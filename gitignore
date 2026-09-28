@@ -20,7 +20,7 @@ dg
 # Java / Servlet 컴파일 출력물
 # ===============================
 *.class
-src/main/java/resource/db.properties
+db.properties
 mail.properties
 
 # 기본 Dynamic Web Project 출력 폴더
