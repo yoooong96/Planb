@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatix.org//DTD mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.itinerary.user">
+	<insert id="insertUser" parameterType="user">
+	</insert>
+
+	<select id="selectUser" parameterType="Integer">
+	</select>
+	
+	<update id="updateUser" parameterType="user">
+	</update>
+	
+	<delete id="deleteUser" parameterType="user">
+	</delete>
+</mapper>

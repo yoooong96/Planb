@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+	PUBLIC "-//mybatis.org//DTD config 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-config.dtd">
+	
+<configuration>
+
+	<properties resource="resource/db.properties"/>
+	
+	<!-- <properties> -> <settings> -> <typeAliases> 순서 -->
+	<settings>
+		<setting name="mapUnderscoreToCamelCase" value="true" />
+	</settings>
+
+	<typeAliases>
+		<!-- 관리자 -->
+		<typeAlias type="dto.admin.AdminActionLogDto" alias="adminActionLog"/>
+		
+		<!-- 광고 -->
+		<typeAlias type="dto.advertisement.AdvertisementDto" alias="advertisement"/>
+		<typeAlias type="dto.advertisement.AdvertisementHistoryDto" alias="advertisementHistory"/>
+		
+		<!-- 커뮤니티 -->
+		<typeAlias type="dto.community.PostDto" alias="post"/>
+		<typeAlias type="dto.community.PostCommentDto" alias="postComment"/>
+		<typeAlias type="dto.community.PostLikeDto" alias="postLike"/>
+		<typeAlias type="dto.community.PostMediaDto" alias="postMedia"/>
+		
+		<!-- 콘텐츠 -->
+		<typeAlias type="dto.content.ContentViewLogDto" alias="contentViewLog"/>
+		
+		<!-- 장바구니 -->
+		<typeAlias type="dto.cartitem.CartItemDto" alias="cartItem"/>
+		
+		<!-- 여행 일정 -->
+		<typeAlias type="dto.itinerary.ItineraryDto" alias="itinerary"/>
+		<typeAlias type="dto.itinerary.ItineraryBlockDto" alias="itineraryBlock"/>
+		<typeAlias type="dto.itinerary.ItineraryBookmarkDto" alias="itineraryBookmark"/>
+		<typeAlias type="dto.itinerary.ItineraryCommentDto" alias="itineraryComment"/>
+		<typeAlias type="dto.itinerary.ItineraryDayDto" alias="itineraryDay"/>
+		<typeAlias type="dto.itinerary.ItineraryImportDto" alias="itineraryImport"/>
+		<typeAlias type="dto.itinerary.ItineraryLikeDto" alias="itineraryLike"/>
+		
+		<!-- 회원 -->
+		<typeAlias type="dto.member.UserConsentDto" alias="userConsent"/>
+		<typeAlias type="dto.member.UserDto" alias="user"/>
+		
+		<!-- 알림 -->
+		<typeAlias type="dto.notification.NotificationDto" alias="notification"/>
+		
+		<!-- 장소 -->
+		<typeAlias type="dto.place.PlaceDto" alias="place"/>
+		
+		<!-- 신고 -->
+		<typeAlias type="dto.report.ReportDto" alias="report"/>
+		<typeAlias type="dto.report.ReportReasonDto" alias="reportReason"/>
+		
+		<!-- 고객지원 -->
+		<typeAlias type="dto.support.SupportInquiryDto" alias="supportInquiry"/>
+	</typeAliases>
+	
+	<environments default="development">
+		<environment id="development">
+			<transactionManager type="JDBC"/>
+			<dataSource type="POOLED">
+				<property name="driver" value="${driver}" />
+				<property name="url" value="${url}" />
+				<property name="username" value="${username}" />
+				<property name="password" value="${password}" />
+				<!-- 최대 활성 커넥션 수 : 동시에 사용할 수 있는 최대 커넥션 수 -->
+				<property name="poolMaximumActiveConnections" value="500" />
+				<!-- 최대 유휴 커넥션 수 : 사용하지 않고 대기 상태를 유지할 커넥션 수 -->
+				<property name="poolMaximumIdleConnections" value="500" />
+			</dataSource>
+		</environment>
+	</environments>
+	
+	<mappers>
+	    <!-- 관리자 -->
+	    <mapper resource="mapper/admin/adminActionLog.xml"/>
+	
+	    <!-- 광고 -->
+	    <mapper resource="mapper/advertisement/advertisement.xml"/>
+	    <mapper resource="mapper/advertisement/advertisementHistory.xml"/>
+	
+	    <!-- 커뮤니티 -->
+	    <mapper resource="mapper/community/post.xml"/>
+	    <mapper resource="mapper/community/postComment.xml"/>
+	    <mapper resource="mapper/community/postLike.xml"/>
+	    <mapper resource="mapper/community/postMedia.xml"/>
+	
+	    <!-- 콘텐츠 -->
+	    <mapper resource="mapper/content/contentViewLog.xml"/>
+	
+	    <!-- 장바구니 -->
+	    <mapper resource="mapper/cartitem/cartItem.xml"/>
+	
+	    <!-- 여행 일정 -->
+	    <mapper resource="mapper/itinerary/itinerary.xml"/>
+	    <mapper resource="mapper/itinerary/itineraryBlock.xml"/>
+	    <mapper resource="mapper/itinerary/itineraryBookmark.xml"/>
+	    <mapper resource="mapper/itinerary/itineraryComment.xml"/>
+	    <mapper resource="mapper/itinerary/itineraryDay.xml"/>
+	    <mapper resource="mapper/itinerary/itineraryImport.xml"/>
+	    <mapper resource="mapper/itinerary/itineraryLike.xml"/>
+	
+	    <!-- 회원 -->
+	    <mapper resource="mapper/member/userConsent.xml"/>
+	    <mapper resource="mapper/member/user.xml"/>
+	
+	    <!-- 알림 -->
+	    <mapper resource="mapper/notification/notification.xml"/>
+	
+	    <!-- 장소 -->
+	    <mapper resource="mapper/place/place.xml"/>
+	
+	    <!-- 신고 -->
+	    <mapper resource="mapper/report/report.xml"/>
+	    <mapper resource="mapper/report/reportReason.xml"/>
+	
+	    <!-- 고객지원 -->
+	    <mapper resource="mapper/support/supportInquiry.xml"/>
+	</mappers>
+</configuration>

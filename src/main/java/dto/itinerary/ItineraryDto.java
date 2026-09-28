@@ -1,0 +1,181 @@
+package dto.itinerary;
+
+import java.math.BigDecimal;
+import java.sql.Date;
+import java.sql.Timestamp;
+
+public class ItineraryDto {
+	private long itineraryId;		// 일정 고유번호
+	private long userId;			// 작성 회원
+	private String title;			// 여행 제목
+	private String summary;			// 일정 소개
+	private String continent;		// 대륙
+	private String country;			// 나라	
+	private String city;			// 도시
+	private Date startDate;			// 시작일
+	private Date endDate;			// 종료일	
+	private BigDecimal totalBudget;	// 총 예산
+	private String visibility;		// 공개 설정
+	private String thumbnailImg;	// 대표 이미지
+	private int viewCount;			// 유효 조회수
+	private long sourceItineraryId; // 원본 일정 번호
+	private String status;			// 일정 상태
+	private long deletedByuserId;	// 삭제 처리자
+	private Timestamp deletedAt;	// 삭제 일시
+	private Timestamp createdAt;	// 작성 일자
+	private Timestamp updatedAt;	// 수정 일자
+	public ItineraryDto() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+	public ItineraryDto(long itineraryId, long userId, String title, String summary, String continent, String country,
+			String city, Date startDate, Date endDate, BigDecimal totalBudget, String visibility, String thumbnailImg,
+			int viewCount, long sourceItineraryId, String status, long deletedByuserId, Timestamp deletedAt,
+			Timestamp createdAt, Timestamp updatedAt) {
+		super();
+		this.itineraryId = itineraryId;
+		this.userId = userId;
+		this.title = title;
+		this.summary = summary;
+		this.continent = continent;
+		this.country = country;
+		this.city = city;
+		this.startDate = startDate;
+		this.endDate = endDate;
+		this.totalBudget = totalBudget;
+		this.visibility = visibility;
+		this.thumbnailImg = thumbnailImg;
+		this.viewCount = viewCount;
+		this.sourceItineraryId = sourceItineraryId;
+		this.status = status;
+		this.deletedByuserId = deletedByuserId;
+		this.deletedAt = deletedAt;
+		this.createdAt = createdAt;
+		this.updatedAt = updatedAt;
+	}
+	public long getItineraryId() {
+		return itineraryId;
+	}
+	public void setItineraryId(long itineraryId) {
+		this.itineraryId = itineraryId;
+	}
+	public long getUserId() {
+		return userId;
+	}
+	public void setUserId(long userId) {
+		this.userId = userId;
+	}
+	public String getTitle() {
+		return title;
+	}
+	public void setTitle(String title) {
+		this.title = title;
+	}
+	public String getSummary() {
+		return summary;
+	}
+	public void setSummary(String summary) {
+		this.summary = summary;
+	}
+	public String getContinent() {
+		return continent;
+	}
+	public void setContinent(String continent) {
+		this.continent = continent;
+	}
+	public String getCountry() {
+		return country;
+	}
+	public void setCountry(String country) {
+		this.country = country;
+	}
+	public String getCity() {
+		return city;
+	}
+	public void setCity(String city) {
+		this.city = city;
+	}
+	public Date getStartDate() {
+		return startDate;
+	}
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
+	}
+	public Date getEndDate() {
+		return endDate;
+	}
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
+	}
+	public BigDecimal getTotalBudget() {
+		return totalBudget;
+	}
+	public void setTotalBudget(BigDecimal totalBudget) {
+		this.totalBudget = totalBudget;
+	}
+	public String getVisibility() {
+		return visibility;
+	}
+	public void setVisibility(String visibility) {
+		this.visibility = visibility;
+	}
+	public String getThumbnailImg() {
+		return thumbnailImg;
+	}
+	public void setThumbnailImg(String thumbnailImg) {
+		this.thumbnailImg = thumbnailImg;
+	}
+	public int getViewCount() {
+		return viewCount;
+	}
+	public void setViewCount(int viewCount) {
+		this.viewCount = viewCount;
+	}
+	public long getSourceItineraryId() {
+		return sourceItineraryId;
+	}
+	public void setSourceItineraryId(long sourceItineraryId) {
+		this.sourceItineraryId = sourceItineraryId;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	public long getDeletedByuserId() {
+		return deletedByuserId;
+	}
+	public void setDeletedByuserId(long deletedByuserId) {
+		this.deletedByuserId = deletedByuserId;
+	}
+	public Timestamp getDeletedAt() {
+		return deletedAt;
+	}
+	public void setDeletedAt(Timestamp deletedAt) {
+		this.deletedAt = deletedAt;
+	}
+	public Timestamp getCreatedAt() {
+		return createdAt;
+	}
+	public void setCreatedAt(Timestamp createdAt) {
+		this.createdAt = createdAt;
+	}
+	public Timestamp getUpdatedAt() {
+		return updatedAt;
+	}
+	public void setUpdatedAt(Timestamp updatedAt) {
+		this.updatedAt = updatedAt;
+	}
+	@Override
+	public String toString() {
+		return "ItineraryDto [itineraryId=" + itineraryId + ", userId=" + userId + ", title=" + title + ", summary="
+				+ summary + ", continent=" + continent + ", country=" + country + ", city=" + city + ", startDate="
+				+ startDate + ", endDate=" + endDate + ", totalBudget=" + totalBudget + ", visibility=" + visibility
+				+ ", thumbnailImg=" + thumbnailImg + ", viewCount=" + viewCount + ", sourceItineraryId="
+				+ sourceItineraryId + ", status=" + status + ", deletedByuserId=" + deletedByuserId + ", deletedAt="
+				+ deletedAt + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + "]";
+	}
+	
+	
+}

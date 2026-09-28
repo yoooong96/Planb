@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<mapper namespace="mapper.itinerary.itineraryBlock">
+	<insert id="insertItineraryBlock" parameterType="itineraryBlock">
+		
+	</insert>
+	
+	<select id="selectItineraryBlock" resultType="itineraryBlock" parameterType="String">
+		
+	</select>
+	
+	<update id="updateItineraryBlock" parameterType="itineraryBlock">
+	
+	</update>
+	
+	<delete id="deleteItineraryBlock" parameterType="itineraryBlock">
+	
+	</delete>
+</mapper>

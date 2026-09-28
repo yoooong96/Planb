@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.advertisement.advertisementHistory">
+	<insert id="insertAdvertisementHistory" parameterType="advertisementHistory" useGeneratedKeys="true" keyProperty="num">
+	
+	</insert>
+	
+	<select id="selectAdvertisementHistory" parameterType="Integer" resultType="advertisementHistory">
+	
+	</select>
+	
+	<update id="updateAdvertisementHistory" parameterType="advertisementHistory">
+	
+	</update>
+	
+	<delete id="deleteAdvertisementHistory">
+	
+	</delete>
+</mapper>

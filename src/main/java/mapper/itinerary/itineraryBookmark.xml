@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<mapper namespace="mapper.itinerary.itineraryBookmark">
+	<insert id="insertItineraryBookmark" parameterType="itineraryBookmark">
+		
+	</insert>
+	
+	<select id="selectItineraryBookmark" resultType="itineraryBookmark" parameterType="String">
+		
+	</select>
+	
+	<update id="updateItineraryBookmark" parameterType="itineraryBookmark">
+	
+	</update>
+	
+	<delete id="deleteItineraryBookmark" parameterType="itineraryBookmark">
+	
+	</delete>
+</mapper>

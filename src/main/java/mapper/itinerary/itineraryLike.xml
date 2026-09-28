@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatix.org//DTD mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.itinerary.itineraryLike">
+	<insert id="insertItineraryLike" parameterType="itineraryLike">
+	</insert>
+	
+	<select id="selectItineraryLike" parameterType="Integer">
+	</select>
+	
+	<update id="updateItineraryLike" parameterType="itineraryLike">
+	</update>
+	
+	<delete id="deleteItineraryLike" parameterType="itineraryLike">
+	</delete>
+	
+</mapper>
