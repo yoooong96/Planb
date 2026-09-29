@@ -1,92 +1,523 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <% request.setAttribute("activePage", "home"); %>
 <!DOCTYPE html>
-<html lang="ko">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Tripily · Travel Plan Share</title>
-<jsp:include page="/common/headStyles.jsp" />
-</head>
-<body class="figma-home-body">
-<jsp:include page="/common/header.jsp" />
-<main class="home-figma">
-  <section class="home-hero">
-    <div class="home-hero-image"></div>
-    <div class="home-hero-overlay"></div>
-    <div class="home-hero-content">
-      <div class="home-eyebrow">✈ Travel Plan Share</div>
-      <h1>Plan less.&nbsp;<span>Wander</span> more.</h1>
-      <p>계획보다 중요한 건, <strong>일단 떠나는 것</strong>&nbsp;·&nbsp;실제로 다녀온 사람들의 진짜 이야기</p>
-      <form class="home-search" action="${pageContext.request.contextPath}/view/search/searchResult.jsp" method="get">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-        <input name="q" placeholder="여행지, 일정, 꿀팁 등 무엇이든 검색해보세요">
-        <button type="submit" aria-label="검색"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></button>
+<html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Tripily · Travel Plan Share</title><jsp:include page="/common/headStyles.jsp" /></head>
+<body class="site-shell"><jsp:include page="/common/header.jsp" />
+<main style="font-family:'Plus Jakarta Sans','Noto Sans KR',sans-serif">
+  <section class="relative flex flex-col items-center justify-center" style="height:100vh;min-height:560px">
+    <div class="absolute inset-0 bg-cover bg-center" style="background-image:url('https://images.unsplash.com/photo-1786049129855-3fdf58f32d72?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx5b3VuZyUyMHRyYXZlbGVycyUyMGFkdmVudHVyZSUyMGZyaWVuZHMlMjBtb3VudGFpbiUyMGdvbGRlbiUyMGhvdXJ8ZW58MXx8fHwxNzg5ODI5NTA4fDA&ixlib=rb-4.1.0&q=80&w=1600')"></div>
+    <div class="absolute inset-0" style="background:linear-gradient(to bottom,rgba(15,10,40,.55) 0%,rgba(15,10,40,.45) 50%,rgba(15,10,40,.65) 100%)"></div>
+    <div class="relative z-10 flex flex-col items-center text-center px-4 w-full" style="margin-top:-40px">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full mb-5 text-xs font-bold tracking-widest uppercase" style="background-color:var(--brand-yellow);color:#1a1a2e">✈ Travel Plan Share</div>
+      <h1 class="text-white leading-tight mb-3" style="font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-size:clamp(2.6rem,5.5vw,5rem);text-shadow:0 2px 20px rgba(0,0,0,.4)">Plan less.&nbsp;<span style="color:var(--brand-light)">Wander</span> more.</h1>
+      <p class="text-white/80 text-sm md:text-base mb-8 font-medium" style="text-shadow:0 1px 8px rgba(0,0,0,.4)">계획보다 중요한 건, <span class="text-white font-semibold">일단 떠나는 것</span>&nbsp;·&nbsp;실제로 다녀온 사람들의 진짜 이야기</p>
+      <form action="${pageContext.request.contextPath}/view/search/searchResult.jsp" method="get" class="w-full max-w-2xl rounded-full flex items-center px-5 py-3.5 gap-3 border border-white/30" style="background-color:rgba(255,255,255,.18);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)">
+        <svg class="shrink-0 text-white/70" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input type="text" name="q" placeholder="여행지, 일정, 꿀팁 등 무엇이든 검색해보세요" class="flex-1 text-sm text-white placeholder-white/60 outline-none bg-transparent">
+        <button type="submit" class="shrink-0 w-9 h-9 rounded-full flex items-center justify-center text-white transition-all jsp-brand-hover" style="background-color:var(--brand)" aria-label="검색"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></button>
       </form>
     </div>
-    <button class="home-scroll-hint" type="button" data-scroll-popular aria-label="아래로 스크롤"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg></button>
+    <button type="button" class="jsp-home-scroll absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 text-white/50 z-10 hover:text-white/80 transition-colors cursor-pointer bg-transparent border-none p-2" data-scroll-popular aria-label="아래로 스크롤"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg></button>
   </section>
 
-  <section class="home-popular" id="popularPlans">
-    <div class="home-section-head centered">
-      <p>Popular Travel Plans</p>
-      <h2>지금 가장 인기 있는 여행일정</h2>
-      <span>전 세계 여행자들이 사랑하는 특별한 일정을 만나보세요.</span>
+  <section id="popularPlans" class="mt-16">
+    <div class="text-center mb-8 px-4"><p class="text-xs font-bold tracking-widest uppercase mb-2" style="color:var(--brand)">Popular Travel Plans</p><h2 class="text-2xl md:text-3xl font-extrabold text-gray-900 mb-2">지금 가장 인기 있는 여행일정</h2><p class="text-sm text-gray-400">전 세계 여행자들이 사랑하는 특별한 일정을 만나보세요.</p></div>
+    <div class="flex gap-2 px-8" data-home-carousel data-loop-width="2120" style="scroll-behavior:auto;overflow:hidden;padding-top:24px;padding-bottom:24px"><a href="${pageContext.request.contextPath}/view/travel/scheduleDetail.jsp?id=9" class="jsp-home-schedule-card shrink-0 bg-white rounded-2xl overflow-hidden cursor-pointer border" style="width:204px;position:relative;z-index:1;border-color:#e5e7eb;box-shadow:0 2px 8px rgba(0,0,0,0.07);transform:scale(1);transition:transform .25s cubic-bezier(.22,1,.36,1),box-shadow .25s,border-color .2s,z-index 0s">
+  <div class="relative overflow-hidden" style="aspect-ratio:4/3">
+    <img src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=600&amp;h=400&amp;fit=crop" alt="파리 5박 6일 예술 &amp; 낭만" class="w-full h-full object-cover transition-transform duration-300">
+    <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
+    <span class="absolute top-2 left-2 text-[10px] font-bold px-2 py-0.5 rounded-full text-white" style="background-color:#6369D1">파리</span>
+    <button class="absolute top-2 right-2 w-6 h-6 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-sm transition-transform hover:scale-110" type="button" data-bookmark aria-label="북마크">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>
+    </button>
+    <span class="absolute bottom-2 left-2 text-white text-[10px] font-bold bg-black/50 rounded-full px-2 py-0.5">5박 6일</span>
+  </div>
+  <div class="p-3">
+    <h3 class="font-bold text-[13px] leading-snug mb-0.5 line-clamp-2 transition-colors" style="color:#18181b">파리 5박 6일 예술 &amp; 낭만</h3>
+    <p class="text-gray-500 text-[11px] line-clamp-1 mb-2 leading-relaxed">에펠탑, 루브르, 몽마르트! 낭만의 도시 파리를 온전히 즐기는 일정.</p>
+    <div class="flex items-center gap-2.5 text-[10px] text-gray-400 mb-2.5">
+      <span class="flex items-center gap-0.5"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg><span class="font-medium">1,234</span></span>
+      <span class="flex items-center gap-0.5"><svg width="10" height="10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>5,670</span>
     </div>
-    <div class="home-carousel" data-home-carousel>
-      <a class="home-plan-card" href="${pageContext.request.contextPath}/view/travel/scheduleDetail.jsp?id=7">
-        <div class="home-plan-media"><img src="https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=600&h=400&fit=crop" alt="도쿄"><span class="home-region-tag">도쿄</span><button class="home-bookmark" type="button" data-bookmark aria-label="북마크"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg></button><span class="home-duration">3박 4일</span></div>
-        <div class="home-plan-body"><h3>도쿄 3박 4일 완전 정복</h3><p>시부야, 아키하바라, 아사쿠사! 도쿄의 모든 것을 담은 알찬 일정.</p><div class="home-plan-stats"><span>▰ 921</span><span>◉ 4,210</span></div><div class="home-plan-author"><span><img src="https://i.pravatar.cc/40?img=13" alt="재팬러버">재팬러버</span><time>2026.08.05</time></div></div>
-      </a>
-      <a class="home-plan-card" href="${pageContext.request.contextPath}/view/travel/scheduleDetail.jsp?id=3">
-        <div class="home-plan-media"><img src="https://images.unsplash.com/photo-1538485399081-7191377e8241?w=600&h=400&fit=crop" alt="부산"><span class="home-region-tag">부산</span><button class="home-bookmark" type="button" data-bookmark aria-label="북마크"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg></button><span class="home-duration">1박 2일</span></div>
-        <div class="home-plan-body"><h3>부산 1박 2일 바다 여행</h3><p>해운대와 광안리, 자갈치시장까지! 부산 핵심 코스.</p><div class="home-plan-stats"><span>▰ 512</span><span>◉ 2,341</span></div><div class="home-plan-author"><span><img src="https://i.pravatar.cc/40?img=5" alt="바다러버">바다러버</span><time>2026.08.10</time></div></div>
-      </a>
-      <a class="home-plan-card" href="${pageContext.request.contextPath}/view/travel/scheduleDetail.jsp?id=5">
-        <div class="home-plan-media"><img src="https://images.unsplash.com/photo-1674606042265-c9f03a77e286?w=600&h=400&fit=crop" alt="강릉"><span class="home-region-tag">강릉</span><button class="home-bookmark" type="button" data-bookmark aria-label="북마크"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg></button><span class="home-duration">1박 2일</span></div>
-        <div class="home-plan-body"><h3>강릉 1박 2일 커피 &amp; 바다</h3><p>안목해변 커피거리와 강릉 바다의 아름다움을 즐기는 힐링 코스.</p><div class="home-plan-stats"><span>▰ 445</span><span>◉ 1,890</span></div><div class="home-plan-author"><span><img src="https://i.pravatar.cc/40?img=9" alt="커피향">커피향</span><time>2026.08.01</time></div></div>
-      </a>
-      <a class="home-plan-card" href="${pageContext.request.contextPath}/view/travel/scheduleDetail.jsp?id=1">
-        <div class="home-plan-media"><img src="https://images.unsplash.com/photo-1628411848698-e3b3249a272a?w=600&h=400&fit=crop" alt="제주도"><span class="home-region-tag">제주도</span><button class="home-bookmark" type="button" data-bookmark aria-label="북마크"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg></button><span class="home-duration">2박 3일</span></div>
-        <div class="home-plan-body"><h3>제주도 2박 3일 힐링 여행</h3><p>바다, 맛집, 자연까지! 처음 가는 분들도 따라가기 쉬운 코스.</p><div class="home-plan-stats"><span>▰ 328</span><span>◉ 1,234</span></div><div class="home-plan-author"><span><img src="https://i.pravatar.cc/40?img=12" alt="여행좋아">여행좋아</span><time>2026.08.20</time></div></div>
-      </a>
-      <a class="home-plan-card" href="${pageContext.request.contextPath}/view/travel/scheduleDetail.jsp?id=6">
-        <div class="home-plan-media"><img src="https://images.unsplash.com/photo-1758327740327-61826f744965?w=600&h=400&fit=crop" alt="전주"><span class="home-region-tag">전주</span><button class="home-bookmark" type="button" data-bookmark aria-label="북마크"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg></button><span class="home-duration">1박 2일</span></div>
-        <div class="home-plan-body"><h3>전주 1박 2일 한옥 &amp; 맛집</h3><p>전주한옥마을과 비빔밥, 콩나물국밥! 미식가를 위한 전주 완전정복.</p><div class="home-plan-stats"><span>▰ 267</span><span>◉ 1,102</span></div><div class="home-plan-author"><span><img src="https://i.pravatar.cc/40?img=11" alt="맛집탐방">맛집탐방</span><time>2026.07.20</time></div></div>
-      </a>
-      <a class="home-plan-card" href="${pageContext.request.contextPath}/view/travel/scheduleDetail.jsp?id=2">
-        <div class="home-plan-media"><img src="https://images.unsplash.com/photo-1506816561089-5cc37b3aa9b0?w=600&h=400&fit=crop" alt="서울"><span class="home-region-tag">서울</span><button class="home-bookmark" type="button" data-bookmark aria-label="북마크"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg></button><span class="home-duration">2박 3일</span></div>
-        <div class="home-plan-body"><h3>서울 2박 3일 역사 탐방</h3><p>경복궁부터 북촌까지, 서울의 숨겨진 역사를 따라가는 특별한 여행.</p><div class="home-plan-stats"><span>▰ 214</span><span>◉ 876</span></div><div class="home-plan-author"><span><img src="https://i.pravatar.cc/40?img=3" alt="히스토리맨">히스토리맨</span><time>2026.08.15</time></div></div>
-      </a>
-      <a class="home-plan-card" href="${pageContext.request.contextPath}/view/travel/scheduleDetail.jsp?id=4">
-        <div class="home-plan-media"><img src="https://images.unsplash.com/photo-1597552661064-af143a5f3bee?w=600&h=400&fit=crop" alt="경주"><span class="home-region-tag">경주</span><button class="home-bookmark" type="button" data-bookmark aria-label="북마크"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg></button><span class="home-duration">1박 2일</span></div>
-        <div class="home-plan-body"><h3>경주 1박 2일 문화 여행</h3><p>천년 고도 경주에서 신라의 역사와 문화를 만나보세요.</p><div class="home-plan-stats"><span>▰ 178</span><span>◉ 654</span></div><div class="home-plan-author"><span><img src="https://i.pravatar.cc/40?img=7" alt="문화탐험가">문화탐험가</span><time>2026.07.28</time></div></div>
-      </a>
+    <div class="flex items-center justify-between border-t pt-2" style="border-color:#D1D2F9">
+      <div class="flex items-center gap-1.5"><img src="https://i.pravatar.cc/40?img=17" alt="파리지앵" class="w-4 h-4 rounded-full object-cover"><span class="text-[10px] text-gray-500 font-medium">파리지앵</span></div>
+      <span class="text-[9px] text-gray-400">2026.07.10</span>
     </div>
+  </div>
+</a>
+<a href="${pageContext.request.contextPath}/view/travel/scheduleDetail.jsp?id=16" class="jsp-home-schedule-card shrink-0 bg-white rounded-2xl overflow-hidden cursor-pointer border" style="width:204px;position:relative;z-index:1;border-color:#e5e7eb;box-shadow:0 2px 8px rgba(0,0,0,0.07);transform:scale(1);transition:transform .25s cubic-bezier(.22,1,.36,1),box-shadow .25s,border-color .2s,z-index 0s">
+  <div class="relative overflow-hidden" style="aspect-ratio:4/3">
+    <img src="https://images.unsplash.com/photo-1589452271712-64b8a66c7b71?w=600&amp;h=400&amp;fit=crop" alt="오사카 2박 3일 먹방 여행" class="w-full h-full object-cover transition-transform duration-300">
+    <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
+    <span class="absolute top-2 left-2 text-[10px] font-bold px-2 py-0.5 rounded-full text-white" style="background-color:#6369D1">오사카</span>
+    <button class="absolute top-2 right-2 w-6 h-6 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-sm transition-transform hover:scale-110" type="button" data-bookmark aria-label="북마크">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>
+    </button>
+    <span class="absolute bottom-2 left-2 text-white text-[10px] font-bold bg-black/50 rounded-full px-2 py-0.5">2박 3일</span>
+  </div>
+  <div class="p-3">
+    <h3 class="font-bold text-[13px] leading-snug mb-0.5 line-clamp-2 transition-colors" style="color:#18181b">오사카 2박 3일 먹방 여행</h3>
+    <p class="text-gray-500 text-[11px] line-clamp-1 mb-2 leading-relaxed">도톤보리, 구로몬시장, 오사카 성! 먹고 먹고 또 먹는 오사카.</p>
+    <div class="flex items-center gap-2.5 text-[10px] text-gray-400 mb-2.5">
+      <span class="flex items-center gap-0.5"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg><span class="font-medium">1,102</span></span>
+      <span class="flex items-center gap-0.5"><svg width="10" height="10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>5,100</span>
+    </div>
+    <div class="flex items-center justify-between border-t pt-2" style="border-color:#D1D2F9">
+      <div class="flex items-center gap-1.5"><img src="https://i.pravatar.cc/40?img=31" alt="오사카마니아" class="w-4 h-4 rounded-full object-cover"><span class="text-[10px] text-gray-500 font-medium">오사카마니아</span></div>
+      <span class="text-[9px] text-gray-400">2026.09.08</span>
+    </div>
+  </div>
+</a>
+<a href="${pageContext.request.contextPath}/view/travel/scheduleDetail.jsp?id=11" class="jsp-home-schedule-card shrink-0 bg-white rounded-2xl overflow-hidden cursor-pointer border" style="width:204px;position:relative;z-index:1;border-color:#e5e7eb;box-shadow:0 2px 8px rgba(0,0,0,0.07);transform:scale(1);transition:transform .25s cubic-bezier(.22,1,.36,1),box-shadow .25s,border-color .2s,z-index 0s">
+  <div class="relative overflow-hidden" style="aspect-ratio:4/3">
+    <img src="https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?w=600&amp;h=400&amp;fit=crop" alt="뉴욕 6박 7일 도시 탐험" class="w-full h-full object-cover transition-transform duration-300">
+    <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
+    <span class="absolute top-2 left-2 text-[10px] font-bold px-2 py-0.5 rounded-full text-white" style="background-color:#6369D1">뉴욕</span>
+    <button class="absolute top-2 right-2 w-6 h-6 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-sm transition-transform hover:scale-110" type="button" data-bookmark aria-label="북마크">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>
+    </button>
+    <span class="absolute bottom-2 left-2 text-white text-[10px] font-bold bg-black/50 rounded-full px-2 py-0.5">6박 7일</span>
+  </div>
+  <div class="p-3">
+    <h3 class="font-bold text-[13px] leading-snug mb-0.5 line-clamp-2 transition-colors" style="color:#18181b">뉴욕 6박 7일 도시 탐험</h3>
+    <p class="text-gray-500 text-[11px] line-clamp-1 mb-2 leading-relaxed">타임스퀘어, 센트럴파크, 브루클린 브리지! 잠들지 않는 도시 뉴욕.</p>
+    <div class="flex items-center gap-2.5 text-[10px] text-gray-400 mb-2.5">
+      <span class="flex items-center gap-0.5"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg><span class="font-medium">987</span></span>
+      <span class="flex items-center gap-0.5"><svg width="10" height="10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>4,520</span>
+    </div>
+    <div class="flex items-center justify-between border-t pt-2" style="border-color:#D1D2F9">
+      <div class="flex items-center gap-1.5"><img src="https://i.pravatar.cc/40?img=21" alt="NYC러버" class="w-4 h-4 rounded-full object-cover"><span class="text-[10px] text-gray-500 font-medium">NYC러버</span></div>
+      <span class="text-[9px] text-gray-400">2026.07.28</span>
+    </div>
+  </div>
+</a>
+<a href="${pageContext.request.contextPath}/view/travel/scheduleDetail.jsp?id=7" class="jsp-home-schedule-card shrink-0 bg-white rounded-2xl overflow-hidden cursor-pointer border" style="width:204px;position:relative;z-index:1;border-color:#e5e7eb;box-shadow:0 2px 8px rgba(0,0,0,0.07);transform:scale(1);transition:transform .25s cubic-bezier(.22,1,.36,1),box-shadow .25s,border-color .2s,z-index 0s">
+  <div class="relative overflow-hidden" style="aspect-ratio:4/3">
+    <img src="https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=600&amp;h=400&amp;fit=crop" alt="도쿄 3박 4일 완전 정복" class="w-full h-full object-cover transition-transform duration-300">
+    <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
+    <span class="absolute top-2 left-2 text-[10px] font-bold px-2 py-0.5 rounded-full text-white" style="background-color:#6369D1">도쿄</span>
+    <button class="absolute top-2 right-2 w-6 h-6 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-sm transition-transform hover:scale-110" type="button" data-bookmark aria-label="북마크">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>
+    </button>
+    <span class="absolute bottom-2 left-2 text-white text-[10px] font-bold bg-black/50 rounded-full px-2 py-0.5">3박 4일</span>
+  </div>
+  <div class="p-3">
+    <h3 class="font-bold text-[13px] leading-snug mb-0.5 line-clamp-2 transition-colors" style="color:#18181b">도쿄 3박 4일 완전 정복</h3>
+    <p class="text-gray-500 text-[11px] line-clamp-1 mb-2 leading-relaxed">시부야, 아키하바라, 아사쿠사! 도쿄의 모든 것을 담은 알찬 일정.</p>
+    <div class="flex items-center gap-2.5 text-[10px] text-gray-400 mb-2.5">
+      <span class="flex items-center gap-0.5"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg><span class="font-medium">921</span></span>
+      <span class="flex items-center gap-0.5"><svg width="10" height="10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>4,210</span>
+    </div>
+    <div class="flex items-center justify-between border-t pt-2" style="border-color:#D1D2F9">
+      <div class="flex items-center gap-1.5"><img src="https://i.pravatar.cc/40?img=13" alt="재팬러버" class="w-4 h-4 rounded-full object-cover"><span class="text-[10px] text-gray-500 font-medium">재팬러버</span></div>
+      <span class="text-[9px] text-gray-400">2026.08.05</span>
+    </div>
+  </div>
+</a>
+<a href="https://example.com/tripstay" target="_blank" rel="noreferrer" class="jsp-home-ad-card shrink-0 rounded-2xl overflow-hidden cursor-pointer group relative border bg-white" style="width:204px;z-index:1;position:relative;border-color:#e5e7eb;box-shadow:0 2px 8px rgba(0,0,0,.07);transform:scale(1);transition:transform .25s cubic-bezier(.22,1,.36,1),box-shadow .25s">
+  <div class="relative overflow-hidden" style="aspect-ratio:4/3">
+    <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=900&q=80" alt="도쿄 숙소 최대 15% 할인" class="w-full h-full object-cover transition-transform duration-300">
+    <div class="absolute inset-0" style="background:linear-gradient(to top,rgba(10,5,40,.8) 0%,rgba(10,5,40,.25) 60%,transparent 100%)"></div>
+    <span class="absolute top-2 left-2 text-[9px] font-bold px-2 py-0.5 rounded-full bg-yellow-400 text-gray-900">AD</span>
+  </div>
+  <div class="p-3" style="background:linear-gradient(135deg,#f4f4ff 0%,#fff9df 100%)">
+    <div class="text-[10px] text-gray-400 mb-0.5 font-semibold">TripStay</div>
+    <h3 class="font-bold text-[12px] text-gray-800 line-clamp-2 leading-snug mb-2">도쿄 숙소 최대 15% 할인</h3>
+    <div class="text-[10px] font-bold" style="color:var(--brand)">광고 보기 →</div>
+  </div>
+</a>
+<a href="${pageContext.request.contextPath}/view/travel/scheduleDetail.jsp?id=10" class="jsp-home-schedule-card shrink-0 bg-white rounded-2xl overflow-hidden cursor-pointer border" style="width:204px;position:relative;z-index:1;border-color:#e5e7eb;box-shadow:0 2px 8px rgba(0,0,0,0.07);transform:scale(1);transition:transform .25s cubic-bezier(.22,1,.36,1),box-shadow .25s,border-color .2s,z-index 0s">
+  <div class="relative overflow-hidden" style="aspect-ratio:4/3">
+    <img src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=600&amp;h=400&amp;fit=crop" alt="발리 5박 6일 힐링 휴양" class="w-full h-full object-cover transition-transform duration-300">
+    <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
+    <span class="absolute top-2 left-2 text-[10px] font-bold px-2 py-0.5 rounded-full text-white" style="background-color:#6369D1">발리</span>
+    <button class="absolute top-2 right-2 w-6 h-6 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-sm transition-transform hover:scale-110" type="button" data-bookmark aria-label="북마크">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>
+    </button>
+    <span class="absolute bottom-2 left-2 text-white text-[10px] font-bold bg-black/50 rounded-full px-2 py-0.5">5박 6일</span>
+  </div>
+  <div class="p-3">
+    <h3 class="font-bold text-[13px] leading-snug mb-0.5 line-clamp-2 transition-colors" style="color:#18181b">발리 5박 6일 힐링 휴양</h3>
+    <p class="text-gray-500 text-[11px] line-clamp-1 mb-2 leading-relaxed">우붓 라이스테라스, 울루와뚜 사원, 짱구 카페까지 발리 완전정복.</p>
+    <div class="flex items-center gap-2.5 text-[10px] text-gray-400 mb-2.5">
+      <span class="flex items-center gap-0.5"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg><span class="font-medium">892</span></span>
+      <span class="flex items-center gap-0.5"><svg width="10" height="10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>3,890</span>
+    </div>
+    <div class="flex items-center justify-between border-t pt-2" style="border-color:#D1D2F9">
+      <div class="flex items-center gap-1.5"><img src="https://i.pravatar.cc/40?img=19" alt="발리덕후" class="w-4 h-4 rounded-full object-cover"><span class="text-[10px] text-gray-500 font-medium">발리덕후</span></div>
+      <span class="text-[9px] text-gray-400">2026.08.22</span>
+    </div>
+  </div>
+</a>
+<a href="${pageContext.request.contextPath}/view/travel/scheduleDetail.jsp?id=14" class="jsp-home-schedule-card shrink-0 bg-white rounded-2xl overflow-hidden cursor-pointer border" style="width:204px;position:relative;z-index:1;border-color:#e5e7eb;box-shadow:0 2px 8px rgba(0,0,0,0.07);transform:scale(1);transition:transform .25s cubic-bezier(.22,1,.36,1),box-shadow .25s,border-color .2s,z-index 0s">
+  <div class="relative overflow-hidden" style="aspect-ratio:4/3">
+    <img src="https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?w=600&amp;h=400&amp;fit=crop" alt="다낭 3박 4일 바다 &amp; 리조트" class="w-full h-full object-cover transition-transform duration-300">
+    <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
+    <span class="absolute top-2 left-2 text-[10px] font-bold px-2 py-0.5 rounded-full text-white" style="background-color:#6369D1">다낭</span>
+    <button class="absolute top-2 right-2 w-6 h-6 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-sm transition-transform hover:scale-110" type="button" data-bookmark aria-label="북마크">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>
+    </button>
+    <span class="absolute bottom-2 left-2 text-white text-[10px] font-bold bg-black/50 rounded-full px-2 py-0.5">3박 4일</span>
+  </div>
+  <div class="p-3">
+    <h3 class="font-bold text-[13px] leading-snug mb-0.5 line-clamp-2 transition-colors" style="color:#18181b">다낭 3박 4일 바다 &amp; 리조트</h3>
+    <p class="text-gray-500 text-[11px] line-clamp-1 mb-2 leading-relaxed">미케 비치, 바나힐, 호이안 올드타운까지! 베트남 중부의 진주.</p>
+    <div class="flex items-center gap-2.5 text-[10px] text-gray-400 mb-2.5">
+      <span class="flex items-center gap-0.5"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg><span class="font-medium">712</span></span>
+      <span class="flex items-center gap-0.5"><svg width="10" height="10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>3,200</span>
+    </div>
+    <div class="flex items-center justify-between border-t pt-2" style="border-color:#D1D2F9">
+      <div class="flex items-center gap-1.5"><img src="https://i.pravatar.cc/40?img=27" alt="다낭러버" class="w-4 h-4 rounded-full object-cover"><span class="text-[10px] text-gray-500 font-medium">다낭러버</span></div>
+      <span class="text-[9px] text-gray-400">2026.09.01</span>
+    </div>
+  </div>
+</a>
+<a href="${pageContext.request.contextPath}/view/travel/scheduleDetail.jsp?id=8" class="jsp-home-schedule-card shrink-0 bg-white rounded-2xl overflow-hidden cursor-pointer border" style="width:204px;position:relative;z-index:1;border-color:#e5e7eb;box-shadow:0 2px 8px rgba(0,0,0,0.07);transform:scale(1);transition:transform .25s cubic-bezier(.22,1,.36,1),box-shadow .25s,border-color .2s,z-index 0s">
+  <div class="relative overflow-hidden" style="aspect-ratio:4/3">
+    <img src="https://images.unsplash.com/photo-1506665531195-3566af2b548e?w=600&amp;h=400&amp;fit=crop" alt="방콕 4박 5일 사원 &amp; 야시장" class="w-full h-full object-cover transition-transform duration-300">
+    <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
+    <span class="absolute top-2 left-2 text-[10px] font-bold px-2 py-0.5 rounded-full text-white" style="background-color:#6369D1">방콕</span>
+    <button class="absolute top-2 right-2 w-6 h-6 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-sm transition-transform hover:scale-110" type="button" data-bookmark aria-label="북마크">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>
+    </button>
+    <span class="absolute bottom-2 left-2 text-white text-[10px] font-bold bg-black/50 rounded-full px-2 py-0.5">4박 5일</span>
+  </div>
+  <div class="p-3">
+    <h3 class="font-bold text-[13px] leading-snug mb-0.5 line-clamp-2 transition-colors" style="color:#18181b">방콕 4박 5일 사원 &amp; 야시장</h3>
+    <p class="text-gray-500 text-[11px] line-clamp-1 mb-2 leading-relaxed">왕궁, 왓포, 차오프라야강과 야시장까지! 방콕의 매력에 빠져봐요.</p>
+    <div class="flex items-center gap-2.5 text-[10px] text-gray-400 mb-2.5">
+      <span class="flex items-center gap-0.5"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg><span class="font-medium">678</span></span>
+      <span class="flex items-center gap-0.5"><svg width="10" height="10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>3,100</span>
+    </div>
+    <div class="flex items-center justify-between border-t pt-2" style="border-color:#D1D2F9">
+      <div class="flex items-center gap-1.5"><img src="https://i.pravatar.cc/40?img=15" alt="태국덕후" class="w-4 h-4 rounded-full object-cover"><span class="text-[10px] text-gray-500 font-medium">태국덕후</span></div>
+      <span class="text-[9px] text-gray-400">2026.08.18</span>
+    </div>
+  </div>
+</a>
+<a href="${pageContext.request.contextPath}/view/travel/scheduleDetail.jsp?id=12" class="jsp-home-schedule-card shrink-0 bg-white rounded-2xl overflow-hidden cursor-pointer border" style="width:204px;position:relative;z-index:1;border-color:#e5e7eb;box-shadow:0 2px 8px rgba(0,0,0,0.07);transform:scale(1);transition:transform .25s cubic-bezier(.22,1,.36,1),box-shadow .25s,border-color .2s,z-index 0s">
+  <div class="relative overflow-hidden" style="aspect-ratio:4/3">
+    <img src="https://images.unsplash.com/photo-1539037116277-4db20889f2d4?w=600&amp;h=400&amp;fit=crop" alt="바르셀로나 4박 5일 가우디 투어" class="w-full h-full object-cover transition-transform duration-300">
+    <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
+    <span class="absolute top-2 left-2 text-[10px] font-bold px-2 py-0.5 rounded-full text-white" style="background-color:#6369D1">바르셀로나</span>
+    <button class="absolute top-2 right-2 w-6 h-6 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-sm transition-transform hover:scale-110" type="button" data-bookmark aria-label="북마크">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>
+    </button>
+    <span class="absolute bottom-2 left-2 text-white text-[10px] font-bold bg-black/50 rounded-full px-2 py-0.5">4박 5일</span>
+  </div>
+  <div class="p-3">
+    <h3 class="font-bold text-[13px] leading-snug mb-0.5 line-clamp-2 transition-colors" style="color:#18181b">바르셀로나 4박 5일 가우디 투어</h3>
+    <p class="text-gray-500 text-[11px] line-clamp-1 mb-2 leading-relaxed">사그라다 파밀리아, 구엘공원, 바르셀로나 해변까지 가우디의 도시.</p>
+    <div class="flex items-center gap-2.5 text-[10px] text-gray-400 mb-2.5">
+      <span class="flex items-center gap-0.5"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg><span class="font-medium">634</span></span>
+      <span class="flex items-center gap-0.5"><svg width="10" height="10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>2,890</span>
+    </div>
+    <div class="flex items-center justify-between border-t pt-2" style="border-color:#D1D2F9">
+      <div class="flex items-center gap-1.5"><img src="https://i.pravatar.cc/40?img=23" alt="스페인러버" class="w-4 h-4 rounded-full object-cover"><span class="text-[10px] text-gray-500 font-medium">스페인러버</span></div>
+      <span class="text-[9px] text-gray-400">2026.08.08</span>
+    </div>
+  </div>
+</a>
+<a href="${pageContext.request.contextPath}/view/travel/scheduleDetail.jsp?id=3" class="jsp-home-schedule-card shrink-0 bg-white rounded-2xl overflow-hidden cursor-pointer border" style="width:204px;position:relative;z-index:1;border-color:#e5e7eb;box-shadow:0 2px 8px rgba(0,0,0,0.07);transform:scale(1);transition:transform .25s cubic-bezier(.22,1,.36,1),box-shadow .25s,border-color .2s,z-index 0s">
+  <div class="relative overflow-hidden" style="aspect-ratio:4/3">
+    <img src="https://images.unsplash.com/photo-1538485399081-7191377e8241?w=600&amp;h=400&amp;fit=crop" alt="부산 1박 2일 바다 여행" class="w-full h-full object-cover transition-transform duration-300">
+    <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
+    <span class="absolute top-2 left-2 text-[10px] font-bold px-2 py-0.5 rounded-full text-white" style="background-color:#6369D1">부산</span>
+    <button class="absolute top-2 right-2 w-6 h-6 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-sm transition-transform hover:scale-110" type="button" data-bookmark aria-label="북마크">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>
+    </button>
+    <span class="absolute bottom-2 left-2 text-white text-[10px] font-bold bg-black/50 rounded-full px-2 py-0.5">1박 2일</span>
+  </div>
+  <div class="p-3">
+    <h3 class="font-bold text-[13px] leading-snug mb-0.5 line-clamp-2 transition-colors" style="color:#18181b">부산 1박 2일 바다 여행</h3>
+    <p class="text-gray-500 text-[11px] line-clamp-1 mb-2 leading-relaxed">해운대와 광안리, 자갈치시장까지! 부산 핵심 코스.</p>
+    <div class="flex items-center gap-2.5 text-[10px] text-gray-400 mb-2.5">
+      <span class="flex items-center gap-0.5"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg><span class="font-medium">512</span></span>
+      <span class="flex items-center gap-0.5"><svg width="10" height="10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>2,341</span>
+    </div>
+    <div class="flex items-center justify-between border-t pt-2" style="border-color:#D1D2F9">
+      <div class="flex items-center gap-1.5"><img src="https://i.pravatar.cc/40?img=5" alt="바다러버" class="w-4 h-4 rounded-full object-cover"><span class="text-[10px] text-gray-500 font-medium">바다러버</span></div>
+      <span class="text-[9px] text-gray-400">2026.08.10</span>
+    </div>
+  </div>
+</a>
+<a href="${pageContext.request.contextPath}/view/travel/scheduleDetail.jsp?id=9" class="jsp-home-schedule-card shrink-0 bg-white rounded-2xl overflow-hidden cursor-pointer border" style="width:204px;position:relative;z-index:1;border-color:#e5e7eb;box-shadow:0 2px 8px rgba(0,0,0,0.07);transform:scale(1);transition:transform .25s cubic-bezier(.22,1,.36,1),box-shadow .25s,border-color .2s,z-index 0s">
+  <div class="relative overflow-hidden" style="aspect-ratio:4/3">
+    <img src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=600&amp;h=400&amp;fit=crop" alt="파리 5박 6일 예술 &amp; 낭만" class="w-full h-full object-cover transition-transform duration-300">
+    <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
+    <span class="absolute top-2 left-2 text-[10px] font-bold px-2 py-0.5 rounded-full text-white" style="background-color:#6369D1">파리</span>
+    <button class="absolute top-2 right-2 w-6 h-6 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-sm transition-transform hover:scale-110" type="button" data-bookmark aria-label="북마크">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>
+    </button>
+    <span class="absolute bottom-2 left-2 text-white text-[10px] font-bold bg-black/50 rounded-full px-2 py-0.5">5박 6일</span>
+  </div>
+  <div class="p-3">
+    <h3 class="font-bold text-[13px] leading-snug mb-0.5 line-clamp-2 transition-colors" style="color:#18181b">파리 5박 6일 예술 &amp; 낭만</h3>
+    <p class="text-gray-500 text-[11px] line-clamp-1 mb-2 leading-relaxed">에펠탑, 루브르, 몽마르트! 낭만의 도시 파리를 온전히 즐기는 일정.</p>
+    <div class="flex items-center gap-2.5 text-[10px] text-gray-400 mb-2.5">
+      <span class="flex items-center gap-0.5"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg><span class="font-medium">1,234</span></span>
+      <span class="flex items-center gap-0.5"><svg width="10" height="10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>5,670</span>
+    </div>
+    <div class="flex items-center justify-between border-t pt-2" style="border-color:#D1D2F9">
+      <div class="flex items-center gap-1.5"><img src="https://i.pravatar.cc/40?img=17" alt="파리지앵" class="w-4 h-4 rounded-full object-cover"><span class="text-[10px] text-gray-500 font-medium">파리지앵</span></div>
+      <span class="text-[9px] text-gray-400">2026.07.10</span>
+    </div>
+  </div>
+</a>
+<a href="${pageContext.request.contextPath}/view/travel/scheduleDetail.jsp?id=16" class="jsp-home-schedule-card shrink-0 bg-white rounded-2xl overflow-hidden cursor-pointer border" style="width:204px;position:relative;z-index:1;border-color:#e5e7eb;box-shadow:0 2px 8px rgba(0,0,0,0.07);transform:scale(1);transition:transform .25s cubic-bezier(.22,1,.36,1),box-shadow .25s,border-color .2s,z-index 0s">
+  <div class="relative overflow-hidden" style="aspect-ratio:4/3">
+    <img src="https://images.unsplash.com/photo-1589452271712-64b8a66c7b71?w=600&amp;h=400&amp;fit=crop" alt="오사카 2박 3일 먹방 여행" class="w-full h-full object-cover transition-transform duration-300">
+    <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
+    <span class="absolute top-2 left-2 text-[10px] font-bold px-2 py-0.5 rounded-full text-white" style="background-color:#6369D1">오사카</span>
+    <button class="absolute top-2 right-2 w-6 h-6 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-sm transition-transform hover:scale-110" type="button" data-bookmark aria-label="북마크">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>
+    </button>
+    <span class="absolute bottom-2 left-2 text-white text-[10px] font-bold bg-black/50 rounded-full px-2 py-0.5">2박 3일</span>
+  </div>
+  <div class="p-3">
+    <h3 class="font-bold text-[13px] leading-snug mb-0.5 line-clamp-2 transition-colors" style="color:#18181b">오사카 2박 3일 먹방 여행</h3>
+    <p class="text-gray-500 text-[11px] line-clamp-1 mb-2 leading-relaxed">도톤보리, 구로몬시장, 오사카 성! 먹고 먹고 또 먹는 오사카.</p>
+    <div class="flex items-center gap-2.5 text-[10px] text-gray-400 mb-2.5">
+      <span class="flex items-center gap-0.5"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg><span class="font-medium">1,102</span></span>
+      <span class="flex items-center gap-0.5"><svg width="10" height="10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>5,100</span>
+    </div>
+    <div class="flex items-center justify-between border-t pt-2" style="border-color:#D1D2F9">
+      <div class="flex items-center gap-1.5"><img src="https://i.pravatar.cc/40?img=31" alt="오사카마니아" class="w-4 h-4 rounded-full object-cover"><span class="text-[10px] text-gray-500 font-medium">오사카마니아</span></div>
+      <span class="text-[9px] text-gray-400">2026.09.08</span>
+    </div>
+  </div>
+</a>
+<a href="${pageContext.request.contextPath}/view/travel/scheduleDetail.jsp?id=11" class="jsp-home-schedule-card shrink-0 bg-white rounded-2xl overflow-hidden cursor-pointer border" style="width:204px;position:relative;z-index:1;border-color:#e5e7eb;box-shadow:0 2px 8px rgba(0,0,0,0.07);transform:scale(1);transition:transform .25s cubic-bezier(.22,1,.36,1),box-shadow .25s,border-color .2s,z-index 0s">
+  <div class="relative overflow-hidden" style="aspect-ratio:4/3">
+    <img src="https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?w=600&amp;h=400&amp;fit=crop" alt="뉴욕 6박 7일 도시 탐험" class="w-full h-full object-cover transition-transform duration-300">
+    <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
+    <span class="absolute top-2 left-2 text-[10px] font-bold px-2 py-0.5 rounded-full text-white" style="background-color:#6369D1">뉴욕</span>
+    <button class="absolute top-2 right-2 w-6 h-6 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-sm transition-transform hover:scale-110" type="button" data-bookmark aria-label="북마크">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>
+    </button>
+    <span class="absolute bottom-2 left-2 text-white text-[10px] font-bold bg-black/50 rounded-full px-2 py-0.5">6박 7일</span>
+  </div>
+  <div class="p-3">
+    <h3 class="font-bold text-[13px] leading-snug mb-0.5 line-clamp-2 transition-colors" style="color:#18181b">뉴욕 6박 7일 도시 탐험</h3>
+    <p class="text-gray-500 text-[11px] line-clamp-1 mb-2 leading-relaxed">타임스퀘어, 센트럴파크, 브루클린 브리지! 잠들지 않는 도시 뉴욕.</p>
+    <div class="flex items-center gap-2.5 text-[10px] text-gray-400 mb-2.5">
+      <span class="flex items-center gap-0.5"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg><span class="font-medium">987</span></span>
+      <span class="flex items-center gap-0.5"><svg width="10" height="10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>4,520</span>
+    </div>
+    <div class="flex items-center justify-between border-t pt-2" style="border-color:#D1D2F9">
+      <div class="flex items-center gap-1.5"><img src="https://i.pravatar.cc/40?img=21" alt="NYC러버" class="w-4 h-4 rounded-full object-cover"><span class="text-[10px] text-gray-500 font-medium">NYC러버</span></div>
+      <span class="text-[9px] text-gray-400">2026.07.28</span>
+    </div>
+  </div>
+</a>
+<a href="${pageContext.request.contextPath}/view/travel/scheduleDetail.jsp?id=7" class="jsp-home-schedule-card shrink-0 bg-white rounded-2xl overflow-hidden cursor-pointer border" style="width:204px;position:relative;z-index:1;border-color:#e5e7eb;box-shadow:0 2px 8px rgba(0,0,0,0.07);transform:scale(1);transition:transform .25s cubic-bezier(.22,1,.36,1),box-shadow .25s,border-color .2s,z-index 0s">
+  <div class="relative overflow-hidden" style="aspect-ratio:4/3">
+    <img src="https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=600&amp;h=400&amp;fit=crop" alt="도쿄 3박 4일 완전 정복" class="w-full h-full object-cover transition-transform duration-300">
+    <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
+    <span class="absolute top-2 left-2 text-[10px] font-bold px-2 py-0.5 rounded-full text-white" style="background-color:#6369D1">도쿄</span>
+    <button class="absolute top-2 right-2 w-6 h-6 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-sm transition-transform hover:scale-110" type="button" data-bookmark aria-label="북마크">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>
+    </button>
+    <span class="absolute bottom-2 left-2 text-white text-[10px] font-bold bg-black/50 rounded-full px-2 py-0.5">3박 4일</span>
+  </div>
+  <div class="p-3">
+    <h3 class="font-bold text-[13px] leading-snug mb-0.5 line-clamp-2 transition-colors" style="color:#18181b">도쿄 3박 4일 완전 정복</h3>
+    <p class="text-gray-500 text-[11px] line-clamp-1 mb-2 leading-relaxed">시부야, 아키하바라, 아사쿠사! 도쿄의 모든 것을 담은 알찬 일정.</p>
+    <div class="flex items-center gap-2.5 text-[10px] text-gray-400 mb-2.5">
+      <span class="flex items-center gap-0.5"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg><span class="font-medium">921</span></span>
+      <span class="flex items-center gap-0.5"><svg width="10" height="10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>4,210</span>
+    </div>
+    <div class="flex items-center justify-between border-t pt-2" style="border-color:#D1D2F9">
+      <div class="flex items-center gap-1.5"><img src="https://i.pravatar.cc/40?img=13" alt="재팬러버" class="w-4 h-4 rounded-full object-cover"><span class="text-[10px] text-gray-500 font-medium">재팬러버</span></div>
+      <span class="text-[9px] text-gray-400">2026.08.05</span>
+    </div>
+  </div>
+</a>
+<a href="https://example.com/tripstay" target="_blank" rel="noreferrer" class="jsp-home-ad-card shrink-0 rounded-2xl overflow-hidden cursor-pointer group relative border bg-white" style="width:204px;z-index:1;position:relative;border-color:#e5e7eb;box-shadow:0 2px 8px rgba(0,0,0,.07);transform:scale(1);transition:transform .25s cubic-bezier(.22,1,.36,1),box-shadow .25s">
+  <div class="relative overflow-hidden" style="aspect-ratio:4/3">
+    <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=900&q=80" alt="도쿄 숙소 최대 15% 할인" class="w-full h-full object-cover transition-transform duration-300">
+    <div class="absolute inset-0" style="background:linear-gradient(to top,rgba(10,5,40,.8) 0%,rgba(10,5,40,.25) 60%,transparent 100%)"></div>
+    <span class="absolute top-2 left-2 text-[9px] font-bold px-2 py-0.5 rounded-full bg-yellow-400 text-gray-900">AD</span>
+  </div>
+  <div class="p-3" style="background:linear-gradient(135deg,#f4f4ff 0%,#fff9df 100%)">
+    <div class="text-[10px] text-gray-400 mb-0.5 font-semibold">TripStay</div>
+    <h3 class="font-bold text-[12px] text-gray-800 line-clamp-2 leading-snug mb-2">도쿄 숙소 최대 15% 할인</h3>
+    <div class="text-[10px] font-bold" style="color:var(--brand)">광고 보기 →</div>
+  </div>
+</a>
+<a href="${pageContext.request.contextPath}/view/travel/scheduleDetail.jsp?id=10" class="jsp-home-schedule-card shrink-0 bg-white rounded-2xl overflow-hidden cursor-pointer border" style="width:204px;position:relative;z-index:1;border-color:#e5e7eb;box-shadow:0 2px 8px rgba(0,0,0,0.07);transform:scale(1);transition:transform .25s cubic-bezier(.22,1,.36,1),box-shadow .25s,border-color .2s,z-index 0s">
+  <div class="relative overflow-hidden" style="aspect-ratio:4/3">
+    <img src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=600&amp;h=400&amp;fit=crop" alt="발리 5박 6일 힐링 휴양" class="w-full h-full object-cover transition-transform duration-300">
+    <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
+    <span class="absolute top-2 left-2 text-[10px] font-bold px-2 py-0.5 rounded-full text-white" style="background-color:#6369D1">발리</span>
+    <button class="absolute top-2 right-2 w-6 h-6 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-sm transition-transform hover:scale-110" type="button" data-bookmark aria-label="북마크">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>
+    </button>
+    <span class="absolute bottom-2 left-2 text-white text-[10px] font-bold bg-black/50 rounded-full px-2 py-0.5">5박 6일</span>
+  </div>
+  <div class="p-3">
+    <h3 class="font-bold text-[13px] leading-snug mb-0.5 line-clamp-2 transition-colors" style="color:#18181b">발리 5박 6일 힐링 휴양</h3>
+    <p class="text-gray-500 text-[11px] line-clamp-1 mb-2 leading-relaxed">우붓 라이스테라스, 울루와뚜 사원, 짱구 카페까지 발리 완전정복.</p>
+    <div class="flex items-center gap-2.5 text-[10px] text-gray-400 mb-2.5">
+      <span class="flex items-center gap-0.5"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg><span class="font-medium">892</span></span>
+      <span class="flex items-center gap-0.5"><svg width="10" height="10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>3,890</span>
+    </div>
+    <div class="flex items-center justify-between border-t pt-2" style="border-color:#D1D2F9">
+      <div class="flex items-center gap-1.5"><img src="https://i.pravatar.cc/40?img=19" alt="발리덕후" class="w-4 h-4 rounded-full object-cover"><span class="text-[10px] text-gray-500 font-medium">발리덕후</span></div>
+      <span class="text-[9px] text-gray-400">2026.08.22</span>
+    </div>
+  </div>
+</a>
+<a href="${pageContext.request.contextPath}/view/travel/scheduleDetail.jsp?id=14" class="jsp-home-schedule-card shrink-0 bg-white rounded-2xl overflow-hidden cursor-pointer border" style="width:204px;position:relative;z-index:1;border-color:#e5e7eb;box-shadow:0 2px 8px rgba(0,0,0,0.07);transform:scale(1);transition:transform .25s cubic-bezier(.22,1,.36,1),box-shadow .25s,border-color .2s,z-index 0s">
+  <div class="relative overflow-hidden" style="aspect-ratio:4/3">
+    <img src="https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?w=600&amp;h=400&amp;fit=crop" alt="다낭 3박 4일 바다 &amp; 리조트" class="w-full h-full object-cover transition-transform duration-300">
+    <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
+    <span class="absolute top-2 left-2 text-[10px] font-bold px-2 py-0.5 rounded-full text-white" style="background-color:#6369D1">다낭</span>
+    <button class="absolute top-2 right-2 w-6 h-6 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-sm transition-transform hover:scale-110" type="button" data-bookmark aria-label="북마크">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>
+    </button>
+    <span class="absolute bottom-2 left-2 text-white text-[10px] font-bold bg-black/50 rounded-full px-2 py-0.5">3박 4일</span>
+  </div>
+  <div class="p-3">
+    <h3 class="font-bold text-[13px] leading-snug mb-0.5 line-clamp-2 transition-colors" style="color:#18181b">다낭 3박 4일 바다 &amp; 리조트</h3>
+    <p class="text-gray-500 text-[11px] line-clamp-1 mb-2 leading-relaxed">미케 비치, 바나힐, 호이안 올드타운까지! 베트남 중부의 진주.</p>
+    <div class="flex items-center gap-2.5 text-[10px] text-gray-400 mb-2.5">
+      <span class="flex items-center gap-0.5"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg><span class="font-medium">712</span></span>
+      <span class="flex items-center gap-0.5"><svg width="10" height="10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>3,200</span>
+    </div>
+    <div class="flex items-center justify-between border-t pt-2" style="border-color:#D1D2F9">
+      <div class="flex items-center gap-1.5"><img src="https://i.pravatar.cc/40?img=27" alt="다낭러버" class="w-4 h-4 rounded-full object-cover"><span class="text-[10px] text-gray-500 font-medium">다낭러버</span></div>
+      <span class="text-[9px] text-gray-400">2026.09.01</span>
+    </div>
+  </div>
+</a>
+<a href="${pageContext.request.contextPath}/view/travel/scheduleDetail.jsp?id=8" class="jsp-home-schedule-card shrink-0 bg-white rounded-2xl overflow-hidden cursor-pointer border" style="width:204px;position:relative;z-index:1;border-color:#e5e7eb;box-shadow:0 2px 8px rgba(0,0,0,0.07);transform:scale(1);transition:transform .25s cubic-bezier(.22,1,.36,1),box-shadow .25s,border-color .2s,z-index 0s">
+  <div class="relative overflow-hidden" style="aspect-ratio:4/3">
+    <img src="https://images.unsplash.com/photo-1506665531195-3566af2b548e?w=600&amp;h=400&amp;fit=crop" alt="방콕 4박 5일 사원 &amp; 야시장" class="w-full h-full object-cover transition-transform duration-300">
+    <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
+    <span class="absolute top-2 left-2 text-[10px] font-bold px-2 py-0.5 rounded-full text-white" style="background-color:#6369D1">방콕</span>
+    <button class="absolute top-2 right-2 w-6 h-6 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-sm transition-transform hover:scale-110" type="button" data-bookmark aria-label="북마크">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>
+    </button>
+    <span class="absolute bottom-2 left-2 text-white text-[10px] font-bold bg-black/50 rounded-full px-2 py-0.5">4박 5일</span>
+  </div>
+  <div class="p-3">
+    <h3 class="font-bold text-[13px] leading-snug mb-0.5 line-clamp-2 transition-colors" style="color:#18181b">방콕 4박 5일 사원 &amp; 야시장</h3>
+    <p class="text-gray-500 text-[11px] line-clamp-1 mb-2 leading-relaxed">왕궁, 왓포, 차오프라야강과 야시장까지! 방콕의 매력에 빠져봐요.</p>
+    <div class="flex items-center gap-2.5 text-[10px] text-gray-400 mb-2.5">
+      <span class="flex items-center gap-0.5"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg><span class="font-medium">678</span></span>
+      <span class="flex items-center gap-0.5"><svg width="10" height="10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>3,100</span>
+    </div>
+    <div class="flex items-center justify-between border-t pt-2" style="border-color:#D1D2F9">
+      <div class="flex items-center gap-1.5"><img src="https://i.pravatar.cc/40?img=15" alt="태국덕후" class="w-4 h-4 rounded-full object-cover"><span class="text-[10px] text-gray-500 font-medium">태국덕후</span></div>
+      <span class="text-[9px] text-gray-400">2026.08.18</span>
+    </div>
+  </div>
+</a>
+<a href="${pageContext.request.contextPath}/view/travel/scheduleDetail.jsp?id=12" class="jsp-home-schedule-card shrink-0 bg-white rounded-2xl overflow-hidden cursor-pointer border" style="width:204px;position:relative;z-index:1;border-color:#e5e7eb;box-shadow:0 2px 8px rgba(0,0,0,0.07);transform:scale(1);transition:transform .25s cubic-bezier(.22,1,.36,1),box-shadow .25s,border-color .2s,z-index 0s">
+  <div class="relative overflow-hidden" style="aspect-ratio:4/3">
+    <img src="https://images.unsplash.com/photo-1539037116277-4db20889f2d4?w=600&amp;h=400&amp;fit=crop" alt="바르셀로나 4박 5일 가우디 투어" class="w-full h-full object-cover transition-transform duration-300">
+    <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
+    <span class="absolute top-2 left-2 text-[10px] font-bold px-2 py-0.5 rounded-full text-white" style="background-color:#6369D1">바르셀로나</span>
+    <button class="absolute top-2 right-2 w-6 h-6 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-sm transition-transform hover:scale-110" type="button" data-bookmark aria-label="북마크">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>
+    </button>
+    <span class="absolute bottom-2 left-2 text-white text-[10px] font-bold bg-black/50 rounded-full px-2 py-0.5">4박 5일</span>
+  </div>
+  <div class="p-3">
+    <h3 class="font-bold text-[13px] leading-snug mb-0.5 line-clamp-2 transition-colors" style="color:#18181b">바르셀로나 4박 5일 가우디 투어</h3>
+    <p class="text-gray-500 text-[11px] line-clamp-1 mb-2 leading-relaxed">사그라다 파밀리아, 구엘공원, 바르셀로나 해변까지 가우디의 도시.</p>
+    <div class="flex items-center gap-2.5 text-[10px] text-gray-400 mb-2.5">
+      <span class="flex items-center gap-0.5"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg><span class="font-medium">634</span></span>
+      <span class="flex items-center gap-0.5"><svg width="10" height="10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>2,890</span>
+    </div>
+    <div class="flex items-center justify-between border-t pt-2" style="border-color:#D1D2F9">
+      <div class="flex items-center gap-1.5"><img src="https://i.pravatar.cc/40?img=23" alt="스페인러버" class="w-4 h-4 rounded-full object-cover"><span class="text-[10px] text-gray-500 font-medium">스페인러버</span></div>
+      <span class="text-[9px] text-gray-400">2026.08.08</span>
+    </div>
+  </div>
+</a>
+<a href="${pageContext.request.contextPath}/view/travel/scheduleDetail.jsp?id=3" class="jsp-home-schedule-card shrink-0 bg-white rounded-2xl overflow-hidden cursor-pointer border" style="width:204px;position:relative;z-index:1;border-color:#e5e7eb;box-shadow:0 2px 8px rgba(0,0,0,0.07);transform:scale(1);transition:transform .25s cubic-bezier(.22,1,.36,1),box-shadow .25s,border-color .2s,z-index 0s">
+  <div class="relative overflow-hidden" style="aspect-ratio:4/3">
+    <img src="https://images.unsplash.com/photo-1538485399081-7191377e8241?w=600&amp;h=400&amp;fit=crop" alt="부산 1박 2일 바다 여행" class="w-full h-full object-cover transition-transform duration-300">
+    <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
+    <span class="absolute top-2 left-2 text-[10px] font-bold px-2 py-0.5 rounded-full text-white" style="background-color:#6369D1">부산</span>
+    <button class="absolute top-2 right-2 w-6 h-6 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-sm transition-transform hover:scale-110" type="button" data-bookmark aria-label="북마크">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>
+    </button>
+    <span class="absolute bottom-2 left-2 text-white text-[10px] font-bold bg-black/50 rounded-full px-2 py-0.5">1박 2일</span>
+  </div>
+  <div class="p-3">
+    <h3 class="font-bold text-[13px] leading-snug mb-0.5 line-clamp-2 transition-colors" style="color:#18181b">부산 1박 2일 바다 여행</h3>
+    <p class="text-gray-500 text-[11px] line-clamp-1 mb-2 leading-relaxed">해운대와 광안리, 자갈치시장까지! 부산 핵심 코스.</p>
+    <div class="flex items-center gap-2.5 text-[10px] text-gray-400 mb-2.5">
+      <span class="flex items-center gap-0.5"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg><span class="font-medium">512</span></span>
+      <span class="flex items-center gap-0.5"><svg width="10" height="10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>2,341</span>
+    </div>
+    <div class="flex items-center justify-between border-t pt-2" style="border-color:#D1D2F9">
+      <div class="flex items-center gap-1.5"><img src="https://i.pravatar.cc/40?img=5" alt="바다러버" class="w-4 h-4 rounded-full object-cover"><span class="text-[10px] text-gray-500 font-medium">바다러버</span></div>
+      <span class="text-[9px] text-gray-400">2026.08.10</span>
+    </div>
+  </div>
+</a></div>
   </section>
 
-  <section class="home-community-preview">
-    <div class="home-preview-column">
-      <div class="home-preview-head"><div><p>Travel Tips</p><h2>여행꿀팁</h2><span>여행 고수들의 노하우</span></div><a class="home-more" href="${pageContext.request.contextPath}/view/tips/tipList.jsp">더보기 <b>→</b></a></div>
-      <div class="home-preview-list" data-rotating-list="tips">
-        <a class="home-preview-card" href="${pageContext.request.contextPath}/view/tips/tipDetail.jsp?id=3"><img src="https://images.unsplash.com/photo-1591814468924-caf88d1232e1?fit=crop&w=300&q=80" alt="후쿠오카"><div><span class="home-category food">음식</span><h3>후쿠오카에서 꼭 먹어야 하는 현지 음식 7가지</h3><small><i style="background:#F59E0B">민</i> 민수 · 1일 전</small></div></a>
-        <a class="home-preview-card" href="${pageContext.request.contextPath}/view/tips/tipDetail.jsp?id=6"><img src="https://images.unsplash.com/photo-1561501900-3701fa6a0864?fit=crop&w=300&q=80" alt="발리"><div><span class="home-category stay">숙박</span><h3>발리 숙소 지역별 추천 (꾸따, 스미냑, 우붓 비교)</h3><small><i style="background:#10B981">한</i> 한우 · 3일 전</small></div></a>
-        <a class="home-preview-card" href="${pageContext.request.contextPath}/view/tips/tipDetail.jsp?id=4"><img src="https://images.unsplash.com/photo-1488415032361-b7e238421f1b?fit=crop&w=300&q=80" alt="아이슬란드"><div><span class="home-category culture">문화</span><h3>아이슬란드 오로라 여행 팁 (시기, 준비물, 촬영방법)</h3><small><i style="background:#EC4899">나</i> 나 · 1일 전</small></div></a>
+  <section class="mt-20 mb-20 px-4 md:px-8 max-w-6xl mx-auto">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+      <div>
+        <div class="flex items-end justify-between mb-6"><div><p class="text-xs font-bold tracking-widest uppercase mb-1" style="color:var(--brand)">Travel Tips</p><h2 class="text-xl font-extrabold text-gray-900">여행꿀팁</h2><p class="text-xs text-gray-400 mt-0.5">여행 고수들의 노하우</p></div><a href="${pageContext.request.contextPath}/view/tips/tipList.jsp" class="jsp-more-button flex items-center gap-2 px-5 py-2.5 rounded-xl border-2 text-sm font-bold transition-all" style="border-color:var(--brand);color:var(--brand)">더보기<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a></div>
+        <div class="flex flex-col gap-3"><a href="${pageContext.request.contextPath}/view/tips/tipDetail.jsp?id=3" class="jsp-preview-card preview-item-enter flex gap-4 p-4 bg-white rounded-2xl border border-gray-100 shadow-sm text-left w-full group transition-all" style="height:96px">
+  <div class="shrink-0 rounded-xl overflow-hidden" style="width:68px;height:64px"><img src="https://images.unsplash.com/photo-1591814468924-caf88d1232e1?crop=entropy&amp;cs=tinysrgb&amp;fit=max&amp;fm=jpg&amp;ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxyYW1lbiUyMG5vb2RsZSUyMGphcGFuZXNlJTIwZm9vZCUyMGJvd2x8ZW58MXx8fHwxNzg5MjgzNjU5fDA&amp;ixlib=rb-4.1.0&amp;q=80&amp;w=600" alt="후쿠오카에서 꼭 먹어야 하는 현지 음식 7가지" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"></div>
+  <div class="flex-1 min-w-0 flex flex-col justify-center">
+    <span class="inline-block text-[10px] font-bold px-2 py-0.5 rounded-full mb-1 self-start" style="color:#F59E0B;background-color:#FFFBEB">음식</span>
+    <h3 class="font-bold text-[13px] text-gray-900 mb-0.5 line-clamp-1 group-hover:text-[#6369D1] transition-colors">후쿠오카에서 꼭 먹어야 하는 현지 음식 7가지</h3>
+    <div class="flex items-center gap-1"><div class="w-4 h-4 rounded-full flex items-center justify-center text-white text-[8px] font-bold" style="background-color:#F59E0B">민</div><span class="text-[10px] text-gray-400">민수 · 1일 전</span></div>
+  </div>
+</a><a href="${pageContext.request.contextPath}/view/tips/tipDetail.jsp?id=6" class="jsp-preview-card preview-item-enter flex gap-4 p-4 bg-white rounded-2xl border border-gray-100 shadow-sm text-left w-full group transition-all" style="height:96px">
+  <div class="shrink-0 rounded-xl overflow-hidden" style="width:68px;height:64px"><img src="https://images.unsplash.com/photo-1561501900-3701fa6a0864?crop=entropy&amp;cs=tinysrgb&amp;fit=max&amp;fm=jpg&amp;ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwyfHxob3RlbCUyMGx1eHVyeSUyMHJlc29ydCUyMGFjY29tbW9kYXRpb258ZW58MXx8fHwxNzg5MjgzNjU4fDA&amp;ixlib=rb-4.1.0&amp;q=80&amp;w=600" alt="발리 숙소 지역별 추천 (꾸따, 스미냑, 우붓 비교)" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"></div>
+  <div class="flex-1 min-w-0 flex flex-col justify-center">
+    <span class="inline-block text-[10px] font-bold px-2 py-0.5 rounded-full mb-1 self-start" style="color:#3B82F6;background-color:#EFF6FF">숙박</span>
+    <h3 class="font-bold text-[13px] text-gray-900 mb-0.5 line-clamp-1 group-hover:text-[#6369D1] transition-colors">발리 숙소 지역별 추천 (꾸따, 스미냑, 우붓 비교)</h3>
+    <div class="flex items-center gap-1"><div class="w-4 h-4 rounded-full flex items-center justify-center text-white text-[8px] font-bold" style="background-color:#10B981">한</div><span class="text-[10px] text-gray-400">한우 · 3일 전</span></div>
+  </div>
+</a><a href="${pageContext.request.contextPath}/view/tips/tipDetail.jsp?id=4" class="jsp-preview-card preview-item-enter flex gap-4 p-4 bg-white rounded-2xl border border-gray-100 shadow-sm text-left w-full group transition-all" style="height:96px">
+  <div class="shrink-0 rounded-xl overflow-hidden" style="width:68px;height:64px"><img src="https://images.unsplash.com/photo-1488415032361-b7e238421f1b?crop=entropy&amp;cs=tinysrgb&amp;fit=max&amp;fm=jpg&amp;ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxub3J0aGVybiUyMGxpZ2h0cyUyMGF1cm9yYSUyMGljZWxhbmQlMjBjdWx0dXJlfGVufDF8fHx8MTc4OTI4MzY1OXww&amp;ixlib=rb-4.1.0&amp;q=80&amp;w=600" alt="아이슬란드 오로라 여행 팁 (시기, 준비물, 촬영방법)" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"></div>
+  <div class="flex-1 min-w-0 flex flex-col justify-center">
+    <span class="inline-block text-[10px] font-bold px-2 py-0.5 rounded-full mb-1 self-start" style="color:#10B981;background-color:#ECFDF5">문화</span>
+    <h3 class="font-bold text-[13px] text-gray-900 mb-0.5 line-clamp-1 group-hover:text-[#6369D1] transition-colors">아이슬란드 오로라 여행 팁 (시기, 준비물, 촬영방법)</h3>
+    <div class="flex items-center gap-1"><div class="w-4 h-4 rounded-full flex items-center justify-center text-white text-[8px] font-bold" style="background-color:#EC4899">나</div><span class="text-[10px] text-gray-400">나 · 1일 전</span></div>
+  </div>
+</a></div>
+        <div class="flex items-center justify-center gap-2 mt-5"><button type="button" class="jsp-progress-active relative overflow-hidden rounded-full" style="width:44px;height:9px;background-color:#e5e7eb"><span class="dot-fill-active absolute inset-y-0 left-0 rounded-full" style="background-color:#FFD447"></span></button><button type="button" class="relative overflow-hidden rounded-full" style="width:44px;height:9px;background-color:#e5e7eb"></button><button type="button" class="relative overflow-hidden rounded-full" style="width:44px;height:9px;background-color:#e5e7eb"></button></div>
       </div>
-      <div class="home-progress"><button class="active"><span></span></button><button></button><button></button></div>
-    </div>
-
-    <div class="home-preview-column">
-      <div class="home-preview-head"><div><p>Travel Mate</p><h2>여행 메이트</h2><span>함께 여행할 동반자</span></div><a class="home-more" href="${pageContext.request.contextPath}/view/mate/mateList.jsp">더보기 <b>→</b></a></div>
-      <div class="home-preview-list" data-rotating-list="mates">
-        <a class="home-preview-card mate" href="${pageContext.request.contextPath}/view/mate/mateDetail.jsp?id=4"><div class="home-mate-icon">⌖<span>이탈리아</span></div><div><span class="home-mate-meta">이탈리아 · 로마 <em>2명 모집</em></span><h3>🍕 10/15-22 로마·피렌체·베네치아 맛집 여행 동행</h3><small><i style="background:#EC4899">서</i> 서연 · 2026.09.09</small></div></a>
-        <a class="home-preview-card mate" href="${pageContext.request.contextPath}/view/mate/mateDetail.jsp?id=5"><div class="home-mate-icon">⌖<span>영국</span></div><div><span class="home-mate-meta">영국 · 런던 <em>3명 모집</em></span><h3>🎓 11월 런던 어학연수 · 영어 회화 파트너 구해요</h3><small><i style="background:#10B981">도</i> 도현 · 2026.09.08</small></div></a>
-        <a class="home-preview-card mate" href="${pageContext.request.contextPath}/view/mate/mateDetail.jsp?id=1"><div class="home-mate-icon">⌖<span>일본</span></div><div><span class="home-mate-meta">일본 · 도쿄 <em>1명 모집</em></span><h3>🗼 11/10-14 도쿄 4박 · 맛집+카페+쇼핑 동행 1명</h3><small><i style="background:#8B5CF6">지</i> 지민 · 2026.09.10</small></div></a>
+      <div>
+        <div class="flex items-end justify-between mb-6"><div><p class="text-xs font-bold tracking-widest uppercase mb-1" style="color:var(--brand)">Travel Mate</p><h2 class="text-xl font-extrabold text-gray-900">여행 메이트</h2><p class="text-xs text-gray-400 mt-0.5">함께 여행할 동반자</p></div><a href="${pageContext.request.contextPath}/view/mate/mateList.jsp" class="jsp-more-button flex items-center gap-2 px-5 py-2.5 rounded-xl border-2 text-sm font-bold transition-all" style="border-color:var(--brand);color:var(--brand)">더보기<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a></div>
+        <div class="flex flex-col gap-3"><a href="${pageContext.request.contextPath}/view/mate/mateDetail.jsp?id=4" class="jsp-preview-card preview-item-enter flex gap-4 p-4 bg-white rounded-2xl border border-gray-100 shadow-sm text-left w-full group transition-all" style="height:96px">
+  <div class="shrink-0 rounded-xl flex flex-col items-center justify-center gap-1 font-bold" style="width:68px;height:64px;background-color:var(--brand-soft);color:var(--brand)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg><span class="text-[10px] font-bold leading-tight text-center px-1 line-clamp-2">이탈리아</span></div>
+  <div class="flex-1 min-w-0 flex flex-col justify-center">
+    <div class="flex items-center gap-1.5 mb-0.5"><span class="text-[11px] font-semibold" style="color:var(--brand)">이탈리아 · 로마</span><span class="text-[10px] font-bold px-1.5 py-0.5 rounded-full" style="background-color:var(--brand-light);color:var(--brand)">2명 모집</span></div>
+    <h3 class="font-bold text-[13px] text-gray-900 mb-0.5 line-clamp-1 group-hover:text-[#6369D1] transition-colors">🍕 10/15-22 로마·피렌체·베네치아 맛집 여행 동행</h3>
+    <div class="flex items-center gap-1"><div class="w-4 h-4 rounded-full flex items-center justify-center text-white text-[8px] font-bold" style="background-color:#EC4899">서</div><span class="text-[10px] text-gray-400">서연 · 2026.09.09</span></div>
+  </div>
+</a><a href="${pageContext.request.contextPath}/view/mate/mateDetail.jsp?id=5" class="jsp-preview-card preview-item-enter flex gap-4 p-4 bg-white rounded-2xl border border-gray-100 shadow-sm text-left w-full group transition-all" style="height:96px">
+  <div class="shrink-0 rounded-xl flex flex-col items-center justify-center gap-1 font-bold" style="width:68px;height:64px;background-color:var(--brand-soft);color:var(--brand)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg><span class="text-[10px] font-bold leading-tight text-center px-1 line-clamp-2">영국</span></div>
+  <div class="flex-1 min-w-0 flex flex-col justify-center">
+    <div class="flex items-center gap-1.5 mb-0.5"><span class="text-[11px] font-semibold" style="color:var(--brand)">영국 · 런던</span><span class="text-[10px] font-bold px-1.5 py-0.5 rounded-full" style="background-color:var(--brand-light);color:var(--brand)">3명 모집</span></div>
+    <h3 class="font-bold text-[13px] text-gray-900 mb-0.5 line-clamp-1 group-hover:text-[#6369D1] transition-colors">🎓 11월 런던 어학연수 · 영어 회화 파트너 구해요</h3>
+    <div class="flex items-center gap-1"><div class="w-4 h-4 rounded-full flex items-center justify-center text-white text-[8px] font-bold" style="background-color:#10B981">도</div><span class="text-[10px] text-gray-400">도현 · 2026.09.08</span></div>
+  </div>
+</a><a href="${pageContext.request.contextPath}/view/mate/mateDetail.jsp?id=1" class="jsp-preview-card preview-item-enter flex gap-4 p-4 bg-white rounded-2xl border border-gray-100 shadow-sm text-left w-full group transition-all" style="height:96px">
+  <div class="shrink-0 rounded-xl flex flex-col items-center justify-center gap-1 font-bold" style="width:68px;height:64px;background-color:var(--brand-soft);color:var(--brand)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg><span class="text-[10px] font-bold leading-tight text-center px-1 line-clamp-2">일본</span></div>
+  <div class="flex-1 min-w-0 flex flex-col justify-center">
+    <div class="flex items-center gap-1.5 mb-0.5"><span class="text-[11px] font-semibold" style="color:var(--brand)">일본 · 도쿄</span><span class="text-[10px] font-bold px-1.5 py-0.5 rounded-full" style="background-color:var(--brand-light);color:var(--brand)">1명 모집</span></div>
+    <h3 class="font-bold text-[13px] text-gray-900 mb-0.5 line-clamp-1 group-hover:text-[#6369D1] transition-colors">🗼 11/10-14 도쿄 4박 · 맛집+카페+쇼핑 동행 1명</h3>
+    <div class="flex items-center gap-1"><div class="w-4 h-4 rounded-full flex items-center justify-center text-white text-[8px] font-bold" style="background-color:#8B5CF6">지</div><span class="text-[10px] text-gray-400">지민 · 2026.09.10</span></div>
+  </div>
+</a></div>
+        <div class="flex items-center justify-center gap-2 mt-5"><button type="button" class="jsp-progress-active relative overflow-hidden rounded-full" style="width:44px;height:9px;background-color:#e5e7eb"><span class="dot-fill-active absolute inset-y-0 left-0 rounded-full" style="background-color:#FFD447"></span></button><button type="button" class="relative overflow-hidden rounded-full" style="width:44px;height:9px;background-color:#e5e7eb"></button><button type="button" class="relative overflow-hidden rounded-full" style="width:44px;height:9px;background-color:#e5e7eb"></button></div>
       </div>
-      <div class="home-progress"><button class="active"><span></span></button><button></button><button></button></div>
     </div>
   </section>
 </main>
 <jsp:include page="/common/footer.jsp" />
-</body>
-</html>
+</body></html>

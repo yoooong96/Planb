@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%><% request.setAttribute("activePage","notifications"); %>
-<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>알림 · Tripily</title><jsp:include page="/common/headStyles.jsp" /></head><body><jsp:include page="/common/header.jsp" />
+<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>알림 · Tripily</title><jsp:include page="/common/headStyles.jsp" /></head><body class="site-shell"><jsp:include page="/common/header.jsp" />
 <main class="max-w-4xl mx-auto px-6 py-10">
  <div class="flex items-end justify-between gap-4 mb-7"><div><p class="text-xs font-black tracking-[.18em] text-[#6369D1]">NOTIFICATIONS</p><h1 class="text-3xl font-black mt-1">알림</h1><p class="text-sm text-gray-500 mt-2">댓글, 좋아요 등 내 활동과 관련된 소식을 확인합니다.</p></div><button type="button" class="px-4 py-2 rounded-xl border border-gray-200 text-sm font-bold text-gray-600" data-read-all>모두 읽음</button></div>
  <div class="border border-gray-200 rounded-2xl overflow-hidden bg-white" data-notification-list><div class="px-5 py-3 border-b bg-gray-50 text-xs font-bold text-gray-500">읽지 않은 알림 <span data-unread-count>2</span>개</div>
