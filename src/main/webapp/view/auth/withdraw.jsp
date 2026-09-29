@@ -1,3 +1,44 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<% request.setAttribute("activePage", "auth");  %>
-<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>회원 탈퇴 | Tripily</title><link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/tripily.css"></head><body><jsp:include page="/common/header.jsp"/><main class="page narrow"><div class="page-title-row"><div><span class="eyebrow">ACCOUNT</span><h1>회원 탈퇴</h1><p class="page-desc">탈퇴 전에 삭제 및 보존되는 정보를 확인해주세요.</p></div></div><div class="form-card"><div class="notice danger"><b>탈퇴하면 되돌릴 수 없습니다.</b><br>계정은 WITHDRAWN 상태로 처리하고 법적 보존이 필요한 이력은 정책에 따라 보관하도록 서버에서 처리합니다.</div><div class="form-section"><label class="check-row"><input type="checkbox" required> 탈퇴 안내사항을 확인했고 계정 삭제에 동의합니다.</label><div class="field"><label>현재 비밀번호 <span class="required">필수</span></label><input type="password" placeholder="본인 확인을 위해 입력"></div></div><div class="form-actions"><a class="btn outline" href="../settings/settings.jsp">취소</a><button class="btn danger" data-confirm="정말 탈퇴하시겠습니까?" onclick="tripilyToast('탈퇴 Controller 연결 위치입니다.')">회원 탈퇴</button></div></div></main><jsp:include page="/common/footer.jsp"/></body></html>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%
+request.setAttribute("activePage", "auth");
+%>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>회원 탈퇴 | Tripily</title>
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/view/assets/css/tripily.css">
+</head>
+<body><jsp:include page="/common/header.jsp" /><main
+		class="page narrow">
+		<div class="page-title-row">
+			<div>
+				<span class="eyebrow">ACCOUNT</span>
+				<h1>회원 탈퇴</h1>
+				<p class="page-desc">탈퇴 전에 삭제 및 보존되는 정보를 확인해주세요.</p>
+			</div>
+		</div>
+		<div class="form-card">
+			<div class="notice danger">
+				<b>탈퇴하면 되돌릴 수 없습니다.</b><br>계정은 WITHDRAWN 상태로 처리하고 법적 보존이 필요한
+				이력은 정책에 따라 보관하도록 서버에서 처리합니다.
+			</div>
+			<div class="form-section">
+				<label class="check-row"><input type="checkbox" required>
+					탈퇴 안내사항을 확인했고 계정 삭제에 동의합니다.</label>
+				<div class="field">
+					<label>현재 비밀번호 <span class="required">필수</span></label><input
+						type="password" placeholder="본인 확인을 위해 입력">
+				</div>
+			</div>
+			<div class="form-actions">
+				<a class="btn outline" href="../settings/settings.jsp">취소</a>
+				<button class="btn danger" data-confirm="정말 탈퇴하시겠습니까?"
+					onclick="tripilyToast('탈퇴 Controller 연결 위치입니다.')">회원 탈퇴</button>
+			</div>
+		</div>
+	</main><jsp:include page="/common/footer.jsp" /></body>
+</html>

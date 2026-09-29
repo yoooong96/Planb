@@ -1,3 +1,49 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<% request.setAttribute("activePage", "settings");  %>
-<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>공개범위 설정 | Tripily</title><link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/tripily.css"></head><body><jsp:include page="/common/header.jsp"/><main class="page narrow"><div class="page-title-row"><div><span class="eyebrow">PRIVACY</span><h1>개인정보 및 공개범위</h1><p class="page-desc">프로필과 활동 콘텐츠의 공개 범위를 설정합니다.</p></div></div><div class="form-card"><div class="toggle-row"><div class="toggle-copy"><b>프로필 공개</b><span>꺼짐 상태에서는 다른 사용자가 프로필 콘텐츠를 볼 수 없습니다.</span></div><button class="switch on"></button></div><div class="toggle-row"><div class="toggle-copy"><b>북마크한 일정 공개</b><span>내 프로필의 북마크 탭 공개 여부</span></div><button class="switch on"></button></div><div class="toggle-row"><div class="toggle-copy"><b>좋아요한 콘텐츠 공개</b><span>내 프로필의 좋아요 탭 공개 여부</span></div><button class="switch on"></button></div><div class="form-actions"><button class="btn primary" onclick="tripilyToast('공개범위 설정이 저장되었습니다.')">저장</button></div></div></main><jsp:include page="/common/footer.jsp"/></body></html>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%
+request.setAttribute("activePage", "settings");
+%>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>공개범위 설정 | Tripily</title>
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/view/assets/css/tripily.css">
+</head>
+<body><jsp:include page="/common/header.jsp" /><main
+		class="page narrow">
+		<div class="page-title-row">
+			<div>
+				<span class="eyebrow">PRIVACY</span>
+				<h1>개인정보 및 공개범위</h1>
+				<p class="page-desc">프로필과 활동 콘텐츠의 공개 범위를 설정합니다.</p>
+			</div>
+		</div>
+		<div class="form-card">
+			<div class="toggle-row">
+				<div class="toggle-copy">
+					<b>프로필 공개</b><span>꺼짐 상태에서는 다른 사용자가 프로필 콘텐츠를 볼 수 없습니다.</span>
+				</div>
+				<button class="switch on"></button>
+			</div>
+			<div class="toggle-row">
+				<div class="toggle-copy">
+					<b>북마크한 일정 공개</b><span>내 프로필의 북마크 탭 공개 여부</span>
+				</div>
+				<button class="switch on"></button>
+			</div>
+			<div class="toggle-row">
+				<div class="toggle-copy">
+					<b>좋아요한 콘텐츠 공개</b><span>내 프로필의 좋아요 탭 공개 여부</span>
+				</div>
+				<button class="switch on"></button>
+			</div>
+			<div class="form-actions">
+				<button class="btn primary"
+					onclick="tripilyToast('공개범위 설정이 저장되었습니다.')">저장</button>
+			</div>
+		</div>
+	</main><jsp:include page="/common/footer.jsp" /></body>
+</html>
