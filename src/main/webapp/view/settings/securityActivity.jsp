@@ -1,3 +1,53 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<% request.setAttribute("activePage", "settings");  %>
-<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>로그인 활동 | Tripily</title><link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/tripily.css"></head><body><jsp:include page="/common/header.jsp"/><main class="page narrow"><div class="page-title-row"><div><span class="eyebrow">SECURITY</span><h1>보안 및 로그인 활동</h1><p class="page-desc">최근 로그인 기록과 사용 중인 기기를 확인합니다.</p></div></div><div class="table-wrap"><table class="data-table" style="min-width:650px"><thead><tr><th>기기</th><th>접속 정보</th><th>최근 로그인</th><th></th></tr></thead><tbody><tr><td><b>Windows · Chrome</b><br><span class="help">현재 기기</span></td><td>Seoul, KR · 127.0.0.1</td><td>2026.09.28 16:40</td><td><span class="pill green">현재</span></td></tr><tr><td>Android · Chrome</td><td>Daegu, KR</td><td>2026.09.27 22:13</td><td><button class="btn outline" onclick="tripilyToast('해당 기기에서 로그아웃 처리됩니다.')">로그아웃</button></td></tr></tbody></table></div></main><jsp:include page="/common/footer.jsp"/></body></html>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%
+request.setAttribute("activePage", "settings");
+%>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>로그인 활동 | Tripily</title>
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/view/assets/css/tripily.css">
+</head>
+<body><jsp:include page="/common/header.jsp" /><main
+		class="page narrow">
+		<div class="page-title-row">
+			<div>
+				<span class="eyebrow">SECURITY</span>
+				<h1>보안 및 로그인 활동</h1>
+				<p class="page-desc">최근 로그인 기록과 사용 중인 기기를 확인합니다.</p>
+			</div>
+		</div>
+		<div class="table-wrap">
+			<table class="data-table" style="min-width: 650px">
+				<thead>
+					<tr>
+						<th>기기</th>
+						<th>접속 정보</th>
+						<th>최근 로그인</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td><b>Windows · Chrome</b><br>
+						<span class="help">현재 기기</span></td>
+						<td>Seoul, KR · 127.0.0.1</td>
+						<td>2026.09.28 16:40</td>
+						<td><span class="pill green">현재</span></td>
+					</tr>
+					<tr>
+						<td>Android · Chrome</td>
+						<td>Daegu, KR</td>
+						<td>2026.09.27 22:13</td>
+						<td><button class="btn outline"
+								onclick="tripilyToast('해당 기기에서 로그아웃 처리됩니다.')">로그아웃</button></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</main><jsp:include page="/common/footer.jsp" /></body>
+</html>

@@ -1,3 +1,46 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<% request.setAttribute("activePage", "notification");  %>
-<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>알림 | Tripily</title><link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/tripily.css"></head><body><jsp:include page="/common/header.jsp"/><main class="page narrow"><div class="page-title-row"><div><span class="eyebrow">NOTIFICATIONS</span><h1>알림</h1><p class="page-desc">댓글과 좋아요 등 일반 알림입니다. 관리자 신고는 별도 버튼으로 관리합니다.</p></div><button class="btn outline" onclick="tripilyToast('모두 읽음 처리되었습니다.')">모두 읽음</button></div><div class="panel"><div class="toggle-row"><div class="toggle-copy"><b>💬 민지님이 댓글을 남겼어요.</b><span>“도쿄 숙소 위치가 정말 좋아 보이네요!” · 5분 전</span></div><span class="pill brand">NEW</span></div><div class="toggle-row"><div class="toggle-copy"><b>♥ 도윤님이 내 여행일정을 좋아해요.</b><span>도쿄 3박 4일 감성 여행 · 1시간 전</span></div><span class="pill brand">NEW</span></div><div class="toggle-row"><div class="toggle-copy"><b>새 답글이 등록되었어요.</b><span>여행 꿀팁 게시글 · 어제</span></div></div></div></main><jsp:include page="/common/footer.jsp"/></body></html>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%
+request.setAttribute("activePage", "notification");
+%>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>알림 | Tripily</title>
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/view/assets/css/tripily.css">
+</head>
+<body><jsp:include page="/common/header.jsp" /><main
+		class="page narrow">
+		<div class="page-title-row">
+			<div>
+				<span class="eyebrow">NOTIFICATIONS</span>
+				<h1>알림</h1>
+				<p class="page-desc">댓글과 좋아요 등 일반 알림입니다. 관리자 신고는 별도 버튼으로 관리합니다.</p>
+			</div>
+			<button class="btn outline" onclick="tripilyToast('모두 읽음 처리되었습니다.')">모두
+				읽음</button>
+		</div>
+		<div class="panel">
+			<div class="toggle-row">
+				<div class="toggle-copy">
+					<b>💬 민지님이 댓글을 남겼어요.</b><span>“도쿄 숙소 위치가 정말 좋아 보이네요!” · 5분 전</span>
+				</div>
+				<span class="pill brand">NEW</span>
+			</div>
+			<div class="toggle-row">
+				<div class="toggle-copy">
+					<b>♥ 도윤님이 내 여행일정을 좋아해요.</b><span>도쿄 3박 4일 감성 여행 · 1시간 전</span>
+				</div>
+				<span class="pill brand">NEW</span>
+			</div>
+			<div class="toggle-row">
+				<div class="toggle-copy">
+					<b>새 답글이 등록되었어요.</b><span>여행 꿀팁 게시글 · 어제</span>
+				</div>
+			</div>
+		</div>
+	</main><jsp:include page="/common/footer.jsp" /></body>
+</html>

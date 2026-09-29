@@ -1,3 +1,69 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<% request.setAttribute("activePage", "admin"); request.setAttribute("forceAdminHeader", Boolean.TRUE); %>
-<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>신고 관리 | Tripily</title><link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/tripily.css"></head><body><jsp:include page="/common/header.jsp"/><main class="page"><div class="page-title-row"><div><span class="eyebrow">ADMIN · REPORTS</span><h1>신고 관리</h1><p class="page-desc">일반 알림과 분리하여 신고 대상과 처리상태를 관리합니다.</p></div><a class="btn outline" href="../ads/adminAds.jsp">광고 관리 →</a></div><div class="admin-tabs"><a class="admin-tab active" href="reportPendingList.jsp">접수 목록</a><a class="admin-tab " href="reportProcessedList.jsp">처리 완료</a><a class="admin-tab " href="reportDeletedList.jsp">삭제 조치</a></div><div class="table-wrap"><table class="data-table"><thead><tr><th>접수일</th><th>신고 사유</th><th>신고 대상</th><th>신고자</th><th>상태</th><th>처리</th></tr></thead><tbody><tr><td>09.28 15:12</td><td>프로필 사진 부적절</td><td>사용자 · sea.lover.kr</td><td>user102</td><td><span class="pill yellow">접수</span></td><td><div class="table-actions"><a class="btn outline" href="reportDetail.jsp">상세</a><a class="btn danger" href="reportDeleteConfirm.jsp">삭제 조치</a></div></td></tr><tr><td>09.28 13:44</td><td>허위 여행정보</td><td>일정 · #128</td><td>user045</td><td><span class="pill yellow">접수</span></td><td><div class="table-actions"><a class="btn outline" href="reportDetail.jsp">상세</a><a class="btn secondary" href="reportRejectForm.jsp">기각</a></div></td></tr></tbody></table></div></main><jsp:include page="/common/footer.jsp"/></body></html>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%
+request.setAttribute("activePage", "admin");
+request.setAttribute("forceAdminHeader", Boolean.TRUE);
+%>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>신고 관리 | Tripily</title>
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/view/assets/css/tripily.css">
+</head>
+<body><jsp:include page="/common/header.jsp" /><main class="page">
+		<div class="page-title-row">
+			<div>
+				<span class="eyebrow">ADMIN · REPORTS</span>
+				<h1>신고 관리</h1>
+				<p class="page-desc">일반 알림과 분리하여 신고 대상과 처리상태를 관리합니다.</p>
+			</div>
+			<a class="btn outline" href="../ads/adminAds.jsp">광고 관리 →</a>
+		</div>
+		<div class="admin-tabs">
+			<a class="admin-tab active" href="reportPendingList.jsp">접수 목록</a><a
+				class="admin-tab " href="reportProcessedList.jsp">처리 완료</a><a
+				class="admin-tab " href="reportDeletedList.jsp">삭제 조치</a>
+		</div>
+		<div class="table-wrap">
+			<table class="data-table">
+				<thead>
+					<tr>
+						<th>접수일</th>
+						<th>신고 사유</th>
+						<th>신고 대상</th>
+						<th>신고자</th>
+						<th>상태</th>
+						<th>처리</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>09.28 15:12</td>
+						<td>프로필 사진 부적절</td>
+						<td>사용자 · sea.lover.kr</td>
+						<td>user102</td>
+						<td><span class="pill yellow">접수</span></td>
+						<td><div class="table-actions">
+								<a class="btn outline" href="reportDetail.jsp">상세</a><a
+									class="btn danger" href="reportDeleteConfirm.jsp">삭제 조치</a>
+							</div></td>
+					</tr>
+					<tr>
+						<td>09.28 13:44</td>
+						<td>허위 여행정보</td>
+						<td>일정 · #128</td>
+						<td>user045</td>
+						<td><span class="pill yellow">접수</span></td>
+						<td><div class="table-actions">
+								<a class="btn outline" href="reportDetail.jsp">상세</a><a
+									class="btn secondary" href="reportRejectForm.jsp">기각</a>
+							</div></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</main><jsp:include page="/common/footer.jsp" /></body>
+</html>

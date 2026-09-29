@@ -1,3 +1,56 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<% request.setAttribute("activePage", "admin"); request.setAttribute("forceAdminHeader", Boolean.TRUE); %>
-<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>신고 상세 | Tripily</title><link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/tripily.css"></head><body><jsp:include page="/common/header.jsp"/><main class="page narrow"><div class="page-title-row"><div><span class="eyebrow">ADMIN · REPORT DETAIL</span><h1>신고 상세</h1><p class="page-desc">신고 대상과 사유를 확인한 뒤 조치합니다.</p></div><a class="btn outline" href="adminReports.jsp">← 목록</a></div><div class="form-card"><div class="two-col"><div class="field"><label>신고 ID</label><input value="RPT-20260928-0031" readonly></div><div class="field"><label>상태</label><input value="PENDING" readonly></div></div><div class="two-col"><div class="field"><label>신고자</label><input value="user102" readonly></div><div class="field"><label>대상</label><input value="userProfile: sea.lover.kr" readonly></div></div><div class="field"><label>신고 사유</label><input value="프로필 사진이 부적절해요" readonly></div><div class="field"><label>상세 내용</label><textarea readonly>프로필 이미지가 서비스 운영 정책에 맞지 않는 것 같습니다.</textarea></div><div class="form-actions"><a class="btn secondary" href="reportRejectForm.jsp">기각</a><a class="btn danger" href="reportDeleteConfirm.jsp">대상 삭제 조치</a></div></div></main><jsp:include page="/common/footer.jsp"/></body></html>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%
+request.setAttribute("activePage", "admin");
+request.setAttribute("forceAdminHeader", Boolean.TRUE);
+%>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>신고 상세 | Tripily</title>
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/view/assets/css/tripily.css">
+</head>
+<body><jsp:include page="/common/header.jsp" /><main
+		class="page narrow">
+		<div class="page-title-row">
+			<div>
+				<span class="eyebrow">ADMIN · REPORT DETAIL</span>
+				<h1>신고 상세</h1>
+				<p class="page-desc">신고 대상과 사유를 확인한 뒤 조치합니다.</p>
+			</div>
+			<a class="btn outline" href="adminReports.jsp">← 목록</a>
+		</div>
+		<div class="form-card">
+			<div class="two-col">
+				<div class="field">
+					<label>신고 ID</label><input value="RPT-20260928-0031" readonly>
+				</div>
+				<div class="field">
+					<label>상태</label><input value="PENDING" readonly>
+				</div>
+			</div>
+			<div class="two-col">
+				<div class="field">
+					<label>신고자</label><input value="user102" readonly>
+				</div>
+				<div class="field">
+					<label>대상</label><input value="userProfile: sea.lover.kr" readonly>
+				</div>
+			</div>
+			<div class="field">
+				<label>신고 사유</label><input value="프로필 사진이 부적절해요" readonly>
+			</div>
+			<div class="field">
+				<label>상세 내용</label>
+				<textarea readonly>프로필 이미지가 서비스 운영 정책에 맞지 않는 것 같습니다.</textarea>
+			</div>
+			<div class="form-actions">
+				<a class="btn secondary" href="reportRejectForm.jsp">기각</a><a
+					class="btn danger" href="reportDeleteConfirm.jsp">대상 삭제 조치</a>
+			</div>
+		</div>
+	</main><jsp:include page="/common/footer.jsp" /></body>
+</html>
