@@ -1,70 +1,17 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<%
-request.setAttribute("activePage", "community");
-%>
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>커뮤니티 | Tripily</title>
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/view/assets/css/tripily.css">
-</head>
-<body><jsp:include page="/common/header.jsp" /><main class="page">
-		<div class="page-title-row">
-			<div>
-				<span class="eyebrow">COMMUNITY</span>
-				<h1>커뮤니티</h1>
-				<p class="page-desc">여행 이야기를 자유롭게 나누고 댓글과 좋아요로 소통하세요.</p>
-			</div>
-			<a class="btn primary" href="communityWrite.jsp">＋ 글쓰기</a>
-		</div>
-		<div class="toolbar">
-			<div class="search-box">
-				<span>⌕</span><input placeholder="제목, 지역, 키워드 검색">
-			</div>
-			<button class="chip active">전체</button>
-			<button class="chip">아시아</button>
-			<button class="chip">유럽</button>
-			<button class="chip">국내</button>
-		</div>
-		<div class="grid grid-3" style="margin-top: 22px">
-			<a class="card" href="communityDetail.jsp"><div class="card-img">
-					<img
-						src="https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=800&q=80">
-				</div>
-				<div class="card-body">
-					<span class="card-kicker">TOKYO · 준비 팁</span>
-					<h3>처음 가는 도쿄에서 꼭 알아둘 것들</h3>
-					<p>교통패스부터 숙소 위치까지 직접 다녀온 경험을 정리했어요.</p>
-					<div class="meta">
-						<span>여행좋아</span><span>♡ 68</span><span>💬 12</span>
-					</div>
-				</div></a><a class="card" href="communityDetail.jsp"><div class="card-img">
-					<img
-						src="https://images.unsplash.com/photo-1688544969956-a887beadb9d2?w=800&q=80">
-				</div>
-				<div class="card-body">
-					<span class="card-kicker">JEJU · 여행 기록</span>
-					<h3>렌터카 없이 제주 동쪽 여행하기</h3>
-					<p>버스와 택시만으로도 충분했던 2박 3일 동선입니다.</p>
-					<div class="meta">
-						<span>바다러버</span><span>♡ 54</span><span>💬 7</span>
-					</div>
-				</div></a><a class="card" href="communityDetail.jsp"><div class="card-img">
-					<img
-						src="https://images.unsplash.com/photo-1613395877344-13d4a8e0d49e?w=800&q=80">
-				</div>
-				<div class="card-body">
-					<span class="card-kicker">EUROPE · 추천</span>
-					<h3>유럽 여행 짐 싸기 체크리스트</h3>
-					<p>장기 여행에서 정말 필요했던 것만 정리했습니다.</p>
-					<div class="meta">
-						<span>문화탐험가</span><span>♡ 91</span><span>💬 18</span>
-					</div>
-				</div></a>
-		</div>
-	</main><jsp:include page="/common/footer.jsp" /></body>
-</html>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<% request.setAttribute("activePage","community"); %><!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><jsp:include page="/common/headStyles.jsp" /><title>여행 커뮤니티 | Tripily</title></head><body><jsp:include page="/common/header.jsp" />
+<main class="max-w-[1280px] mx-auto px-6 py-10">
+  <div class="flex items-end justify-between gap-4 mb-8"><div><p class="text-xs font-black tracking-[.2em] text-[#6369D1]">COMMUNITY</p><h1 class="text-3xl font-black mt-1">여행 커뮤니티</h1><p class="text-sm text-gray-500 mt-2">글·댓글·검색·분류·좋아요까지 한 곳에서 관리합니다.</p></div><a href="communityWrite.jsp" class="px-5 py-3 rounded-xl bg-[#6369D1] text-white text-sm font-bold">+ 글쓰기</a></div>
+  <div class="grid lg:grid-cols-[240px_1fr] gap-7">
+   <aside class="border rounded-2xl p-4 h-fit bg-white"><p class="text-xs font-bold text-gray-400 mb-3">지역 분류</p>
+    <button class="w-full text-left px-3 py-2 rounded-lg text-sm bg-[#F0F0FF] text-[#6369D1] font-bold">전체</button>
+    <button class="w-full text-left px-3 py-2 rounded-lg text-sm text-gray-600 hover:bg-gray-50">아시아</button><button class="w-full text-left px-3 py-2 rounded-lg text-sm text-gray-600 hover:bg-gray-50">유럽</button><button class="w-full text-left px-3 py-2 rounded-lg text-sm text-gray-600 hover:bg-gray-50">북미</button><button class="w-full text-left px-3 py-2 rounded-lg text-sm text-gray-600 hover:bg-gray-50">오세아니아</button><button class="w-full text-left px-3 py-2 rounded-lg text-sm text-gray-600 hover:bg-gray-50">남미</button>
+   </aside>
+   <section><div class="flex flex-col md:flex-row gap-3 mb-4"><div class="flex-1 flex border rounded-xl overflow-hidden bg-white"><input class="flex-1 px-4 py-3 outline-none" placeholder="제목 또는 내용 검색"><button class="px-5 bg-[#6369D1] text-white font-bold">검색</button></div><select class="border rounded-xl px-3 bg-white"><option>최신순</option><option>인기순</option></select></div>
+    <div class="flex gap-2 overflow-x-auto pb-4" data-chip-group><button class="px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap bg-[#6369D1] text-white">전체</button><button class="px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap bg-gray-100 text-gray-500">교통</button><button class="px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap bg-gray-100 text-gray-500">맛집</button><button class="px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap bg-gray-100 text-gray-500">숙소</button><button class="px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap bg-gray-100 text-gray-500">안전</button><button class="px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap bg-gray-100 text-gray-500">쇼핑</button><button class="px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap bg-gray-100 text-gray-500">기타</button></div>
+    <div class="border-y divide-y bg-white">
+<a href="communityDetail.jsp" class="relative w-full text-left py-5 flex gap-4 hover:bg-gray-50 transition px-2"><div class="flex-1 min-w-0 pr-12"><div class="flex gap-2 text-[11px] mb-1"><span class="text-[#6369D1] font-bold">일본</span><span class="text-gray-400">교통</span></div><h3 class="font-bold text-base truncate">도쿄 지하철 패스 이렇게 쓰면 편해요</h3><p class="text-sm text-gray-500 mt-1 line-clamp-1">3박 4일 동안 직접 써본 교통패스와 환승 팁을 정리했습니다. 숙소가 신주쿠 쪽이면 JR과 메트로 조합이 가장 편했어요.</p><div class="text-xs text-gray-400 mt-2">여행왕_수빈 · 2026.09.18 · 조회 812 · 좋아요 43 · 댓글 1</div></div><img src="https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=900&q=80" class="w-24 h-20 object-cover rounded-xl shrink-0"></a><a href="communityDetail.jsp" class="relative w-full text-left py-5 flex gap-4 hover:bg-gray-50 transition px-2"><div class="flex-1 min-w-0 pr-12"><div class="flex gap-2 text-[11px] mb-1"><span class="text-[#6369D1] font-bold">프랑스</span><span class="text-gray-400">안전</span></div><h3 class="font-bold text-base truncate">파리 소매치기 피하려면 이건 꼭 챙기세요</h3><p class="text-sm text-gray-500 mt-1 line-clamp-1">관광지별로 사람이 몰리는 시간대와 가방 보관 팁을 공유합니다.</p><div class="text-xs text-gray-400 mt-2">paris_love · 2026.09.16 · 조회 1260 · 좋아요 102 · 댓글 1</div></div></a><a href="communityDetail.jsp" class="relative w-full text-left py-5 flex gap-4 hover:bg-gray-50 transition px-2"><div class="flex-1 min-w-0 pr-12"><div class="flex gap-2 text-[11px] mb-1"><span class="text-[#6369D1] font-bold">한국</span><span class="text-gray-400">맛집</span></div><h3 class="font-bold text-base truncate">제주 동쪽 2박 3일 맛집 동선</h3><p class="text-sm text-gray-500 mt-1 line-clamp-1">성산부터 세화까지 이동 시간을 줄이는 순서로 정리한 맛집 동선입니다.</p><div class="text-xs text-gray-400 mt-2">제주사는사람 · 2026.09.14 · 조회 620 · 좋아요 67 · 댓글 0</div></div></a><a href="communityDetail.jsp" class="relative w-full text-left py-5 flex gap-4 hover:bg-gray-50 transition px-2"><div class="flex-1 min-w-0 pr-12"><div class="flex gap-2 text-[11px] mb-1"><span class="text-[#6369D1] font-bold">미국</span><span class="text-gray-400">숙소</span></div><h3 class="font-bold text-base truncate">뉴욕 처음 가는 분들 숙소 위치 추천</h3><p class="text-sm text-gray-500 mt-1 line-clamp-1">타임스퀘어만 고집하지 않아도 됩니다. 이동성, 치안, 가격을 기준으로 지역을 비교했어요.</p><div class="text-xs text-gray-400 mt-2">nyc_note · 2026.09.10 · 조회 930 · 좋아요 55 · 댓글 0</div></div></a>
+    </div>
+   </section>
+  </div>
+</main><jsp:include page="/common/footer.jsp" /></body></html>

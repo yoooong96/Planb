@@ -1,133 +1,19 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<%
-request.setAttribute("activePage", "auth");
-%>
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>회원가입 | Tripily</title>
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/view/assets/css/tripily.css">
-</head>
-<body><jsp:include page="/common/header.jsp" /><main
-		class="auth-shell">
-		<section class="auth-card signup">
-			<div class="auth-logo">● Tripily</div>
-			<h1>새로운 여행을 시작해요.</h1>
-			<p class="subtitle">TB_USER 기준으로 가입에 필요한 필수 정보와 선택 정보를 나누었습니다.</p>
-			<div class="required-guide">* 필수 항목: 로그인 아이디, 비밀번호, 이름, 닉네임,
-				이메일, 전화번호</div>
-			<form data-signup-form
-				action="${pageContext.request.contextPath}/signup" method="post"
-				enctype="multipart/form-data" novalidate>
-				<div class="form-section">
-					<div class="form-section-head">
-						<div>
-							<h2>계정 정보</h2>
-							<p>로그인과 계정 식별에 필요한 정보입니다.</p>
-						</div>
-						<span class="pill red">필수</span>
-					</div>
-					<div class="field">
-						<label>로그인 아이디 <span class="required">필수</span></label>
-						<div class="field-row">
-							<input id="loginId" name="loginId" data-required
-								placeholder="영문/숫자 4~20자">
-							<button type="button" class="btn outline"
-								data-demo-duplicate="loginId">중복 확인</button>
-						</div>
-					</div>
-					<div class="two-col">
-						<div class="field">
-							<label>비밀번호 <span class="required">필수</span></label><input
-								id="password" name="password" data-required type="password"
-								placeholder="영문·숫자·특수문자 8~16자">
-						</div>
-						<div class="field">
-							<label>비밀번호 확인 <span class="required">필수</span></label><input
-								id="passwordConfirm" data-required type="password"
-								placeholder="비밀번호 재입력">
-						</div>
-					</div>
-					<div class="two-col">
-						<div class="field">
-							<label>이름 <span class="required">필수</span></label><input
-								name="name" data-required maxlength="50" placeholder="실명">
-						</div>
-						<div class="field">
-							<label>닉네임 <span class="required">필수</span></label>
-							<div class="field-row">
-								<input id="nickname" name="nickname" data-required
-									maxlength="50" placeholder="게시글에 표시될 이름">
-								<button type="button" class="btn outline"
-									data-demo-duplicate="nickname">중복 확인</button>
-							</div>
-						</div>
-					</div>
-					<div class="two-col">
-						<div class="field">
-							<label>이메일 <span class="required">필수</span></label>
-							<div class="field-row">
-								<input id="email" name="email" data-required type="email"
-									placeholder="example@email.com">
-								<button type="button" class="btn outline"
-									data-demo-duplicate="email">중복 확인</button>
-							</div>
-						</div>
-						<div class="field">
-							<label>전화번호 <span class="required">필수</span></label><input
-								name="phone" data-required inputmode="tel"
-								placeholder="010-1234-5678">
-						</div>
-					</div>
-				</div>
-				<div class="form-section">
-					<div class="form-section-head">
-						<div>
-							<h2>추가 프로필 정보</h2>
-							<p>가입 후 프로필 편집에서도 변경할 수 있습니다.</p>
-						</div>
-						<span class="pill gray">선택</span>
-					</div>
-					<div class="two-col">
-						<div class="field">
-							<label>생년월일 <span class="optional">선택</span></label><input
-								name="birthDate" type="date">
-						</div>
-						<div class="field">
-							<label>프로필 이미지 <span class="optional">선택</span></label><input
-								name="profileImg" type="file" accept="image/*"
-								data-image-preview="signupPreview">
-						</div>
-					</div>
-					<img id="signupPreview" class="upload-preview hidden"
-						alt="프로필 미리보기">
-					<div class="field">
-						<label>소개글 <span class="optional">선택</span></label>
-						<textarea name="bio" maxlength="300"
-							placeholder="여행 스타일이나 간단한 소개를 적어주세요."></textarea>
-					</div>
-				</div>
-				<div class="form-section">
-					<h2 style="margin-top: 0">약관 동의</h2>
-					<label class="check-row"><input type="checkbox" required>
-						<span><b>[필수] 서비스 이용약관 및 개인정보 처리방침 동의</b><br> <span
-							class="help">동의 이력은 TB_USER_CONSENT에 버전별로 저장합니다.</span></span></label><label
-						class="check-row"><input type="checkbox"> <span>[선택]
-							마케팅 정보 수신 동의</span></label>
-					<div class="notice">provider=LOCAL, role=USER, status=ACTIVE,
-						공개범위/알림 설정 및 가입·수정일시는 사용자가 입력하지 않고 서버 기본값으로 처리합니다.</div>
-				</div>
-				<button class="btn primary" style="width: 100%">회원가입</button>
-			</form>
-			<p
-				style="text-align: center; font-size: 12px; color: #888; margin-top: 18px">
-				이미 계정이 있으신가요? <a href="login.jsp"
-					style="color: #6369D1; font-weight: 800">로그인</a>
-			</p>
-		</section>
-	</main><jsp:include page="/common/footer.jsp" /></body>
-</html>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<% request.setAttribute("activePage", "auth"); %>
+<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>회원가입 · Tripily</title><jsp:include page="/common/headStyles.jsp" /></head>
+<body><jsp:include page="/common/header.jsp" />
+<main class="min-h-screen flex items-center justify-center px-4" style="background-color:#f5f5fb">
+  <div class="w-full max-w-md py-10">
+    <div class="text-center mb-8"><a href="${pageContext.request.contextPath}/view/home/home.jsp" class="inline-flex items-center gap-2 mb-4"><span class="tripily-mark" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7Z" fill="var(--brand)"/><circle cx="12" cy="9" r="2.6" fill="white"/></svg></span><span class="text-2xl font-extrabold" style="color:var(--brand)">Tripily</span></a><h1 class="text-2xl font-extrabold text-gray-900 mb-1">회원가입</h1><p class="text-sm text-gray-500">Tripily와 함께 특별한 여행을 시작하세요.</p></div>
+    <div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-8">
+      <form class="flex flex-col gap-4" action="#" method="post" data-signup-form>
+        <div><label class="block text-sm font-semibold text-gray-700 mb-1.5">닉네임</label><input type="text" name="nickname" placeholder="사용할 닉네임을 입력하세요" class="jsp-focus w-full border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-800 placeholder-gray-400 outline-none transition-all"></div>
+        <div><label class="block text-sm font-semibold text-gray-700 mb-1.5">이메일</label><input type="email" name="email" placeholder="example@email.com" class="jsp-focus w-full border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-800 placeholder-gray-400 outline-none transition-all"></div>
+        <div><label class="block text-sm font-semibold text-gray-700 mb-1.5">비밀번호</label><input type="password" name="password" placeholder="8자 이상 입력하세요" class="jsp-focus w-full border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-800 placeholder-gray-400 outline-none transition-all"></div>
+        <p class="text-sm text-red-500 font-medium jsp-hidden" data-signup-error>모든 항목을 입력해주세요.</p>
+        <button type="submit" class="w-full py-3.5 rounded-xl text-white font-bold text-sm transition-all mt-1" style="background-color:var(--brand)">회원가입</button>
+      </form>
+      <p class="text-center text-sm text-gray-500 mt-6">이미 계정이 있으신가요? <a href="${pageContext.request.contextPath}/view/auth/login.jsp" class="font-bold" style="color:var(--brand)">로그인</a></p>
+    </div>
+  </div>
+</main><jsp:include page="/common/footer.jsp" /></body></html>

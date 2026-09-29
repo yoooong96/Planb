@@ -1,56 +1,10 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<%
-request.setAttribute("activePage", "mate");
-%>
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>메이트 글 작성 | Tripily</title>
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/view/assets/css/tripily.css">
-</head>
-<body><jsp:include page="/common/header.jsp" /><main
-		class="page narrow">
-		<div class="page-title-row">
-			<div>
-				<span class="eyebrow">TRAVEL MATE</span>
-				<h1>메이트 모집글 작성</h1>
-			</div>
-		</div>
-		<form class="form-card"
-			onsubmit="return tripilyDemoSubmit(event,'메이트 모집글 저장 Controller 연결 위치입니다.');">
-			<div class="two-col">
-				<div class="field">
-					<label>여행지 <span class="required">필수</span></label><input required
-						placeholder="일본 도쿄">
-				</div>
-				<div class="field">
-					<label>모집 인원 <span class="required">필수</span></label><input
-						type="number" min="1" max="10" value="2">
-				</div>
-			</div>
-			<div class="two-col">
-				<div class="field">
-					<label>출발일</label><input type="date">
-				</div>
-				<div class="field">
-					<label>종료일</label><input type="date">
-				</div>
-			</div>
-			<div class="field">
-				<label>제목 <span class="required">필수</span></label><input required>
-			</div>
-			<div class="field">
-				<label>여행 스타일 / 상세 내용 <span class="required">필수</span></label>
-				<textarea style="min-height: 260px" required></textarea>
-			</div>
-			<div class="form-actions">
-				<a class="btn outline" href="mateList.jsp">취소</a>
-				<button class="btn primary">저장</button>
-			</div>
-		</form>
-	</main><jsp:include page="/common/footer.jsp" /></body>
-</html>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%><% request.setAttribute("activePage","mate"); %>
+<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>여행 메이트 모집 · Tripily</title><jsp:include page="/common/headStyles.jsp" /></head><body><jsp:include page="/common/header.jsp" />
+<div class="min-h-screen bg-gray-50"><div class="relative" style="height:180px"><img src="https://images.unsplash.com/photo-1539635278303-d4002c07eae3?fit=crop&w=1600&q=80" alt="hero" class="absolute inset-0 w-full h-full object-cover object-[center_30%]"><div class="absolute inset-0" style="background:linear-gradient(to right,rgba(30,20,80,.65) 0%,rgba(99,105,209,.3) 60%,transparent 100%)"></div><div class="absolute inset-0 flex flex-col justify-center px-8 md:px-16"><h1 style="font-family:Georgia,serif" class="text-white text-2xl md:text-3xl italic font-bold leading-snug mb-1">좋은 사람과 함께하면,<br>여행은 더 특별해집니다.</h1><p class="text-white/80 text-sm mt-1">여행 메이트와 함께 잊지 못할 추억을 만들어보세요.</p></div></div>
+<div class="max-w-3xl mx-auto px-4 py-10"><form class="bg-white rounded-2xl border border-gray-200 shadow-sm p-8"><div class="flex items-start justify-between mb-7"><div><h2 class="text-xl font-bold text-gray-900">여행 메이트 모집하기</h2><p class="text-sm text-gray-400 mt-1">함께 여행할 메이트를 모집해보세요.</p></div><a href="${pageContext.request.contextPath}/view/mate/mateList.jsp" class="flex items-center gap-1.5 px-4 py-2 border border-gray-200 rounded-full text-sm text-gray-500">‹ 목록으로</a></div>
+<div class="mb-6"><label class="block text-sm font-semibold text-gray-800 mb-2">여행지 <span class="text-red-500">*</span></label><div class="grid grid-cols-2 gap-3"><input class="jsp-focus w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none" placeholder="나라 (예: 일본)"><input class="jsp-focus w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none" placeholder="도시 (예: 도쿄)"></div></div>
+<div class="mb-6"><label class="block text-sm font-semibold text-gray-800 mb-2">제목 <span class="text-red-500">*</span></label><div class="relative"><input maxlength="25" data-char-input class="jsp-focus w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none" placeholder="모집 제목을 입력해주세요."><span class="absolute right-4 top-1/2 -translate-y-1/2 text-xs text-gray-300"><span data-char-count>0</span>/25</span></div></div>
+<div class="mb-6"><label class="block text-sm font-semibold text-gray-800 mb-2">모집 인원 <span class="text-red-500">*</span></label><div class="flex items-center gap-3" data-stepper><button type="button" class="w-9 h-9 rounded-full border border-gray-200 flex items-center justify-center text-gray-600" data-step="-1">−</button><span class="text-lg font-bold text-gray-900 w-6 text-center" data-step-value>1</span><button type="button" class="w-9 h-9 rounded-full border border-gray-200 flex items-center justify-center text-gray-600" data-step="1">＋</button><span class="text-sm text-gray-400">명</span></div></div>
+<div class="mb-6"><label class="block text-sm font-semibold text-gray-800 mb-2">내용 <span class="text-red-500">*</span></label><textarea class="jsp-focus w-full border border-gray-200 rounded-xl px-4 py-4 text-sm text-gray-700 outline-none resize-none min-h-[200px]" placeholder="여행 일정, 원하는 메이트 스타일, 연락 방법 등을 자유롭게 작성해주세요!"></textarea></div>
+<div class="mb-8"><div class="flex items-center justify-between mb-2"><label class="flex items-center gap-2 text-sm font-semibold text-gray-800">⌕ 사진 첨부</label><span class="text-xs text-gray-400">최대 5장까지 첨부할 수 있습니다.</span></div><label class="border-2 border-dashed border-gray-200 rounded-xl py-12 flex flex-col items-center justify-center gap-3 cursor-pointer"><input type="file" multiple accept="image/*" class="hidden"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#d1d5db" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><div class="text-center"><p class="text-sm text-gray-500">사진을 드래그하거나 클릭하여 업로드하세요.</p><p class="text-xs text-gray-400 mt-1">JPG, PNG, GIF 파일 (최대 10MB)</p></div></label></div>
+<div class="flex justify-end gap-3"><a href="${pageContext.request.contextPath}/view/mate/mateList.jsp" class="px-8 py-3 rounded-full border border-gray-200 text-sm font-semibold text-gray-600">취소</a><button class="px-8 py-3 rounded-full text-white text-sm font-semibold shadow-sm" style="background:var(--brand)">등록하기</button></div></form></div></div><jsp:include page="/common/footer.jsp" /></body></html>

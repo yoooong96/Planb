@@ -1,54 +1,10 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<%
-request.setAttribute("activePage", "tips");
-%>
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>여행꿀팁 작성 | Tripily</title>
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/view/assets/css/tripily.css">
-</head>
-<body><jsp:include page="/common/header.jsp" /><main
-		class="page narrow">
-		<div class="page-title-row">
-			<div>
-				<span class="eyebrow">TRAVEL TIPS</span>
-				<h1>여행꿀팁 작성</h1>
-			</div>
-		</div>
-		<form class="form-card"
-			onsubmit="return tripilyDemoSubmit(event,'여행꿀팁 저장 Controller 연결 위치입니다.');">
-			<div class="two-col">
-				<div class="field">
-					<label>지역/국가 <span class="required">필수</span></label><input
-						required placeholder="예: 일본 도쿄">
-				</div>
-				<div class="field">
-					<label>분류 <span class="required">필수</span></label><select><option>교통</option>
-						<option>숙소</option>
-						<option>음식</option>
-						<option>준비물</option>
-						<option>기타</option></select>
-				</div>
-			</div>
-			<div class="field">
-				<label>제목 <span class="required">필수</span></label><input required>
-			</div>
-			<div class="field">
-				<label>내용 <span class="required">필수</span></label>
-				<textarea style="min-height: 300px" required></textarea>
-			</div>
-			<div class="field">
-				<label>이미지</label><input type="file" multiple accept="image/*">
-			</div>
-			<div class="form-actions">
-				<a class="btn outline" href="tipList.jsp">취소</a>
-				<button class="btn primary">저장</button>
-			</div>
-		</form>
-	</main><jsp:include page="/common/footer.jsp" /></body>
-</html>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%><% request.setAttribute("activePage","tips"); %>
+<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>여행꿀팁 작성 · Tripily</title><jsp:include page="/common/headStyles.jsp" /></head><body><jsp:include page="/common/header.jsp" />
+<div class="min-h-screen" style="background:#f5f5ff"><div class="relative" style="height:220px"><img src="https://images.unsplash.com/photo-1488646953014-85cb44e25828?fit=crop&w=1600&q=80" alt="여행꿀팁 작성" class="absolute inset-0 w-full h-full object-cover" style="object-position:center 30%"><div class="absolute inset-0" style="background:linear-gradient(135deg,rgba(20,12,70,.80) 0%,rgba(99,105,209,.50) 55%,rgba(20,12,70,.40) 100%)"></div><div class="absolute inset-0 flex flex-col items-center justify-center text-center px-4" style="padding-top:64px"><span class="inline-flex items-center gap-1.5 text-[11px] font-bold tracking-widest uppercase px-3 py-1 rounded-full mb-3" style="background:#FFD447;color:#1a1a2e">✈ 여행꿀팁 작성</span><h1 class="text-white font-bold leading-snug" style="font-family:Georgia,serif;font-size:clamp(1.4rem,3vw,2rem);font-style:italic;text-shadow:0 2px 16px rgba(0,0,0,.4)">여행의 모든 순간을 더 특별하게</h1><p class="mt-2 text-sm" style="color:#D1D2F9">여행자들의 생생한 경험과 꿀팁을 공유해보세요.</p></div></div>
+<div class="max-w-3xl mx-auto px-4 py-10"><form class="bg-white rounded-2xl shadow-md overflow-hidden" style="border:1.5px solid #D1D2F9"><div class="flex items-center justify-between px-8 py-5" style="background:linear-gradient(135deg,#6369D1 0%,#8b91e3 100%)"><div><h2 class="text-lg font-bold text-white">여행꿀팁 작성하기</h2><p class="text-sm mt-0.5" style="color:#D1D2F9">여러분의 소중한 경험이 누군가에게 특별한 여행이 됩니다.</p></div><a href="${pageContext.request.contextPath}/view/tips/tipList.jsp" class="flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-semibold text-white" style="background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3)">‹ 목록으로</a></div><div class="px-8 py-8 flex flex-col gap-8">
+<div><label class="flex items-center gap-1.5 text-sm font-bold mb-2" style="color:#6369D1"><span class="w-5 h-5 rounded-full flex items-center justify-center text-white text-xs font-bold bg-[#6369D1]">1</span>제목 <span class="text-red-500 text-xs">*</span></label><div class="relative"><input maxlength="100" data-char-input class="jsp-focus w-full rounded-xl px-4 py-3 text-sm text-gray-800 outline-none" style="border:1.5px solid #D1D2F9" placeholder="제목을 입력해주세요."><span class="absolute right-4 top-1/2 -translate-y-1/2 text-xs text-gray-300"><span data-char-count>0</span>/100</span></div></div>
+<div><label class="flex items-center gap-1.5 text-sm font-bold mb-3" style="color:#6369D1"><span class="w-5 h-5 rounded-full flex items-center justify-center text-white text-xs font-bold bg-[#6369D1]">2</span>카테고리 <span class="text-red-500 text-xs">*</span></label><div class="flex flex-wrap gap-2" data-chip-group><button type="button" class="px-4 py-2 rounded-full text-sm font-semibold border-2 border-[#D1D2F9] text-gray-500">교통</button><button type="button" class="px-4 py-2 rounded-full text-sm font-semibold border-2 border-[#D1D2F9] text-gray-500">숙박</button><button type="button" class="px-4 py-2 rounded-full text-sm font-semibold border-2 border-[#D1D2F9] text-gray-500">음식</button><button type="button" class="px-4 py-2 rounded-full text-sm font-semibold border-2 border-[#D1D2F9] text-gray-500">문화</button><button type="button" class="px-4 py-2 rounded-full text-sm font-semibold border-2 border-[#D1D2F9] text-gray-500">기타</button></div></div>
+<div><label class="flex items-center gap-1.5 text-sm font-bold mb-3" style="color:#6369D1"><span class="w-5 h-5 rounded-full flex items-center justify-center text-white text-xs font-bold bg-[#6369D1]">3</span>여행 국가 <span class="text-red-500 text-xs">*</span></label><div class="flex gap-1.5 mb-3 overflow-x-auto pb-0.5" data-chip-group><button type="button" class="px-3 py-1.5 rounded-full text-[11px] font-bold border-2 bg-[#6369D1] text-white border-[#6369D1]">🌏 아시아</button><button type="button" class="px-3 py-1.5 rounded-full text-[11px] font-bold border-2 border-[#D1D2F9] text-gray-500">🗺️ 유럽</button><button type="button" class="px-3 py-1.5 rounded-full text-[11px] font-bold border-2 border-[#D1D2F9] text-gray-500">🌎 북아메리카</button><button type="button" class="px-3 py-1.5 rounded-full text-[11px] font-bold border-2 border-[#D1D2F9] text-gray-500">🌿 남아메리카</button><button type="button" class="px-3 py-1.5 rounded-full text-[11px] font-bold border-2 border-[#D1D2F9] text-gray-500">🌍 아프리카</button></div><div class="p-4 rounded-xl flex flex-wrap gap-2" style="background:#fafaff;border:1px solid #D1D2F9" data-chip-group><button type="button" class="px-3 py-1.5 rounded-full text-xs border bg-white border-[#D1D2F9] text-gray-500">대한민국</button><button type="button" class="px-3 py-1.5 rounded-full text-xs border bg-white border-[#D1D2F9] text-gray-500">일본</button><button type="button" class="px-3 py-1.5 rounded-full text-xs border bg-white border-[#D1D2F9] text-gray-500">태국</button><button type="button" class="px-3 py-1.5 rounded-full text-xs border bg-white border-[#D1D2F9] text-gray-500">베트남</button><button type="button" class="px-3 py-1.5 rounded-full text-xs border bg-white border-[#D1D2F9] text-gray-500">대만</button><button type="button" class="px-3 py-1.5 rounded-full text-xs border bg-white border-[#D1D2F9] text-gray-500">싱가포르</button></div></div>
+<div><label class="flex items-center gap-1.5 text-sm font-bold mb-3" style="color:#6369D1"><span class="w-5 h-5 rounded-full flex items-center justify-center text-white text-xs font-bold bg-[#6369D1]">4</span>내용 <span class="text-red-500 text-xs">*</span></label><div class="rounded-xl overflow-hidden" style="border:1.5px solid #D1D2F9"><div class="flex flex-wrap gap-1 px-3 py-2 border-b border-[#D1D2F9] bg-[#FAFAFF]"><button type="button" class="px-2 py-1 text-xs font-bold">↩</button><button type="button" class="px-2 py-1 text-xs font-bold">↪</button><button type="button" class="px-2 py-1 text-xs">본문 ▾</button><button type="button" class="px-2 py-1 text-xs font-bold">B</button><button type="button" class="px-2 py-1 text-xs italic">I</button><button type="button" class="px-2 py-1 text-xs underline">U</button><button type="button" class="px-2 py-1 text-xs">🖼</button></div><textarea class="w-full min-h-[220px] p-4 outline-none resize-y text-sm text-gray-700" placeholder="여행에서 직접 경험한 소중한 팁을 자세히 적어주세요."></textarea></div></div>
+<div><div class="flex items-center justify-between mb-2"><label class="flex items-center gap-2 text-sm font-bold" style="color:#6369D1">📎 사진 첨부</label><span class="text-xs text-gray-400">최대 5장</span></div><label class="rounded-xl py-12 flex flex-col items-center justify-center gap-3 cursor-pointer" style="border:2px dashed #D1D2F9;background:#fafaff"><input type="file" multiple accept="image/*" class="hidden"><div class="w-14 h-14 rounded-2xl flex items-center justify-center bg-[#D1D2F9]"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#6369D1" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div><div class="text-center"><p class="text-sm font-semibold text-[#6369D1]">사진을 드래그하거나 클릭하여 업로드하세요.</p><p class="text-xs text-gray-400 mt-0.5">JPG, PNG, GIF 파일 (최대 10MB)</p></div></label></div>
+<div class="flex justify-end gap-3 pt-2"><a href="${pageContext.request.contextPath}/view/tips/tipList.jsp" class="px-8 py-3 rounded-full text-sm font-semibold" style="border:2px solid #D1D2F9;color:#6369D1">취소</a><button class="px-8 py-3 rounded-full text-white text-sm font-bold shadow-md" style="background:linear-gradient(135deg,#6369D1 0%,#8b91e3 100%)">등록하기</button></div></div></form></div></div><jsp:include page="/common/footer.jsp" /></body></html>

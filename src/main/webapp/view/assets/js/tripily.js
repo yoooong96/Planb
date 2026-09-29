@@ -371,3 +371,116 @@
 	});
 
 })();
+/* =========================================================
+   FIGMA 통합본 공통 헤더 상호작용
+========================================================= */
+(function () {
+  const toggle = document.querySelector('[data-notification-toggle]');
+  const popover = document.querySelector('[data-notification-popover]');
+  if (toggle && popover) {
+    toggle.addEventListener('click', function (e) {
+      e.stopPropagation();
+      const willOpen = popover.hasAttribute('hidden');
+      if (willOpen) popover.removeAttribute('hidden'); else popover.setAttribute('hidden', '');
+      toggle.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
+      toggle.classList.toggle('active', willOpen);
+    });
+    popover.addEventListener('click', function (e) { e.stopPropagation(); });
+    document.addEventListener('click', function () {
+      popover.setAttribute('hidden', '');
+      toggle.setAttribute('aria-expanded', 'false');
+      toggle.classList.remove('active');
+    });
+  }
+})();
+
+/* Home interactions from 통합본(9) */
+(function(){
+  var carousel=document.querySelector('[data-home-carousel]');
+  if(carousel){
+    var paused=false;
+    carousel.addEventListener('mouseenter',function(){paused=true;});
+    carousel.addEventListener('mouseleave',function(){paused=false;});
+    function step(){ if(!paused){ carousel.scrollLeft+=0.7; if(carousel.scrollLeft>=carousel.scrollWidth-carousel.clientWidth-2) carousel.scrollLeft=0; } requestAnimationFrame(step); }
+    requestAnimationFrame(step);
+  }
+  document.querySelectorAll('[data-bookmark]').forEach(function(btn){ btn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();btn.classList.toggle('saved');}); });
+  var scroll=document.querySelector('[data-scroll-popular]');
+  if(scroll){scroll.addEventListener('click',function(){var t=document.getElementById('popularPlans');if(t)t.scrollIntoView({behavior:'smooth',block:'start'});});}
+})();
+
+/* =========================================================
+   통합본(9) JSP 화면 상호작용
+========================================================= */
+(function () {
+  function all(selector, root) { return Array.prototype.slice.call((root || document).querySelectorAll(selector)); }
+
+  all('.continent-toggle').forEach(function (button) {
+    button.addEventListener('click', function () {
+      var panel = button.parentElement && button.parentElement.querySelector('.continent-panel');
+      if (!panel) return;
+      panel.classList.toggle('hidden');
+    });
+  });
+
+  var filterToggle = document.getElementById('scheduleFilterToggle');
+  var filterPanel = document.getElementById('scheduleFilterPanel');
+  var filterBar = document.getElementById('scheduleSearchBar');
+  if (filterToggle && filterPanel) {
+    filterToggle.addEventListener('click', function (event) {
+      event.preventDefault();
+      event.stopPropagation();
+      filterPanel.classList.toggle('hidden');
+      if (filterBar) filterBar.style.borderColor = filterPanel.classList.contains('hidden') ? '#D1D2F9' : '#6369D1';
+    });
+    filterPanel.addEventListener('click', function (event) { event.stopPropagation(); });
+    document.addEventListener('click', function () {
+      filterPanel.classList.add('hidden');
+      if (filterBar) filterBar.style.borderColor = '#D1D2F9';
+    });
+  }
+
+  all('[data-chip-group]').forEach(function (group) {
+    all('button', group).forEach(function (button) {
+      button.addEventListener('click', function () {
+        all('button', group).forEach(function (item) {
+          item.classList.remove('bg-[#6369D1]', 'border-[#6369D1]', 'text-white');
+          if (!item.classList.contains('bg-white')) item.classList.add('bg-gray-100');
+          item.classList.add('text-gray-500');
+        });
+        button.classList.remove('bg-gray-100', 'text-gray-500');
+        button.classList.add('bg-[#6369D1]', 'border-[#6369D1]', 'text-white');
+      });
+    });
+  });
+
+  all('[data-tab-group]').forEach(function (group) {
+    all('button', group).forEach(function (button) {
+      button.addEventListener('click', function () {
+        all('button', group).forEach(function (item) {
+          item.classList.remove('text-[#6369D1]', 'border-b-2', 'border-[#6369D1]', 'font-black');
+          item.classList.add('text-gray-400', 'font-bold');
+        });
+        button.classList.remove('text-gray-400', 'font-bold');
+        button.classList.add('text-[#6369D1]', 'border-b-2', 'border-[#6369D1]', 'font-black');
+      });
+    });
+  });
+
+  all('[data-read-all]').forEach(function (button) {
+    button.addEventListener('click', function () {
+      all('.unread').forEach(function (item) { item.classList.remove('unread'); });
+      if (window.tripilyToast) window.tripilyToast('모든 알림을 읽음 처리했습니다.');
+    });
+  });
+
+  all('[data-char-input]').forEach(function (input) {
+    function sync() {
+      var counterId = input.getAttribute('data-char-input');
+      var counter = counterId ? document.getElementById(counterId) : input.parentElement && input.parentElement.querySelector('[data-char-count]');
+      if (counter) counter.textContent = String(input.value.length);
+    }
+    input.addEventListener('input', sync);
+    sync();
+  });
+})();

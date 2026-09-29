@@ -1,46 +1,11 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<%
-request.setAttribute("activePage", "notification");
-%>
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>알림 | Tripily</title>
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/view/assets/css/tripily.css">
-</head>
-<body><jsp:include page="/common/header.jsp" /><main
-		class="page narrow">
-		<div class="page-title-row">
-			<div>
-				<span class="eyebrow">NOTIFICATIONS</span>
-				<h1>알림</h1>
-				<p class="page-desc">댓글과 좋아요 등 일반 알림입니다. 관리자 신고는 별도 버튼으로 관리합니다.</p>
-			</div>
-			<button class="btn outline" onclick="tripilyToast('모두 읽음 처리되었습니다.')">모두
-				읽음</button>
-		</div>
-		<div class="panel">
-			<div class="toggle-row">
-				<div class="toggle-copy">
-					<b>💬 민지님이 댓글을 남겼어요.</b><span>“도쿄 숙소 위치가 정말 좋아 보이네요!” · 5분 전</span>
-				</div>
-				<span class="pill brand">NEW</span>
-			</div>
-			<div class="toggle-row">
-				<div class="toggle-copy">
-					<b>♥ 도윤님이 내 여행일정을 좋아해요.</b><span>도쿄 3박 4일 감성 여행 · 1시간 전</span>
-				</div>
-				<span class="pill brand">NEW</span>
-			</div>
-			<div class="toggle-row">
-				<div class="toggle-copy">
-					<b>새 답글이 등록되었어요.</b><span>여행 꿀팁 게시글 · 어제</span>
-				</div>
-			</div>
-		</div>
-	</main><jsp:include page="/common/footer.jsp" /></body>
-</html>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%><% request.setAttribute("activePage","notifications"); %>
+<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>알림 · Tripily</title><jsp:include page="/common/headStyles.jsp" /></head><body><jsp:include page="/common/header.jsp" />
+<main class="max-w-4xl mx-auto px-6 py-10">
+ <div class="flex items-end justify-between gap-4 mb-7"><div><p class="text-xs font-black tracking-[.18em] text-[#6369D1]">NOTIFICATIONS</p><h1 class="text-3xl font-black mt-1">알림</h1><p class="text-sm text-gray-500 mt-2">댓글, 좋아요 등 내 활동과 관련된 소식을 확인합니다.</p></div><button type="button" class="px-4 py-2 rounded-xl border border-gray-200 text-sm font-bold text-gray-600" data-read-all>모두 읽음</button></div>
+ <div class="border border-gray-200 rounded-2xl overflow-hidden bg-white" data-notification-list><div class="px-5 py-3 border-b bg-gray-50 text-xs font-bold text-gray-500">읽지 않은 알림 <span data-unread-count>2</span>개</div>
+  <a data-notification-row data-unread="true" href="${pageContext.request.contextPath}/view/travel/scheduleDetail.jsp?id=7" class="w-full px-5 py-5 border-b flex gap-4 text-left hover:bg-gray-50 transition bg-[#FAFAFF]"><span class="w-10 h-10 shrink-0 rounded-full flex items-center justify-center bg-[#F0F0FF] text-[#6369D1]">💬</span><span class="flex-1 min-w-0"><span class="flex items-center gap-2"><strong class="text-sm">새 댓글</strong><span class="w-1.5 h-1.5 rounded-full bg-[#6369D1] unread-dot"></span></span><span class="block text-sm text-gray-600 mt-1">민지님이 ‘도쿄 3박 4일 완전 정복’에 댓글을 남겼어요.</span><span class="block text-xs text-gray-400 mt-2">12분 전</span></span></a>
+  <a data-notification-row data-unread="true" href="${pageContext.request.contextPath}/view/travel/scheduleDetail.jsp?id=1" class="w-full px-5 py-5 border-b flex gap-4 text-left hover:bg-gray-50 transition bg-[#FAFAFF]"><span class="w-10 h-10 shrink-0 rounded-full flex items-center justify-center bg-red-50 text-red-500">♥</span><span class="flex-1 min-w-0"><span class="flex items-center gap-2"><strong class="text-sm">새 좋아요</strong><span class="w-1.5 h-1.5 rounded-full bg-[#6369D1] unread-dot"></span></span><span class="block text-sm text-gray-600 mt-1">도윤님이 내 여행 일정에 좋아요를 눌렀어요.</span><span class="block text-xs text-gray-400 mt-2">1시간 전</span></span></a>
+  <a data-notification-row href="${pageContext.request.contextPath}/view/tips/tipDetail.jsp?id=1" class="w-full px-5 py-5 border-b flex gap-4 text-left hover:bg-gray-50 transition bg-white"><span class="w-10 h-10 shrink-0 rounded-full flex items-center justify-center bg-[#F0F0FF] text-[#6369D1]">💬</span><span class="flex-1 min-w-0"><span class="flex items-center gap-2"><strong class="text-sm">새 댓글</strong></span><span class="block text-sm text-gray-600 mt-1">여행자_J님이 내 여행꿀팁에 댓글을 남겼어요.</span><span class="block text-xs text-gray-400 mt-2">어제</span></span></a>
+  <a data-notification-row href="${pageContext.request.contextPath}/view/mate/mateDetail.jsp?id=1" class="w-full px-5 py-5 flex gap-4 text-left hover:bg-gray-50 transition bg-white"><span class="w-10 h-10 shrink-0 rounded-full flex items-center justify-center bg-red-50 text-red-500">♥</span><span class="flex-1 min-w-0"><span class="flex items-center gap-2"><strong class="text-sm">새 좋아요</strong></span><span class="block text-sm text-gray-600 mt-1">내 여행 메이트 게시글이 좋아요를 받았어요.</span><span class="block text-xs text-gray-400 mt-2">2일 전</span></span></a>
+ </div>
+</main><jsp:include page="/common/footer.jsp" /></body></html>

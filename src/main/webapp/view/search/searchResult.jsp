@@ -1,95 +1,12 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<%
-request.setAttribute("activePage", "search");
-%>
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>통합 검색 | Tripily</title>
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/view/assets/css/tripily.css">
-</head>
-<body><jsp:include page="/common/header.jsp" /><main class="page">
-		<div class="page-title-row">
-			<div>
-				<span class="eyebrow">SEARCH</span>
-				<h1>“도쿄” 검색 결과</h1>
-				<p class="page-desc">여행일정, 여행꿀팁, 여행메이트 결과를 통합해서 보여줍니다.</p>
-			</div>
-		</div>
-		<div class="section-title">
-			<div>
-				<h2>
-					여행일정 <span style="color: #6369D1">12</span>
-				</h2>
-			</div>
-			<a class="btn outline" href="../travel/scheduleList.jsp">더보기</a>
-		</div>
-		<div class="grid grid-3">
-			<a class="card" href="../travel/scheduleDetail.jsp"><div
-					class="card-img">
-					<img
-						src="https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=800&q=80">
-				</div>
-				<div class="card-body">
-					<span class="card-kicker">TOKYO · 3박 4일</span>
-					<h3>도쿄 감성 여행</h3>
-					<p>맛집과 골목 산책을 균형 있게 담은 일정</p>
-					<div class="meta">
-						<span>조회 1.2k</span><span>⌑ 164</span><span>예산 82만원</span>
-					</div>
-				</div></a><a class="card" href="../travel/scheduleDetail.jsp"><div
-					class="card-img">
-					<img
-						src="https://images.unsplash.com/photo-1688544969956-a887beadb9d2?w=800&q=80">
-				</div>
-				<div class="card-body">
-					<span class="card-kicker">JEJU · 2박 3일</span>
-					<h3>제주 동쪽 드라이브</h3>
-					<p>성산부터 세화까지 여유로운 해안 코스</p>
-					<div class="meta">
-						<span>조회 980</span><span>⌑ 121</span><span>예산 45만원</span>
-					</div>
-				</div></a><a class="card" href="../travel/scheduleDetail.jsp"><div
-					class="card-img">
-					<img
-						src="https://images.unsplash.com/photo-1511739001486-6bfe10ce785f?w=800&q=80">
-				</div>
-				<div class="card-body">
-					<span class="card-kicker">PARIS · 4박 5일</span>
-					<h3>파리 첫 여행 정석</h3>
-					<p>미술관, 몽마르트, 세느강 야경까지</p>
-					<div class="meta">
-						<span>조회 840</span><span>⌑ 105</span><span>예산 190만원</span>
-					</div>
-				</div></a>
-		</div>
-		<div class="section-title">
-			<div>
-				<h2>
-					여행꿀팁 <span style="color: #6369D1">7</span>
-				</h2>
-			</div>
-			<a class="btn outline" href="../tips/tipList.jsp">더보기</a>
-		</div>
-		<div class="panel">
-			<a href="../tips/tipDetail.jsp"><b>처음 가는 도쿄에서 꼭 알아둘 것들</b>
-			<p class="page-desc">교통패스부터 숙소 위치까지 직접 다녀온 경험을 정리했어요.</p></a>
-		</div>
-		<div class="section-title">
-			<div>
-				<h2>
-					여행 메이트 <span style="color: #6369D1">4</span>
-				</h2>
-			</div>
-			<a class="btn outline" href="../mate/mateList.jsp">더보기</a>
-		</div>
-		<div class="panel">
-			<a href="../mate/mateDetail.jsp"><b>10월 도쿄 3박 4일 같이 여행하실 분!</b>
-			<p class="page-desc">2026.10.12 ~ 10.15 · 20~30대 · 1~2명 모집</p></a>
-		</div>
-	</main><jsp:include page="/common/footer.jsp" /></body>
-</html>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%><% request.setAttribute("activePage","search"); String q=request.getParameter("q"); if(q==null||q.trim().isEmpty())q="전체"; %>
+<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>통합 검색 · Tripily</title><jsp:include page="/common/headStyles.jsp" /></head><body><jsp:include page="/common/header.jsp" />
+<main class="max-w-6xl mx-auto px-6 py-10"><div class="mb-8"><p class="text-xs font-bold tracking-widest text-[#6369D1]">GLOBAL SEARCH</p><h1 class="text-3xl font-black mt-2">“<%=q%>” 통합 검색</h1><p class="text-sm text-gray-500 mt-2">여행일정 · 여행꿀팁 · 여행 메이트를 한 번에 검색합니다. 총 13건</p></div>
+ <div class="flex gap-2 flex-wrap mb-8"><button class="px-4 py-2 rounded-full text-sm font-bold border bg-[#6369D1] text-white border-[#6369D1]" data-search-tab="all">전체</button><button class="px-4 py-2 rounded-full text-sm font-bold border bg-white text-gray-600 border-gray-200" data-search-tab="itinerary">여행일정</button><button class="px-4 py-2 rounded-full text-sm font-bold border bg-white text-gray-600 border-gray-200" data-search-tab="tips">여행꿀팁</button><button class="px-4 py-2 rounded-full text-sm font-bold border bg-white text-gray-600 border-gray-200" data-search-tab="mate">여행 메이트</button></div>
+ <section class="mb-10" data-search-section="itinerary"><div class="flex items-center justify-between mb-3"><h2 class="text-lg font-black">여행일정 <span class="text-[#6369D1]">4</span></h2><a href="${pageContext.request.contextPath}/view/travel/scheduleList.jsp?q=<%=java.net.URLEncoder.encode(q,"UTF-8")%>" class="text-sm font-bold text-[#6369D1]">상세 조건으로 더 보기 →</a></div><div class="grid md:grid-cols-2 gap-3">
+  <a href="${pageContext.request.contextPath}/view/travel/scheduleDetail.jsp?id=1" class="block p-5 rounded-2xl border bg-white hover:border-[#6369D1] transition"><div class="text-xs font-bold text-[#6369D1]">제주</div><div class="font-black mt-1">제주 3박 4일 감성 여행</div><p class="text-sm text-gray-500 mt-1">성산일출봉, 협재해변, 맛집을 담은 일정</p></a><a href="${pageContext.request.contextPath}/view/travel/scheduleDetail.jsp?id=7" class="block p-5 rounded-2xl border bg-white hover:border-[#6369D1] transition"><div class="text-xs font-bold text-[#6369D1]">일본 · 도쿄</div><div class="font-black mt-1">도쿄 3박 4일 완전 정복</div><p class="text-sm text-gray-500 mt-1">시부야, 아사쿠사, 아키하바라 핵심 일정</p></a><a href="${pageContext.request.contextPath}/view/travel/scheduleDetail.jsp?id=9" class="block p-5 rounded-2xl border bg-white hover:border-[#6369D1] transition"><div class="text-xs font-bold text-[#6369D1]">프랑스 · 파리</div><div class="font-black mt-1">파리 5박 6일 예술 &amp; 낭만</div><p class="text-sm text-gray-500 mt-1">에펠탑과 루브르 중심의 일정</p></a><a href="${pageContext.request.contextPath}/view/travel/scheduleDetail.jsp?id=16" class="block p-5 rounded-2xl border bg-white hover:border-[#6369D1] transition"><div class="text-xs font-bold text-[#6369D1]">일본 · 오사카</div><div class="font-black mt-1">오사카 2박 3일 먹방 여행</div><p class="text-sm text-gray-500 mt-1">도톤보리와 시장을 중심으로 한 먹방 코스</p></a>
+ </div></section>
+ <section class="mb-10" data-search-section="tips"><div class="flex items-center justify-between mb-3"><h2 class="text-lg font-black">여행꿀팁 <span class="text-[#6369D1]">6</span></h2><a href="${pageContext.request.contextPath}/view/tips/tipList.jsp" class="text-sm font-bold text-[#6369D1]">전체 보기 →</a></div><div class="grid md:grid-cols-3 gap-3">
+  <a href="${pageContext.request.contextPath}/view/tips/tipDetail.jsp?id=1" class="block rounded-2xl border bg-white overflow-hidden hover:border-[#6369D1] transition"><img src="https://images.unsplash.com/photo-1585208798174-6cedd86e019a?fit=crop&w=600&q=80" alt="" class="w-full h-28 object-cover"><div class="p-4"><span class="text-[11px] font-bold" style="color:#EC4899">교통</span><div class="font-bold text-sm mt-1 line-clamp-2">리스본 대중교통 완벽 가이드</div></div></a><a href="${pageContext.request.contextPath}/view/tips/tipDetail.jsp?id=2" class="block rounded-2xl border bg-white overflow-hidden hover:border-[#6369D1] transition"><img src="https://images.unsplash.com/photo-1549294413-26f195200c16?fit=crop&w=600&q=80" alt="" class="w-full h-28 object-cover"><div class="p-4"><span class="text-[11px] font-bold" style="color:#3B82F6">숙박</span><div class="font-bold text-sm mt-1 line-clamp-2">제주도 숙소 추천 오션뷰 가성비 숙소 모음</div></div></a><a href="${pageContext.request.contextPath}/view/tips/tipDetail.jsp?id=3" class="block rounded-2xl border bg-white overflow-hidden hover:border-[#6369D1] transition"><img src="https://images.unsplash.com/photo-1591814468924-caf88d1232e1?fit=crop&w=600&q=80" alt="" class="w-full h-28 object-cover"><div class="p-4"><span class="text-[11px] font-bold" style="color:#F59E0B">음식</span><div class="font-bold text-sm mt-1 line-clamp-2">후쿠오카에서 꼭 먹어야 하는 현지 음식 7가지</div></div></a>
+ </div></section>
+ <section data-search-section="mate"><div class="flex items-center justify-between mb-3"><h2 class="text-lg font-black">여행 메이트 <span class="text-[#6369D1]">3</span></h2><a href="${pageContext.request.contextPath}/view/mate/mateList.jsp" class="text-sm font-bold text-[#6369D1]">전체 보기 →</a></div><div class="space-y-3"><a href="${pageContext.request.contextPath}/view/mate/mateDetail.jsp?id=1" class="block rounded-2xl border bg-white p-5 hover:border-[#6369D1] transition"><div class="text-xs font-bold text-[#6369D1]">일본 · 도쿄 · 여행동행</div><div class="font-bold mt-1">🗼 11/10-14 도쿄 4박 · 맛집+카페+쇼핑 동행 1명</div><p class="text-sm text-gray-500 mt-1">11월 10일~14일 도쿄 여행 계획 중입니다.</p></a><a href="${pageContext.request.contextPath}/view/mate/mateDetail.jsp?id=2" class="block rounded-2xl border bg-white p-5 hover:border-[#6369D1] transition"><div class="text-xs font-bold text-[#6369D1]">베트남 · 다낭 · 정보공유</div><div class="font-bold mt-1">✈️ 12월 다낭 · 항공+숙소 같이 알아볼 분</div><p class="text-sm text-gray-500 mt-1">12월 다낭 여행 준비 중이라 항공권, 숙소를 같이 알아봐요.</p></a></div></section>
+</main><jsp:include page="/common/footer.jsp" /></body></html>
