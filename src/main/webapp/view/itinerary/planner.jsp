@@ -1,34 +1,529 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<% request.setAttribute("activePage","planner"); %>
-<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>일정 만들기 | Tripily</title><jsp:include page="/common/headStyles.jsp" /></head><body class="site-shell"><jsp:include page="/common/header.jsp" />
-<main class="flex flex-col" style="height:calc(100vh - 64px)">
-  <div class="shrink-0 border-b border-gray-100" style="background:#F8F8FF">
-    <div class="grid min-w-0" style="grid-template-columns:minmax(0,1fr) 460px">
-      <div class="min-w-0 px-6 py-3 flex flex-col gap-3">
-        <div class="flex items-center gap-3 min-w-0">
-          <div class="h-[46px] flex-1 min-w-0 rounded-xl border bg-white flex items-center gap-3 px-4" style="border-color:#e2e5ef"><svg class="shrink-0" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6369D1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg><input class="flex-1 min-w-0 font-semibold text-sm text-gray-800 outline-none bg-transparent placeholder-gray-400 border-none" placeholder="여행 제목을 입력하세요" style="font-size:14px"></div>
-          <div class="flex items-center gap-1.5 shrink-0 text-gray-500 text-sm px-2"><svg class="text-gray-400" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg><span>1일 · 0개 일정</span></div>
-        </div>
-        <div class="grid gap-3 min-w-0" style="grid-template-columns:minmax(0,.78fr) minmax(0,.78fr) minmax(360px,1.35fr)">
-          <div class="relative min-w-0 h-[50px] rounded-xl border bg-white flex items-center gap-3 px-3.5" style="border-color:#fca5a5"><div class="w-8 h-8 rounded-lg shrink-0 flex items-center justify-center" style="background:#F0EFFF;color:#6369D1"><svg class="" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10Z"/></svg></div><div class="min-w-0 flex-1 flex flex-col justify-center"><span class="text-[10px] font-semibold text-gray-400 leading-none mb-1">국가</span><div class="relative"><div class="flex items-center gap-1.5 transition-all w-full border-0 p-0" style="border-color:transparent;background:transparent;box-shadow:none"><input class="outline-none text-sm text-gray-800 bg-transparent placeholder-gray-400 w-full min-w-0" placeholder="국가 선택"></div></div></div><span class="text-[10px] font-semibold shrink-0" style="color:#ef4444">필수</span></div>
-          <div class="relative min-w-0 h-[50px] rounded-xl border bg-white flex items-center gap-3 px-3.5" style="border-color:#e2e5ef"><div class="w-8 h-8 rounded-lg shrink-0 flex items-center justify-center" style="background:#F0EFFF;color:#6369D1"><svg class="" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg></div><div class="min-w-0 flex-1 flex flex-col justify-center"><span class="text-[10px] font-semibold text-gray-400 leading-none mb-1">지역</span><div class="relative"><div class="flex items-center gap-1.5 transition-all w-full border-0 p-0" style="border-color:transparent;background:transparent;box-shadow:none"><input class="outline-none text-sm text-gray-800 bg-transparent placeholder-gray-400 w-full min-w-0" placeholder="국가 먼저 입력" disabled></div></div></div></div>
-          <div class="relative min-w-0 h-[50px] rounded-xl border bg-white flex items-center gap-3 px-3.5" style="border-color:#e2e5ef"><div class="w-8 h-8 rounded-lg shrink-0 flex items-center justify-center" style="background:#F0EFFF;color:#6369D1"><svg class="" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div><div class="min-w-0 flex-1 flex flex-col justify-center"><span class="text-[10px] font-semibold text-gray-400 leading-none mb-1">여행 기간</span><div class="flex items-center gap-2 min-w-0"><input type="date" class="text-xs text-gray-700 rounded-md px-1 py-0.5 outline-none cursor-pointer border-0 bg-transparent focus:bg-gray-50 min-w-0" style="color-scheme:light;width:132px"><svg width="14" height="10" viewBox="0 0 14 10" fill="none" class="shrink-0 text-gray-400"><path d="M1 5h12M9 1l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg><input type="date" disabled class="text-xs text-gray-700 rounded-md px-1 py-0.5 outline-none cursor-pointer border-0 bg-transparent focus:bg-gray-50 min-w-0" style="color-scheme:light;width:132px;opacity:.4"></div></div></div>
-        </div>
-      </div>
-      <div class="border-l border-gray-100 px-6 py-3 flex flex-col items-end justify-center gap-3" style="border-color:#e8e9f2"><div class="flex items-center justify-end gap-2"><button class="h-10 w-[200px] text-xs font-bold text-white rounded-xl hover:opacity-90 transition-all flex items-center justify-center gap-1.5 shadow-sm" style="background:#6369D1" onclick="tripilyToast('로그인이 필요한 서비스입니다.')"><svg class="" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2Z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> 저장하기</button></div><button id="plannerVisibility" class="h-10 w-[200px] flex items-center justify-center gap-2 text-xs font-semibold rounded-full border bg-white transition-all" style="border-color:#8B91FF;color:#555CD6"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0"></span>공개 중 <svg class="" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></button></div>
-    </div>
-  </div>
-  <div class="flex flex-1 min-h-0">
-    <div class="relative flex shrink-0">
-      <div id="plannerLeftPanel" class="flex flex-col bg-gray-50 border-r border-gray-100 overflow-hidden transition-all duration-300 ease-in-out" style="width:340px"><div class="w-[340px] flex flex-col h-full"><div class="px-4 py-3 bg-white border-b border-gray-100 shrink-0"><div class="flex items-center justify-between mb-2"><h2 class="font-bold text-sm text-gray-800">📋 일정 가져오기</h2><span class="text-[10px] text-gray-400">6개</span></div><div class="relative"><svg class="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><input type="text" placeholder="지역, 내용 검색..." class="w-full pl-8 pr-7 py-2 text-xs bg-gray-50 border border-gray-200 rounded-lg outline-none focus:border-purple-300 focus:bg-white transition-all"></div><div class="mt-2 flex gap-2 text-[10px] text-gray-400 flex-wrap"><span class="flex items-center gap-0.5"><svg class="" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="6" r="1"/><circle cx="15" cy="6" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="9" cy="18" r="1"/><circle cx="15" cy="18" r="1"/></svg> 전체</span><span>·</span><span>D# = 1일</span><span>·</span><span>항목 = 단일</span></div></div><div class="flex-1 overflow-y-auto p-3 flex flex-col gap-2"><div class="rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden"><div class="flex items-center gap-2.5 px-3 py-2.5 cursor-pointer hover:bg-gray-50 transition-colors select-none"><svg class="text-gray-300 shrink-0" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="6" r="1"/><circle cx="15" cy="6" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="9" cy="18" r="1"/><circle cx="15" cy="18" r="1"/></svg><div class="w-8 h-8 rounded-lg flex items-center justify-center text-white text-[11px] font-black shrink-0" style="background:#FF6B9D">JP</div><div class="flex-1 min-w-0"><p class="text-xs font-bold text-gray-800 truncate">도쿄 벚꽃 시즌 4박 5일</p><p class="text-[10px] text-gray-400">일본 · 4박 5일</p></div><span class="text-gray-400 p-1 shrink-0"><svg class="" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span></div></div><div class="rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden"><div class="flex items-center gap-2.5 px-3 py-2.5 cursor-pointer hover:bg-gray-50 transition-colors select-none"><svg class="text-gray-300 shrink-0" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="6" r="1"/><circle cx="15" cy="6" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="9" cy="18" r="1"/><circle cx="15" cy="18" r="1"/></svg><div class="w-8 h-8 rounded-lg flex items-center justify-center text-white text-[11px] font-black shrink-0" style="background:#6369D1">FR</div><div class="flex-1 min-w-0"><p class="text-xs font-bold text-gray-800 truncate">파리 낭만 일주일</p><p class="text-[10px] text-gray-400">프랑스 · 6박 7일</p></div><span class="text-gray-400 p-1 shrink-0"><svg class="" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span></div></div><div class="rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden"><div class="flex items-center gap-2.5 px-3 py-2.5 cursor-pointer hover:bg-gray-50 transition-colors select-none"><svg class="text-gray-300 shrink-0" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="6" r="1"/><circle cx="15" cy="6" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="9" cy="18" r="1"/><circle cx="15" cy="18" r="1"/></svg><div class="w-8 h-8 rounded-lg flex items-center justify-center text-white text-[11px] font-black shrink-0" style="background:#FFD447">TH</div><div class="flex-1 min-w-0"><p class="text-xs font-bold text-gray-800 truncate">방콕 미식 여행 3박 4일</p><p class="text-[10px] text-gray-400">태국 · 3박 4일</p></div><span class="text-gray-400 p-1 shrink-0"><svg class="" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span></div></div><div class="rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden"><div class="flex items-center gap-2.5 px-3 py-2.5 cursor-pointer hover:bg-gray-50 transition-colors select-none"><svg class="text-gray-300 shrink-0" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="6" r="1"/><circle cx="15" cy="6" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="9" cy="18" r="1"/><circle cx="15" cy="18" r="1"/></svg><div class="w-8 h-8 rounded-lg flex items-center justify-center text-white text-[11px] font-black shrink-0" style="background:#FF8C42">JP</div><div class="flex-1 min-w-0"><p class="text-xs font-bold text-gray-800 truncate">오사카 먹방 여행 3박 4일</p><p class="text-[10px] text-gray-400">일본 · 3박 4일</p></div><span class="text-gray-400 p-1 shrink-0"><svg class="" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span></div></div><div class="rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden"><div class="flex items-center gap-2.5 px-3 py-2.5 cursor-pointer hover:bg-gray-50 transition-colors select-none"><svg class="text-gray-300 shrink-0" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="6" r="1"/><circle cx="15" cy="6" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="9" cy="18" r="1"/><circle cx="15" cy="18" r="1"/></svg><div class="w-8 h-8 rounded-lg flex items-center justify-center text-white text-[11px] font-black shrink-0" style="background:#4CAF50">KR</div><div class="flex-1 min-w-0"><p class="text-xs font-bold text-gray-800 truncate">제주 힐링 2박 3일</p><p class="text-[10px] text-gray-400">한국 · 2박 3일</p></div><span class="text-gray-400 p-1 shrink-0"><svg class="" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span></div></div><div class="rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden"><div class="flex items-center gap-2.5 px-3 py-2.5 cursor-pointer hover:bg-gray-50 transition-colors select-none"><svg class="text-gray-300 shrink-0" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="6" r="1"/><circle cx="15" cy="6" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="9" cy="18" r="1"/><circle cx="15" cy="18" r="1"/></svg><div class="w-8 h-8 rounded-lg flex items-center justify-center text-white text-[11px] font-black shrink-0" style="background:#E91E63">ES</div><div class="flex-1 min-w-0"><p class="text-xs font-bold text-gray-800 truncate">바르셀로나 5박 6일</p><p class="text-[10px] text-gray-400">스페인 · 5박 6일</p></div><span class="text-gray-400 p-1 shrink-0"><svg class="" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span></div></div></div></div></div>
-      <button id="plannerPanelToggle" title="일정 가져오기 숨기기" class="absolute right-0 top-1/2 -translate-y-1/2 translate-x-full z-20 flex flex-col items-center justify-center gap-1 shadow-md border border-gray-200 bg-white hover:bg-purple-50 transition-all" style="width:18px;height:56px;border-radius:0 8px 8px 0;border-left:none"><svg class="text-gray-400" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></button>
-    </div>
-    <div class="flex-1 flex flex-col min-w-0 bg-white">
-      <div class="px-5 py-2.5 border-b border-gray-100 flex items-center shrink-0"><div class="flex items-center gap-2 rounded-lg px-3 py-1.5 border" style="background:#FFFBEB;border-color:#F5D98B"><svg class="" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#B8960C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7V5a2 2 0 0 0-2-2H5a3 3 0 0 0 0 6h15v12H5a3 3 0 0 1-3-3V6"/><path d="M16 13h4"/></svg><span class="text-xs font-semibold" style="color:#92720A">총 예상 예산</span><span class="text-sm font-black" style="color:#78590A">0원</span></div><div class="ml-auto flex gap-2"><button title="모두 닫기" class="flex items-center justify-center text-gray-500 hover:text-gray-700 w-8 h-8 rounded-lg border border-gray-200 hover:border-gray-300 transition-all"><svg class="" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7 15 5 5 5-5M7 9l5-5 5 5"/></svg></button></div></div>
-      <div class="flex-1 overflow-y-auto px-5 py-4"><div class="mb-4"><div class="flex items-center gap-3 rounded-xl px-4 py-3 cursor-pointer select-none transition-all group/hdr hover:brightness-[0.93]" style="background:linear-gradient(135deg,#6369D1,#8B5CF6)"><div class="w-7 h-7 rounded-full flex items-center justify-center font-black text-sm text-white shrink-0" style="background:rgba(255,255,255,.22)">1</div><div class="flex-1"><div class="flex items-center gap-2 flex-wrap"><p class="font-bold text-sm" style="color:#fff">Day 1</p></div></div><button class="p-1 rounded transition-all hover:bg-white/20" style="color:rgba(255,255,255,.6)" title="이 날 삭제"><svg class="" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6m3 0V4h8v2M10 11v6M14 11v6"/></svg></button><span style="color:rgba(255,255,255,.7)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m18 15-6-6-6 6"/></svg></span></div><div class="mt-1.5 rounded-xl border-2 border-dashed transition-all p-2.5 min-h-[80px] border-amber-200 bg-amber-50/30"><div class="flex flex-col items-center justify-center h-14 gap-1.5"><p class="text-[12px] font-semibold text-amber-500">🌍 국가를 먼저 입력해야 일정을 추가할 수 있어요</p><p class="text-[11px] text-amber-400">상단 바에서 국가를 선택하세요</p></div></div><button class="w-full mt-2 flex items-center justify-center gap-2 py-2.5 rounded-xl border-2 border-dashed border-gray-200 text-xs font-semibold text-gray-400 hover:border-purple-300 hover:text-purple-400 transition-all"><svg class="" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg> Day 2 추가</button></div></div>
-    </div>
-    <div class="w-[460px] shrink-0 border-l border-gray-100 flex flex-col bg-white"><div class="px-4 py-3 border-b border-gray-100 shrink-0"><div class="flex items-center justify-between"><div class="flex items-center gap-2"><svg class="" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6369D1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg><h2 class="font-bold text-sm text-gray-800">경로 지도</h2></div><div class="relative"><button type="button" class="flex items-center gap-2 rounded-xl border px-3 py-1.5 text-xs font-bold shadow-sm hover:shadow-md transition-all" style="border-color:#D1D2F9;color:#6369D1;background:#F5F5FF;min-width:86px"><span class="w-2 h-2 rounded-full shrink-0" style="background:#6369D1"></span><span class="flex-1 text-left">전체</span><svg class="" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></button></div></div></div><div class="flex-1 flex flex-col min-h-0"><div id="plannerGoogleMap" class="flex-1 w-full" style="min-height:0"></div></div><div class="px-4 py-3 border-t border-gray-100 shrink-0"><p class="text-[10px] text-gray-400 mb-2 font-medium">핀 범례</p><div class="flex flex-wrap gap-2"><div class="flex items-center gap-1"><div class="w-4 h-4 rounded flex items-center justify-center" style="background:#3B82F618"><span style="color:#3B82F6;font-size:9px">●</span></div><span class="text-[10px] font-medium" style="color:#3B82F6">관광</span></div><div class="flex items-center gap-1"><div class="w-4 h-4 rounded flex items-center justify-center" style="background:#F9731618"><span style="color:#F97316;font-size:9px">●</span></div><span class="text-[10px] font-medium" style="color:#F97316">식사</span></div><div class="flex items-center gap-1"><div class="w-4 h-4 rounded flex items-center justify-center" style="background:#8B5CF618"><span style="color:#8B5CF6;font-size:9px">●</span></div><span class="text-[10px] font-medium" style="color:#8B5CF6">숙박</span></div><div class="flex items-center gap-1"><div class="w-4 h-4 rounded flex items-center justify-center" style="background:#10B98118"><span style="color:#10B981;font-size:9px">●</span></div><span class="text-[10px] font-medium" style="color:#10B981">활동</span></div></div></div></div>
-  </div>
-</main><jsp:include page="/common/footer.jsp" />
-<script>document.getElementById('plannerPanelToggle')?.addEventListener('click',function(){var p=document.getElementById('plannerLeftPanel');var closed=p.style.width==='0px';p.style.width=closed?'340px':'0px';this.title=closed?'일정 가져오기 숨기기':'일정 가져오기 열기';});function initPlannerMap(){var el=document.getElementById('plannerGoogleMap');if(!el||!window.google||!google.maps)return;new google.maps.Map(el,{center:{lat:35.6762,lng:139.6503},zoom:11,mapTypeControl:false,streetViewControl:false,fullscreenControl:false,styles:[{featureType:'poi',elementType:'labels',stylers:[{visibility:'off'}]},{featureType:'transit',elementType:'labels',stylers:[{visibility:'off'}]}]});}</script>
-<script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB7ioaQS08aAzCl7gZPk6SyE1w7EeIrYhI&language=ko&loading=async&callback=initPlannerMap"></script></body></html>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%
+request.setAttribute("activePage", "planner");
+%>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>일정 만들기 | Tripily</title><jsp:include
+	page="/common/headStyles.jsp" /></head>
+<body class="site-shell"><jsp:include page="/common/header.jsp" />
+	<main class="flex flex-col" style="height: calc(100vh - 64px)">
+		<div class="shrink-0 border-b border-gray-100"
+			style="background: #F8F8FF">
+			<div class="grid min-w-0"
+				style="grid-template-columns: minmax(0, 1fr) 460px">
+				<div class="min-w-0 px-6 py-3 flex flex-col gap-3">
+					<div class="flex items-center gap-3 min-w-0">
+						<div
+							class="h-[46px] flex-1 min-w-0 rounded-xl border bg-white flex items-center gap-3 px-4"
+							style="border-color: #e2e5ef">
+							<svg class="shrink-0" width="16" height="16" viewBox="0 0 24 24"
+								fill="none" stroke="#6369D1" stroke-width="2"
+								stroke-linecap="round" stroke-linejoin="round">
+								<path d="M12 20h9" />
+								<path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4Z" /></svg>
+							<input
+								class="flex-1 min-w-0 font-semibold text-sm text-gray-800 outline-none bg-transparent placeholder-gray-400 border-none"
+								placeholder="여행 제목을 입력하세요" style="font-size: 14px">
+						</div>
+						<div
+							class="flex items-center gap-1.5 shrink-0 text-gray-500 text-sm px-2">
+							<svg class="text-gray-400" width="14" height="14"
+								viewBox="0 0 24 24" fill="none" stroke="currentColor"
+								stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+								<rect width="18" height="18" x="3" y="4" rx="2" />
+								<path d="M16 2v4M8 2v4M3 10h18" /></svg>
+							<span>1일 · 0개 일정</span>
+						</div>
+					</div>
+					<div class="grid gap-3 min-w-0"
+						style="grid-template-columns: minmax(0, .78fr) minmax(0, .78fr) minmax(360px, 1.35fr)">
+						<div
+							class="relative min-w-0 h-[50px] rounded-xl border bg-white flex items-center gap-3 px-3.5"
+							style="border-color: #fca5a5">
+							<div
+								class="w-8 h-8 rounded-lg shrink-0 flex items-center justify-center"
+								style="background: #F0EFFF; color: #6369D1">
+								<svg class="" width="17" height="17" viewBox="0 0 24 24"
+									fill="none" stroke="currentColor" stroke-width="2"
+									stroke-linecap="round" stroke-linejoin="round">
+									<circle cx="12" cy="12" r="10" />
+									<path
+										d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10Z" /></svg>
+							</div>
+							<div class="min-w-0 flex-1 flex flex-col justify-center">
+								<span
+									class="text-[10px] font-semibold text-gray-400 leading-none mb-1">국가</span>
+								<div class="relative">
+									<div
+										class="flex items-center gap-1.5 transition-all w-full border-0 p-0"
+										style="border-color: transparent; background: transparent; box-shadow: none">
+										<input
+											class="outline-none text-sm text-gray-800 bg-transparent placeholder-gray-400 w-full min-w-0"
+											placeholder="국가 선택">
+									</div>
+								</div>
+							</div>
+							<span class="text-[10px] font-semibold shrink-0"
+								style="color: #ef4444">필수</span>
+						</div>
+						<div
+							class="relative min-w-0 h-[50px] rounded-xl border bg-white flex items-center gap-3 px-3.5"
+							style="border-color: #e2e5ef">
+							<div
+								class="w-8 h-8 rounded-lg shrink-0 flex items-center justify-center"
+								style="background: #F0EFFF; color: #6369D1">
+								<svg class="" width="17" height="17" viewBox="0 0 24 24"
+									fill="none" stroke="currentColor" stroke-width="2"
+									stroke-linecap="round" stroke-linejoin="round">
+									<path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z" />
+									<circle cx="12" cy="10" r="2.5" /></svg>
+							</div>
+							<div class="min-w-0 flex-1 flex flex-col justify-center">
+								<span
+									class="text-[10px] font-semibold text-gray-400 leading-none mb-1">지역</span>
+								<div class="relative">
+									<div
+										class="flex items-center gap-1.5 transition-all w-full border-0 p-0"
+										style="border-color: transparent; background: transparent; box-shadow: none">
+										<input
+											class="outline-none text-sm text-gray-800 bg-transparent placeholder-gray-400 w-full min-w-0"
+											placeholder="국가 먼저 입력" disabled>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div
+							class="relative min-w-0 h-[50px] rounded-xl border bg-white flex items-center gap-3 px-3.5"
+							style="border-color: #e2e5ef">
+							<div
+								class="w-8 h-8 rounded-lg shrink-0 flex items-center justify-center"
+								style="background: #F0EFFF; color: #6369D1">
+								<svg class="" width="17" height="17" viewBox="0 0 24 24"
+									fill="none" stroke="currentColor" stroke-width="2"
+									stroke-linecap="round" stroke-linejoin="round">
+									<rect width="18" height="18" x="3" y="4" rx="2" />
+									<path d="M16 2v4M8 2v4M3 10h18" /></svg>
+							</div>
+							<div class="min-w-0 flex-1 flex flex-col justify-center">
+								<span
+									class="text-[10px] font-semibold text-gray-400 leading-none mb-1">여행
+									기간</span>
+								<div class="flex items-center gap-2 min-w-0">
+									<input type="date"
+										class="text-xs text-gray-700 rounded-md px-1 py-0.5 outline-none cursor-pointer border-0 bg-transparent focus:bg-gray-50 min-w-0"
+										style="color-scheme: light; width: 132px">
+									<svg width="14" height="10" viewBox="0 0 14 10" fill="none"
+										class="shrink-0 text-gray-400">
+										<path d="M1 5h12M9 1l4 4-4 4" stroke="currentColor"
+											stroke-width="1.5" stroke-linecap="round"
+											stroke-linejoin="round" /></svg>
+									<input type="date" disabled
+										class="text-xs text-gray-700 rounded-md px-1 py-0.5 outline-none cursor-pointer border-0 bg-transparent focus:bg-gray-50 min-w-0"
+										style="color-scheme: light; width: 132px; opacity: .4">
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div
+					class="border-l border-gray-100 px-6 py-3 flex flex-col items-end justify-center gap-3"
+					style="border-color: #e8e9f2">
+					<div class="flex items-center justify-end gap-2">
+						<button
+							class="h-10 w-[200px] text-xs font-bold text-white rounded-xl hover:opacity-90 transition-all flex items-center justify-center gap-1.5 shadow-sm"
+							style="background: #6369D1"
+							onclick="tripilyToast('로그인이 필요한 서비스입니다.')">
+							<svg class="" width="14" height="14" viewBox="0 0 24 24"
+								fill="none" stroke="currentColor" stroke-width="2"
+								stroke-linecap="round" stroke-linejoin="round">
+								<path
+									d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2Z" />
+								<polyline points="17 21 17 13 7 13 7 21" />
+								<polyline points="7 3 7 8 15 8" /></svg>
+							저장하기
+						</button>
+					</div>
+					<button id="plannerVisibility"
+						class="h-10 w-[200px] flex items-center justify-center gap-2 text-xs font-semibold rounded-full border bg-white transition-all"
+						style="border-color: #8B91FF; color: #555CD6">
+						<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0"></span>공개
+						중
+						<svg class="" width="13" height="13" viewBox="0 0 24 24"
+							fill="none" stroke="currentColor" stroke-width="2"
+							stroke-linecap="round" stroke-linejoin="round">
+							<path d="m6 9 6 6 6-6" /></svg>
+					</button>
+				</div>
+			</div>
+		</div>
+		<div class="flex flex-1 min-h-0">
+			<div class="relative flex shrink-0">
+				<div id="plannerLeftPanel"
+					class="flex flex-col bg-gray-50 border-r border-gray-100 overflow-hidden transition-all duration-300 ease-in-out"
+					style="width: 340px">
+					<div class="w-[340px] flex flex-col h-full">
+						<div class="px-4 py-3 bg-white border-b border-gray-100 shrink-0">
+							<div class="flex items-center justify-between mb-2">
+								<h2 class="font-bold text-sm text-gray-800">📋 일정 가져오기</h2>
+								<span class="text-[10px] text-gray-400">6개</span>
+							</div>
+							<div class="relative">
+								<svg
+									class="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400"
+									width="13" height="13" viewBox="0 0 24 24" fill="none"
+									stroke="currentColor" stroke-width="2" stroke-linecap="round"
+									stroke-linejoin="round">
+									<circle cx="11" cy="11" r="8" />
+									<path d="m21 21-4.3-4.3" /></svg>
+								<input type="text" placeholder="지역, 내용 검색..."
+									class="w-full pl-8 pr-7 py-2 text-xs bg-gray-50 border border-gray-200 rounded-lg outline-none focus:border-purple-300 focus:bg-white transition-all">
+							</div>
+							<div class="mt-2 flex gap-2 text-[10px] text-gray-400 flex-wrap">
+								<span class="flex items-center gap-0.5"><svg class=""
+										width="10" height="10" viewBox="0 0 24 24" fill="none"
+										stroke="currentColor" stroke-width="2" stroke-linecap="round"
+										stroke-linejoin="round">
+										<circle cx="9" cy="6" r="1" />
+										<circle cx="15" cy="6" r="1" />
+										<circle cx="9" cy="12" r="1" />
+										<circle cx="15" cy="12" r="1" />
+										<circle cx="9" cy="18" r="1" />
+										<circle cx="15" cy="18" r="1" /></svg> 전체</span><span>·</span><span>D#
+									= 1일</span><span>·</span><span>항목 = 단일</span>
+							</div>
+						</div>
+						<div class="flex-1 overflow-y-auto p-3 flex flex-col gap-2">
+							<div
+								class="rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden">
+								<div
+									class="flex items-center gap-2.5 px-3 py-2.5 cursor-pointer hover:bg-gray-50 transition-colors select-none">
+									<svg class="text-gray-300 shrink-0" width="13" height="13"
+										viewBox="0 0 24 24" fill="none" stroke="currentColor"
+										stroke-width="2" stroke-linecap="round"
+										stroke-linejoin="round">
+										<circle cx="9" cy="6" r="1" />
+										<circle cx="15" cy="6" r="1" />
+										<circle cx="9" cy="12" r="1" />
+										<circle cx="15" cy="12" r="1" />
+										<circle cx="9" cy="18" r="1" />
+										<circle cx="15" cy="18" r="1" /></svg>
+									<div
+										class="w-8 h-8 rounded-lg flex items-center justify-center text-white text-[11px] font-black shrink-0"
+										style="background: #FF6B9D">JP</div>
+									<div class="flex-1 min-w-0">
+										<p class="text-xs font-bold text-gray-800 truncate">도쿄 벚꽃
+											시즌 4박 5일</p>
+										<p class="text-[10px] text-gray-400">일본 · 4박 5일</p>
+									</div>
+									<span class="text-gray-400 p-1 shrink-0"><svg class=""
+											width="13" height="13" viewBox="0 0 24 24" fill="none"
+											stroke="currentColor" stroke-width="2" stroke-linecap="round"
+											stroke-linejoin="round">
+											<path d="m6 9 6 6 6-6" /></svg></span>
+								</div>
+							</div>
+							<div
+								class="rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden">
+								<div
+									class="flex items-center gap-2.5 px-3 py-2.5 cursor-pointer hover:bg-gray-50 transition-colors select-none">
+									<svg class="text-gray-300 shrink-0" width="13" height="13"
+										viewBox="0 0 24 24" fill="none" stroke="currentColor"
+										stroke-width="2" stroke-linecap="round"
+										stroke-linejoin="round">
+										<circle cx="9" cy="6" r="1" />
+										<circle cx="15" cy="6" r="1" />
+										<circle cx="9" cy="12" r="1" />
+										<circle cx="15" cy="12" r="1" />
+										<circle cx="9" cy="18" r="1" />
+										<circle cx="15" cy="18" r="1" /></svg>
+									<div
+										class="w-8 h-8 rounded-lg flex items-center justify-center text-white text-[11px] font-black shrink-0"
+										style="background: #6369D1">FR</div>
+									<div class="flex-1 min-w-0">
+										<p class="text-xs font-bold text-gray-800 truncate">파리 낭만
+											일주일</p>
+										<p class="text-[10px] text-gray-400">프랑스 · 6박 7일</p>
+									</div>
+									<span class="text-gray-400 p-1 shrink-0"><svg class=""
+											width="13" height="13" viewBox="0 0 24 24" fill="none"
+											stroke="currentColor" stroke-width="2" stroke-linecap="round"
+											stroke-linejoin="round">
+											<path d="m6 9 6 6 6-6" /></svg></span>
+								</div>
+							</div>
+							<div
+								class="rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden">
+								<div
+									class="flex items-center gap-2.5 px-3 py-2.5 cursor-pointer hover:bg-gray-50 transition-colors select-none">
+									<svg class="text-gray-300 shrink-0" width="13" height="13"
+										viewBox="0 0 24 24" fill="none" stroke="currentColor"
+										stroke-width="2" stroke-linecap="round"
+										stroke-linejoin="round">
+										<circle cx="9" cy="6" r="1" />
+										<circle cx="15" cy="6" r="1" />
+										<circle cx="9" cy="12" r="1" />
+										<circle cx="15" cy="12" r="1" />
+										<circle cx="9" cy="18" r="1" />
+										<circle cx="15" cy="18" r="1" /></svg>
+									<div
+										class="w-8 h-8 rounded-lg flex items-center justify-center text-white text-[11px] font-black shrink-0"
+										style="background: #FFD447">TH</div>
+									<div class="flex-1 min-w-0">
+										<p class="text-xs font-bold text-gray-800 truncate">방콕 미식
+											여행 3박 4일</p>
+										<p class="text-[10px] text-gray-400">태국 · 3박 4일</p>
+									</div>
+									<span class="text-gray-400 p-1 shrink-0"><svg class=""
+											width="13" height="13" viewBox="0 0 24 24" fill="none"
+											stroke="currentColor" stroke-width="2" stroke-linecap="round"
+											stroke-linejoin="round">
+											<path d="m6 9 6 6 6-6" /></svg></span>
+								</div>
+							</div>
+							<div
+								class="rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden">
+								<div
+									class="flex items-center gap-2.5 px-3 py-2.5 cursor-pointer hover:bg-gray-50 transition-colors select-none">
+									<svg class="text-gray-300 shrink-0" width="13" height="13"
+										viewBox="0 0 24 24" fill="none" stroke="currentColor"
+										stroke-width="2" stroke-linecap="round"
+										stroke-linejoin="round">
+										<circle cx="9" cy="6" r="1" />
+										<circle cx="15" cy="6" r="1" />
+										<circle cx="9" cy="12" r="1" />
+										<circle cx="15" cy="12" r="1" />
+										<circle cx="9" cy="18" r="1" />
+										<circle cx="15" cy="18" r="1" /></svg>
+									<div
+										class="w-8 h-8 rounded-lg flex items-center justify-center text-white text-[11px] font-black shrink-0"
+										style="background: #FF8C42">JP</div>
+									<div class="flex-1 min-w-0">
+										<p class="text-xs font-bold text-gray-800 truncate">오사카 먹방
+											여행 3박 4일</p>
+										<p class="text-[10px] text-gray-400">일본 · 3박 4일</p>
+									</div>
+									<span class="text-gray-400 p-1 shrink-0"><svg class=""
+											width="13" height="13" viewBox="0 0 24 24" fill="none"
+											stroke="currentColor" stroke-width="2" stroke-linecap="round"
+											stroke-linejoin="round">
+											<path d="m6 9 6 6 6-6" /></svg></span>
+								</div>
+							</div>
+							<div
+								class="rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden">
+								<div
+									class="flex items-center gap-2.5 px-3 py-2.5 cursor-pointer hover:bg-gray-50 transition-colors select-none">
+									<svg class="text-gray-300 shrink-0" width="13" height="13"
+										viewBox="0 0 24 24" fill="none" stroke="currentColor"
+										stroke-width="2" stroke-linecap="round"
+										stroke-linejoin="round">
+										<circle cx="9" cy="6" r="1" />
+										<circle cx="15" cy="6" r="1" />
+										<circle cx="9" cy="12" r="1" />
+										<circle cx="15" cy="12" r="1" />
+										<circle cx="9" cy="18" r="1" />
+										<circle cx="15" cy="18" r="1" /></svg>
+									<div
+										class="w-8 h-8 rounded-lg flex items-center justify-center text-white text-[11px] font-black shrink-0"
+										style="background: #4CAF50">KR</div>
+									<div class="flex-1 min-w-0">
+										<p class="text-xs font-bold text-gray-800 truncate">제주 힐링
+											2박 3일</p>
+										<p class="text-[10px] text-gray-400">한국 · 2박 3일</p>
+									</div>
+									<span class="text-gray-400 p-1 shrink-0"><svg class=""
+											width="13" height="13" viewBox="0 0 24 24" fill="none"
+											stroke="currentColor" stroke-width="2" stroke-linecap="round"
+											stroke-linejoin="round">
+											<path d="m6 9 6 6 6-6" /></svg></span>
+								</div>
+							</div>
+							<div
+								class="rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden">
+								<div
+									class="flex items-center gap-2.5 px-3 py-2.5 cursor-pointer hover:bg-gray-50 transition-colors select-none">
+									<svg class="text-gray-300 shrink-0" width="13" height="13"
+										viewBox="0 0 24 24" fill="none" stroke="currentColor"
+										stroke-width="2" stroke-linecap="round"
+										stroke-linejoin="round">
+										<circle cx="9" cy="6" r="1" />
+										<circle cx="15" cy="6" r="1" />
+										<circle cx="9" cy="12" r="1" />
+										<circle cx="15" cy="12" r="1" />
+										<circle cx="9" cy="18" r="1" />
+										<circle cx="15" cy="18" r="1" /></svg>
+									<div
+										class="w-8 h-8 rounded-lg flex items-center justify-center text-white text-[11px] font-black shrink-0"
+										style="background: #E91E63">ES</div>
+									<div class="flex-1 min-w-0">
+										<p class="text-xs font-bold text-gray-800 truncate">바르셀로나
+											5박 6일</p>
+										<p class="text-[10px] text-gray-400">스페인 · 5박 6일</p>
+									</div>
+									<span class="text-gray-400 p-1 shrink-0"><svg class=""
+											width="13" height="13" viewBox="0 0 24 24" fill="none"
+											stroke="currentColor" stroke-width="2" stroke-linecap="round"
+											stroke-linejoin="round">
+											<path d="m6 9 6 6 6-6" /></svg></span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<button id="plannerPanelToggle" title="일정 가져오기 숨기기"
+					class="absolute right-0 top-1/2 -translate-y-1/2 translate-x-full z-20 flex flex-col items-center justify-center gap-1 shadow-md border border-gray-200 bg-white hover:bg-purple-50 transition-all"
+					style="width: 18px; height: 56px; border-radius: 0 8px 8px 0; border-left: none">
+					<svg class="text-gray-400" width="13" height="13"
+						viewBox="0 0 24 24" fill="none" stroke="currentColor"
+						stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+						<path d="m15 18-6-6 6-6" /></svg>
+				</button>
+			</div>
+			<div class="flex-1 flex flex-col min-w-0 bg-white">
+				<div
+					class="px-5 py-2.5 border-b border-gray-100 flex items-center shrink-0">
+					<div class="flex items-center gap-2 rounded-lg px-3 py-1.5 border"
+						style="background: #FFFBEB; border-color: #F5D98B">
+						<svg class="" width="13" height="13" viewBox="0 0 24 24"
+							fill="none" stroke="#B8960C" stroke-width="2"
+							stroke-linecap="round" stroke-linejoin="round">
+							<path
+								d="M20 7V5a2 2 0 0 0-2-2H5a3 3 0 0 0 0 6h15v12H5a3 3 0 0 1-3-3V6" />
+							<path d="M16 13h4" /></svg>
+						<span class="text-xs font-semibold" style="color: #92720A">총
+							예상 예산</span><span class="text-sm font-black" style="color: #78590A">0원</span>
+					</div>
+					<div class="ml-auto flex gap-2">
+						<button title="모두 닫기"
+							class="flex items-center justify-center text-gray-500 hover:text-gray-700 w-8 h-8 rounded-lg border border-gray-200 hover:border-gray-300 transition-all">
+							<svg class="" width="15" height="15" viewBox="0 0 24 24"
+								fill="none" stroke="currentColor" stroke-width="2"
+								stroke-linecap="round" stroke-linejoin="round">
+								<path d="m7 15 5 5 5-5M7 9l5-5 5 5" /></svg>
+						</button>
+					</div>
+				</div>
+				<div class="flex-1 overflow-y-auto px-5 py-4">
+					<div class="mb-4">
+						<div
+							class="flex items-center gap-3 rounded-xl px-4 py-3 cursor-pointer select-none transition-all group/hdr hover:brightness-[0.93]"
+							style="background: linear-gradient(135deg, #6369D1, #8B5CF6)">
+							<div
+								class="w-7 h-7 rounded-full flex items-center justify-center font-black text-sm text-white shrink-0"
+								style="background: rgba(255, 255, 255, .22)">1</div>
+							<div class="flex-1">
+								<div class="flex items-center gap-2 flex-wrap">
+									<p class="font-bold text-sm" style="color: #fff">Day 1</p>
+								</div>
+							</div>
+							<button class="p-1 rounded transition-all hover:bg-white/20"
+								style="color: rgba(255, 255, 255, .6)" title="이 날 삭제">
+								<svg class="" width="13" height="13" viewBox="0 0 24 24"
+									fill="none" stroke="currentColor" stroke-width="2"
+									stroke-linecap="round" stroke-linejoin="round">
+									<polyline points="3 6 5 6 21 6" />
+									<path d="M19 6l-1 14H6L5 6m3 0V4h8v2M10 11v6M14 11v6" /></svg>
+							</button>
+							<span style="color: rgba(255, 255, 255, .7)"><svg
+									width="16" height="16" viewBox="0 0 24 24" fill="none"
+									stroke="currentColor" stroke-width="2">
+									<path d="m18 15-6-6-6 6" /></svg></span>
+						</div>
+						<div
+							class="mt-1.5 rounded-xl border-2 border-dashed transition-all p-2.5 min-h-[80px] border-amber-200 bg-amber-50/30">
+							<div
+								class="flex flex-col items-center justify-center h-14 gap-1.5">
+								<p class="text-[12px] font-semibold text-amber-500">🌍 국가를
+									먼저 입력해야 일정을 추가할 수 있어요</p>
+								<p class="text-[11px] text-amber-400">상단 바에서 국가를 선택하세요</p>
+							</div>
+						</div>
+						<button
+							class="w-full mt-2 flex items-center justify-center gap-2 py-2.5 rounded-xl border-2 border-dashed border-gray-200 text-xs font-semibold text-gray-400 hover:border-purple-300 hover:text-purple-400 transition-all">
+							<svg class="" width="14" height="14" viewBox="0 0 24 24"
+								fill="none" stroke="currentColor" stroke-width="2"
+								stroke-linecap="round" stroke-linejoin="round">
+								<path d="M12 5v14M5 12h14" /></svg>
+							Day 2 추가
+						</button>
+					</div>
+				</div>
+			</div>
+			<div
+				class="w-[460px] shrink-0 border-l border-gray-100 flex flex-col bg-white">
+				<div class="px-4 py-3 border-b border-gray-100 shrink-0">
+					<div class="flex items-center justify-between">
+						<div class="flex items-center gap-2">
+							<svg class="" width="14" height="14" viewBox="0 0 24 24"
+								fill="none" stroke="#6369D1" stroke-width="2"
+								stroke-linecap="round" stroke-linejoin="round">
+								<polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21" />
+								<line x1="9" y1="3" x2="9" y2="18" />
+								<line x1="15" y1="6" x2="15" y2="21" /></svg>
+							<h2 class="font-bold text-sm text-gray-800">경로 지도</h2>
+						</div>
+						<div class="relative">
+							<button type="button"
+								class="flex items-center gap-2 rounded-xl border px-3 py-1.5 text-xs font-bold shadow-sm hover:shadow-md transition-all"
+								style="border-color: #D1D2F9; color: #6369D1; background: #F5F5FF; min-width: 86px">
+								<span class="w-2 h-2 rounded-full shrink-0"
+									style="background: #6369D1"></span><span
+									class="flex-1 text-left">전체</span>
+								<svg class="" width="12" height="12" viewBox="0 0 24 24"
+									fill="none" stroke="currentColor" stroke-width="2"
+									stroke-linecap="round" stroke-linejoin="round">
+									<path d="m6 9 6 6 6-6" /></svg>
+							</button>
+						</div>
+					</div>
+				</div>
+				<div class="flex-1 flex flex-col min-h-0">
+					<div id="plannerGoogleMap" class="flex-1 w-full"
+						style="min-height: 0"></div>
+				</div>
+				<div class="px-4 py-3 border-t border-gray-100 shrink-0">
+					<p class="text-[10px] text-gray-400 mb-2 font-medium">핀 범례</p>
+					<div class="flex flex-wrap gap-2">
+						<div class="flex items-center gap-1">
+							<div class="w-4 h-4 rounded flex items-center justify-center"
+								style="background: #3B82F618">
+								<span style="color: #3B82F6; font-size: 9px">●</span>
+							</div>
+							<span class="text-[10px] font-medium" style="color: #3B82F6">관광</span>
+						</div>
+						<div class="flex items-center gap-1">
+							<div class="w-4 h-4 rounded flex items-center justify-center"
+								style="background: #F9731618">
+								<span style="color: #F97316; font-size: 9px">●</span>
+							</div>
+							<span class="text-[10px] font-medium" style="color: #F97316">식사</span>
+						</div>
+						<div class="flex items-center gap-1">
+							<div class="w-4 h-4 rounded flex items-center justify-center"
+								style="background: #8B5CF618">
+								<span style="color: #8B5CF6; font-size: 9px">●</span>
+							</div>
+							<span class="text-[10px] font-medium" style="color: #8B5CF6">숙박</span>
+						</div>
+						<div class="flex items-center gap-1">
+							<div class="w-4 h-4 rounded flex items-center justify-center"
+								style="background: #10B98118">
+								<span style="color: #10B981; font-size: 9px">●</span>
+							</div>
+							<span class="text-[10px] font-medium" style="color: #10B981">활동</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</main><jsp:include page="/common/footer.jsp" />
+	<script>document.getElementById('plannerPanelToggle')?.addEventListener('click',function(){var p=document.getElementById('plannerLeftPanel');var closed=p.style.width==='0px';p.style.width=closed?'340px':'0px';this.title=closed?'일정 가져오기 숨기기':'일정 가져오기 열기';});function initPlannerMap(){var el=document.getElementById('plannerGoogleMap');if(!el||!window.google||!google.maps)return;new google.maps.Map(el,{center:{lat:35.6762,lng:139.6503},zoom:11,mapTypeControl:false,streetViewControl:false,fullscreenControl:false,styles:[{featureType:'poi',elementType:'labels',stylers:[{visibility:'off'}]},{featureType:'transit',elementType:'labels',stylers:[{visibility:'off'}]}]});}</script>
+	<script async
+		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB7ioaQS08aAzCl7gZPk6SyE1w7EeIrYhI&language=ko&loading=async&callback=initPlannerMap"></script>
+</body>
+</html>
