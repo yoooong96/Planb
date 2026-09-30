@@ -1,8 +1,8 @@
-package dto.cartitem;
+package dto.itinerary;
 
 import java.sql.Timestamp;
 
-public class CartItemDto {
+public class ItineraryCartDto {
 	private long cartItemId;	// 장바구니 항목 번호
 	private long userId;		// 회원 번호
 	private String itemType;	// 항목 유형
@@ -10,11 +10,11 @@ public class CartItemDto {
 	private long dayId;			// DAY 번호
 	private long blockId;		// 블록 번호
 	private Timestamp createdAt;// 담기 일시	
-	public CartItemDto() {
+	public ItineraryCartDto() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public CartItemDto(long cartItemId, long userId, String itemType, long itineraryId, long dayId, long blockId,
+	public ItineraryCartDto(long cartItemId, long userId, String itemType, long itineraryId, long dayId, long blockId,
 			Timestamp createdAt) {
 		super();
 		this.cartItemId = cartItemId;
