@@ -18,7 +18,7 @@ request.setAttribute("activePage", "travel");
 				class="text-xs font-bold text-gray-400 uppercase tracking-widest px-3 mb-1">여행
 				일정</div>
 			<a
-				href="${pageContext.request.contextPath}/view/travel/myItineraries.jsp"
+				href="${pageContext.request.contextPath}/view/profile.myProfile.jsp"
 				class="flex items-center justify-between px-3 py-2.5 rounded-lg transition-colors group"><span
 				class="flex items-center gap-2 text-sm font-semibold text-gray-700"><svg
 						width="16" height="16" viewBox="0 0 24 24" fill="none"
