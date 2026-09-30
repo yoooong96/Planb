@@ -10,13 +10,14 @@ request.setAttribute("activePage", "home");
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Planb</title>
 	<jsp:include page="/common/headStyles.jsp" />
+	<link rel="stylesheet" href="${pageContext.request.contextPath}/view/assets/css/auth/home.css">
+	<script defer src="${pageContext.request.contextPath}/view/assets/js/auth/home.js"></script>
 </head>
 <body class="site-shell">
 	<jsp:include page="/common/header.jsp" />
 	<main
 		style="font-family: 'Plus Jakarta Sans', 'Noto Sans KR', sans-serif">
-		<section class="relative flex flex-col items-center justify-center"
-			style="height: 91.5vh; min-height: 560px">
+		<section class="home-hero relative flex flex-col items-center justify-center">
 			<div class="absolute inset-0 bg-cover bg-center"
 				style="background-image: url('https://images.unsplash.com/photo-1786049129855-3fdf58f32d72?crop=entropy&amp;cs=tinysrgb&amp;fit=max&amp;fm=jpg&amp;ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx5b3VuZyUyMHRyYXZlbGVycyUyMGFkdmVudHVyZSUyMGZyaWVuZHMlMjBtb3VudGFpbiUyMGdvbGRlbiUyMGhvdXJ8ZW58MXx8fHwxNzg5ODI5NTA4fDA&amp;ixlib=rb-4.1.0&amp;q=80&amp;w=1600')"></div>
 			<div class="absolute inset-0"

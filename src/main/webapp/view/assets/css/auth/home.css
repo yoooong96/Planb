@@ -1,0 +1,13 @@
+@charset "UTF-8";
+
+/* =========================
+   HOME - MAIN HERO
+========================= */
+
+.home-hero {
+    width: 100%;
+    height: calc(100dvh - var(--header-height, 0px));
+    min-height: 560px;
+    position: relative;
+    overflow: hidden;
+}
