@@ -24,7 +24,10 @@ public class UserDto {
 	private Boolean notifyLike;			// 좋아요 알림
 	private Boolean notifyComment;		// 댓글 알림
 	private Boolean notifyPost;			// 게시글 알림
-	private String region; // 사용자 지역
+	private String region; 				// 사용자 지역
+	private String postcode;			// 사용자 우편번호
+	private String address; 			// 사용자 주소
+	private String addressDetail; 		// 사용자 상세 주소
 	public UserDto() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -32,7 +35,8 @@ public class UserDto {
 	public UserDto(long userId, String loginId, String password, String name, String nickName, String email,
 			String phone, Date birthDate, String profileImg, String bio, String role, String status,
 			Timestamp lastLoginAt, Timestamp createdAt, Timestamp updatedAt, String profileVisibility,
-			Boolean showLikedItinerary, Boolean notifyLike, Boolean notifyComment, Boolean notifyPost, String region) {
+			Boolean showLikedItinerary, Boolean notifyLike, Boolean notifyComment, Boolean notifyPost, String region,
+			String postcode, String address, String addressDetail) {
 		super();
 		this.userId = userId;
 		this.loginId = loginId;
@@ -55,6 +59,9 @@ public class UserDto {
 		this.notifyComment = notifyComment;
 		this.notifyPost = notifyPost;
 		this.region = region;
+		this.postcode = postcode;
+		this.address = address;
+		this.addressDetail = addressDetail;
 	}
 	public long getUserId() {
 		return userId;
@@ -184,6 +191,27 @@ public class UserDto {
 	public void setRegion(String region) {
 		this.region = region;
 	}
+	
+	
+	
+	public String getPostcode() {
+		return postcode;
+	}
+	public void setPostcode(String postcode) {
+		this.postcode = postcode;
+	}
+	public String getAddress() {
+		return address;
+	}
+	public void setAddress(String address) {
+		this.address = address;
+	}
+	public String getAddressDetail() {
+		return addressDetail;
+	}
+	public void setAddressDetail(String addressDetail) {
+		this.addressDetail = addressDetail;
+	}
 	@Override
 	public String toString() {
 		return "UserDto [userId=" + userId + ", loginId=" + loginId + ", password=" + password + ", name=" + name
@@ -192,8 +220,10 @@ public class UserDto {
 				+ ", lastLoginAt=" + lastLoginAt + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt
 				+ ", profileVisibility=" + profileVisibility + ", showLikedItinerary=" + showLikedItinerary
 				+ ", notifyLike=" + notifyLike + ", notifyComment=" + notifyComment + ", notifyPost=" + notifyPost
-				+ "]";
+				+ ", region=" + region + ", postcode=" + postcode + ", address=" + address + ", addressDetail="
+				+ addressDetail + "]";
 	}
+	
 	
 	
 }
