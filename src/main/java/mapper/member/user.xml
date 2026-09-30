@@ -43,7 +43,42 @@
 	
 	</insert>
 
-	<select id="selectUser" parameterType="Integer">
+	<select id="selectUser"
+        parameterType="String"
+        resultType="user">
+
+	    SELECT
+	        user_id AS userId,
+	        login_id AS loginId,
+	        password,
+	        name,
+	        nickname AS nickname,
+	        email,
+	        phone,
+	        birth_date AS birthDate,
+	        profile_img AS profileImg,
+	        region,
+	        postcode,
+	        address,
+	        address_detail AS addressDetail,
+	        bio,
+	        provider,
+	        role,
+	        status,
+	        last_login_at AS lastLoginAt,
+	        created_at AS createdAt,
+	        updated_at AS updatedAt,
+	        profile_visibility AS profileVisibility,
+	        show_liked_itinerary AS showLikedItinerary,
+	        show_bookmarked_itinerary AS showBookmarkedItinerary,
+	        notify_like AS notifyLike,
+	        notify_comment AS notifyComment
+	
+	    FROM TB_USER
+	
+	    WHERE login_id = #{loginId}
+	      AND status = 'ACTIVE'
+	
 	</select>
 	
 	<update id="updateUser" parameterType="user">

@@ -24,8 +24,13 @@ public class UserDaoImpl implements UserDao {
 	}
 
 	@Override
-	public void selectUser(UserDto userDto) throws Exception {
-		// TODO Auto-generated method stub
+	public UserDto selectUser(String id) throws Exception {
+		try(SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+			return sqlSession.selectOne("mapper.member.user.selectUser", id);
+		} catch(Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
 
 	}
 

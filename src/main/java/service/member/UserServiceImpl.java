@@ -51,8 +51,11 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public UserDto login(String id, String password) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		UserDto user = userDao.selectUser(id);
+		if(user==null) throw new Exception("아이디 오류입니다.");
+		if(!user.getPassword().equals(password)) throw new Exception("비밀번호 오류입니다.");
+		user.setPassword("");
+		return user;
 	}
 
 	@Override
