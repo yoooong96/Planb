@@ -17,7 +17,7 @@ request.setAttribute("activePage", "auth");
     <jsp:include page="/common/headStyles.jsp" />
 
     <link rel="stylesheet"
-          href="${pageContext.request.contextPath}/view/assets/css/signup.css">
+          href="${pageContext.request.contextPath}/view/assets/css/auth/signup.css">
 </head>
 
 <body class="site-shell">
@@ -524,7 +524,7 @@ request.setAttribute("activePage", "auth");
 <script src="//t1.kakaocdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 
 <script
-    src="${pageContext.request.contextPath}/view/assets/js/signup.js">
+    src="${pageContext.request.contextPath}/view/assets/js/auth/signup.js">
 </script>
 
 </body>
