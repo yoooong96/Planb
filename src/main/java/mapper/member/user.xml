@@ -1,8 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatix.org//DTD mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="mapper.itinerary.user">
-	<insert id="insertUser" parameterType="user">
+<mapper namespace="mapper.member.user">
+	<insert id="insertUser"
+        parameterType="user"
+        useGeneratedKeys="true"
+        keyProperty="userId"
+        keyColumn="user_id">
+
+	    INSERT INTO TB_USER
+	    (
+	        login_id,
+	        password,
+	        name,
+	        nickname,
+	        email,
+	        phone,
+	        birth_date,
+	        region,
+	        postcode,
+	        address,
+	        address_detail,
+	        bio
+	    )
+	    VALUES
+	    (
+	        #{loginId},
+	        #{password},
+	        #{name},
+	        #{nickname},
+	        #{email},
+	        #{phone},
+	        #{birthDate},
+	        #{region},
+	        #{postcode},
+	        #{address},
+	        #{addressDetail},
+	        #{bio}
+	    )
+	
 	</insert>
 
 	<select id="selectUser" parameterType="Integer">

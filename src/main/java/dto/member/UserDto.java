@@ -8,7 +8,7 @@ public class UserDto {
 	private String loginId;				// 로그인 아이디
 	private String password;			// 비밀번호
 	private String name;				// 이름
-	private String NickName;			// 닉네임
+	private String nickname;			// 닉네임
 	private String email;				// 이메일
 	private String phone;				// 전화번호
 	private Date birthDate;				// 생년월일
@@ -42,7 +42,7 @@ public class UserDto {
 		this.loginId = loginId;
 		this.password = password;
 		this.name = name;
-		NickName = nickName;
+		this.nickname = nickName;
 		this.email = email;
 		this.phone = phone;
 		this.birthDate = birthDate;
@@ -88,10 +88,10 @@ public class UserDto {
 		this.name = name;
 	}
 	public String getNickName() {
-		return NickName;
+		return nickname;
 	}
 	public void setNickName(String nickName) {
-		NickName = nickName;
+		this.nickname = nickName;
 	}
 	public String getEmail() {
 		return email;
@@ -215,7 +215,7 @@ public class UserDto {
 	@Override
 	public String toString() {
 		return "UserDto [userId=" + userId + ", loginId=" + loginId + ", password=" + password + ", name=" + name
-				+ ", NickName=" + NickName + ", email=" + email + ", phone=" + phone + ", birthDate=" + birthDate
+				+ ", NickName=" + nickname + ", email=" + email + ", phone=" + phone + ", birthDate=" + birthDate
 				+ ", profileImg=" + profileImg + ", bio=" + bio + ", role=" + role + ", status=" + status
 				+ ", lastLoginAt=" + lastLoginAt + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt
 				+ ", profileVisibility=" + profileVisibility + ", showLikedItinerary=" + showLikedItinerary

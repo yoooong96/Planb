@@ -11,11 +11,11 @@
 	
 	</select>
 	
-	<update id="selectItineraryImport" parameterType="itineraryImport">
+	<update id="updateItineraryImport" parameterType="itineraryImport">
 	
 	</update>
 	
-	<delete id="selectItineraryImport" parameterType="itineraryImport">
+	<delete id="deleteItineraryImport" parameterType="itineraryImport">
 	
 	</delete>
 </mapper>
