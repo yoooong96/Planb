@@ -29,16 +29,15 @@
 		<!-- 콘텐츠 -->
 		<typeAlias type="dto.content.ContentViewLogDto" alias="contentViewLog"/>
 		
-		<!-- 장바구니 -->
-		<typeAlias type="dto.cartitem.CartItemDto" alias="cartItem"/>
 		
 		<!-- 여행 일정 -->
 		<typeAlias type="dto.itinerary.ItineraryDto" alias="itinerary"/>
 		<typeAlias type="dto.itinerary.ItineraryBlockDto" alias="itineraryBlock"/>
+		<typeAlias type="dto.itinerary.ItineraryBlockImageDto" alias="itineraryBlockImage"/>
 		<typeAlias type="dto.itinerary.ItineraryBookmarkDto" alias="itineraryBookmark"/>
 		<typeAlias type="dto.itinerary.ItineraryCommentDto" alias="itineraryComment"/>
+		<typeAlias type="dto.itinerary.ItineraryCartDto" alias="itineraryCart"/>
 		<typeAlias type="dto.itinerary.ItineraryDayDto" alias="itineraryDay"/>
-		<typeAlias type="dto.itinerary.ItineraryImportDto" alias="itineraryImport"/>
 		<typeAlias type="dto.itinerary.ItineraryLikeDto" alias="itineraryLike"/>
 		
 		<!-- 회원 -->
@@ -92,16 +91,14 @@
 	    <!-- 콘텐츠 -->
 	    <mapper resource="mapper/content/contentViewLog.xml"/>
 	
-	    <!-- 장바구니 -->
-	    <mapper resource="mapper/cartitem/cartItem.xml"/>
-	
 	    <!-- 여행 일정 -->
 	    <mapper resource="mapper/itinerary/itinerary.xml"/>
 	    <mapper resource="mapper/itinerary/itineraryBlock.xml"/>
+	    <mapper resource="mapper/itinerary/itineraryBlockImage.xml"/>
 	    <mapper resource="mapper/itinerary/itineraryBookmark.xml"/>
 	    <mapper resource="mapper/itinerary/itineraryComment.xml"/>
+	    <mapper resource="mapper/itinerary/itineraryCart.xml"/>
 	    <mapper resource="mapper/itinerary/itineraryDay.xml"/>
-	    <mapper resource="mapper/itinerary/itineraryImport.xml"/>
 	    <mapper resource="mapper/itinerary/itineraryLike.xml"/>
 	
 	    <!-- 회원 -->
