@@ -24,6 +24,7 @@ public class UserDto {
 	private Boolean notifyLike;			// 좋아요 알림
 	private Boolean notifyComment;		// 댓글 알림
 	private Boolean notifyPost;			// 게시글 알림
+	private String region; // 사용자 지역
 	public UserDto() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -31,7 +32,7 @@ public class UserDto {
 	public UserDto(long userId, String loginId, String password, String name, String nickName, String email,
 			String phone, Date birthDate, String profileImg, String bio, String role, String status,
 			Timestamp lastLoginAt, Timestamp createdAt, Timestamp updatedAt, String profileVisibility,
-			Boolean showLikedItinerary, Boolean notifyLike, Boolean notifyComment, Boolean notifyPost) {
+			Boolean showLikedItinerary, Boolean notifyLike, Boolean notifyComment, Boolean notifyPost, String region) {
 		super();
 		this.userId = userId;
 		this.loginId = loginId;
@@ -53,6 +54,7 @@ public class UserDto {
 		this.notifyLike = notifyLike;
 		this.notifyComment = notifyComment;
 		this.notifyPost = notifyPost;
+		this.region = region;
 	}
 	public long getUserId() {
 		return userId;
@@ -173,6 +175,14 @@ public class UserDto {
 	}
 	public void setNotifyPost(Boolean notifyPost) {
 		this.notifyPost = notifyPost;
+	}
+	
+	public String getRegion() {
+		return region;
+	}
+	
+	public void setRegion(String region) {
+		this.region = region;
 	}
 	@Override
 	public String toString() {
