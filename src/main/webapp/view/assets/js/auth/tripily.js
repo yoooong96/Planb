@@ -409,6 +409,130 @@
   if(scroll){scroll.addEventListener('click',function(){var t=document.getElementById('popularPlans');if(t)t.scrollIntoView({behavior:'smooth',block:'start'});});}
 })();
 
+/* 여행꿀팁 + 여행메이트 게시글/진행바 로테이션 */
+document.querySelectorAll('[data-rotate-group]').forEach(function (rotateGroup) {
+
+    const pages = rotateGroup.querySelectorAll('.home-rotate-page');
+
+    const progressWrap = rotateGroup.nextElementSibling;
+    const bars = progressWrap.querySelectorAll('.home-progress-bar');
+
+    let current = 0;
+
+    // 진행바가 차는 시간
+    const duration = 3000;
+
+    // 게시글 전환 시간
+    const fadeDuration = 150;
+
+
+    function startProgress(index) {
+
+        // 진행바 전부 초기화
+        bars.forEach(function (bar) {
+            bar.style.backgroundColor = '#e5e7eb';
+            bar.innerHTML = '';
+        });
+
+        // 현재 진행바 채움 생성
+        const fill = document.createElement('span');
+
+        fill.style.position = 'absolute';
+        fill.style.left = '0';
+        fill.style.top = '0';
+        fill.style.height = '100%';
+        fill.style.width = '0%';
+        fill.style.backgroundColor = '#FFD447';
+        fill.style.borderRadius = '9999px';
+
+        bars[index].appendChild(fill);
+
+        // 0% → 100%
+        requestAnimationFrame(function () {
+            requestAnimationFrame(function () {
+
+                fill.style.transition =
+                    'width ' + duration + 'ms linear';
+
+                fill.style.width = '100%';
+
+            });
+        });
+    }
+
+
+    function changePage() {
+
+        const oldPage = pages[current];
+
+        // 현재 게시글 살짝 사라짐
+        oldPage.style.transition =
+            'opacity ' + fadeDuration + 'ms ease';
+
+        oldPage.style.opacity = '0';
+
+
+        setTimeout(function () {
+
+            oldPage.style.display = 'none';
+
+            // 다음 페이지
+            current = (current + 1) % pages.length;
+
+            const newPage = pages[current];
+
+            newPage.style.display = 'flex';
+            newPage.style.opacity = '0';
+
+            newPage.style.transition =
+                'opacity ' + fadeDuration + 'ms ease';
+
+
+            // 다음 게시글 살짝 나타남
+            requestAnimationFrame(function () {
+                requestAnimationFrame(function () {
+                    newPage.style.opacity = '1';
+                });
+            });
+
+
+            // 다음 진행바 시작
+            startProgress(current);
+
+
+            // 다시 3초 후 다음 페이지
+            setTimeout(changePage, duration);
+
+        }, fadeDuration);
+    }
+
+
+    // 처음 상태 설정
+    pages.forEach(function (page, i) {
+
+        if (i === 0) {
+
+            page.style.display = 'flex';
+            page.style.opacity = '1';
+
+        } else {
+
+            page.style.display = 'none';
+            page.style.opacity = '0';
+
+        }
+
+    });
+
+
+    // 첫 번째 진행바 시작
+    startProgress(current);
+
+    // 첫 번째 로테이션 시작
+    setTimeout(changePage, duration);
+
+});
+
 /* =========================================================
    통합본(9) JSP 화면 상호작용
 ========================================================= */

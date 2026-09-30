@@ -6,11 +6,13 @@ request.setAttribute("activePage", "home");
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Tripily · Travel Plan Share</title><jsp:include
-	page="/common/headStyles.jsp" /></head>
-<body class="site-shell"><jsp:include page="/common/header.jsp" />
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Planb</title>
+	<jsp:include page="/common/headStyles.jsp" />
+</head>
+<body class="site-shell">
+	<jsp:include page="/common/header.jsp" />
 	<main
 		style="font-family: 'Plus Jakarta Sans', 'Noto Sans KR', sans-serif">
 		<section class="relative flex flex-col items-center justify-center"
@@ -24,11 +26,11 @@ request.setAttribute("activePage", "home");
 				style="margin-top: -40px">
 				<div
 					class="inline-flex items-center gap-2 px-3 py-1 rounded-full mb-5 text-xs font-bold tracking-widest uppercase"
-					style="background-color: var(- -brand-yellow); color: #1a1a2e">✈
+					style="background-color: var(--brand-yellow); color: #1a1a2e">✈
 					Travel Plan Share</div>
 				<h1 class="text-white leading-tight mb-3"
 					style="font-family: 'Instrument Serif', Georgia, serif; font-style: italic; font-size: clamp(2.6rem, 5.5vw, 5rem); text-shadow: 0 2px 20px rgba(0, 0, 0, .4)">
-					Plan less.&nbsp;<span style="color: var(- -brand-light)">Wander</span>
+					Plan less.&nbsp;<span style="color: var(--brand-light)">Wander</span>
 					more.
 				</h1>
 				<p class="text-white/80 text-sm md:text-base mb-8 font-medium"
@@ -50,7 +52,7 @@ request.setAttribute("activePage", "home");
 						class="flex-1 text-sm text-white placeholder-white/60 outline-none bg-transparent">
 					<button type="submit"
 						class="shrink-0 w-9 h-9 rounded-full flex items-center justify-center text-white transition-all jsp-brand-hover"
-						style="background-color: var(- -brand)" aria-label="검색">
+						style="background-color: var(--brand)" aria-label="검색">
 						<svg width="15" height="15" viewBox="0 0 24 24" fill="none"
 							stroke="white" stroke-width="2.5">
 							<circle cx="11" cy="11" r="8" />
@@ -70,7 +72,7 @@ request.setAttribute("activePage", "home");
 		<section id="popularPlans" class="mt-16">
 			<div class="text-center mb-8 px-4">
 				<p class="text-xs font-bold tracking-widest uppercase mb-2"
-					style="color: var(- -brand)">Popular Travel Plans</p>
+					style="color: var(--brand)">Popular Travel Plans</p>
 				<h2 class="text-2xl md:text-3xl font-extrabold text-gray-900 mb-2">지금
 					가장 인기 있는 여행일정</h2>
 				<p class="text-sm text-gray-400">전 세계 여행자들이 사랑하는 특별한 일정을 만나보세요.</p>
@@ -338,7 +340,7 @@ request.setAttribute("activePage", "home");
 						<h3
 							class="font-bold text-[12px] text-gray-800 line-clamp-2 leading-snug mb-2">도쿄
 							숙소 최대 15% 할인</h3>
-						<div class="text-[10px] font-bold" style="color: var(- -brand)">광고
+						<div class="text-[10px] font-bold" style="color: var(--brand)">광고
 							보기 →</div>
 					</div>
 				</a> <a
@@ -901,7 +903,7 @@ request.setAttribute("activePage", "home");
 						<h3
 							class="font-bold text-[12px] text-gray-800 line-clamp-2 leading-snug mb-2">도쿄
 							숙소 최대 15% 할인</h3>
-						<div class="text-[10px] font-bold" style="color: var(- -brand)">광고
+						<div class="text-[10px] font-bold" style="color: var(--brand)">광고
 							보기 →</div>
 					</div>
 				</a> <a
@@ -1214,240 +1216,598 @@ request.setAttribute("activePage", "home");
 					<div class="flex items-end justify-between mb-6">
 						<div>
 							<p class="text-xs font-bold tracking-widest uppercase mb-1"
-								style="color: var(- -brand)">Travel Tips</p>
+								style="color: var(--brand)">Travel Tips</p>
 							<h2 class="text-xl font-extrabold text-gray-900">여행꿀팁</h2>
 							<p class="text-xs text-gray-400 mt-0.5">여행 고수들의 노하우</p>
 						</div>
 						<a href="${pageContext.request.contextPath}/view/tips/tipList.jsp"
 							class="jsp-more-button flex items-center gap-2 px-5 py-2.5 rounded-xl border-2 text-sm font-bold transition-all"
-							style="border-color: var(- -brand); color: var(- -brand)">더보기<svg
+							style="border-color: var(--brand); color: var(--brand)">더보기<svg
 								width="14" height="14" viewBox="0 0 24 24" fill="none"
 								stroke="currentColor" stroke-width="2.5">
 								<path d="M5 12h14M12 5l7 7-7 7" /></svg></a>
 					</div>
-					<div class="flex flex-col gap-3">
-						<a
-							href="${pageContext.request.contextPath}/view/tips/tipDetail.jsp?id=3"
-							class="jsp-preview-card preview-item-enter flex gap-4 p-4 bg-white rounded-2xl border border-gray-100 shadow-sm text-left w-full group transition-all"
-							style="height: 96px">
-							<div class="shrink-0 rounded-xl overflow-hidden"
-								style="width: 68px; height: 64px">
-								<img
-									src="https://images.unsplash.com/photo-1591814468924-caf88d1232e1?crop=entropy&amp;cs=tinysrgb&amp;fit=max&amp;fm=jpg&amp;ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxyYW1lbiUyMG5vb2RsZSUyMGphcGFuZXNlJTIwZm9vZCUyMGJvd2x8ZW58MXx8fHwxNzg5MjgzNjU5fDA&amp;ixlib=rb-4.1.0&amp;q=80&amp;w=600"
-									alt="후쿠오카에서 꼭 먹어야 하는 현지 음식 7가지"
-									class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-							</div>
-							<div class="flex-1 min-w-0 flex flex-col justify-center">
-								<span
-									class="inline-block text-[10px] font-bold px-2 py-0.5 rounded-full mb-1 self-start"
-									style="color: #F59E0B; background-color: #FFFBEB">음식</span>
-								<h3
-									class="font-bold text-[13px] text-gray-900 mb-0.5 line-clamp-1 group-hover:text-[#6369D1] transition-colors">후쿠오카에서
-									꼭 먹어야 하는 현지 음식 7가지</h3>
-								<div class="flex items-center gap-1">
-									<div
-										class="w-4 h-4 rounded-full flex items-center justify-center text-white text-[8px] font-bold"
-										style="background-color: #F59E0B">민</div>
-									<span class="text-[10px] text-gray-400">민수 · 1일 전</span>
+					<div data-rotate-group>
+						<div class="flex flex-col gap-3 home-rotate-page">
+							<a
+								href="${pageContext.request.contextPath}/view/tips/tipDetail.jsp?id=3"
+								class="jsp-preview-card preview-item-enter flex gap-4 p-4 bg-white rounded-2xl border border-gray-100 shadow-sm text-left w-full group transition-all"
+								style="height: 96px">
+								<div class="shrink-0 rounded-xl overflow-hidden"
+									style="width: 68px; height: 64px">
+									<img
+										src="https://images.unsplash.com/photo-1591814468924-caf88d1232e1?crop=entropy&amp;cs=tinysrgb&amp;fit=max&amp;fm=jpg&amp;ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxyYW1lbiUyMG5vb2RsZSUyMGphcGFuZXNlJTIwZm9vZCUyMGJvd2x8ZW58MXx8fHwxNzg5MjgzNjU5fDA&amp;ixlib=rb-4.1.0&amp;q=80&amp;w=600"
+										alt="후쿠오카에서 꼭 먹어야 하는 현지 음식 7가지"
+										class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
 								</div>
-							</div>
-						</a><a
-							href="${pageContext.request.contextPath}/view/tips/tipDetail.jsp?id=6"
-							class="jsp-preview-card preview-item-enter flex gap-4 p-4 bg-white rounded-2xl border border-gray-100 shadow-sm text-left w-full group transition-all"
-							style="height: 96px">
-							<div class="shrink-0 rounded-xl overflow-hidden"
-								style="width: 68px; height: 64px">
-								<img
-									src="https://images.unsplash.com/photo-1561501900-3701fa6a0864?crop=entropy&amp;cs=tinysrgb&amp;fit=max&amp;fm=jpg&amp;ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwyfHxob3RlbCUyMGx1eHVyeSUyMHJlc29ydCUyMGFjY29tbW9kYXRpb258ZW58MXx8fHwxNzg5MjgzNjU4fDA&amp;ixlib=rb-4.1.0&amp;q=80&amp;w=600"
-									alt="발리 숙소 지역별 추천 (꾸따, 스미냑, 우붓 비교)"
-									class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-							</div>
-							<div class="flex-1 min-w-0 flex flex-col justify-center">
-								<span
-									class="inline-block text-[10px] font-bold px-2 py-0.5 rounded-full mb-1 self-start"
-									style="color: #3B82F6; background-color: #EFF6FF">숙박</span>
-								<h3
-									class="font-bold text-[13px] text-gray-900 mb-0.5 line-clamp-1 group-hover:text-[#6369D1] transition-colors">발리
-									숙소 지역별 추천 (꾸따, 스미냑, 우붓 비교)</h3>
-								<div class="flex items-center gap-1">
-									<div
-										class="w-4 h-4 rounded-full flex items-center justify-center text-white text-[8px] font-bold"
-										style="background-color: #10B981">한</div>
-									<span class="text-[10px] text-gray-400">한우 · 3일 전</span>
+								<div class="flex-1 min-w-0 flex flex-col justify-center">
+									<span
+										class="inline-block text-[10px] font-bold px-2 py-0.5 rounded-full mb-1 self-start"
+										style="color: #F59E0B; background-color: #FFFBEB">음식</span>
+									<h3
+										class="font-bold text-[13px] text-gray-900 mb-0.5 line-clamp-1 group-hover:text-[#6369D1] transition-colors">후쿠오카에서
+										꼭 먹어야 하는 현지 음식 7가지</h3>
+									<div class="flex items-center gap-1">
+										<div
+											class="w-4 h-4 rounded-full flex items-center justify-center text-white text-[8px] font-bold"
+											style="background-color: #F59E0B">민</div>
+										<span class="text-[10px] text-gray-400">민수 · 1일 전</span>
+									</div>
 								</div>
-							</div>
-						</a><a
-							href="${pageContext.request.contextPath}/view/tips/tipDetail.jsp?id=4"
-							class="jsp-preview-card preview-item-enter flex gap-4 p-4 bg-white rounded-2xl border border-gray-100 shadow-sm text-left w-full group transition-all"
-							style="height: 96px">
-							<div class="shrink-0 rounded-xl overflow-hidden"
-								style="width: 68px; height: 64px">
-								<img
-									src="https://images.unsplash.com/photo-1488415032361-b7e238421f1b?crop=entropy&amp;cs=tinysrgb&amp;fit=max&amp;fm=jpg&amp;ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxub3J0aGVybiUyMGxpZ2h0cyUyMGF1cm9yYSUyMGljZWxhbmQlMjBjdWx0dXJlfGVufDF8fHx8MTc4OTI4MzY1OXww&amp;ixlib=rb-4.1.0&amp;q=80&amp;w=600"
-									alt="아이슬란드 오로라 여행 팁 (시기, 준비물, 촬영방법)"
-									class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-							</div>
-							<div class="flex-1 min-w-0 flex flex-col justify-center">
-								<span
-									class="inline-block text-[10px] font-bold px-2 py-0.5 rounded-full mb-1 self-start"
-									style="color: #10B981; background-color: #ECFDF5">문화</span>
-								<h3
-									class="font-bold text-[13px] text-gray-900 mb-0.5 line-clamp-1 group-hover:text-[#6369D1] transition-colors">아이슬란드
-									오로라 여행 팁 (시기, 준비물, 촬영방법)</h3>
-								<div class="flex items-center gap-1">
-									<div
-										class="w-4 h-4 rounded-full flex items-center justify-center text-white text-[8px] font-bold"
-										style="background-color: #EC4899">나</div>
-									<span class="text-[10px] text-gray-400">나 · 1일 전</span>
+							</a><a
+								href="${pageContext.request.contextPath}/view/tips/tipDetail.jsp?id=6"
+								class="jsp-preview-card preview-item-enter flex gap-4 p-4 bg-white rounded-2xl border border-gray-100 shadow-sm text-left w-full group transition-all"
+								style="height: 96px">
+								<div class="shrink-0 rounded-xl overflow-hidden"
+									style="width: 68px; height: 64px">
+									<img
+										src="https://images.unsplash.com/photo-1561501900-3701fa6a0864?crop=entropy&amp;cs=tinysrgb&amp;fit=max&amp;fm=jpg&amp;ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwyfHxob3RlbCUyMGx1eHVyeSUyMHJlc29ydCUyMGFjY29tbW9kYXRpb258ZW58MXx8fHwxNzg5MjgzNjU4fDA&amp;ixlib=rb-4.1.0&amp;q=80&amp;w=600"
+										alt="발리 숙소 지역별 추천 (꾸따, 스미냑, 우붓 비교)"
+										class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
 								</div>
-							</div>
-						</a>
+								<div class="flex-1 min-w-0 flex flex-col justify-center">
+									<span
+										class="inline-block text-[10px] font-bold px-2 py-0.5 rounded-full mb-1 self-start"
+										style="color: #3B82F6; background-color: #EFF6FF">숙박</span>
+									<h3
+										class="font-bold text-[13px] text-gray-900 mb-0.5 line-clamp-1 group-hover:text-[#6369D1] transition-colors">발리
+										숙소 지역별 추천 (꾸따, 스미냑, 우붓 비교)</h3>
+									<div class="flex items-center gap-1">
+										<div
+											class="w-4 h-4 rounded-full flex items-center justify-center text-white text-[8px] font-bold"
+											style="background-color: #10B981">한</div>
+										<span class="text-[10px] text-gray-400">한우 · 3일 전</span>
+									</div>
+								</div>
+							</a><a
+								href="${pageContext.request.contextPath}/view/tips/tipDetail.jsp?id=4"
+								class="jsp-preview-card preview-item-enter flex gap-4 p-4 bg-white rounded-2xl border border-gray-100 shadow-sm text-left w-full group transition-all"
+								style="height: 96px">
+								<div class="shrink-0 rounded-xl overflow-hidden"
+									style="width: 68px; height: 64px">
+									<img
+										src="https://images.unsplash.com/photo-1488415032361-b7e238421f1b?crop=entropy&amp;cs=tinysrgb&amp;fit=max&amp;fm=jpg&amp;ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxub3J0aGVybiUyMGxpZ2h0cyUyMGF1cm9yYSUyMGljZWxhbmQlMjBjdWx0dXJlfGVufDF8fHx8MTc4OTI4MzY1OXww&amp;ixlib=rb-4.1.0&amp;q=80&amp;w=600"
+										alt="아이슬란드 오로라 여행 팁 (시기, 준비물, 촬영방법)"
+										class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+								</div>
+								<div class="flex-1 min-w-0 flex flex-col justify-center">
+									<span
+										class="inline-block text-[10px] font-bold px-2 py-0.5 rounded-full mb-1 self-start"
+										style="color: #10B981; background-color: #ECFDF5">문화</span>
+									<h3
+										class="font-bold text-[13px] text-gray-900 mb-0.5 line-clamp-1 group-hover:text-[#6369D1] transition-colors">아이슬란드
+										오로라 여행 팁 (시기, 준비물, 촬영방법)</h3>
+									<div class="flex items-center gap-1">
+										<div
+											class="w-4 h-4 rounded-full flex items-center justify-center text-white text-[8px] font-bold"
+											style="background-color: #EC4899">나</div>
+										<span class="text-[10px] text-gray-400">나 · 1일 전</span>
+									</div>
+								</div>
+							</a>
+						</div>
+						<!-- 2번째 묶음 -->
+					    <div class="flex flex-col gap-3 home-rotate-page" style="display: none;">
+							<a
+								href="${pageContext.request.contextPath}/view/tips/tipDetail.jsp?id=3"
+								class="jsp-preview-card preview-item-enter flex gap-4 p-4 bg-white rounded-2xl border border-gray-100 shadow-sm text-left w-full group transition-all"
+								style="height: 96px">
+								<div class="shrink-0 rounded-xl overflow-hidden"
+									style="width: 68px; height: 64px">
+									<img
+										src="https://images.unsplash.com/photo-1591814468924-caf88d1232e1?crop=entropy&amp;cs=tinysrgb&amp;fit=max&amp;fm=jpg&amp;ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxyYW1lbiUyMG5vb2RsZSUyMGphcGFuZXNlJTIwZm9vZCUyMGJvd2x8ZW58MXx8fHwxNzg5MjgzNjU5fDA&amp;ixlib=rb-4.1.0&amp;q=80&amp;w=600"
+										alt="후쿠오카에서 꼭 먹어야 하는 현지 음식 7가지"
+										class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+								</div>
+								<div class="flex-1 min-w-0 flex flex-col justify-center">
+									<span
+										class="inline-block text-[10px] font-bold px-2 py-0.5 rounded-full mb-1 self-start"
+										style="color: #F59E0B; background-color: #FFFBEB">음식</span>
+									<h3
+										class="font-bold text-[13px] text-gray-900 mb-0.5 line-clamp-1 group-hover:text-[#6369D1] transition-colors">후쿠오카에서
+										꼭 먹어야 하는 현지 음식 7가지</h3>
+									<div class="flex items-center gap-1">
+										<div
+											class="w-4 h-4 rounded-full flex items-center justify-center text-white text-[8px] font-bold"
+											style="background-color: #F59E0B">민</div>
+										<span class="text-[10px] text-gray-400">민수 · 1일 전</span>
+									</div>
+								</div>
+							</a><a
+								href="${pageContext.request.contextPath}/view/tips/tipDetail.jsp?id=6"
+								class="jsp-preview-card preview-item-enter flex gap-4 p-4 bg-white rounded-2xl border border-gray-100 shadow-sm text-left w-full group transition-all"
+								style="height: 96px">
+								<div class="shrink-0 rounded-xl overflow-hidden"
+									style="width: 68px; height: 64px">
+									<img
+										src="https://images.unsplash.com/photo-1561501900-3701fa6a0864?crop=entropy&amp;cs=tinysrgb&amp;fit=max&amp;fm=jpg&amp;ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwyfHxob3RlbCUyMGx1eHVyeSUyMHJlc29ydCUyMGFjY29tbW9kYXRpb258ZW58MXx8fHwxNzg5MjgzNjU4fDA&amp;ixlib=rb-4.1.0&amp;q=80&amp;w=600"
+										alt="발리 숙소 지역별 추천 (꾸따, 스미냑, 우붓 비교)"
+										class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+								</div>
+								<div class="flex-1 min-w-0 flex flex-col justify-center">
+									<span
+										class="inline-block text-[10px] font-bold px-2 py-0.5 rounded-full mb-1 self-start"
+										style="color: #3B82F6; background-color: #EFF6FF">숙박</span>
+									<h3
+										class="font-bold text-[13px] text-gray-900 mb-0.5 line-clamp-1 group-hover:text-[#6369D1] transition-colors">발리
+										숙소 지역별 추천 (꾸따, 스미냑, 우붓 비교)</h3>
+									<div class="flex items-center gap-1">
+										<div
+											class="w-4 h-4 rounded-full flex items-center justify-center text-white text-[8px] font-bold"
+											style="background-color: #10B981">한</div>
+										<span class="text-[10px] text-gray-400">한우 · 3일 전</span>
+									</div>
+								</div>
+							</a><a
+								href="${pageContext.request.contextPath}/view/tips/tipDetail.jsp?id=4"
+								class="jsp-preview-card preview-item-enter flex gap-4 p-4 bg-white rounded-2xl border border-gray-100 shadow-sm text-left w-full group transition-all"
+								style="height: 96px">
+								<div class="shrink-0 rounded-xl overflow-hidden"
+									style="width: 68px; height: 64px">
+									<img
+										src="https://images.unsplash.com/photo-1488415032361-b7e238421f1b?crop=entropy&amp;cs=tinysrgb&amp;fit=max&amp;fm=jpg&amp;ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxub3J0aGVybiUyMGxpZ2h0cyUyMGF1cm9yYSUyMGljZWxhbmQlMjBjdWx0dXJlfGVufDF8fHx8MTc4OTI4MzY1OXww&amp;ixlib=rb-4.1.0&amp;q=80&amp;w=600"
+										alt="아이슬란드 오로라 여행 팁 (시기, 준비물, 촬영방법)"
+										class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+								</div>
+								<div class="flex-1 min-w-0 flex flex-col justify-center">
+									<span
+										class="inline-block text-[10px] font-bold px-2 py-0.5 rounded-full mb-1 self-start"
+										style="color: #10B981; background-color: #ECFDF5">문화</span>
+									<h3
+										class="font-bold text-[13px] text-gray-900 mb-0.5 line-clamp-1 group-hover:text-[#6369D1] transition-colors">아이슬란드
+										오로라 여행 팁 (시기, 준비물, 촬영방법)</h3>
+									<div class="flex items-center gap-1">
+										<div
+											class="w-4 h-4 rounded-full flex items-center justify-center text-white text-[8px] font-bold"
+											style="background-color: #EC4899">나</div>
+										<span class="text-[10px] text-gray-400">나 · 1일 전</span>
+									</div>
+								</div>
+							</a>
+					    </div>
+					    <!-- 3번째 묶음 -->
+					    <div class="flex flex-col gap-3 home-rotate-page" style="display: none;">
+							<a
+								href="${pageContext.request.contextPath}/view/tips/tipDetail.jsp?id=3"
+								class="jsp-preview-card preview-item-enter flex gap-4 p-4 bg-white rounded-2xl border border-gray-100 shadow-sm text-left w-full group transition-all"
+								style="height: 96px">
+								<div class="shrink-0 rounded-xl overflow-hidden"
+									style="width: 68px; height: 64px">
+									<img
+										src="https://images.unsplash.com/photo-1591814468924-caf88d1232e1?crop=entropy&amp;cs=tinysrgb&amp;fit=max&amp;fm=jpg&amp;ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxyYW1lbiUyMG5vb2RsZSUyMGphcGFuZXNlJTIwZm9vZCUyMGJvd2x8ZW58MXx8fHwxNzg5MjgzNjU5fDA&amp;ixlib=rb-4.1.0&amp;q=80&amp;w=600"
+										alt="후쿠오카에서 꼭 먹어야 하는 현지 음식 7가지"
+										class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+								</div>
+								<div class="flex-1 min-w-0 flex flex-col justify-center">
+									<span
+										class="inline-block text-[10px] font-bold px-2 py-0.5 rounded-full mb-1 self-start"
+										style="color: #F59E0B; background-color: #FFFBEB">음식</span>
+									<h3
+										class="font-bold text-[13px] text-gray-900 mb-0.5 line-clamp-1 group-hover:text-[#6369D1] transition-colors">후쿠오카에서
+										꼭 먹어야 하는 현지 음식 7가지</h3>
+									<div class="flex items-center gap-1">
+										<div
+											class="w-4 h-4 rounded-full flex items-center justify-center text-white text-[8px] font-bold"
+											style="background-color: #F59E0B">민</div>
+										<span class="text-[10px] text-gray-400">민수 · 1일 전</span>
+									</div>
+								</div>
+							</a><a
+								href="${pageContext.request.contextPath}/view/tips/tipDetail.jsp?id=6"
+								class="jsp-preview-card preview-item-enter flex gap-4 p-4 bg-white rounded-2xl border border-gray-100 shadow-sm text-left w-full group transition-all"
+								style="height: 96px">
+								<div class="shrink-0 rounded-xl overflow-hidden"
+									style="width: 68px; height: 64px">
+									<img
+										src="https://images.unsplash.com/photo-1561501900-3701fa6a0864?crop=entropy&amp;cs=tinysrgb&amp;fit=max&amp;fm=jpg&amp;ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwyfHxob3RlbCUyMGx1eHVyeSUyMHJlc29ydCUyMGFjY29tbW9kYXRpb258ZW58MXx8fHwxNzg5MjgzNjU4fDA&amp;ixlib=rb-4.1.0&amp;q=80&amp;w=600"
+										alt="발리 숙소 지역별 추천 (꾸따, 스미냑, 우붓 비교)"
+										class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+								</div>
+								<div class="flex-1 min-w-0 flex flex-col justify-center">
+									<span
+										class="inline-block text-[10px] font-bold px-2 py-0.5 rounded-full mb-1 self-start"
+										style="color: #3B82F6; background-color: #EFF6FF">숙박</span>
+									<h3
+										class="font-bold text-[13px] text-gray-900 mb-0.5 line-clamp-1 group-hover:text-[#6369D1] transition-colors">발리
+										숙소 지역별 추천 (꾸따, 스미냑, 우붓 비교)</h3>
+									<div class="flex items-center gap-1">
+										<div
+											class="w-4 h-4 rounded-full flex items-center justify-center text-white text-[8px] font-bold"
+											style="background-color: #10B981">한</div>
+										<span class="text-[10px] text-gray-400">한우 · 3일 전</span>
+									</div>
+								</div>
+							</a><a
+								href="${pageContext.request.contextPath}/view/tips/tipDetail.jsp?id=4"
+								class="jsp-preview-card preview-item-enter flex gap-4 p-4 bg-white rounded-2xl border border-gray-100 shadow-sm text-left w-full group transition-all"
+								style="height: 96px">
+								<div class="shrink-0 rounded-xl overflow-hidden"
+									style="width: 68px; height: 64px">
+									<img
+										src="https://images.unsplash.com/photo-1488415032361-b7e238421f1b?crop=entropy&amp;cs=tinysrgb&amp;fit=max&amp;fm=jpg&amp;ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxub3J0aGVybiUyMGxpZ2h0cyUyMGF1cm9yYSUyMGljZWxhbmQlMjBjdWx0dXJlfGVufDF8fHx8MTc4OTI4MzY1OXww&amp;ixlib=rb-4.1.0&amp;q=80&amp;w=600"
+										alt="아이슬란드 오로라 여행 팁 (시기, 준비물, 촬영방법)"
+										class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+								</div>
+								<div class="flex-1 min-w-0 flex flex-col justify-center">
+									<span
+										class="inline-block text-[10px] font-bold px-2 py-0.5 rounded-full mb-1 self-start"
+										style="color: #10B981; background-color: #ECFDF5">문화</span>
+									<h3
+										class="font-bold text-[13px] text-gray-900 mb-0.5 line-clamp-1 group-hover:text-[#6369D1] transition-colors">아이슬란드
+										오로라 여행 팁 (시기, 준비물, 촬영방법)</h3>
+									<div class="flex items-center gap-1">
+										<div
+											class="w-4 h-4 rounded-full flex items-center justify-center text-white text-[8px] font-bold"
+											style="background-color: #EC4899">나</div>
+										<span class="text-[10px] text-gray-400">나 · 1일 전</span>
+									</div>
+								</div>
+							</a>
+					    </div>
 					</div>
-					<div class="flex items-center justify-center gap-2 mt-5">
+					<div class="home-progress flex items-center justify-center gap-2 mt-5">
 						<button type="button"
-							class="jsp-progress-active relative overflow-hidden rounded-full"
+							class="home-progress-bar jsp-progress-active relative overflow-hidden rounded-full"
 							style="width: 44px; height: 9px; background-color: #e5e7eb">
-							<span
-								class="dot-fill-active absolute inset-y-0 left-0 rounded-full"
-								style="background-color: #FFD447"></span>
 						</button>
 						<button type="button"
-							class="relative overflow-hidden rounded-full"
-							style="width: 44px; height: 9px; background-color: #e5e7eb"></button>
+							class="home-progress-bar relative overflow-hidden rounded-full"
+							style="width: 44px; height: 9px; background-color: #e5e7eb">
+						</button>
 						<button type="button"
-							class="relative overflow-hidden rounded-full"
-							style="width: 44px; height: 9px; background-color: #e5e7eb"></button>
+							class="home-progress-bar relative overflow-hidden rounded-full"
+							style="width: 44px; height: 9px; background-color: #e5e7eb">
+						</button>
 					</div>
 				</div>
 				<div>
 					<div class="flex items-end justify-between mb-6">
 						<div>
 							<p class="text-xs font-bold tracking-widest uppercase mb-1"
-								style="color: var(- -brand)">Travel Mate</p>
+								style="color: var(--brand)">Travel Mate</p>
 							<h2 class="text-xl font-extrabold text-gray-900">여행 메이트</h2>
 							<p class="text-xs text-gray-400 mt-0.5">함께 여행할 동반자</p>
 						</div>
 						<a
 							href="${pageContext.request.contextPath}/view/mate/mateList.jsp"
 							class="jsp-more-button flex items-center gap-2 px-5 py-2.5 rounded-xl border-2 text-sm font-bold transition-all"
-							style="border-color: var(- -brand); color: var(- -brand)">더보기<svg
+							style="border-color: var(--brand); color: var(--brand)">더보기<svg
 								width="14" height="14" viewBox="0 0 24 24" fill="none"
 								stroke="currentColor" stroke-width="2.5">
 								<path d="M5 12h14M12 5l7 7-7 7" /></svg></a>
 					</div>
-					<div class="flex flex-col gap-3">
-						<a
-							href="${pageContext.request.contextPath}/view/mate/mateDetail.jsp?id=4"
-							class="jsp-preview-card preview-item-enter flex gap-4 p-4 bg-white rounded-2xl border border-gray-100 shadow-sm text-left w-full group transition-all"
-							style="height: 96px">
-							<div
-								class="shrink-0 rounded-xl flex flex-col items-center justify-center gap-1 font-bold"
-								style="width: 68px; height: 64px; background-color: var(- -brand-soft); color: var(- -brand)">
-								<svg width="18" height="18" viewBox="0 0 24 24" fill="none"
-									stroke="currentColor" stroke-width="2">
-									<path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-									<circle cx="12" cy="10" r="3" /></svg>
-								<span
-									class="text-[10px] font-bold leading-tight text-center px-1 line-clamp-2">이탈리아</span>
-							</div>
-							<div class="flex-1 min-w-0 flex flex-col justify-center">
-								<div class="flex items-center gap-1.5 mb-0.5">
-									<span class="text-[11px] font-semibold"
-										style="color: var(- -brand)">이탈리아 · 로마</span><span
-										class="text-[10px] font-bold px-1.5 py-0.5 rounded-full"
-										style="background-color: var(- -brand-light); color: var(- -brand)">2명
-										모집</span>
+					<div data-rotate-group>
+						<div class="flex flex-col gap-3 home-rotate-page">
+							<a
+								href="${pageContext.request.contextPath}/view/mate/mateDetail.jsp?id=4"
+								class="jsp-preview-card preview-item-enter flex gap-4 p-4 bg-white rounded-2xl border border-gray-100 shadow-sm text-left w-full group transition-all"
+								style="height: 96px">
+								<div
+									class="shrink-0 rounded-xl flex flex-col items-center justify-center gap-1 font-bold"
+									style="width: 68px; height: 64px; background-color: var(--brand-soft); color: var(--brand)">
+									<svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+										stroke="currentColor" stroke-width="2">
+										<path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+										<circle cx="12" cy="10" r="3" /></svg>
+									<span
+										class="text-[10px] font-bold leading-tight text-center px-1 line-clamp-2">이탈리아</span>
 								</div>
-								<h3
-									class="font-bold text-[13px] text-gray-900 mb-0.5 line-clamp-1 group-hover:text-[#6369D1] transition-colors">🍕
-									10/15-22 로마·피렌체·베네치아 맛집 여행 동행</h3>
-								<div class="flex items-center gap-1">
-									<div
-										class="w-4 h-4 rounded-full flex items-center justify-center text-white text-[8px] font-bold"
-										style="background-color: #EC4899">서</div>
-									<span class="text-[10px] text-gray-400">서연 · 2026.09.09</span>
+								<div class="flex-1 min-w-0 flex flex-col justify-center">
+									<div class="flex items-center gap-1.5 mb-0.5">
+										<span class="text-[11px] font-semibold"
+											style="color: var(--brand)">이탈리아 · 로마</span><span
+											class="text-[10px] font-bold px-1.5 py-0.5 rounded-full"
+											style="background-color: var(--brand-light); color: var(--brand)">2명
+											모집</span>
+									</div>
+									<h3
+										class="font-bold text-[13px] text-gray-900 mb-0.5 line-clamp-1 group-hover:text-[#6369D1] transition-colors">🍕
+										10/15-22 로마·피렌체·베네치아 맛집 여행 동행</h3>
+									<div class="flex items-center gap-1">
+										<div
+											class="w-4 h-4 rounded-full flex items-center justify-center text-white text-[8px] font-bold"
+											style="background-color: #EC4899">서</div>
+										<span class="text-[10px] text-gray-400">서연 · 2026.09.09</span>
+									</div>
 								</div>
-							</div>
-						</a><a
-							href="${pageContext.request.contextPath}/view/mate/mateDetail.jsp?id=5"
-							class="jsp-preview-card preview-item-enter flex gap-4 p-4 bg-white rounded-2xl border border-gray-100 shadow-sm text-left w-full group transition-all"
-							style="height: 96px">
-							<div
-								class="shrink-0 rounded-xl flex flex-col items-center justify-center gap-1 font-bold"
-								style="width: 68px; height: 64px; background-color: var(- -brand-soft); color: var(- -brand)">
-								<svg width="18" height="18" viewBox="0 0 24 24" fill="none"
-									stroke="currentColor" stroke-width="2">
-									<path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-									<circle cx="12" cy="10" r="3" /></svg>
-								<span
-									class="text-[10px] font-bold leading-tight text-center px-1 line-clamp-2">영국</span>
-							</div>
-							<div class="flex-1 min-w-0 flex flex-col justify-center">
-								<div class="flex items-center gap-1.5 mb-0.5">
-									<span class="text-[11px] font-semibold"
-										style="color: var(- -brand)">영국 · 런던</span><span
-										class="text-[10px] font-bold px-1.5 py-0.5 rounded-full"
-										style="background-color: var(- -brand-light); color: var(- -brand)">3명
-										모집</span>
+							</a><a
+								href="${pageContext.request.contextPath}/view/mate/mateDetail.jsp?id=5"
+								class="jsp-preview-card preview-item-enter flex gap-4 p-4 bg-white rounded-2xl border border-gray-100 shadow-sm text-left w-full group transition-all"
+								style="height: 96px">
+								<div
+									class="shrink-0 rounded-xl flex flex-col items-center justify-center gap-1 font-bold"
+									style="width: 68px; height: 64px; background-color: var(--brand-soft); color: var(--brand)">
+									<svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+										stroke="currentColor" stroke-width="2">
+										<path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+										<circle cx="12" cy="10" r="3" /></svg>
+									<span
+										class="text-[10px] font-bold leading-tight text-center px-1 line-clamp-2">영국</span>
 								</div>
-								<h3
-									class="font-bold text-[13px] text-gray-900 mb-0.5 line-clamp-1 group-hover:text-[#6369D1] transition-colors">🎓
-									11월 런던 어학연수 · 영어 회화 파트너 구해요</h3>
-								<div class="flex items-center gap-1">
-									<div
-										class="w-4 h-4 rounded-full flex items-center justify-center text-white text-[8px] font-bold"
-										style="background-color: #10B981">도</div>
-									<span class="text-[10px] text-gray-400">도현 · 2026.09.08</span>
+								<div class="flex-1 min-w-0 flex flex-col justify-center">
+									<div class="flex items-center gap-1.5 mb-0.5">
+										<span class="text-[11px] font-semibold"
+											style="color: var(--brand)">영국 · 런던</span><span
+											class="text-[10px] font-bold px-1.5 py-0.5 rounded-full"
+											style="background-color: var(--brand-light); color: var(--brand)">3명
+											모집</span>
+									</div>
+									<h3
+										class="font-bold text-[13px] text-gray-900 mb-0.5 line-clamp-1 group-hover:text-[#6369D1] transition-colors">🎓
+										11월 런던 어학연수 · 영어 회화 파트너 구해요</h3>
+									<div class="flex items-center gap-1">
+										<div
+											class="w-4 h-4 rounded-full flex items-center justify-center text-white text-[8px] font-bold"
+											style="background-color: #10B981">도</div>
+										<span class="text-[10px] text-gray-400">도현 · 2026.09.08</span>
+									</div>
 								</div>
-							</div>
-						</a><a
-							href="${pageContext.request.contextPath}/view/mate/mateDetail.jsp?id=1"
-							class="jsp-preview-card preview-item-enter flex gap-4 p-4 bg-white rounded-2xl border border-gray-100 shadow-sm text-left w-full group transition-all"
-							style="height: 96px">
-							<div
-								class="shrink-0 rounded-xl flex flex-col items-center justify-center gap-1 font-bold"
-								style="width: 68px; height: 64px; background-color: var(- -brand-soft); color: var(- -brand)">
-								<svg width="18" height="18" viewBox="0 0 24 24" fill="none"
-									stroke="currentColor" stroke-width="2">
-									<path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-									<circle cx="12" cy="10" r="3" /></svg>
-								<span
-									class="text-[10px] font-bold leading-tight text-center px-1 line-clamp-2">일본</span>
-							</div>
-							<div class="flex-1 min-w-0 flex flex-col justify-center">
-								<div class="flex items-center gap-1.5 mb-0.5">
-									<span class="text-[11px] font-semibold"
-										style="color: var(- -brand)">일본 · 도쿄</span><span
-										class="text-[10px] font-bold px-1.5 py-0.5 rounded-full"
-										style="background-color: var(- -brand-light); color: var(- -brand)">1명
-										모집</span>
+							</a><a
+								href="${pageContext.request.contextPath}/view/mate/mateDetail.jsp?id=1"
+								class="jsp-preview-card preview-item-enter flex gap-4 p-4 bg-white rounded-2xl border border-gray-100 shadow-sm text-left w-full group transition-all"
+								style="height: 96px">
+								<div
+									class="shrink-0 rounded-xl flex flex-col items-center justify-center gap-1 font-bold"
+									style="width: 68px; height: 64px; background-color: var(--brand-soft); color: var(--brand)">
+									<svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+										stroke="currentColor" stroke-width="2">
+										<path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+										<circle cx="12" cy="10" r="3" /></svg>
+									<span
+										class="text-[10px] font-bold leading-tight text-center px-1 line-clamp-2">일본</span>
 								</div>
-								<h3
-									class="font-bold text-[13px] text-gray-900 mb-0.5 line-clamp-1 group-hover:text-[#6369D1] transition-colors">🗼
-									11/10-14 도쿄 4박 · 맛집+카페+쇼핑 동행 1명</h3>
-								<div class="flex items-center gap-1">
-									<div
-										class="w-4 h-4 rounded-full flex items-center justify-center text-white text-[8px] font-bold"
-										style="background-color: #8B5CF6">지</div>
-									<span class="text-[10px] text-gray-400">지민 · 2026.09.10</span>
+								<div class="flex-1 min-w-0 flex flex-col justify-center">
+									<div class="flex items-center gap-1.5 mb-0.5">
+										<span class="text-[11px] font-semibold"
+											style="color: var(--brand)">일본 · 도쿄</span><span
+											class="text-[10px] font-bold px-1.5 py-0.5 rounded-full"
+											style="background-color: var(--brand-light); color: var(--brand)">1명
+											모집</span>
+									</div>
+									<h3
+										class="font-bold text-[13px] text-gray-900 mb-0.5 line-clamp-1 group-hover:text-[#6369D1] transition-colors">🗼
+										11/10-14 도쿄 4박 · 맛집+카페+쇼핑 동행 1명</h3>
+									<div class="flex items-center gap-1">
+										<div
+											class="w-4 h-4 rounded-full flex items-center justify-center text-white text-[8px] font-bold"
+											style="background-color: #8B5CF6">지</div>
+										<span class="text-[10px] text-gray-400">지민 · 2026.09.10</span>
+									</div>
 								</div>
-							</div>
-						</a>
+							</a>
+						</div>
+						<div class="flex flex-col gap-3 home-rotate-page" style="display: none;">
+						    <a
+								href="${pageContext.request.contextPath}/view/mate/mateDetail.jsp?id=4"
+								class="jsp-preview-card preview-item-enter flex gap-4 p-4 bg-white rounded-2xl border border-gray-100 shadow-sm text-left w-full group transition-all"
+								style="height: 96px">
+								<div
+									class="shrink-0 rounded-xl flex flex-col items-center justify-center gap-1 font-bold"
+									style="width: 68px; height: 64px; background-color: var(--brand-soft); color: var(--brand)">
+									<svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+										stroke="currentColor" stroke-width="2">
+										<path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+										<circle cx="12" cy="10" r="3" /></svg>
+									<span
+										class="text-[10px] font-bold leading-tight text-center px-1 line-clamp-2">이탈리아</span>
+								</div>
+								<div class="flex-1 min-w-0 flex flex-col justify-center">
+									<div class="flex items-center gap-1.5 mb-0.5">
+										<span class="text-[11px] font-semibold"
+											style="color: var(--brand)">이탈리아 · 로마</span><span
+											class="text-[10px] font-bold px-1.5 py-0.5 rounded-full"
+											style="background-color: var(--brand-light); color: var(--brand)">2명
+											모집</span>
+									</div>
+									<h3
+										class="font-bold text-[13px] text-gray-900 mb-0.5 line-clamp-1 group-hover:text-[#6369D1] transition-colors">🍕
+										10/15-22 로마·피렌체·베네치아 맛집 여행 동행</h3>
+									<div class="flex items-center gap-1">
+										<div
+											class="w-4 h-4 rounded-full flex items-center justify-center text-white text-[8px] font-bold"
+											style="background-color: #EC4899">서</div>
+										<span class="text-[10px] text-gray-400">서연 · 2026.09.09</span>
+									</div>
+								</div>
+							</a><a
+								href="${pageContext.request.contextPath}/view/mate/mateDetail.jsp?id=5"
+								class="jsp-preview-card preview-item-enter flex gap-4 p-4 bg-white rounded-2xl border border-gray-100 shadow-sm text-left w-full group transition-all"
+								style="height: 96px">
+								<div
+									class="shrink-0 rounded-xl flex flex-col items-center justify-center gap-1 font-bold"
+									style="width: 68px; height: 64px; background-color: var(--brand-soft); color: var(--brand)">
+									<svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+										stroke="currentColor" stroke-width="2">
+										<path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+										<circle cx="12" cy="10" r="3" /></svg>
+									<span
+										class="text-[10px] font-bold leading-tight text-center px-1 line-clamp-2">영국</span>
+								</div>
+								<div class="flex-1 min-w-0 flex flex-col justify-center">
+									<div class="flex items-center gap-1.5 mb-0.5">
+										<span class="text-[11px] font-semibold"
+											style="color: var(--brand)">영국 · 런던</span><span
+											class="text-[10px] font-bold px-1.5 py-0.5 rounded-full"
+											style="background-color: var(--brand-light); color: var(--brand)">3명
+											모집</span>
+									</div>
+									<h3
+										class="font-bold text-[13px] text-gray-900 mb-0.5 line-clamp-1 group-hover:text-[#6369D1] transition-colors">🎓
+										11월 런던 어학연수 · 영어 회화 파트너 구해요</h3>
+									<div class="flex items-center gap-1">
+										<div
+											class="w-4 h-4 rounded-full flex items-center justify-center text-white text-[8px] font-bold"
+											style="background-color: #10B981">도</div>
+										<span class="text-[10px] text-gray-400">도현 · 2026.09.08</span>
+									</div>
+								</div>
+							</a><a
+								href="${pageContext.request.contextPath}/view/mate/mateDetail.jsp?id=1"
+								class="jsp-preview-card preview-item-enter flex gap-4 p-4 bg-white rounded-2xl border border-gray-100 shadow-sm text-left w-full group transition-all"
+								style="height: 96px">
+								<div
+									class="shrink-0 rounded-xl flex flex-col items-center justify-center gap-1 font-bold"
+									style="width: 68px; height: 64px; background-color: var(--brand-soft); color: var(--brand)">
+									<svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+										stroke="currentColor" stroke-width="2">
+										<path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+										<circle cx="12" cy="10" r="3" /></svg>
+									<span
+										class="text-[10px] font-bold leading-tight text-center px-1 line-clamp-2">일본</span>
+								</div>
+								<div class="flex-1 min-w-0 flex flex-col justify-center">
+									<div class="flex items-center gap-1.5 mb-0.5">
+										<span class="text-[11px] font-semibold"
+											style="color: var(--brand)">일본 · 도쿄</span><span
+											class="text-[10px] font-bold px-1.5 py-0.5 rounded-full"
+											style="background-color: var(--brand-light); color: var(--brand)">1명
+											모집</span>
+									</div>
+									<h3
+										class="font-bold text-[13px] text-gray-900 mb-0.5 line-clamp-1 group-hover:text-[#6369D1] transition-colors">🗼
+										11/10-14 도쿄 4박 · 맛집+카페+쇼핑 동행 1명</h3>
+									<div class="flex items-center gap-1">
+										<div
+											class="w-4 h-4 rounded-full flex items-center justify-center text-white text-[8px] font-bold"
+											style="background-color: #8B5CF6">지</div>
+										<span class="text-[10px] text-gray-400">지민 · 2026.09.10</span>
+									</div>
+								</div>
+							</a>
+						</div>
+						<div class="flex flex-col gap-3 home-rotate-page" style="display: none;">
+						    <a
+								href="${pageContext.request.contextPath}/view/mate/mateDetail.jsp?id=4"
+								class="jsp-preview-card preview-item-enter flex gap-4 p-4 bg-white rounded-2xl border border-gray-100 shadow-sm text-left w-full group transition-all"
+								style="height: 96px">
+								<div
+									class="shrink-0 rounded-xl flex flex-col items-center justify-center gap-1 font-bold"
+									style="width: 68px; height: 64px; background-color: var(--brand-soft); color: var(--brand)">
+									<svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+										stroke="currentColor" stroke-width="2">
+										<path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+										<circle cx="12" cy="10" r="3" /></svg>
+									<span
+										class="text-[10px] font-bold leading-tight text-center px-1 line-clamp-2">이탈리아</span>
+								</div>
+								<div class="flex-1 min-w-0 flex flex-col justify-center">
+									<div class="flex items-center gap-1.5 mb-0.5">
+										<span class="text-[11px] font-semibold"
+											style="color: var(--brand)">이탈리아 · 로마</span><span
+											class="text-[10px] font-bold px-1.5 py-0.5 rounded-full"
+											style="background-color: var(--brand-light); color: var(--brand)">2명
+											모집</span>
+									</div>
+									<h3
+										class="font-bold text-[13px] text-gray-900 mb-0.5 line-clamp-1 group-hover:text-[#6369D1] transition-colors">🍕
+										10/15-22 로마·피렌체·베네치아 맛집 여행 동행</h3>
+									<div class="flex items-center gap-1">
+										<div
+											class="w-4 h-4 rounded-full flex items-center justify-center text-white text-[8px] font-bold"
+											style="background-color: #EC4899">서</div>
+										<span class="text-[10px] text-gray-400">서연 · 2026.09.09</span>
+									</div>
+								</div>
+							</a><a
+								href="${pageContext.request.contextPath}/view/mate/mateDetail.jsp?id=5"
+								class="jsp-preview-card preview-item-enter flex gap-4 p-4 bg-white rounded-2xl border border-gray-100 shadow-sm text-left w-full group transition-all"
+								style="height: 96px">
+								<div
+									class="shrink-0 rounded-xl flex flex-col items-center justify-center gap-1 font-bold"
+									style="width: 68px; height: 64px; background-color: var(--brand-soft); color: var(--brand)">
+									<svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+										stroke="currentColor" stroke-width="2">
+										<path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+										<circle cx="12" cy="10" r="3" /></svg>
+									<span
+										class="text-[10px] font-bold leading-tight text-center px-1 line-clamp-2">영국</span>
+								</div>
+								<div class="flex-1 min-w-0 flex flex-col justify-center">
+									<div class="flex items-center gap-1.5 mb-0.5">
+										<span class="text-[11px] font-semibold"
+											style="color: var(--brand)">영국 · 런던</span><span
+											class="text-[10px] font-bold px-1.5 py-0.5 rounded-full"
+											style="background-color: var(--brand-light); color: var(--brand)">3명
+											모집</span>
+									</div>
+									<h3
+										class="font-bold text-[13px] text-gray-900 mb-0.5 line-clamp-1 group-hover:text-[#6369D1] transition-colors">🎓
+										11월 런던 어학연수 · 영어 회화 파트너 구해요</h3>
+									<div class="flex items-center gap-1">
+										<div
+											class="w-4 h-4 rounded-full flex items-center justify-center text-white text-[8px] font-bold"
+											style="background-color: #10B981">도</div>
+										<span class="text-[10px] text-gray-400">도현 · 2026.09.08</span>
+									</div>
+								</div>
+							</a><a
+								href="${pageContext.request.contextPath}/view/mate/mateDetail.jsp?id=1"
+								class="jsp-preview-card preview-item-enter flex gap-4 p-4 bg-white rounded-2xl border border-gray-100 shadow-sm text-left w-full group transition-all"
+								style="height: 96px">
+								<div
+									class="shrink-0 rounded-xl flex flex-col items-center justify-center gap-1 font-bold"
+									style="width: 68px; height: 64px; background-color: var(--brand-soft); color: var(--brand)">
+									<svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+										stroke="currentColor" stroke-width="2">
+										<path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+										<circle cx="12" cy="10" r="3" /></svg>
+									<span
+										class="text-[10px] font-bold leading-tight text-center px-1 line-clamp-2">일본</span>
+								</div>
+								<div class="flex-1 min-w-0 flex flex-col justify-center">
+									<div class="flex items-center gap-1.5 mb-0.5">
+										<span class="text-[11px] font-semibold"
+											style="color: var(--brand)">일본 · 도쿄</span><span
+											class="text-[10px] font-bold px-1.5 py-0.5 rounded-full"
+											style="background-color: var(--brand-light); color: var(--brand)">1명
+											모집</span>
+									</div>
+									<h3
+										class="font-bold text-[13px] text-gray-900 mb-0.5 line-clamp-1 group-hover:text-[#6369D1] transition-colors">🗼
+										11/10-14 도쿄 4박 · 맛집+카페+쇼핑 동행 1명</h3>
+									<div class="flex items-center gap-1">
+										<div
+											class="w-4 h-4 rounded-full flex items-center justify-center text-white text-[8px] font-bold"
+											style="background-color: #8B5CF6">지</div>
+										<span class="text-[10px] text-gray-400">지민 · 2026.09.10</span>
+									</div>
+								</div>
+							</a>
+						</div>
 					</div>
-					<div class="flex items-center justify-center gap-2 mt-5">
+					<div class="home-progress flex items-center justify-center gap-2 mt-5">
 						<button type="button"
-							class="jsp-progress-active relative overflow-hidden rounded-full"
+							class="home-progress-bar jsp-progress-active relative overflow-hidden rounded-full"
 							style="width: 44px; height: 9px; background-color: #e5e7eb">
-							<span
-								class="dot-fill-active absolute inset-y-0 left-0 rounded-full"
-								style="background-color: #FFD447"></span>
 						</button>
 						<button type="button"
-							class="relative overflow-hidden rounded-full"
-							style="width: 44px; height: 9px; background-color: #e5e7eb"></button>
+							class="home-progress-bar relative overflow-hidden rounded-full"
+							style="width: 44px; height: 9px; background-color: #e5e7eb">
+						</button>
 						<button type="button"
-							class="relative overflow-hidden rounded-full"
-							style="width: 44px; height: 9px; background-color: #e5e7eb"></button>
+							class="home-progress-bar relative overflow-hidden rounded-full"
+							style="width: 44px; height: 9px; background-color: #e5e7eb">
+						</button>
 					</div>
 				</div>
 			</div>

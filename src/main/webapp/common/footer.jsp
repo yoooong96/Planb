@@ -6,4 +6,4 @@
     <div class="site-footer-links"><span>이용약관</span><span>개인정보처리방침</span></div>
   </div>
 </footer>
-<script src="${pageContext.request.contextPath}/view/assets/js/tripily.js"></script>
+<script src="${pageContext.request.contextPath}/view/assets/js/auth/tripily.js"></script>

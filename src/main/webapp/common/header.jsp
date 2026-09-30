@@ -22,7 +22,7 @@ String points = session.getAttribute("points") == null ? (isAdminHeader ? "0" : 
           <circle cx="12" cy="9" r="2.6" fill="white"/>
         </svg>
       </span>
-      <span class="site-brand-copy"><strong>Tripily</strong><small>Travel Plan Share</small></span>
+      <span class="site-brand-copy"><strong>Planb</strong><small>Travel Plan Share</small></span>
     </a>
 
     <nav class="site-nav<%=homeHeader ? " site-nav--pill" : ""%>" aria-label="주요 메뉴">
