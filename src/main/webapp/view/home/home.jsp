@@ -16,7 +16,7 @@ request.setAttribute("activePage", "home");
 	<main
 		style="font-family: 'Plus Jakarta Sans', 'Noto Sans KR', sans-serif">
 		<section class="relative flex flex-col items-center justify-center"
-			style="height: 100vh; min-height: 560px">
+			style="height: 91.5vh; min-height: 560px">
 			<div class="absolute inset-0 bg-cover bg-center"
 				style="background-image: url('https://images.unsplash.com/photo-1786049129855-3fdf58f32d72?crop=entropy&amp;cs=tinysrgb&amp;fit=max&amp;fm=jpg&amp;ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx5b3VuZyUyMHRyYXZlbGVycyUyMGFkdmVudHVyZSUyMGZyaWVuZHMlMjBtb3VudGFpbiUyMGdvbGRlbiUyMGhvdXJ8ZW58MXx8fHwxNzg5ODI5NTA4fDA&amp;ixlib=rb-4.1.0&amp;q=80&amp;w=1600')"></div>
 			<div class="absolute inset-0"

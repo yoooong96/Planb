@@ -406,7 +406,21 @@
   }
   document.querySelectorAll('[data-bookmark]').forEach(function(btn){ btn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();btn.classList.toggle('saved');}); });
   var scroll=document.querySelector('[data-scroll-popular]');
-  if(scroll){scroll.addEventListener('click',function(){var t=document.getElementById('popularPlans');if(t)t.scrollIntoView({behavior:'smooth',block:'start'});});}
+  var scroll = document.querySelector('[data-scroll-popular]');
+
+	if (scroll) {
+	    scroll.addEventListener('click', function () {
+	        var target = document.getElementById('popularPlans');
+	        if (target) {
+	            var targetPosition = target.getBoundingClientRect().top + window.pageYOffset;
+	
+	            window.scrollTo({
+	                top: targetPosition - 130,
+	                behavior: 'smooth'
+	            });
+	        }
+	    });
+	}
 })();
 
 /* 여행꿀팁 + 여행메이트 게시글/진행바 로테이션 */
