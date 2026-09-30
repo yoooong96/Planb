@@ -76,7 +76,7 @@ public class signup extends HttpServlet {
 		UserService service = new UserServiceImpl();
 		try {
 			service.signup(userDto, realPath, profile);
-			request.getRequestDispatcher("/view/auth/login.jsp");
+			request.getRequestDispatcher("/view/auth/login.jsp").forward(request, response);;
 		} catch(Exception e) {
 			e.printStackTrace();
 			request.getRequestDispatcher("/error.jsp");
