@@ -69,7 +69,7 @@ public class signup extends HttpServlet {
 		userDto.setBio(request.getParameter("bio"));
 		userDto.setName(request.getParameter("name"));
 		
-		Part profile = request.getPart("profile");
+		Part profile = request.getPart("profileImage");
 		String uploadPath = (String)request.getServletContext().getAttribute("profilePath");
 		String realPath = request.getServletContext().getRealPath(uploadPath);
 		
