@@ -499,7 +499,7 @@ if (user != null
                     <% if (!profileImg.isEmpty()) { %>
 
                     <img
-                        src="<%=ctx%>/resources/upload/profile/<%=profileImg%>"
+                        src="<%=ctx%>/profiles/<%=profileImg%>"
                         alt="<%=nickname%>">
 
                     <% } else { %>
