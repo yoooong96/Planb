@@ -299,19 +299,54 @@ request.setAttribute("activePage", "planner");
     #plannerCenterPanel { transition: opacity .18s ease, filter .18s ease; }
     #plannerCenterPanel.is-country-locked { opacity:.46; filter:grayscale(1) blur(.25px); pointer-events:none; user-select:none; }
 
-    .planner-confirm-backdrop { position:fixed; inset:0; z-index:10000; display:none; align-items:center; justify-content:center; background:rgba(17,24,39,.42); backdrop-filter:blur(2px); padding:20px; }
+    .planner-confirm-backdrop { position:fixed; inset:0; z-index:10000; display:none; align-items:center; justify-content:center; background:rgba(0,0,0,.40); padding:20px; }
     .planner-confirm-backdrop.is-open { display:flex; }
-    .planner-confirm-modal { width:min(420px,100%); border:1px solid #E5E7EB; border-radius:18px; background:#fff; box-shadow:0 24px 64px rgba(17,24,39,.22); overflow:hidden; }
-    .planner-confirm-head { padding:20px 22px 10px; display:flex; align-items:flex-start; gap:12px; }
-    .planner-confirm-icon { width:36px; height:36px; border-radius:12px; display:flex; align-items:center; justify-content:center; flex:0 0 auto; background:#FEF2F2; color:#DC2626; font-size:18px; font-weight:900; }
-    .planner-confirm-title { margin:0; color:#111827; font-size:15px; font-weight:800; }
-    .planner-confirm-message { margin:5px 0 0; color:#6B7280; font-size:12px; line-height:1.6; }
-    .planner-confirm-actions { display:flex; justify-content:flex-end; gap:8px; padding:14px 22px 20px; }
-    .planner-confirm-btn { min-width:82px; height:38px; border-radius:10px; font-size:12px; font-weight:800; border:1px solid #E5E7EB; }
+    .planner-confirm-modal { width:min(360px,100%); border:0; border-radius:16px; background:#fff; box-shadow:0 25px 50px -12px rgba(0,0,0,.28); padding:24px; display:flex; flex-direction:column; gap:16px; }
+    .planner-confirm-content { display:flex; flex-direction:column; gap:8px; }
+    .planner-confirm-head { display:flex; align-items:center; gap:8px; }
+    .planner-confirm-icon { width:32px; height:32px; border-radius:999px; display:flex; align-items:center; justify-content:center; flex:0 0 auto; background:#FEE2E2; color:#EF4444; }
+    .planner-confirm-icon svg { width:15px; height:15px; }
+    .planner-confirm-title { margin:0; color:#1F2937; font-size:16px; font-weight:700; line-height:1.35; }
+    .planner-confirm-body { display:flex; flex-direction:column; gap:8px; margin-top:4px; }
+    .planner-confirm-message { margin:0; color:#4B5563; font-size:14px; line-height:1.55; }
+    .planner-confirm-message strong { color:#1F2937; font-weight:600; }
+    .planner-confirm-list { display:none; flex-direction:column; gap:4px; max-height:128px; overflow-y:auto; padding:10px 12px; border:1px solid #FEE2E2; border-radius:12px; background:#FEF2F2; }
+    .planner-confirm-list.is-visible { display:flex; }
+    .planner-confirm-list-item { display:flex; align-items:center; gap:8px; min-width:0; color:#374151; font-size:12px; line-height:1.4; }
+    .planner-confirm-list-dot { width:7px; height:7px; border-radius:999px; flex:0 0 auto; background:#8B5CF6; }
+    .planner-confirm-list-name { overflow:hidden; white-space:nowrap; text-overflow:ellipsis; }
+    .planner-confirm-list-time { margin-left:auto; color:#9CA3AF; flex:0 0 auto; }
+    .planner-confirm-warning { margin:0; color:#EF4444; font-size:12px; font-weight:600; }
+    .planner-confirm-actions { display:flex; gap:8px; padding:0; }
+    .planner-confirm-btn { flex:1 1 0; height:40px; border-radius:12px; font-size:14px; font-weight:600; border:1px solid #E5E7EB; transition:background .15s ease,border-color .15s ease; }
     .planner-confirm-cancel { background:#fff; color:#4B5563; }
-    .planner-confirm-delete { border-color:#DC2626; background:#DC2626; color:#fff; }
+    .planner-confirm-delete { border-color:#EF4444; background:#EF4444; color:#fff; font-weight:700; }
     .planner-confirm-cancel:hover { background:#F9FAFB; }
-    .planner-confirm-delete:hover { background:#B91C1C; border-color:#B91C1C; }
+    .planner-confirm-delete:hover { background:#DC2626; border-color:#DC2626; }
+
+    .planner-required-backdrop { position:fixed; inset:0; z-index:10020; display:none; align-items:center; justify-content:center; background:rgba(0,0,0,.40); padding:20px; }
+    .planner-required-backdrop.is-open { display:flex; }
+    .planner-required-modal { width:min(380px,100%); border-radius:16px; background:#fff; padding:24px; box-shadow:0 25px 50px -12px rgba(0,0,0,.28); }
+    .planner-required-icon { width:34px; height:34px; border-radius:999px; display:flex; align-items:center; justify-content:center; background:#FEF2F2; color:#EF4444; font-weight:800; }
+    .planner-required-list { margin:12px 0 0; padding-left:20px; color:#4B5563; font-size:13px; line-height:1.75; list-style:disc; }
+
+    #plannerCountryDropdown button,
+    #plannerRegionDropdown button { width:100%; min-height:40px; text-align:left; transition:background .15s ease; }
+    #plannerCountryDropdown button:hover,
+    #plannerRegionDropdown button:hover { background:#FAF5FF; }
+    #plannerCountryDropdown::-webkit-scrollbar,
+    #plannerRegionDropdown::-webkit-scrollbar { width:8px; }
+    #plannerCountryDropdown::-webkit-scrollbar-track,
+    #plannerRegionDropdown::-webkit-scrollbar-track { background:#F9FAFB; }
+    #plannerCountryDropdown::-webkit-scrollbar-thumb,
+    #plannerRegionDropdown::-webkit-scrollbar-thumb { background:#C7CBD4; border-radius:999px; }
+    #plannerCountryDropdown,
+    #plannerRegionDropdown { scrollbar-width:thin; scrollbar-color:#C7CBD4 #F9FAFB; }
+
+    .planner-day-header[draggable="true"] { cursor:grab; }
+    .planner-day-header[draggable="true"]:active { cursor:grabbing; }
+    .planner-day.is-day-dragging { opacity:.48; }
+    .planner-day.is-day-drag-over { outline:2px solid rgba(99,105,209,.35); outline-offset:3px; border-radius:14px; }
 
 </style>
 </head>
@@ -346,7 +381,7 @@ request.setAttribute("activePage", "planner");
 
                     <div class="grid gap-3 min-w-0"
                         style="grid-template-columns: minmax(0, .72fr) minmax(0, .72fr) minmax(0, .42fr) minmax(380px, 1.55fr)">
-                        <div class="relative min-w-0 h-[50px] rounded-xl border bg-white flex items-center gap-3 px-3.5"
+                        <div id="plannerCountryField" class="relative overflow-visible min-w-0 h-[50px] rounded-xl border bg-white flex items-center gap-3 px-3.5"
                             style="border-color: #FCA5A5">
                             <div class="w-8 h-8 rounded-lg shrink-0 flex items-center justify-center"
                                 style="background: #F0EFFF; color: #6369D1">
@@ -358,13 +393,30 @@ request.setAttribute("activePage", "planner");
                             </div>
                             <div class="min-w-0 flex-1 flex flex-col justify-center">
                                 <span class="text-[10px] font-semibold text-gray-400 leading-none mb-1">국가</span>
-                                <input class="outline-none text-sm text-gray-800 bg-transparent placeholder-gray-400 w-full min-w-0"
-                                    id="plannerCountry" placeholder="국가 선택" value="" autocomplete="off">
+                                <div id="plannerCountryCombo" class="w-full min-w-0">
+                                    <div class="flex items-center gap-1.5 w-full min-w-0">
+                                        <input class="outline-none text-sm text-gray-800 bg-transparent placeholder-gray-400 w-full min-w-0"
+                                            id="plannerCountry" placeholder="국가 선택" value="" autocomplete="off">
+                                        <button type="button" id="plannerCountryClear"
+                                            class="hidden shrink-0 text-gray-300 hover:text-gray-500"
+                                            aria-label="국가 입력 지우기">
+                                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                stroke-width="2" stroke-linecap="round">
+                                                <path d="M18 6 6 18M6 6l12 12"/>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                    <div id="plannerCountryDropdown"
+                                        class="hidden absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-xl shadow-xl z-50"
+                                        style="max-height: 320px; overflow-y: auto; overflow-x: hidden;">
+                                    </div>
+                                </div>
                             </div>
-                            <span class="text-[10px] font-semibold shrink-0" style="color: #EF4444">필수</span>
+                            <span id="plannerCountryStatus" class="text-[10px] font-semibold shrink-0 whitespace-nowrap"
+                                style="color: #EF4444">필수</span>
                         </div>
 
-                        <div class="relative min-w-0 h-[50px] rounded-xl border bg-white flex items-center gap-3 px-3.5"
+                        <div class="relative overflow-visible min-w-0 h-[50px] rounded-xl border bg-white flex items-center gap-3 px-3.5"
                             style="border-color: #E2E5EF">
                             <div class="w-8 h-8 rounded-lg shrink-0 flex items-center justify-center"
                                 style="background: #F0EFFF; color: #6369D1">
@@ -376,8 +428,24 @@ request.setAttribute("activePage", "planner");
                             </div>
                             <div class="min-w-0 flex-1 flex flex-col justify-center">
                                 <span class="text-[10px] font-semibold text-gray-400 leading-none mb-1">지역 (선택)</span>
-                                <input class="outline-none text-sm text-gray-800 bg-transparent placeholder-gray-400 w-full min-w-0"
-                                    id="plannerRegion" placeholder="선택" value="" autocomplete="off">
+                                <div id="plannerRegionCombo" class="w-full min-w-0">
+                                    <div class="flex items-center gap-1.5 w-full min-w-0">
+                                        <input class="outline-none text-sm text-gray-800 bg-transparent placeholder-gray-400 w-full min-w-0"
+                                            id="plannerRegion" placeholder="국가 먼저 입력" value="" autocomplete="off" disabled>
+                                        <button type="button" id="plannerRegionClear"
+                                            class="hidden shrink-0 text-gray-300 hover:text-gray-500"
+                                            aria-label="지역 입력 지우기">
+                                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                stroke-width="2" stroke-linecap="round">
+                                                <path d="M18 6 6 18M6 6l12 12"/>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                    <div id="plannerRegionDropdown"
+                                        class="hidden absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-xl shadow-xl z-50"
+                                        style="max-height: 280px; overflow-y: auto; overflow-x: hidden;">
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
@@ -449,7 +517,7 @@ request.setAttribute("activePage", "planner");
                                 <polyline points="17 21 17 13 7 13 7 21" />
                                 <polyline points="7 3 7 8 15 8" />
                             </svg>
-                            저장하기
+                            <span id="plannerSaveLabel">저장하기</span>
                         </button>
                     </div>
 
@@ -927,6 +995,7 @@ request.setAttribute("activePage", "planner");
                 var addBtn=$('.planner-add-block-btn',body);
                 body.insertBefore(card,addBtn||null);
                 if(body.classList.contains('is-collapsed')) body.classList.remove('is-collapsed');
+                updateDayDeleteButtons();
                 syncBudget(); markDirty();
                 var ti=$('.planner-item-title',card); if(ti && !prefill?.title) ti.focus();
             }
@@ -946,6 +1015,7 @@ request.setAttribute("activePage", "planner");
                     e.preventDefault(); e.dataTransfer.dropEffect='copy'; body.classList.add('is-drop-target');
                 });
                 body.addEventListener('dragleave',function(e){ if(!body.contains(e.relatedTarget)) body.classList.remove('is-drop-target'); });
+                updateDayDeleteButtons();
                 body.addEventListener('drop',function(e){
                     var raw=e.dataTransfer.getData('application/x-tripily-import');
                     if(!raw)return; e.preventDefault(); body.classList.remove('is-drop-target');
@@ -972,15 +1042,68 @@ request.setAttribute("activePage", "planner");
 
 
             var plannerDeleteAction=null;
-            function openDeleteModal(title,message,onDelete){
+            function openDeleteModal(options,onDelete){
                 setupDeleteModal();
-                var backdrop=$('#plannerConfirmBackdrop'), titleEl=$('#plannerConfirmTitle'), msgEl=$('#plannerConfirmMessage');
-                if(!backdrop){ if(window.confirm(message||title)){ onDelete(); } return; }
+                options=options||{};
+                var backdrop=$('#plannerConfirmBackdrop');
+                var titleEl=$('#plannerConfirmTitle');
+                var msgEl=$('#plannerConfirmMessage');
+                var warningEl=$('#plannerConfirmWarning');
+                var listEl=$('#plannerConfirmList');
+                if(!backdrop){
+                    if(window.confirm(options.message||options.title||'삭제하시겠습니까?')) onDelete();
+                    return;
+                }
+
                 plannerDeleteAction=onDelete;
-                if(titleEl) titleEl.textContent=title||'삭제하시겠습니까?';
-                if(msgEl) msgEl.textContent=message||'삭제한 내용은 현재 작성 화면에서 제거됩니다.';
-                backdrop.classList.add('is-open'); backdrop.setAttribute('aria-hidden','false');
-                var cancel=$('#plannerConfirmCancel'); if(cancel) cancel.focus();
+                if(titleEl) titleEl.textContent=options.title||'삭제';
+
+                if(msgEl){
+                    msgEl.innerHTML='';
+                    if(options.itemName){
+                        var strong=document.createElement('strong');
+                        strong.textContent='"'+options.itemName+'"';
+                        msgEl.appendChild(strong);
+                        msgEl.appendChild(document.createTextNode(' 일정을 삭제할까요?'));
+                    }else{
+                        msgEl.textContent=options.message||'삭제할까요?';
+                    }
+                }
+
+                if(listEl){
+                    listEl.innerHTML='';
+                    var items=options.items||[];
+                    listEl.classList.toggle('is-visible',items.length>0);
+                    items.forEach(function(item){
+                        var row=document.createElement('div');
+                        row.className='planner-confirm-list-item';
+
+                        var dot=document.createElement('span');
+                        dot.className='planner-confirm-list-dot';
+
+                        var name=document.createElement('span');
+                        name.className='planner-confirm-list-name';
+                        name.textContent=item.name||'제목 없음';
+
+                        row.appendChild(dot);
+                        row.appendChild(name);
+
+                        if(item.time){
+                            var time=document.createElement('span');
+                            time.className='planner-confirm-list-time';
+                            time.textContent=item.time;
+                            row.appendChild(time);
+                        }
+                        listEl.appendChild(row);
+                    });
+                }
+
+                if(warningEl) warningEl.textContent='삭제 후 되돌릴 수 없습니다.';
+
+                backdrop.classList.add('is-open');
+                backdrop.setAttribute('aria-hidden','false');
+                var cancel=$('#plannerConfirmCancel');
+                if(cancel) cancel.focus();
             }
             function closeDeleteModal(){
                 var backdrop=$('#plannerConfirmBackdrop'); if(backdrop){backdrop.classList.remove('is-open');backdrop.setAttribute('aria-hidden','true');}
@@ -1012,7 +1135,19 @@ request.setAttribute("activePage", "planner");
                 var body=$('[data-block-body]',card), toggle=$('[data-block-toggle]',card), del=$('.planner-block-delete',card), header=$('.planner-block-header',card), title=$('.planner-item-title',card), label=$('.planner-block-title-label',card), badge=$('.planner-block-type-badge',card);
                 if(toggle&&body) toggle.addEventListener('click',function(){var c=body.classList.toggle('is-collapsed');toggle.textContent=c?'⌄':'˄';toggle.title=c?'블록 펼치기':'블록 접기';toggle.setAttribute('aria-expanded',c?'false':'true')});
                 if(header&&body) header.addEventListener('click',function(e){ if(e.target.closest('button')) return; var c=body.classList.toggle('is-collapsed'); if(toggle){toggle.textContent=c?'⌄':'˄';toggle.title=c?'블록 펼치기':'블록 접기';toggle.setAttribute('aria-expanded',c?'false':'true');} });
-                if(del) del.addEventListener('click',function(e){ e.stopPropagation(); openDeleteModal('일정 블록을 삭제하시겠습니까?','이 블록의 입력 내용이 현재 작성 화면에서 제거됩니다.',function(){ card.remove(); syncBudget(); markDirty(); }); });
+                if(del) del.addEventListener('click',function(e){
+                    e.stopPropagation();
+                    var blockName=(label&&label.textContent?label.textContent.trim():'') || (title&&title.value?title.value.trim():'') || '제목 없음';
+                    openDeleteModal({
+                        title:'일정 삭제',
+                        itemName:blockName
+                    },function(){
+                        card.remove();
+                        updateDayDeleteButtons();
+                        syncBudget();
+                        markDirty();
+                    });
+                });
                 if(title) title.addEventListener('input',function(){ if(label)label.textContent=title.value||'제목 없음';markDirty(); });
                 $$('.planner-type-btn',card).forEach(function(btn){
                     if(btn.dataset.itemType===card.dataset.itemType) btn.classList.add('is-selected');
@@ -1034,20 +1169,30 @@ request.setAttribute("activePage", "planner");
                 }
             }
 
+            function updateDayDeleteButtons(){
+                var days=$$('.planner-day');
+                days.forEach(function(day){
+                    var del=$('.planner-day-delete',day);
+                    if(!del) return;
+                    var blockCount=$$('.planner-block-card,.planner-block-summary',day).length;
+                    var hidden=(days.length===1 && blockCount===0);
+                    del.style.display=hidden?'none':'';
+                    del.disabled=hidden;
+                    del.style.pointerEvents=hidden?'none':'';
+                    del.setAttribute('aria-hidden',hidden?'true':'false');
+                });
+            }
+
             function renumberDays(){
                 $$('.planner-day').forEach(function(day,i){
                     var oldNo=Number(day.dataset.dayNumber||i+1);
                     var newNo=i+1;
                     day.dataset.dayNumber=newNo;
+                    day.dataset.dayOrder=newNo;
                     var circle=day.querySelector('.planner-day-header > div:first-child');
-                    var title=day.querySelector('.planner-day-title');
                     if(circle) circle.textContent='D'+newNo;
-                    if(title){
-                        var current=(title.textContent||'').trim();
-                        if(!current || current==='Day '+oldNo || current==='Day'+oldNo) title.textContent='Day '+newNo;
-                    }
                 });
-                updateAddDayButton(); rebuildMapFilter();
+                updateAddDayButton(); rebuildMapFilter(); updateDayDeleteButtons();
             }
 
             function enableDayTitleEdit(day){
@@ -1085,16 +1230,101 @@ request.setAttribute("activePage", "planner");
                 }
             }
 
+            var draggedPlannerDay=null;
+
+            function clearDayDragState(){
+                $$('.planner-day').forEach(function(d){
+                    d.classList.remove('is-day-dragging','is-day-drag-over');
+                });
+            }
+
             function setupDay(day){
                 if(day.dataset.dayReady==='1') return; day.dataset.dayReady='1';
                 var h=$('.planner-day-header',day), b=$('.planner-day-body',day), del=$('.planner-day-delete',day);
+                if(h){
+                    h.setAttribute('draggable','true');
+                    h.title=h.title||'드래그하여 DAY 순서 변경';
+
+                    h.addEventListener('dragstart',function(e){
+                        if(e.target.closest('.planner-day-delete') ||
+                           e.target.closest('.planner-day-title') ||
+                           e.target.closest('.planner-day-edit-icon') ||
+                           e.target.closest('input,button,a,textarea,select')){
+                            e.preventDefault();
+                            return;
+                        }
+                        draggedPlannerDay=day;
+                        day.classList.add('is-day-dragging');
+                        if(e.dataTransfer){
+                            e.dataTransfer.effectAllowed='move';
+                            e.dataTransfer.setData('text/plain','planner-day');
+                        }
+                    });
+
+                    h.addEventListener('dragend',function(){
+                        draggedPlannerDay=null;
+                        clearDayDragState();
+                        renumberDays();
+                        markDirty();
+                    });
+
+                    day.addEventListener('dragover',function(e){
+                        if(!draggedPlannerDay || draggedPlannerDay===day) return;
+                        e.preventDefault();
+                        if(e.dataTransfer) e.dataTransfer.dropEffect='move';
+
+                        $$('.planner-day').forEach(function(d){d.classList.remove('is-day-drag-over');});
+                        day.classList.add('is-day-drag-over');
+
+                        var rect=day.getBoundingClientRect();
+                        var before=e.clientY < rect.top + rect.height/2;
+                        var parent=day.parentNode;
+                        if(before){
+                            if(draggedPlannerDay!==day.previousElementSibling){
+                                parent.insertBefore(draggedPlannerDay,day);
+                                renumberDays();
+                            }
+                        }else{
+                            var next=day.nextElementSibling;
+                            if(next!==draggedPlannerDay){
+                                parent.insertBefore(draggedPlannerDay,next);
+                                renumberDays();
+                            }
+                        }
+                    });
+
+                    day.addEventListener('drop',function(e){
+                        if(!draggedPlannerDay) return;
+                        e.preventDefault();
+                        clearDayDragState();
+                        draggedPlannerDay=null;
+                        renumberDays();
+                        markDirty();
+                    });
+                }
                 if(h&&b) h.addEventListener('click',function(e){ if(e.target.closest('.planner-day-delete') || e.target.closest('.planner-day-title') || e.target.closest('.planner-day-edit-icon'))return; b.classList.toggle('is-collapsed'); });
                 enableDayTitleEdit(day);
                 if(del) del.addEventListener('click',function(e){
                     e.stopPropagation();
                     var days=$$('.planner-day');
+                    var currentBlockCount=$$('.planner-block-card,.planner-block-summary',day).length;
+                    if(days.length===1 && currentBlockCount===0) return;
                     var dayNo=day.dataset.dayNumber||'';
-                    openDeleteModal('D'+dayNo+'을 삭제하시겠습니까?', days.length<=1 ? '마지막 DAY는 유지되고, 안에 작성한 일정 블록만 모두 삭제됩니다.' : '이 DAY와 안에 작성한 일정 블록이 현재 작성 화면에서 제거됩니다.', function(){
+                    var childItems=$$('.planner-block-card',day).map(function(card){
+                        var nameEl=$('.planner-block-title-label',card);
+                        var timeEl=$('.planner-item-start-time',card);
+                        return {
+                            name:(nameEl&&nameEl.textContent?nameEl.textContent.trim():'') || '제목 없음',
+                            time:(timeEl&&timeEl.value?timeEl.value:'')
+                        };
+                    });
+                    openDeleteModal({
+                        title:'Day '+dayNo+' 삭제',
+                        message:childItems.length>0
+                            ? '하위 일정 '+childItems.length+'개도 함께 삭제됩니다.'
+                            : (days.length<=1 ? '마지막 DAY의 일정 블록을 모두 삭제할까요?' : '이 날 블록을 삭제할까요?'),
+                        items:childItems
+                    }, function(){
                         if(days.length<=1){ $$('.planner-block-card,.planner-block-summary',day).forEach(function(x){x.remove()}); ensureDayControls(day); }
                         else day.remove();
                         renumberDays(); syncBudget(); markDirty();
@@ -1129,6 +1359,310 @@ request.setAttribute("activePage", "planner");
             function bindMapOptions(){ $$('#plannerMapFilterMenu [data-map-day]').forEach(function(b){ b.onclick=function(){ $('#plannerMapFilterLabel').textContent=b.dataset.mapDay==='all'?'전체':b.dataset.mapDay+'일차'; $('#plannerMapFilterMenu').classList.add('hidden'); refreshMap(b.dataset.mapDay); }; }); }
             var mf=$('#plannerMapFilterBtn'); if(mf) mf.addEventListener('click',function(e){e.stopPropagation();$('#plannerMapFilterMenu').classList.toggle('hidden')}); document.addEventListener('click',function(e){var m=$('#plannerMapFilterMenu');if(m&&!e.target.closest('#plannerMapFilterBtn')&&!e.target.closest('#plannerMapFilterMenu'))m.classList.add('hidden')}); bindMapOptions();
 
+            var PLANNER_COUNTRIES=[{"code": "GH", "name": "가나"}, {"code": "GA", "name": "가봉"}, {"code": "GY", "name": "가이아나"}, {"code": "GM", "name": "감비아"}, {"code": "GG", "name": "건지"}, {"code": "GP", "name": "과들루프"}, {"code": "GT", "name": "과테말라"}, {"code": "GU", "name": "괌"}, {"code": "GD", "name": "그레나다"}, {"code": "GR", "name": "그리스"}, {"code": "GL", "name": "그린란드"}, {"code": "GN", "name": "기니"}, {"code": "GW", "name": "기니비사우"}, {"code": "NA", "name": "나미비아"}, {"code": "NR", "name": "나우루"}, {"code": "NG", "name": "나이지리아"}, {"code": "AQ", "name": "남극 대륙"}, {"code": "SS", "name": "남수단"}, {"code": "ZA", "name": "남아프리카"}, {"code": "NL", "name": "네덜란드"}, {"code": "BQ", "name": "네덜란드령 카리브"}, {"code": "NP", "name": "네팔"}, {"code": "NO", "name": "노르웨이"}, {"code": "NF", "name": "노퍽섬"}, {"code": "NZ", "name": "뉴질랜드"}, {"code": "NC", "name": "뉴칼레도니아"}, {"code": "NU", "name": "니우에"}, {"code": "NE", "name": "니제르"}, {"code": "NI", "name": "니카라과"}, {"code": "TW", "name": "대만"}, {"code": "KR", "name": "대한민국"}, {"code": "DK", "name": "덴마크"}, {"code": "DM", "name": "도미니카"}, {"code": "DO", "name": "도미니카 공화국"}, {"code": "DE", "name": "독일"}, {"code": "TL", "name": "동티모르"}, {"code": "LA", "name": "라오스"}, {"code": "LR", "name": "라이베리아"}, {"code": "LV", "name": "라트비아"}, {"code": "RU", "name": "러시아"}, {"code": "LB", "name": "레바논"}, {"code": "LS", "name": "레소토"}, {"code": "RE", "name": "레위니옹"}, {"code": "RO", "name": "루마니아"}, {"code": "LU", "name": "룩셈부르크"}, {"code": "RW", "name": "르완다"}, {"code": "LY", "name": "리비아"}, {"code": "LT", "name": "리투아니아"}, {"code": "LI", "name": "리히텐슈타인"}, {"code": "MG", "name": "마다가스카르"}, {"code": "MQ", "name": "마르티니크"}, {"code": "MH", "name": "마셜 제도"}, {"code": "YT", "name": "마요트"}, {"code": "MO", "name": "마카오(중국 특별행정구)"}, {"code": "MW", "name": "말라위"}, {"code": "MY", "name": "말레이시아"}, {"code": "ML", "name": "말리"}, {"code": "IM", "name": "맨섬"}, {"code": "MX", "name": "멕시코"}, {"code": "MC", "name": "모나코"}, {"code": "MA", "name": "모로코"}, {"code": "MU", "name": "모리셔스"}, {"code": "MR", "name": "모리타니"}, {"code": "MZ", "name": "모잠비크"}, {"code": "ME", "name": "몬테네그로"}, {"code": "MS", "name": "몬트세라트"}, {"code": "MD", "name": "몰도바"}, {"code": "MV", "name": "몰디브"}, {"code": "MT", "name": "몰타"}, {"code": "MN", "name": "몽골"}, {"code": "US", "name": "미국"}, {"code": "VI", "name": "미국령 버진아일랜드"}, {"code": "UM", "name": "미국령 해외 제도"}, {"code": "MM", "name": "미얀마"}, {"code": "FM", "name": "미크로네시아"}, {"code": "VU", "name": "바누아투"}, {"code": "BH", "name": "바레인"}, {"code": "BB", "name": "바베이도스"}, {"code": "VA", "name": "바티칸 시국"}, {"code": "BS", "name": "바하마"}, {"code": "BD", "name": "방글라데시"}, {"code": "BM", "name": "버뮤다"}, {"code": "BJ", "name": "베냉"}, {"code": "VE", "name": "베네수엘라"}, {"code": "VN", "name": "베트남"}, {"code": "BE", "name": "벨기에"}, {"code": "BY", "name": "벨라루스"}, {"code": "BZ", "name": "벨리즈"}, {"code": "BA", "name": "보스니아 헤르체고비나"}, {"code": "BW", "name": "보츠와나"}, {"code": "BO", "name": "볼리비아"}, {"code": "BI", "name": "부룬디"}, {"code": "BF", "name": "부르키나파소"}, {"code": "BV", "name": "부베섬"}, {"code": "BT", "name": "부탄"}, {"code": "MP", "name": "북마리아나제도"}, {"code": "MK", "name": "북마케도니아"}, {"code": "KP", "name": "북한"}, {"code": "BG", "name": "불가리아"}, {"code": "BR", "name": "브라질"}, {"code": "BN", "name": "브루나이"}, {"code": "WS", "name": "사모아"}, {"code": "SA", "name": "사우디아라비아"}, {"code": "GS", "name": "사우스조지아 사우스샌드위치 제도"}, {"code": "SM", "name": "산마리노"}, {"code": "ST", "name": "상투메 프린시페"}, {"code": "MF", "name": "생마르탱"}, {"code": "BL", "name": "생바르텔레미"}, {"code": "PM", "name": "생피에르 미클롱"}, {"code": "EH", "name": "서사하라"}, {"code": "SN", "name": "세네갈"}, {"code": "RS", "name": "세르비아"}, {"code": "SC", "name": "세이셸"}, {"code": "LC", "name": "세인트루시아"}, {"code": "VC", "name": "세인트빈센트그레나딘"}, {"code": "KN", "name": "세인트키츠 네비스"}, {"code": "SH", "name": "세인트헬레나"}, {"code": "SO", "name": "소말리아"}, {"code": "SB", "name": "솔로몬 제도"}, {"code": "SD", "name": "수단"}, {"code": "SR", "name": "수리남"}, {"code": "LK", "name": "스리랑카"}, {"code": "SJ", "name": "스발바르제도-얀마웬섬"}, {"code": "SE", "name": "스웨덴"}, {"code": "CH", "name": "스위스"}, {"code": "ES", "name": "스페인"}, {"code": "SK", "name": "슬로바키아"}, {"code": "SI", "name": "슬로베니아"}, {"code": "SY", "name": "시리아"}, {"code": "SL", "name": "시에라리온"}, {"code": "SX", "name": "신트마르턴"}, {"code": "SG", "name": "싱가포르"}, {"code": "AE", "name": "아랍에미리트"}, {"code": "AW", "name": "아루바"}, {"code": "AM", "name": "아르메니아"}, {"code": "AR", "name": "아르헨티나"}, {"code": "AS", "name": "아메리칸 사모아"}, {"code": "IS", "name": "아이슬란드"}, {"code": "HT", "name": "아이티"}, {"code": "IE", "name": "아일랜드"}, {"code": "AZ", "name": "아제르바이잔"}, {"code": "AF", "name": "아프가니스탄"}, {"code": "AD", "name": "안도라"}, {"code": "AL", "name": "알바니아"}, {"code": "DZ", "name": "알제리"}, {"code": "AO", "name": "앙골라"}, {"code": "AG", "name": "앤티가 바부다"}, {"code": "AI", "name": "앵귈라"}, {"code": "ER", "name": "에리트리아"}, {"code": "SZ", "name": "에스와티니"}, {"code": "EE", "name": "에스토니아"}, {"code": "EC", "name": "에콰도르"}, {"code": "ET", "name": "에티오피아"}, {"code": "SV", "name": "엘살바도르"}, {"code": "GB", "name": "영국"}, {"code": "VG", "name": "영국령 버진아일랜드"}, {"code": "IO", "name": "영국령 인도양 지역"}, {"code": "YE", "name": "예멘"}, {"code": "OM", "name": "오만"}, {"code": "AU", "name": "오스트레일리아"}, {"code": "AT", "name": "오스트리아"}, {"code": "HN", "name": "온두라스"}, {"code": "AX", "name": "올란드 제도"}, {"code": "WF", "name": "왈리스-푸투나 제도"}, {"code": "JO", "name": "요르단"}, {"code": "UG", "name": "우간다"}, {"code": "UY", "name": "우루과이"}, {"code": "UZ", "name": "우즈베키스탄"}, {"code": "UA", "name": "우크라이나"}, {"code": "IQ", "name": "이라크"}, {"code": "IR", "name": "이란"}, {"code": "IL", "name": "이스라엘"}, {"code": "EG", "name": "이집트"}, {"code": "IT", "name": "이탈리아"}, {"code": "IN", "name": "인도"}, {"code": "ID", "name": "인도네시아"}, {"code": "JP", "name": "일본"}, {"code": "JM", "name": "자메이카"}, {"code": "ZM", "name": "잠비아"}, {"code": "JE", "name": "저지"}, {"code": "GQ", "name": "적도 기니"}, {"code": "GE", "name": "조지아"}, {"code": "CN", "name": "중국"}, {"code": "CF", "name": "중앙 아프리카 공화국"}, {"code": "DJ", "name": "지부티"}, {"code": "GI", "name": "지브롤터"}, {"code": "ZW", "name": "짐바브웨"}, {"code": "TD", "name": "차드"}, {"code": "CZ", "name": "체코"}, {"code": "CL", "name": "칠레"}, {"code": "CM", "name": "카메룬"}, {"code": "CV", "name": "카보베르데"}, {"code": "KZ", "name": "카자흐스탄"}, {"code": "QA", "name": "카타르"}, {"code": "KH", "name": "캄보디아"}, {"code": "CA", "name": "캐나다"}, {"code": "KE", "name": "케냐"}, {"code": "KY", "name": "케이맨 제도"}, {"code": "KM", "name": "코모로"}, {"code": "CR", "name": "코스타리카"}, {"code": "CC", "name": "코코스 제도"}, {"code": "CI", "name": "코트디부아르"}, {"code": "CO", "name": "콜롬비아"}, {"code": "CG", "name": "콩고-브라자빌"}, {"code": "CD", "name": "콩고-킨샤사"}, {"code": "CU", "name": "쿠바"}, {"code": "KW", "name": "쿠웨이트"}, {"code": "CK", "name": "쿡 제도"}, {"code": "CW", "name": "퀴라소"}, {"code": "HR", "name": "크로아티아"}, {"code": "CX", "name": "크리스마스섬"}, {"code": "KG", "name": "키르기스스탄"}, {"code": "KI", "name": "키리바시"}, {"code": "CY", "name": "키프로스"}, {"code": "TJ", "name": "타지키스탄"}, {"code": "TZ", "name": "탄자니아"}, {"code": "TH", "name": "태국"}, {"code": "TC", "name": "터크스 케이커스 제도"}, {"code": "TG", "name": "토고"}, {"code": "TK", "name": "토켈라우"}, {"code": "TO", "name": "통가"}, {"code": "TM", "name": "투르크메니스탄"}, {"code": "TV", "name": "투발루"}, {"code": "TN", "name": "튀니지"}, {"code": "TR", "name": "튀르키예"}, {"code": "TT", "name": "트리니다드 토바고"}, {"code": "PA", "name": "파나마"}, {"code": "PY", "name": "파라과이"}, {"code": "PK", "name": "파키스탄"}, {"code": "PG", "name": "파푸아뉴기니"}, {"code": "PW", "name": "팔라우"}, {"code": "PS", "name": "팔레스타인 지구"}, {"code": "FO", "name": "페로 제도"}, {"code": "PE", "name": "페루"}, {"code": "PT", "name": "포르투갈"}, {"code": "FK", "name": "포클랜드 제도"}, {"code": "PL", "name": "폴란드"}, {"code": "PR", "name": "푸에르토리코"}, {"code": "FR", "name": "프랑스"}, {"code": "GF", "name": "프랑스령 기아나"}, {"code": "TF", "name": "프랑스령 남방 지역"}, {"code": "PF", "name": "프랑스령 폴리네시아"}, {"code": "FJ", "name": "피지"}, {"code": "FI", "name": "핀란드"}, {"code": "PH", "name": "필리핀"}, {"code": "PN", "name": "핏케언 제도"}, {"code": "HM", "name": "허드 맥도널드 제도"}, {"code": "HU", "name": "헝가리"}, {"code": "HK", "name": "홍콩(중국 특별행정구)"}];
+            var PLANNER_REGION_MAP={"대한민국": ["서울", "부산", "인천", "대구", "대전", "광주", "울산", "경기", "강원", "충북", "충남", "전북", "전남", "경북", "경남", "제주"], "일본": ["도쿄", "오사카", "교토", "후쿠오카", "삿포로", "나고야", "오키나와", "나라", "고베", "요코하마"], "중국": ["베이징", "상하이", "광저우", "선전", "칭다오", "청두", "시안", "항저우"], "대만": ["타이베이", "가오슝", "타이중", "타이난", "화롄"], "태국": ["방콕", "치앙마이", "푸껫", "파타야", "끄라비"], "베트남": ["하노이", "호찌민", "다낭", "나트랑", "호이안", "푸꾸옥"], "미국": ["뉴욕", "로스앤젤레스", "샌프란시스코", "라스베이거스", "시애틀", "시카고", "보스턴", "하와이"], "프랑스": ["파리", "니스", "리옹", "마르세유", "보르도"], "이탈리아": ["로마", "밀라노", "피렌체", "베네치아", "나폴리"], "스페인": ["마드리드", "바르셀로나", "세비야", "발렌시아"], "영국": ["런던", "에든버러", "맨체스터", "리버풀"], "독일": ["베를린", "뮌헨", "프랑크푸르트", "함부르크"], "싱가포르": ["싱가포르"], "말레이시아": ["쿠알라룸푸르", "코타키나발루", "페낭", "말라카"], "인도네시아": ["발리", "자카르타", "욕야카르타", "롬복"], "필리핀": ["마닐라", "세부", "보라카이", "보홀"], "호주": ["시드니", "멜버른", "브리즈번", "골드코스트", "퍼스"], "캐나다": ["밴쿠버", "토론토", "몬트리올", "퀘벡"]};
+
+            function normalizePlannerText(v){ return String(v||'').trim(); }
+            function findPlannerCountry(name){
+                var n=normalizePlannerText(name);
+                return PLANNER_COUNTRIES.find(function(c){ return c.name===n; }) || null;
+            }
+            function refreshCountryStatus(){
+                var input=$('#plannerCountry');
+                var field=$('#plannerCountryField');
+                var status=$('#plannerCountryStatus');
+                if(!input || !field || !status) return false;
+
+                var value=normalizePlannerText(input.value);
+                var matched=findPlannerCountry(value);
+
+                if(!value){
+                    status.textContent='필수';
+                    field.style.borderColor='#FCA5A5';
+                }else if(!matched){
+                    status.textContent='일치하는 국가가 없습니다';
+                    field.style.borderColor='#FCA5A5';
+                }else{
+                    status.textContent='';
+                    field.style.borderColor='#E2E5EF';
+                }
+                return !!matched;
+            }
+            function searchPlannerCountries(value){
+                var q=normalizePlannerText(value);
+                var qLower=q.toLowerCase();
+
+                if(!q) return PLANNER_COUNTRIES;
+
+                return PLANNER_COUNTRIES
+                    .map(function(c){
+                        var name=c.name||'';
+                        var nameLower=name.toLowerCase();
+                        var codeLower=(c.code||'').toLowerCase();
+                        var rank=99;
+
+                        if(nameLower===qLower || codeLower===qLower){
+                            rank=0; // 완전 일치
+                        }else if(nameLower.indexOf(qLower)===0 || codeLower.indexOf(qLower)===0){
+                            rank=1; // 입력값으로 시작
+                        }else if(nameLower.indexOf(qLower)!==-1 || codeLower.indexOf(qLower)!==-1){
+                            rank=2; // 중간 포함
+                        }
+
+                        return { country:c, rank:rank };
+                    })
+                    .filter(function(item){ return item.rank<99; })
+                    .sort(function(a,b){
+                        if(a.rank!==b.rank) return a.rank-b.rank;
+
+                        var aName=a.country.name||'';
+                        var bName=b.country.name||'';
+
+                        // 같은 우선순위에서는 짧고 직접적인 이름을 먼저
+                        if(aName.length!==bName.length) return aName.length-bName.length;
+                        return aName.localeCompare(bName,'ko');
+                    })
+                    .slice(0,8)
+                    .map(function(item){ return item.country; });
+            }
+            function closePlannerDropdowns(exceptId){
+                ['plannerCountryDropdown','plannerRegionDropdown'].forEach(function(id){
+                    if(id===exceptId) return;
+                    var el=document.getElementById(id);
+                    if(el) el.classList.add('hidden');
+                });
+            }
+            function renderCountryDropdown(){
+                var input=$('#plannerCountry');
+                var dropdown=$('#plannerCountryDropdown');
+                if(!input || !dropdown) return;
+
+                var suggestions=searchPlannerCountries(input.value);
+                dropdown.innerHTML='';
+
+                suggestions.forEach(function(c){
+                    var btn=document.createElement('button');
+                    btn.type='button';
+                    btn.className='flex items-center gap-2 px-3 py-2.5 text-sm min-w-0 whitespace-nowrap';
+
+                    var code=document.createElement('span');
+                    code.className='text-[11px] font-semibold text-gray-500 w-6 shrink-0';
+                    code.textContent=c.code;
+
+                    var name=document.createElement('span');
+                    name.className='font-medium text-gray-800 min-w-0 whitespace-nowrap';
+                    name.textContent=c.name;
+
+                    btn.appendChild(code);
+                    btn.appendChild(name);
+
+                    btn.addEventListener('mousedown',function(e){
+                        e.preventDefault();
+                        input.value=c.name;
+                        dropdown.classList.add('hidden');
+                        refreshCountryStatus();
+                        refreshRegionOptions(true);
+                        syncCountryLock();
+                        updateCountryClear();
+                        markDirty();
+                    });
+
+                    dropdown.appendChild(btn);
+                });
+
+                dropdown.classList.toggle('hidden',suggestions.length===0);
+            }
+            function updateCountryClear(){
+                var input=$('#plannerCountry');
+                var btn=$('#plannerCountryClear');
+                if(btn) btn.classList.toggle('hidden',!(input && input.value));
+            }
+            function updateRegionClear(){
+                var input=$('#plannerRegion');
+                var btn=$('#plannerRegionClear');
+                if(btn) btn.classList.toggle('hidden',!(input && input.value));
+            }
+            function refreshRegionOptions(clearValue){
+                var country=$('#plannerCountry');
+                var region=$('#plannerRegion');
+                var dropdown=$('#plannerRegionDropdown');
+                if(!country || !region || !dropdown) return;
+
+                var matched=findPlannerCountry(country.value);
+                dropdown.innerHTML='';
+
+                if(clearValue) region.value='';
+
+                if(!matched){
+                    region.disabled=true;
+                    region.placeholder='국가 먼저 입력';
+                    region.value='';
+                    dropdown.classList.add('hidden');
+                    updateRegionClear();
+                    return;
+                }
+
+                var options=PLANNER_REGION_MAP[matched.name]||[];
+                region.disabled=options.length===0;
+                region.placeholder=options.length ? '선택' : '지역 정보 없음';
+
+                if(!options.length){
+                    dropdown.classList.add('hidden');
+                    updateRegionClear();
+                    return;
+                }
+
+                renderRegionDropdown();
+                dropdown.classList.add('hidden');
+                updateRegionClear();
+            }
+            function renderRegionDropdown(){
+                var country=$('#plannerCountry');
+                var region=$('#plannerRegion');
+                var dropdown=$('#plannerRegionDropdown');
+                if(!country || !region || !dropdown) return;
+
+                var matched=findPlannerCountry(country.value);
+                var options=matched ? (PLANNER_REGION_MAP[matched.name]||[]) : [];
+                var q=normalizePlannerText(region.value);
+                var filtered=options.filter(function(r){ return !q || r.indexOf(q)!==-1; });
+
+                dropdown.innerHTML='';
+                filtered.forEach(function(r){
+                    var btn=document.createElement('button');
+                    btn.type='button';
+                    btn.className='px-3 py-2 text-sm font-medium text-gray-800';
+                    btn.textContent=r;
+                    btn.addEventListener('mousedown',function(e){
+                        e.preventDefault();
+                        region.value=r;
+                        dropdown.classList.add('hidden');
+                        updateRegionClear();
+                        markDirty();
+                    });
+                    dropdown.appendChild(btn);
+                });
+                dropdown.classList.toggle('hidden',filtered.length===0);
+            }
+
+            function showRequiredFieldsModal(items){
+                var backdrop=$('#plannerRequiredBackdrop');
+                var list=$('#plannerRequiredList');
+                if(!backdrop || !list) return;
+                list.innerHTML='';
+                items.forEach(function(item){
+                    var li=document.createElement('li');
+                    li.textContent=item;
+                    list.appendChild(li);
+                });
+                backdrop.classList.add('is-open');
+                backdrop.setAttribute('aria-hidden','false');
+                var close=$('#plannerRequiredClose');
+                if(close) close.focus();
+            }
+            function closeRequiredFieldsModal(){
+                var backdrop=$('#plannerRequiredBackdrop');
+                if(!backdrop) return;
+                backdrop.classList.remove('is-open');
+                backdrop.setAttribute('aria-hidden','true');
+            }
+            function validatePlannerRequiredFields(){
+                var missing=[];
+                var title=$('#tripTitle');
+                var country=$('#plannerCountry');
+
+                if(!title || !normalizePlannerText(title.value)) missing.push('여행 제목');
+
+                if(!country || !normalizePlannerText(country.value)){
+                    missing.push('국가');
+                    refreshCountryStatus();
+                }else if(!findPlannerCountry(country.value)){
+                    missing.push('일치하는 국가 선택');
+                    refreshCountryStatus();
+                }
+
+                if(missing.length){
+                    showRequiredFieldsModal(missing);
+                    return false;
+                }
+                return true;
+            }
+
+            var plannerCountryInput=$('#plannerCountry');
+            var plannerCountryClear=$('#plannerCountryClear');
+            var plannerCountryDropdown=$('#plannerCountryDropdown');
+            var plannerRegionInput=$('#plannerRegion');
+            var plannerRegionClear=$('#plannerRegionClear');
+            var plannerRegionDropdown=$('#plannerRegionDropdown');
+
+            if(plannerCountryInput){
+                plannerCountryInput.addEventListener('input',function(){
+                    refreshCountryStatus();
+                    refreshRegionOptions(true);
+                    syncCountryLock();
+                    updateCountryClear();
+                    closePlannerDropdowns('plannerCountryDropdown');
+                    renderCountryDropdown();
+                });
+                plannerCountryInput.addEventListener('focus',function(){
+                    closePlannerDropdowns('plannerCountryDropdown');
+                    renderCountryDropdown();
+                });
+                plannerCountryInput.addEventListener('change',function(){
+                    refreshCountryStatus();
+                    refreshRegionOptions(false);
+                    syncCountryLock();
+                    updateCountryClear();
+                });
+            }
+            if(plannerCountryClear){
+                plannerCountryClear.addEventListener('click',function(){
+                    plannerCountryInput.value='';
+                    refreshCountryStatus();
+                    refreshRegionOptions(true);
+                    syncCountryLock();
+                    updateCountryClear();
+                    plannerCountryDropdown.classList.add('hidden');
+                    plannerCountryInput.focus();
+                    markDirty();
+                });
+            }
+            if(plannerRegionInput){
+                plannerRegionInput.addEventListener('input',function(){
+                    updateRegionClear();
+                    closePlannerDropdowns('plannerRegionDropdown');
+                    renderRegionDropdown();
+                });
+                plannerRegionInput.addEventListener('focus',function(){
+                    if(!plannerRegionInput.disabled){
+                        closePlannerDropdowns('plannerRegionDropdown');
+                        renderRegionDropdown();
+                    }
+                });
+            }
+            if(plannerRegionClear){
+                plannerRegionClear.addEventListener('click',function(){
+                    plannerRegionInput.value='';
+                    updateRegionClear();
+                    renderRegionDropdown();
+                    plannerRegionInput.focus();
+                    markDirty();
+                });
+            }
+
+            document.addEventListener('mousedown',function(e){
+                if(!e.target.closest('#plannerCountryCombo') && plannerCountryDropdown){
+                    plannerCountryDropdown.classList.add('hidden');
+                }
+                if(!e.target.closest('#plannerRegionCombo') && plannerRegionDropdown){
+                    plannerRegionDropdown.classList.add('hidden');
+                }
+            });
+
+            var plannerItineraryId=new URLSearchParams(window.location.search).get('itineraryId');
+            var plannerSaveLabel=$('#plannerSaveLabel');
+            if(plannerSaveLabel) plannerSaveLabel.textContent=plannerItineraryId?'수정하기':'저장하기';
+
             function collectDraft(){ return {tripTitle:$('#tripTitle')?.value||'',country:$('#plannerCountry')?.value||'',region:$('#plannerRegion')?.value||'',travelerCount:$('#plannerTravelerCount')?.value||'1',startDate:startDate?.value||'',endDate:endDate?.value||'',visibility:visibility?.dataset.visibility||'PUBLIC',savedAt:new Date().toISOString()}; }
             function restoreDraft(){
                 try{
@@ -1144,7 +1678,13 @@ request.setAttribute("activePage", "planner");
                     dirty=false;
                 }catch(e){ sessionStorage.removeItem(DRAFT_KEY); }
             }
-            var save=$('#plannerSaveBtn'); if(save) save.addEventListener('click',function(){ sessionStorage.setItem(DRAFT_KEY,JSON.stringify(collectDraft())); dirty=false; toast('일정 내용이 임시 저장되었습니다.'); });
+            var save=$('#plannerSaveBtn');
+            if(save) save.addEventListener('click',function(){
+                if(!validatePlannerRequiredFields()) return;
+                sessionStorage.setItem(DRAFT_KEY,JSON.stringify(collectDraft()));
+                dirty=false;
+                toast(plannerItineraryId?'수정할 일정 데이터가 준비되었습니다.':'저장할 일정 데이터가 준비되었습니다.');
+            });
             ['#tripTitle','#plannerCountry','#plannerRegion','#plannerTravelerCount'].forEach(function(sel){var el=$(sel);if(el)el.addEventListener('input',markDirty)});
             var travelerCountInput=$('#plannerTravelerCount');
             if(travelerCountInput){
@@ -1157,9 +1697,9 @@ request.setAttribute("activePage", "planner");
             }
 
             function syncCountryLock(){
-                var country=$('#plannerCountry'), center=$('#plannerCenterPanel');
+                var center=$('#plannerCenterPanel');
                 if(!center) return;
-                var locked=!(country && country.value.trim());
+                var locked=!findPlannerCountry($('#plannerCountry') ? $('#plannerCountry').value : '');
                 center.classList.toggle('is-country-locked',locked);
                 center.setAttribute('aria-disabled',locked?'true':'false');
             }
@@ -1169,6 +1709,10 @@ request.setAttribute("activePage", "planner");
                 countryInput.addEventListener('change',syncCountryLock);
             }
             restoreDraft();
+            refreshCountryStatus();
+            refreshRegionOptions(false);
+            updateCountryClear();
+            updateRegionClear();
             syncCountryLock();
 
             function plannerMapQuery(){
@@ -1205,19 +1749,59 @@ request.setAttribute("activePage", "planner");
                 var el=$(sel);
                 if(el) el.addEventListener('change',function(){ if($('#plannerGoogleMap') && $('#plannerGoogleMap').dataset.fallback==='1') showPlannerMapFallback(true); });
             });
+            var plannerRequiredClose=$('#plannerRequiredClose');
+            var plannerRequiredBackdrop=$('#plannerRequiredBackdrop');
+            if(plannerRequiredClose) plannerRequiredClose.addEventListener('click',closeRequiredFieldsModal);
+            if(plannerRequiredBackdrop) plannerRequiredBackdrop.addEventListener('click',function(e){
+                if(e.target===plannerRequiredBackdrop) closeRequiredFieldsModal();
+            });
+            document.addEventListener('keydown',function(e){
+                if(e.key==='Escape' && plannerRequiredBackdrop && plannerRequiredBackdrop.classList.contains('is-open')){
+                    closeRequiredFieldsModal();
+                }
+            });
+
             window.setTimeout(function(){ if(!map) showPlannerMapFallback(); },1800);
         })();
     </script>
     <script async
         onerror="showPlannerMapFallback()" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB7ioaQS08aAzCl7gZPk6SyE1w7EeIrYhI&language=ko&loading=async&callback=initPlannerMap"></script>
 
+    <div id="plannerRequiredBackdrop" class="planner-required-backdrop" aria-hidden="true">
+        <div class="planner-required-modal" role="dialog" aria-modal="true" aria-labelledby="plannerRequiredTitle">
+            <div class="flex items-center gap-3">
+                <div class="planner-required-icon">!</div>
+                <div>
+                    <h3 id="plannerRequiredTitle" class="text-base font-bold text-gray-800">필수 항목을 확인해 주세요</h3>
+                    <p class="mt-1 text-xs text-gray-500">저장하기 전에 아래 항목을 입력하거나 수정해야 합니다.</p>
+                </div>
+            </div>
+            <ul id="plannerRequiredList" class="planner-required-list"></ul>
+            <button type="button" id="plannerRequiredClose"
+                class="mt-5 w-full h-10 rounded-xl text-sm font-bold text-white"
+                style="background:#6369D1">확인</button>
+        </div>
+    </div>
+
     <div id="plannerConfirmBackdrop" class="planner-confirm-backdrop" aria-hidden="true">
         <div class="planner-confirm-modal" role="dialog" aria-modal="true" aria-labelledby="plannerConfirmTitle">
-            <div class="planner-confirm-head">
-                <div class="planner-confirm-icon">!</div>
-                <div>
-                    <h3 id="plannerConfirmTitle" class="planner-confirm-title">삭제하시겠습니까?</h3>
-                    <p id="plannerConfirmMessage" class="planner-confirm-message">삭제한 내용은 현재 작성 화면에서 제거됩니다.</p>
+            <div class="planner-confirm-content">
+                <div class="planner-confirm-head">
+                    <div class="planner-confirm-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="3 6 5 6 21 6"></polyline>
+                            <path d="M19 6l-1 14H6L5 6"></path>
+                            <path d="M8 6V4h8v2"></path>
+                            <path d="M10 11v6M14 11v6"></path>
+                        </svg>
+                    </div>
+                    <h3 id="plannerConfirmTitle" class="planner-confirm-title">삭제</h3>
+                </div>
+                <div class="planner-confirm-body">
+                    <p id="plannerConfirmMessage" class="planner-confirm-message">삭제할까요?</p>
+                    <div id="plannerConfirmList" class="planner-confirm-list"></div>
+                    <p id="plannerConfirmWarning" class="planner-confirm-warning">삭제 후 되돌릴 수 없습니다.</p>
                 </div>
             </div>
             <div class="planner-confirm-actions">
