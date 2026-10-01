@@ -3,15 +3,15 @@
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="mapper.admin.adminActionLog">
-	<insert id="insertAdminActionLog" parameterType="adminActionLog" useGeneratedKeys="true" keyProperty="num">
-	
+	<insert id="insertAdminActionLog" parameterType="adminActionLog" useGeneratedKeys="true" keyProperty="actionId">
+
 	</insert>
-	
-	<select id="selectAdminActionLog" parameterType="Integer" resultType="adminActionLog">
+
+	<select id="selectAdminActionLog" parameterType="Long" resultType="adminActionLog">
 	
 	</select>
-	
-	<delete id="deleteAdminActionLog">
+
+	<delete id="deleteAdminActionLog" parameterType="Long">
 	
 	</delete>
 </mapper>

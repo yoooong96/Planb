@@ -97,14 +97,10 @@
         if (!paused) {
             // 오른쪽으로 조금씩 이동
             carousel.scrollLeft += 0.7;
-            // JSP의 data-loop-width 값 사용
-            const loopWidth =
-                Number(
-                    carousel.getAttribute(
-                        'data-loop-width'
-                    )
-                )
-                || carousel.scrollWidth / 2;
+            
+            /* 복제된 카드까지 포함한 전체 너비의 절반 */
+			const loopWidth =
+			    carousel.scrollWidth / 2;
 
             // 첫 번째 카드 묶음이 끝나면
             // 처음 위치로 이동
@@ -145,24 +141,7 @@ document
 		}
 	);
 });
-var scroll=document.querySelector('[data-scroll-popular]');
 
-if (scroll) {
-    scroll.addEventListener('click', function () {
-        var target = document.getElementById('popularPlans');
-
-        if (target) {
-            var targetPosition =
-                target.getBoundingClientRect().top
-                + window.pageYOffset;
-
-            window.scrollTo({
-                top: targetPosition - 130,
-                behavior: 'smooth'
-            });
-        }
-    });
-}
 
 /* 여행꿀팁 + 여행메이트 게시글/진행바 로테이션 */
 document.querySelectorAll('[data-rotate-group]').forEach(function (rotateGroup) {
@@ -507,15 +486,12 @@ document.querySelectorAll('[data-rotate-group]').forEach(function (rotateGroup) 
         /* 2번 - 인기 여행일정 */
         if (sectionIndex === 1) {
 
-            const targetPosition =
-                area2.getBoundingClientRect().top +
-                window.scrollY;
-
-            const offset =
-                window.innerHeight * 0.16;
-
-            return targetPosition - offset;
-        }
+		    const targetPosition =
+		        area2.getBoundingClientRect().top +
+		        window.pageYOffset;
+		
+		    return targetPosition - 130;
+		}
 
 
         /* 3번 */
@@ -631,6 +607,24 @@ document.querySelectorAll('[data-rotate-group]').forEach(function (rotateGroup) 
 
         moveToSection(2);
     });
+    
+    /* ========================================
+	   메인 배너 화살표 클릭
+	   - 2번 구역으로 이동
+	======================================== */
+	const heroArrow =
+	    document.querySelector('[data-scroll-popular]');
+	
+	if (heroArrow) {
+	
+	    heroArrow.addEventListener(
+	        'click',
+	        function () {
+	
+	            dot2.click();
+	        }
+	    );
+	}
 
 
     /* ========================================
