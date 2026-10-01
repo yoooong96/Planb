@@ -260,9 +260,23 @@ document.addEventListener("DOMContentLoaded", function () {
 	    });
 	
 	    // 닫히면 비밀번호 칸으로 포커스
-	    loginErrorModal.addEventListener('close', () => {
-	        document.getElementById('password')?.focus();
-	    });
+		if (loginErrorModal) {
+		
+		    loginErrorModal.addEventListener(
+		        'close',
+		        function () {
+		
+		            var passwordInput =
+		                document.getElementById('password');
+		
+		            if (passwordInput) {
+		                passwordInput.focus();
+		            }
+		
+		        }
+		    );
+		
+		}
 	}
 
 });
