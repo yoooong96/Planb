@@ -345,7 +345,7 @@ request.setAttribute("activePage", "planner");
                     </div>
 
                     <div class="grid gap-3 min-w-0"
-                        style="grid-template-columns: minmax(0, .78fr) minmax(0, .78fr) minmax(360px, 1.35fr)">
+                        style="grid-template-columns: minmax(0, .72fr) minmax(0, .72fr) minmax(0, .42fr) minmax(380px, 1.55fr)">
                         <div class="relative min-w-0 h-[50px] rounded-xl border bg-white flex items-center gap-3 px-3.5"
                             style="border-color: #FCA5A5">
                             <div class="w-8 h-8 rounded-lg shrink-0 flex items-center justify-center"
@@ -378,6 +378,36 @@ request.setAttribute("activePage", "planner");
                                 <span class="text-[10px] font-semibold text-gray-400 leading-none mb-1">지역 (선택)</span>
                                 <input class="outline-none text-sm text-gray-800 bg-transparent placeholder-gray-400 w-full min-w-0"
                                     id="plannerRegion" placeholder="선택" value="" autocomplete="off">
+                            </div>
+                        </div>
+
+                        <div class="relative min-w-0 h-[50px] rounded-xl border bg-white flex items-center gap-3 px-3.5"
+                            style="border-color: #E2E5EF">
+                            <div class="w-8 h-8 rounded-lg shrink-0 flex items-center justify-center"
+                                style="background: #F0EFFF; color: #6369D1">
+                                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                                    <circle cx="9" cy="7" r="4" />
+                                    <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+                                    <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                                </svg>
+                            </div>
+                            <div class="min-w-0 flex-1 flex flex-col justify-center">
+                                <span class="text-[10px] font-semibold text-gray-400 leading-none mb-1">여행 인원</span>
+                                <div class="flex items-center gap-1 min-w-0">
+                                    <input
+                                        id="plannerTravelerCount"
+                                        type="number"
+                                        min="1"
+                                        max="99"
+                                        step="1"
+                                        value="1"
+                                        inputmode="numeric"
+                                        class="outline-none text-sm text-gray-800 bg-transparent w-full min-w-0 border-none"
+                                        aria-label="여행 인원수">
+                                    <span class="text-xs text-gray-500 shrink-0">명</span>
+                                </div>
                             </div>
                         </div>
 
@@ -1099,13 +1129,14 @@ request.setAttribute("activePage", "planner");
             function bindMapOptions(){ $$('#plannerMapFilterMenu [data-map-day]').forEach(function(b){ b.onclick=function(){ $('#plannerMapFilterLabel').textContent=b.dataset.mapDay==='all'?'전체':b.dataset.mapDay+'일차'; $('#plannerMapFilterMenu').classList.add('hidden'); refreshMap(b.dataset.mapDay); }; }); }
             var mf=$('#plannerMapFilterBtn'); if(mf) mf.addEventListener('click',function(e){e.stopPropagation();$('#plannerMapFilterMenu').classList.toggle('hidden')}); document.addEventListener('click',function(e){var m=$('#plannerMapFilterMenu');if(m&&!e.target.closest('#plannerMapFilterBtn')&&!e.target.closest('#plannerMapFilterMenu'))m.classList.add('hidden')}); bindMapOptions();
 
-            function collectDraft(){ return {tripTitle:$('#tripTitle')?.value||'',country:$('#plannerCountry')?.value||'',region:$('#plannerRegion')?.value||'',startDate:startDate?.value||'',endDate:endDate?.value||'',visibility:visibility?.dataset.visibility||'PUBLIC',savedAt:new Date().toISOString()}; }
+            function collectDraft(){ return {tripTitle:$('#tripTitle')?.value||'',country:$('#plannerCountry')?.value||'',region:$('#plannerRegion')?.value||'',travelerCount:$('#plannerTravelerCount')?.value||'1',startDate:startDate?.value||'',endDate:endDate?.value||'',visibility:visibility?.dataset.visibility||'PUBLIC',savedAt:new Date().toISOString()}; }
             function restoreDraft(){
                 try{
                     var raw=sessionStorage.getItem(DRAFT_KEY); if(!raw)return; var d=JSON.parse(raw);
                     if($('#tripTitle')&&d.tripTitle!=null)$('#tripTitle').value=d.tripTitle;
                     if($('#plannerCountry')&&d.country!=null)$('#plannerCountry').value=d.country;
                     if($('#plannerRegion')&&d.region!=null)$('#plannerRegion').value=d.region;
+                    if($('#plannerTravelerCount')&&d.travelerCount!=null)$('#plannerTravelerCount').value=d.travelerCount;
                     if(startDate&&d.startDate!=null)startDate.value=d.startDate;
                     if(endDate&&d.endDate!=null)endDate.value=d.endDate;
                     syncDates();
@@ -1114,7 +1145,16 @@ request.setAttribute("activePage", "planner");
                 }catch(e){ sessionStorage.removeItem(DRAFT_KEY); }
             }
             var save=$('#plannerSaveBtn'); if(save) save.addEventListener('click',function(){ sessionStorage.setItem(DRAFT_KEY,JSON.stringify(collectDraft())); dirty=false; toast('일정 내용이 임시 저장되었습니다.'); });
-            ['#tripTitle','#plannerCountry','#plannerRegion'].forEach(function(sel){var el=$(sel);if(el)el.addEventListener('input',markDirty)});
+            ['#tripTitle','#plannerCountry','#plannerRegion','#plannerTravelerCount'].forEach(function(sel){var el=$(sel);if(el)el.addEventListener('input',markDirty)});
+            var travelerCountInput=$('#plannerTravelerCount');
+            if(travelerCountInput){
+                travelerCountInput.addEventListener('change',function(){
+                    var n=parseInt(travelerCountInput.value,10);
+                    if(!Number.isFinite(n) || n<1) n=1;
+                    if(n>99) n=99;
+                    travelerCountInput.value=String(n);
+                });
+            }
 
             function syncCountryLock(){
                 var country=$('#plannerCountry'), center=$('#plannerCenterPanel');
@@ -1168,7 +1208,7 @@ request.setAttribute("activePage", "planner");
             window.setTimeout(function(){ if(!map) showPlannerMapFallback(); },1800);
         })();
     </script>
-    <script asyncs
+    <script async
         onerror="showPlannerMapFallback()" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB7ioaQS08aAzCl7gZPk6SyE1w7EeIrYhI&language=ko&loading=async&callback=initPlannerMap"></script>
 
     <div id="plannerConfirmBackdrop" class="planner-confirm-backdrop" aria-hidden="true">
