@@ -64,4 +64,25 @@ public class UserServiceImpl implements UserService {
 		return false;
 	}
 
+	@Override
+	public boolean withdraw(long userId, String password) throws Exception {
+		String dbPassword = userDao.selectPasswordByUserId(userId);
+		
+		if(dbPassword == null) {
+			throw new Exception("회원정보를 찾을 수 없습니다.");
+		}
+		
+		if(!dbPassword.equals(password)) {
+			throw new Exception("비밀번호가 일치하지 않습니다.");
+		}
+		
+		int result = userDao.withdrawUser(userId);
+		
+		if(result == 0) {
+			throw new Exception("회원 탈퇴 처리에 실패했습니다.");
+		}
+		
+		return true;
+	}
+
 }

@@ -381,13 +381,13 @@ if (bookmarkCount == null) {
                 <div class="profile-bio-block">
 
 
-                    <% if (!name.isEmpty()) { %>
+                    <%-- <% if (!name.isEmpty()) { %>
 
                         <p>
                             <%=name%>
                         </p>
 
-                    <% } %>
+                    <% } %> --%>
 
 
                     <% if (!bio.isEmpty()) { %>

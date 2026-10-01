@@ -81,6 +81,57 @@
 	
 	</select>
 	
+	<select id="selectPasswordByUserId"
+			parameterType="long"
+			resultType="String">
+			
+			SELECT password
+			FROM TB_USER
+			WHERE user_id = #{value}
+				AND status='ACTIVE' 
+	
+	</select>
+	
+	<update id="withdrawUser"
+			parameterType="long">
+	
+		UPDATE TB_USER
+
+    SET
+        status = 'WITHDRAWN',
+
+        login_id =
+            CONCAT(
+                'withdrawn_',
+                user_id,
+                '_',
+                DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
+            ),
+
+        nickname =
+            CONCAT(
+                '탈퇴회원_',
+                user_id,
+                '_',
+                DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
+            ),
+
+        email =
+            CONCAT(
+                'withdrawn_',
+                user_id,
+                '_',
+                DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'),
+                '@deleted.local'
+            ),
+
+        updated_at = NOW()
+
+	    WHERE user_id = #{value}
+	      AND status = 'ACTIVE'	
+			
+	</update>
+	
 	<update id="updateUser" parameterType="user">
 	</update>
 	
