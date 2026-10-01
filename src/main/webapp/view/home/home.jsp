@@ -15,35 +15,29 @@ request.setAttribute("activePage", "home");
 </head>
 <body class="site-shell">
 	<jsp:include page="/common/header.jsp" />
-	<main
-		style="font-family: 'Plus Jakarta Sans', 'Noto Sans KR', sans-serif">
+	<main class="home-main">
 		<section class="home-hero relative flex flex-col items-center justify-center">
-			<div class="absolute inset-0 bg-cover bg-center"
-				style="background-image: url('https://images.unsplash.com/photo-1786049129855-3fdf58f32d72?crop=entropy&amp;cs=tinysrgb&amp;fit=max&amp;fm=jpg&amp;ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx5b3VuZyUyMHRyYXZlbGVycyUyMGFkdmVudHVyZSUyMGZyaWVuZHMlMjBtb3VudGFpbiUyMGdvbGRlbiUyMGhvdXJ8ZW58MXx8fHwxNzg5ODI5NTA4fDA&amp;ixlib=rb-4.1.0&amp;q=80&amp;w=1600')"></div>
-			<div class="absolute inset-0"
-				style="background: linear-gradient(to bottom, rgba(15, 10, 40, .55) 0%, rgba(15, 10, 40, .45) 50%, rgba(15, 10, 40, .65) 100%)"></div>
-			<div
-				class="relative z-10 flex flex-col items-center text-center px-4 w-full"
-				style="margin-top: -40px">
+			<div class="home-hero-bg absolute inset-0 bg-cover bg-center"></div>
+			<div class="home-hero-overlay absolute inset-0"></div>
+			<div class="home-hero-content relative z-10 flex flex-col items-center text-center px-4 w-full">
 				<div
-					class="inline-flex items-center gap-2 px-3 py-1 rounded-full mb-5 text-xs font-bold tracking-widest uppercase"
-					style="background-color: var(--brand-yellow); color: #1a1a2e">✈
-					Travel Plan Share</div>
-				<h1 class="text-white leading-tight mb-3"
-					style="font-family: 'Instrument Serif', Georgia, serif; font-style: italic; font-size: clamp(2.6rem, 5.5vw, 5rem); text-shadow: 0 2px 20px rgba(0, 0, 0, .4)">
-					Plan less.&nbsp;<span style="color: var(--brand-light)">Wander</span>
-					more.
+				    class="home-hero-badge inline-flex items-center gap-2 px-3 py-1 rounded-full mb-5 text-xs font-bold tracking-widest uppercase">
+				    ✈ Travel Plan Share
+				</div>
+				<h1 class="home-hero-title text-white leading-tight mb-3">
+				    Plan less.&nbsp;
+				    <span class="home-hero-title-highlight">Wander</span>
+				    more.
 				</h1>
-				<p class="text-white/80 text-sm md:text-base mb-8 font-medium"
-					style="text-shadow: 0 1px 8px rgba(0, 0, 0, .4)">
-					계획보다 중요한 건, <span class="text-white font-semibold">일단 떠나는 것</span>&nbsp;·&nbsp;실제로
-					다녀온 사람들의 진짜 이야기
+				<p class="home-hero-description text-white/80 text-sm md:text-base mb-8 font-medium">
+				    계획보다 중요한 건,
+				    <span class="text-white font-semibold">일단 떠나는 것</span>
+				    &nbsp;·&nbsp;실제로 다녀온 사람들의 진짜 이야기
 				</p>
 				<form
-					action="${pageContext.request.contextPath}/view/search/searchResult.jsp"
-					method="get"
-					class="w-full max-w-2xl rounded-full flex items-center px-5 py-3.5 gap-3 border border-white/30"
-					style="background-color: rgba(255, 255, 255, .18); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px)">
+				    action="${pageContext.request.contextPath}/view/search/searchResult.jsp"
+				    method="get"
+				    class="home-hero-search w-full max-w-2xl rounded-full flex items-center px-5 py-3.5 gap-3 border border-white/30">
 					<svg class="shrink-0 text-white/70" width="18" height="18"
 						viewBox="0 0 24 24" fill="none" stroke="currentColor"
 						stroke-width="2.2">
@@ -52,8 +46,8 @@ request.setAttribute("activePage", "home");
 					<input type="text" name="q" placeholder="여행지, 일정, 꿀팁 등 무엇이든 검색해보세요"
 						class="flex-1 text-sm text-white placeholder-white/60 outline-none bg-transparent">
 					<button type="submit"
-						class="shrink-0 w-9 h-9 rounded-full flex items-center justify-center text-white transition-all jsp-brand-hover"
-						style="background-color: var(--brand)" aria-label="검색">
+					    class="home-hero-search-btn shrink-0 w-9 h-9 rounded-full flex items-center justify-center text-white transition-all jsp-brand-hover"
+					    aria-label="검색">
 						<svg width="15" height="15" viewBox="0 0 24 24" fill="none"
 							stroke="white" stroke-width="2.5">
 							<circle cx="11" cy="11" r="8" />
@@ -72,20 +66,17 @@ request.setAttribute("activePage", "home");
 
 		<section id="popularPlans" class="mt-16">
 			<div class="text-center mb-8 px-4">
-				<p class="text-xs font-bold tracking-widest uppercase mb-2"
-					style="color: var(--brand)">Popular Travel Plans</p>
+				<p class="home-popular-eyebrow text-xs font-bold tracking-widest uppercase mb-2">Popular Travel Plans</p>
 				<h2 class="text-2xl md:text-3xl font-extrabold text-gray-900 mb-2">지금
 					가장 인기 있는 여행일정</h2>
 				<p class="text-sm text-gray-400">전 세계 여행자들이 사랑하는 특별한 일정을 만나보세요.</p>
 			</div>
-			<div class="flex gap-2 px-8" data-home-carousel
-				data-loop-width="2120"
-				style="scroll-behavior: auto; overflow: hidden; padding-top: 24px; padding-bottom: 24px">
+			<div class="home-popular-carousel flex gap-2 px-8" data-home-carousel
+				data-loop-width="2120">
 				<a
 					href="${pageContext.request.contextPath}/view/travel/scheduleDetail.jsp?id=9"
-					class="jsp-home-schedule-card shrink-0 bg-white rounded-2xl overflow-hidden cursor-pointer border"
-					style="width: 204px; position: relative; z-index: 1; border-color: #e5e7eb; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07); transform: scale(1); transition: transform .25s cubic-bezier(.22, 1, .36, 1), box-shadow .25s, border-color .2s, z-index 0s">
-					<div class="relative overflow-hidden" style="aspect-ratio: 4/3">
+					class="jsp-home-schedule-card home-popular-card shrink-0 bg-white rounded-2xl overflow-hidden cursor-pointer border">
+					<div class="home-popular-card-image relative overflow-hidden">
 						<img
 							src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=600&amp;h=400&amp;fit=crop"
 							alt="파리 5박 6일 예술 &amp; 낭만"
@@ -93,8 +84,7 @@ request.setAttribute("activePage", "home");
 						<div
 							class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
 						<span
-							class="absolute top-2 left-2 text-[10px] font-bold px-2 py-0.5 rounded-full text-white"
-							style="background-color: #6369D1">파리</span>
+							class="home-popular-location absolute top-2 left-2 text-[10px] font-bold px-2 py-0.5 rounded-full text-white">파리</span>
 						<button
 							class="absolute top-2 right-2 w-6 h-6 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-sm transition-transform hover:scale-110"
 							type="button" data-bookmark aria-label="북마크">
@@ -109,8 +99,7 @@ request.setAttribute("activePage", "home");
 					</div>
 					<div class="p-3">
 						<h3
-							class="font-bold text-[13px] leading-snug mb-0.5 line-clamp-2 transition-colors"
-							style="color: #18181b">파리 5박 6일 예술 &amp; 낭만</h3>
+							class="home-popular-title font-bold text-[13px] leading-snug mb-0.5 line-clamp-2 transition-colors">파리 5박 6일 예술 &amp; 낭만</h3>
 						<p
 							class="text-gray-500 text-[11px] line-clamp-1 mb-2 leading-relaxed">에펠탑,
 							루브르, 몽마르트! 낭만의 도시 파리를 온전히 즐기는 일정.</p>
@@ -131,8 +120,7 @@ request.setAttribute("activePage", "home");
 										stroke-width="2"
 										d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>5,670</span>
 						</div>
-						<div class="flex items-center justify-between border-t pt-2"
-							style="border-color: #D1D2F9">
+						<div class="home-popular-author flex items-center justify-between border-t pt-2">
 							<div class="flex items-center gap-1.5">
 								<img src="https://i.pravatar.cc/40?img=17" alt="파리지앵"
 									class="w-4 h-4 rounded-full object-cover"><span
@@ -143,9 +131,8 @@ request.setAttribute("activePage", "home");
 					</div>
 				</a> <a
 					href="${pageContext.request.contextPath}/view/travel/scheduleDetail.jsp?id=16"
-					class="jsp-home-schedule-card shrink-0 bg-white rounded-2xl overflow-hidden cursor-pointer border"
-					style="width: 204px; position: relative; z-index: 1; border-color: #e5e7eb; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07); transform: scale(1); transition: transform .25s cubic-bezier(.22, 1, .36, 1), box-shadow .25s, border-color .2s, z-index 0s">
-					<div class="relative overflow-hidden" style="aspect-ratio: 4/3">
+					class="jsp-home-schedule-card home-popular-card shrink-0 bg-white rounded-2xl overflow-hidden cursor-pointer border">
+					<div class="home-popular-card-image relative overflow-hidden">
 						<img
 							src="https://images.unsplash.com/photo-1589452271712-64b8a66c7b71?w=600&amp;h=400&amp;fit=crop"
 							alt="오사카 2박 3일 먹방 여행"
@@ -153,8 +140,7 @@ request.setAttribute("activePage", "home");
 						<div
 							class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
 						<span
-							class="absolute top-2 left-2 text-[10px] font-bold px-2 py-0.5 rounded-full text-white"
-							style="background-color: #6369D1">오사카</span>
+							class="home-popular-location absolute top-2 left-2 text-[10px] font-bold px-2 py-0.5 rounded-full text-white">오사카</span>
 						<button
 							class="absolute top-2 right-2 w-6 h-6 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-sm transition-transform hover:scale-110"
 							type="button" data-bookmark aria-label="북마크">
@@ -169,8 +155,7 @@ request.setAttribute("activePage", "home");
 					</div>
 					<div class="p-3">
 						<h3
-							class="font-bold text-[13px] leading-snug mb-0.5 line-clamp-2 transition-colors"
-							style="color: #18181b">오사카 2박 3일 먹방 여행</h3>
+							class="home-popular-title font-bold text-[13px] leading-snug mb-0.5 line-clamp-2 transition-colors">오사카 2박 3일 먹방 여행</h3>
 						<p
 							class="text-gray-500 text-[11px] line-clamp-1 mb-2 leading-relaxed">도톤보리,
 							구로몬시장, 오사카 성! 먹고 먹고 또 먹는 오사카.</p>
@@ -191,8 +176,7 @@ request.setAttribute("activePage", "home");
 										stroke-width="2"
 										d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>5,100</span>
 						</div>
-						<div class="flex items-center justify-between border-t pt-2"
-							style="border-color: #D1D2F9">
+						<div class="home-popular-author flex items-center justify-between border-t pt-2">
 							<div class="flex items-center gap-1.5">
 								<img src="https://i.pravatar.cc/40?img=31" alt="오사카마니아"
 									class="w-4 h-4 rounded-full object-cover"><span
@@ -203,9 +187,8 @@ request.setAttribute("activePage", "home");
 					</div>
 				</a> <a
 					href="${pageContext.request.contextPath}/view/travel/scheduleDetail.jsp?id=11"
-					class="jsp-home-schedule-card shrink-0 bg-white rounded-2xl overflow-hidden cursor-pointer border"
-					style="width: 204px; position: relative; z-index: 1; border-color: #e5e7eb; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07); transform: scale(1); transition: transform .25s cubic-bezier(.22, 1, .36, 1), box-shadow .25s, border-color .2s, z-index 0s">
-					<div class="relative overflow-hidden" style="aspect-ratio: 4/3">
+					class="jsp-home-schedule-card home-popular-card shrink-0 bg-white rounded-2xl overflow-hidden cursor-pointer border">
+					<div class="home-popular-card-image relative overflow-hidden">
 						<img
 							src="https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?w=600&amp;h=400&amp;fit=crop"
 							alt="뉴욕 6박 7일 도시 탐험"
@@ -213,8 +196,7 @@ request.setAttribute("activePage", "home");
 						<div
 							class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
 						<span
-							class="absolute top-2 left-2 text-[10px] font-bold px-2 py-0.5 rounded-full text-white"
-							style="background-color: #6369D1">뉴욕</span>
+							class="home-popular-location absolute top-2 left-2 text-[10px] font-bold px-2 py-0.5 rounded-full text-white">뉴욕</span>
 						<button
 							class="absolute top-2 right-2 w-6 h-6 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-sm transition-transform hover:scale-110"
 							type="button" data-bookmark aria-label="북마크">
@@ -229,8 +211,7 @@ request.setAttribute("activePage", "home");
 					</div>
 					<div class="p-3">
 						<h3
-							class="font-bold text-[13px] leading-snug mb-0.5 line-clamp-2 transition-colors"
-							style="color: #18181b">뉴욕 6박 7일 도시 탐험</h3>
+							class="home-popular-title font-bold text-[13px] leading-snug mb-0.5 line-clamp-2 transition-colors">뉴욕 6박 7일 도시 탐험</h3>
 						<p
 							class="text-gray-500 text-[11px] line-clamp-1 mb-2 leading-relaxed">타임스퀘어,
 							센트럴파크, 브루클린 브리지! 잠들지 않는 도시 뉴욕.</p>
@@ -251,8 +232,7 @@ request.setAttribute("activePage", "home");
 										stroke-width="2"
 										d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>4,520</span>
 						</div>
-						<div class="flex items-center justify-between border-t pt-2"
-							style="border-color: #D1D2F9">
+						<div class="home-popular-author flex items-center justify-between border-t pt-2">
 							<div class="flex items-center gap-1.5">
 								<img src="https://i.pravatar.cc/40?img=21" alt="NYC러버"
 									class="w-4 h-4 rounded-full object-cover"><span
@@ -263,9 +243,8 @@ request.setAttribute("activePage", "home");
 					</div>
 				</a> <a
 					href="${pageContext.request.contextPath}/view/travel/scheduleDetail.jsp?id=7"
-					class="jsp-home-schedule-card shrink-0 bg-white rounded-2xl overflow-hidden cursor-pointer border"
-					style="width: 204px; position: relative; z-index: 1; border-color: #e5e7eb; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07); transform: scale(1); transition: transform .25s cubic-bezier(.22, 1, .36, 1), box-shadow .25s, border-color .2s, z-index 0s">
-					<div class="relative overflow-hidden" style="aspect-ratio: 4/3">
+					class="jsp-home-schedule-card home-popular-card shrink-0 bg-white rounded-2xl overflow-hidden cursor-pointer border">
+					<div class="home-popular-card-image relative overflow-hidden">
 						<img
 							src="https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=600&amp;h=400&amp;fit=crop"
 							alt="도쿄 3박 4일 완전 정복"
@@ -273,8 +252,7 @@ request.setAttribute("activePage", "home");
 						<div
 							class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
 						<span
-							class="absolute top-2 left-2 text-[10px] font-bold px-2 py-0.5 rounded-full text-white"
-							style="background-color: #6369D1">도쿄</span>
+							class="home-popular-location absolute top-2 left-2 text-[10px] font-bold px-2 py-0.5 rounded-full text-white">도쿄</span>
 						<button
 							class="absolute top-2 right-2 w-6 h-6 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-sm transition-transform hover:scale-110"
 							type="button" data-bookmark aria-label="북마크">
@@ -289,8 +267,7 @@ request.setAttribute("activePage", "home");
 					</div>
 					<div class="p-3">
 						<h3
-							class="font-bold text-[13px] leading-snug mb-0.5 line-clamp-2 transition-colors"
-							style="color: #18181b">도쿄 3박 4일 완전 정복</h3>
+							class="home-popular-title font-bold text-[13px] leading-snug mb-0.5 line-clamp-2 transition-colors">도쿄 3박 4일 완전 정복</h3>
 						<p
 							class="text-gray-500 text-[11px] line-clamp-1 mb-2 leading-relaxed">시부야,
 							아키하바라, 아사쿠사! 도쿄의 모든 것을 담은 알찬 일정.</p>
@@ -311,8 +288,7 @@ request.setAttribute("activePage", "home");
 										stroke-width="2"
 										d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>4,210</span>
 						</div>
-						<div class="flex items-center justify-between border-t pt-2"
-							style="border-color: #D1D2F9">
+						<div class="home-popular-author flex items-center justify-between border-t pt-2">
 							<div class="flex items-center gap-1.5">
 								<img src="https://i.pravatar.cc/40?img=13" alt="재팬러버"
 									class="w-4 h-4 rounded-full object-cover"><span
@@ -323,32 +299,28 @@ request.setAttribute("activePage", "home");
 					</div>
 				</a> <a href="https://example.com/tripstay" target="_blank"
 					rel="noreferrer"
-					class="jsp-home-ad-card shrink-0 rounded-2xl overflow-hidden cursor-pointer group relative border bg-white"
-					style="width: 204px; z-index: 1; position: relative; border-color: #e5e7eb; box-shadow: 0 2px 8px rgba(0, 0, 0, .07); transform: scale(1); transition: transform .25s cubic-bezier(.22, 1, .36, 1), box-shadow .25s">
-					<div class="relative overflow-hidden" style="aspect-ratio: 4/3">
+					class="jsp-home-ad-card home-popular-ad-card shrink-0 rounded-2xl overflow-hidden cursor-pointer group relative border bg-white">
+					<div class="home-popular-card-image relative overflow-hidden">
 						<img
 							src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=900&q=80"
 							alt="도쿄 숙소 최대 15% 할인"
 							class="w-full h-full object-cover transition-transform duration-300">
-						<div class="absolute inset-0"
-							style="background: linear-gradient(to top, rgba(10, 5, 40, .8) 0%, rgba(10, 5, 40, .25) 60%, transparent 100%)"></div>
+						<div class="home-popular-ad-overlay absolute inset-0"></div>
 						<span
 							class="absolute top-2 left-2 text-[9px] font-bold px-2 py-0.5 rounded-full bg-yellow-400 text-gray-900">AD</span>
 					</div>
-					<div class="p-3"
-						style="background: linear-gradient(135deg, #f4f4ff 0%, #fff9df 100%)">
+					<div class="home-popular-ad-content p-3">
 						<div class="text-[10px] text-gray-400 mb-0.5 font-semibold">TripStay</div>
 						<h3
 							class="font-bold text-[12px] text-gray-800 line-clamp-2 leading-snug mb-2">도쿄
 							숙소 최대 15% 할인</h3>
-						<div class="text-[10px] font-bold" style="color: var(--brand)">광고
+						<div class="home-popular-ad-link text-[10px] font-bold">광고
 							보기 →</div>
 					</div>
 				</a> <a
 					href="${pageContext.request.contextPath}/view/travel/scheduleDetail.jsp?id=10"
-					class="jsp-home-schedule-card shrink-0 bg-white rounded-2xl overflow-hidden cursor-pointer border"
-					style="width: 204px; position: relative; z-index: 1; border-color: #e5e7eb; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07); transform: scale(1); transition: transform .25s cubic-bezier(.22, 1, .36, 1), box-shadow .25s, border-color .2s, z-index 0s">
-					<div class="relative overflow-hidden" style="aspect-ratio: 4/3">
+					class="jsp-home-schedule-card home-popular-card shrink-0 bg-white rounded-2xl overflow-hidden cursor-pointer border">
+					<div class="home-popular-card-image relative overflow-hidden">
 						<img
 							src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=600&amp;h=400&amp;fit=crop"
 							alt="발리 5박 6일 힐링 휴양"
@@ -356,8 +328,7 @@ request.setAttribute("activePage", "home");
 						<div
 							class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
 						<span
-							class="absolute top-2 left-2 text-[10px] font-bold px-2 py-0.5 rounded-full text-white"
-							style="background-color: #6369D1">발리</span>
+							class="home-popular-location absolute top-2 left-2 text-[10px] font-bold px-2 py-0.5 rounded-full text-white">발리</span>
 						<button
 							class="absolute top-2 right-2 w-6 h-6 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-sm transition-transform hover:scale-110"
 							type="button" data-bookmark aria-label="북마크">
@@ -372,8 +343,7 @@ request.setAttribute("activePage", "home");
 					</div>
 					<div class="p-3">
 						<h3
-							class="font-bold text-[13px] leading-snug mb-0.5 line-clamp-2 transition-colors"
-							style="color: #18181b">발리 5박 6일 힐링 휴양</h3>
+							class="home-popular-title font-bold text-[13px] leading-snug mb-0.5 line-clamp-2 transition-colors">발리 5박 6일 힐링 휴양</h3>
 						<p
 							class="text-gray-500 text-[11px] line-clamp-1 mb-2 leading-relaxed">우붓
 							라이스테라스, 울루와뚜 사원, 짱구 카페까지 발리 완전정복.</p>
@@ -394,8 +364,7 @@ request.setAttribute("activePage", "home");
 										stroke-width="2"
 										d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>3,890</span>
 						</div>
-						<div class="flex items-center justify-between border-t pt-2"
-							style="border-color: #D1D2F9">
+						<div class="home-popular-author flex items-center justify-between border-t pt-2">
 							<div class="flex items-center gap-1.5">
 								<img src="https://i.pravatar.cc/40?img=19" alt="발리덕후"
 									class="w-4 h-4 rounded-full object-cover"><span
@@ -406,9 +375,8 @@ request.setAttribute("activePage", "home");
 					</div>
 				</a> <a
 					href="${pageContext.request.contextPath}/view/travel/scheduleDetail.jsp?id=14"
-					class="jsp-home-schedule-card shrink-0 bg-white rounded-2xl overflow-hidden cursor-pointer border"
-					style="width: 204px; position: relative; z-index: 1; border-color: #e5e7eb; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07); transform: scale(1); transition: transform .25s cubic-bezier(.22, 1, .36, 1), box-shadow .25s, border-color .2s, z-index 0s">
-					<div class="relative overflow-hidden" style="aspect-ratio: 4/3">
+					class="jsp-home-schedule-card home-popular-card shrink-0 bg-white rounded-2xl overflow-hidden cursor-pointer border">
+					<div class="home-popular-card-image relative overflow-hidden">
 						<img
 							src="https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?w=600&amp;h=400&amp;fit=crop"
 							alt="다낭 3박 4일 바다 &amp; 리조트"
@@ -416,8 +384,7 @@ request.setAttribute("activePage", "home");
 						<div
 							class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
 						<span
-							class="absolute top-2 left-2 text-[10px] font-bold px-2 py-0.5 rounded-full text-white"
-							style="background-color: #6369D1">다낭</span>
+							class="home-popular-location absolute top-2 left-2 text-[10px] font-bold px-2 py-0.5 rounded-full text-white">다낭</span>
 						<button
 							class="absolute top-2 right-2 w-6 h-6 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-sm transition-transform hover:scale-110"
 							type="button" data-bookmark aria-label="북마크">
@@ -432,8 +399,7 @@ request.setAttribute("activePage", "home");
 					</div>
 					<div class="p-3">
 						<h3
-							class="font-bold text-[13px] leading-snug mb-0.5 line-clamp-2 transition-colors"
-							style="color: #18181b">다낭 3박 4일 바다 &amp; 리조트</h3>
+							class="home-popular-title font-bold text-[13px] leading-snug mb-0.5 line-clamp-2 transition-colors">다낭 3박 4일 바다 &amp; 리조트</h3>
 						<p
 							class="text-gray-500 text-[11px] line-clamp-1 mb-2 leading-relaxed">미케
 							비치, 바나힐, 호이안 올드타운까지! 베트남 중부의 진주.</p>
@@ -454,8 +420,7 @@ request.setAttribute("activePage", "home");
 										stroke-width="2"
 										d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>3,200</span>
 						</div>
-						<div class="flex items-center justify-between border-t pt-2"
-							style="border-color: #D1D2F9">
+						<div class="home-popular-author flex items-center justify-between border-t pt-2">
 							<div class="flex items-center gap-1.5">
 								<img src="https://i.pravatar.cc/40?img=27" alt="다낭러버"
 									class="w-4 h-4 rounded-full object-cover"><span
@@ -466,9 +431,8 @@ request.setAttribute("activePage", "home");
 					</div>
 				</a> <a
 					href="${pageContext.request.contextPath}/view/travel/scheduleDetail.jsp?id=8"
-					class="jsp-home-schedule-card shrink-0 bg-white rounded-2xl overflow-hidden cursor-pointer border"
-					style="width: 204px; position: relative; z-index: 1; border-color: #e5e7eb; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07); transform: scale(1); transition: transform .25s cubic-bezier(.22, 1, .36, 1), box-shadow .25s, border-color .2s, z-index 0s">
-					<div class="relative overflow-hidden" style="aspect-ratio: 4/3">
+					class="jsp-home-schedule-card home-popular-card shrink-0 bg-white rounded-2xl overflow-hidden cursor-pointer border">
+					<div class="home-popular-card-image relative overflow-hidden">
 						<img
 							src="https://images.unsplash.com/photo-1506665531195-3566af2b548e?w=600&amp;h=400&amp;fit=crop"
 							alt="방콕 4박 5일 사원 &amp; 야시장"
@@ -476,8 +440,7 @@ request.setAttribute("activePage", "home");
 						<div
 							class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
 						<span
-							class="absolute top-2 left-2 text-[10px] font-bold px-2 py-0.5 rounded-full text-white"
-							style="background-color: #6369D1">방콕</span>
+							class="home-popular-location absolute top-2 left-2 text-[10px] font-bold px-2 py-0.5 rounded-full text-white">방콕</span>
 						<button
 							class="absolute top-2 right-2 w-6 h-6 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-sm transition-transform hover:scale-110"
 							type="button" data-bookmark aria-label="북마크">
@@ -492,8 +455,7 @@ request.setAttribute("activePage", "home");
 					</div>
 					<div class="p-3">
 						<h3
-							class="font-bold text-[13px] leading-snug mb-0.5 line-clamp-2 transition-colors"
-							style="color: #18181b">방콕 4박 5일 사원 &amp; 야시장</h3>
+							class="home-popular-title font-bold text-[13px] leading-snug mb-0.5 line-clamp-2 transition-colors">방콕 4박 5일 사원 &amp; 야시장</h3>
 						<p
 							class="text-gray-500 text-[11px] line-clamp-1 mb-2 leading-relaxed">왕궁,
 							왓포, 차오프라야강과 야시장까지! 방콕의 매력에 빠져봐요.</p>
@@ -514,8 +476,7 @@ request.setAttribute("activePage", "home");
 										stroke-width="2"
 										d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>3,100</span>
 						</div>
-						<div class="flex items-center justify-between border-t pt-2"
-							style="border-color: #D1D2F9">
+						<div class="home-popular-author flex items-center justify-between border-t pt-2">
 							<div class="flex items-center gap-1.5">
 								<img src="https://i.pravatar.cc/40?img=15" alt="태국덕후"
 									class="w-4 h-4 rounded-full object-cover"><span
@@ -526,9 +487,8 @@ request.setAttribute("activePage", "home");
 					</div>
 				</a> <a
 					href="${pageContext.request.contextPath}/view/travel/scheduleDetail.jsp?id=12"
-					class="jsp-home-schedule-card shrink-0 bg-white rounded-2xl overflow-hidden cursor-pointer border"
-					style="width: 204px; position: relative; z-index: 1; border-color: #e5e7eb; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07); transform: scale(1); transition: transform .25s cubic-bezier(.22, 1, .36, 1), box-shadow .25s, border-color .2s, z-index 0s">
-					<div class="relative overflow-hidden" style="aspect-ratio: 4/3">
+					class="jsp-home-schedule-card home-popular-card shrink-0 bg-white rounded-2xl overflow-hidden cursor-pointer border">
+					<div class="home-popular-card-image relative overflow-hidden">
 						<img
 							src="https://images.unsplash.com/photo-1539037116277-4db20889f2d4?w=600&amp;h=400&amp;fit=crop"
 							alt="바르셀로나 4박 5일 가우디 투어"
@@ -536,8 +496,7 @@ request.setAttribute("activePage", "home");
 						<div
 							class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
 						<span
-							class="absolute top-2 left-2 text-[10px] font-bold px-2 py-0.5 rounded-full text-white"
-							style="background-color: #6369D1">바르셀로나</span>
+							class="home-popular-location absolute top-2 left-2 text-[10px] font-bold px-2 py-0.5 rounded-full text-white">바르셀로나</span>
 						<button
 							class="absolute top-2 right-2 w-6 h-6 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-sm transition-transform hover:scale-110"
 							type="button" data-bookmark aria-label="북마크">
@@ -552,8 +511,7 @@ request.setAttribute("activePage", "home");
 					</div>
 					<div class="p-3">
 						<h3
-							class="font-bold text-[13px] leading-snug mb-0.5 line-clamp-2 transition-colors"
-							style="color: #18181b">바르셀로나 4박 5일 가우디 투어</h3>
+							class="home-popular-title font-bold text-[13px] leading-snug mb-0.5 line-clamp-2 transition-colors">바르셀로나 4박 5일 가우디 투어</h3>
 						<p
 							class="text-gray-500 text-[11px] line-clamp-1 mb-2 leading-relaxed">사그라다
 							파밀리아, 구엘공원, 바르셀로나 해변까지 가우디의 도시.</p>
@@ -574,8 +532,7 @@ request.setAttribute("activePage", "home");
 										stroke-width="2"
 										d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>2,890</span>
 						</div>
-						<div class="flex items-center justify-between border-t pt-2"
-							style="border-color: #D1D2F9">
+						<div class="home-popular-author flex items-center justify-between border-t pt-2">
 							<div class="flex items-center gap-1.5">
 								<img src="https://i.pravatar.cc/40?img=23" alt="스페인러버"
 									class="w-4 h-4 rounded-full object-cover"><span
@@ -586,9 +543,8 @@ request.setAttribute("activePage", "home");
 					</div>
 				</a> <a
 					href="${pageContext.request.contextPath}/view/travel/scheduleDetail.jsp?id=3"
-					class="jsp-home-schedule-card shrink-0 bg-white rounded-2xl overflow-hidden cursor-pointer border"
-					style="width: 204px; position: relative; z-index: 1; border-color: #e5e7eb; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07); transform: scale(1); transition: transform .25s cubic-bezier(.22, 1, .36, 1), box-shadow .25s, border-color .2s, z-index 0s">
-					<div class="relative overflow-hidden" style="aspect-ratio: 4/3">
+					class="jsp-home-schedule-card home-popular-card shrink-0 bg-white rounded-2xl overflow-hidden cursor-pointer border">
+					<div class="home-popular-card-image relative overflow-hidden">
 						<img
 							src="https://images.unsplash.com/photo-1538485399081-7191377e8241?w=600&amp;h=400&amp;fit=crop"
 							alt="부산 1박 2일 바다 여행"
@@ -596,8 +552,7 @@ request.setAttribute("activePage", "home");
 						<div
 							class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
 						<span
-							class="absolute top-2 left-2 text-[10px] font-bold px-2 py-0.5 rounded-full text-white"
-							style="background-color: #6369D1">부산</span>
+							class="home-popular-location absolute top-2 left-2 text-[10px] font-bold px-2 py-0.5 rounded-full text-white">부산</span>
 						<button
 							class="absolute top-2 right-2 w-6 h-6 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-sm transition-transform hover:scale-110"
 							type="button" data-bookmark aria-label="북마크">
@@ -612,8 +567,7 @@ request.setAttribute("activePage", "home");
 					</div>
 					<div class="p-3">
 						<h3
-							class="font-bold text-[13px] leading-snug mb-0.5 line-clamp-2 transition-colors"
-							style="color: #18181b">부산 1박 2일 바다 여행</h3>
+							class="home-popular-title font-bold text-[13px] leading-snug mb-0.5 line-clamp-2 transition-colors">부산 1박 2일 바다 여행</h3>
 						<p
 							class="text-gray-500 text-[11px] line-clamp-1 mb-2 leading-relaxed">해운대와
 							광안리, 자갈치시장까지! 부산 핵심 코스.</p>
@@ -634,8 +588,7 @@ request.setAttribute("activePage", "home");
 										stroke-width="2"
 										d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>2,341</span>
 						</div>
-						<div class="flex items-center justify-between border-t pt-2"
-							style="border-color: #D1D2F9">
+						<div class="home-popular-author flex items-center justify-between border-t pt-2">
 							<div class="flex items-center gap-1.5">
 								<img src="https://i.pravatar.cc/40?img=5" alt="바다러버"
 									class="w-4 h-4 rounded-full object-cover"><span
@@ -646,9 +599,8 @@ request.setAttribute("activePage", "home");
 					</div>
 				</a> <a
 					href="${pageContext.request.contextPath}/view/travel/scheduleDetail.jsp?id=9"
-					class="jsp-home-schedule-card shrink-0 bg-white rounded-2xl overflow-hidden cursor-pointer border"
-					style="width: 204px; position: relative; z-index: 1; border-color: #e5e7eb; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07); transform: scale(1); transition: transform .25s cubic-bezier(.22, 1, .36, 1), box-shadow .25s, border-color .2s, z-index 0s">
-					<div class="relative overflow-hidden" style="aspect-ratio: 4/3">
+					class="jsp-home-schedule-card home-popular-card shrink-0 bg-white rounded-2xl overflow-hidden cursor-pointer border">
+					<div class="home-popular-card-image relative overflow-hidden">
 						<img
 							src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=600&amp;h=400&amp;fit=crop"
 							alt="파리 5박 6일 예술 &amp; 낭만"
@@ -656,8 +608,7 @@ request.setAttribute("activePage", "home");
 						<div
 							class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
 						<span
-							class="absolute top-2 left-2 text-[10px] font-bold px-2 py-0.5 rounded-full text-white"
-							style="background-color: #6369D1">파리</span>
+							class="home-popular-location absolute top-2 left-2 text-[10px] font-bold px-2 py-0.5 rounded-full text-white">파리</span>
 						<button
 							class="absolute top-2 right-2 w-6 h-6 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-sm transition-transform hover:scale-110"
 							type="button" data-bookmark aria-label="북마크">
@@ -672,8 +623,7 @@ request.setAttribute("activePage", "home");
 					</div>
 					<div class="p-3">
 						<h3
-							class="font-bold text-[13px] leading-snug mb-0.5 line-clamp-2 transition-colors"
-							style="color: #18181b">파리 5박 6일 예술 &amp; 낭만</h3>
+							class="home-popular-title font-bold text-[13px] leading-snug mb-0.5 line-clamp-2 transition-colors">파리 5박 6일 예술 &amp; 낭만</h3>
 						<p
 							class="text-gray-500 text-[11px] line-clamp-1 mb-2 leading-relaxed">에펠탑,
 							루브르, 몽마르트! 낭만의 도시 파리를 온전히 즐기는 일정.</p>
@@ -694,8 +644,7 @@ request.setAttribute("activePage", "home");
 										stroke-width="2"
 										d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>5,670</span>
 						</div>
-						<div class="flex items-center justify-between border-t pt-2"
-							style="border-color: #D1D2F9">
+						<div class="home-popular-author flex items-center justify-between border-t pt-2">
 							<div class="flex items-center gap-1.5">
 								<img src="https://i.pravatar.cc/40?img=17" alt="파리지앵"
 									class="w-4 h-4 rounded-full object-cover"><span
@@ -706,9 +655,8 @@ request.setAttribute("activePage", "home");
 					</div>
 				</a> <a
 					href="${pageContext.request.contextPath}/view/travel/scheduleDetail.jsp?id=16"
-					class="jsp-home-schedule-card shrink-0 bg-white rounded-2xl overflow-hidden cursor-pointer border"
-					style="width: 204px; position: relative; z-index: 1; border-color: #e5e7eb; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07); transform: scale(1); transition: transform .25s cubic-bezier(.22, 1, .36, 1), box-shadow .25s, border-color .2s, z-index 0s">
-					<div class="relative overflow-hidden" style="aspect-ratio: 4/3">
+					class="jsp-home-schedule-card home-popular-card shrink-0 bg-white rounded-2xl overflow-hidden cursor-pointer border">
+					<div class="home-popular-card-image relative overflow-hidden">
 						<img
 							src="https://images.unsplash.com/photo-1589452271712-64b8a66c7b71?w=600&amp;h=400&amp;fit=crop"
 							alt="오사카 2박 3일 먹방 여행"
@@ -716,8 +664,7 @@ request.setAttribute("activePage", "home");
 						<div
 							class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
 						<span
-							class="absolute top-2 left-2 text-[10px] font-bold px-2 py-0.5 rounded-full text-white"
-							style="background-color: #6369D1">오사카</span>
+							class="home-popular-location absolute top-2 left-2 text-[10px] font-bold px-2 py-0.5 rounded-full text-white">오사카</span>
 						<button
 							class="absolute top-2 right-2 w-6 h-6 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-sm transition-transform hover:scale-110"
 							type="button" data-bookmark aria-label="북마크">
@@ -732,8 +679,7 @@ request.setAttribute("activePage", "home");
 					</div>
 					<div class="p-3">
 						<h3
-							class="font-bold text-[13px] leading-snug mb-0.5 line-clamp-2 transition-colors"
-							style="color: #18181b">오사카 2박 3일 먹방 여행</h3>
+							class="home-popular-title font-bold text-[13px] leading-snug mb-0.5 line-clamp-2 transition-colors">오사카 2박 3일 먹방 여행</h3>
 						<p
 							class="text-gray-500 text-[11px] line-clamp-1 mb-2 leading-relaxed">도톤보리,
 							구로몬시장, 오사카 성! 먹고 먹고 또 먹는 오사카.</p>
@@ -754,8 +700,7 @@ request.setAttribute("activePage", "home");
 										stroke-width="2"
 										d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>5,100</span>
 						</div>
-						<div class="flex items-center justify-between border-t pt-2"
-							style="border-color: #D1D2F9">
+						<div class="home-popular-author flex items-center justify-between border-t pt-2">
 							<div class="flex items-center gap-1.5">
 								<img src="https://i.pravatar.cc/40?img=31" alt="오사카마니아"
 									class="w-4 h-4 rounded-full object-cover"><span
@@ -766,9 +711,8 @@ request.setAttribute("activePage", "home");
 					</div>
 				</a> <a
 					href="${pageContext.request.contextPath}/view/travel/scheduleDetail.jsp?id=11"
-					class="jsp-home-schedule-card shrink-0 bg-white rounded-2xl overflow-hidden cursor-pointer border"
-					style="width: 204px; position: relative; z-index: 1; border-color: #e5e7eb; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07); transform: scale(1); transition: transform .25s cubic-bezier(.22, 1, .36, 1), box-shadow .25s, border-color .2s, z-index 0s">
-					<div class="relative overflow-hidden" style="aspect-ratio: 4/3">
+					class="jsp-home-schedule-card home-popular-card shrink-0 bg-white rounded-2xl overflow-hidden cursor-pointer border">
+					<div class="home-popular-card-image relative overflow-hidden">
 						<img
 							src="https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?w=600&amp;h=400&amp;fit=crop"
 							alt="뉴욕 6박 7일 도시 탐험"
@@ -776,8 +720,7 @@ request.setAttribute("activePage", "home");
 						<div
 							class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
 						<span
-							class="absolute top-2 left-2 text-[10px] font-bold px-2 py-0.5 rounded-full text-white"
-							style="background-color: #6369D1">뉴욕</span>
+							class="home-popular-location absolute top-2 left-2 text-[10px] font-bold px-2 py-0.5 rounded-full text-white">뉴욕</span>
 						<button
 							class="absolute top-2 right-2 w-6 h-6 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-sm transition-transform hover:scale-110"
 							type="button" data-bookmark aria-label="북마크">
@@ -792,8 +735,7 @@ request.setAttribute("activePage", "home");
 					</div>
 					<div class="p-3">
 						<h3
-							class="font-bold text-[13px] leading-snug mb-0.5 line-clamp-2 transition-colors"
-							style="color: #18181b">뉴욕 6박 7일 도시 탐험</h3>
+							class="home-popular-title font-bold text-[13px] leading-snug mb-0.5 line-clamp-2 transition-colors">뉴욕 6박 7일 도시 탐험</h3>
 						<p
 							class="text-gray-500 text-[11px] line-clamp-1 mb-2 leading-relaxed">타임스퀘어,
 							센트럴파크, 브루클린 브리지! 잠들지 않는 도시 뉴욕.</p>
@@ -814,8 +756,7 @@ request.setAttribute("activePage", "home");
 										stroke-width="2"
 										d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>4,520</span>
 						</div>
-						<div class="flex items-center justify-between border-t pt-2"
-							style="border-color: #D1D2F9">
+						<div class="home-popular-author flex items-center justify-between border-t pt-2">
 							<div class="flex items-center gap-1.5">
 								<img src="https://i.pravatar.cc/40?img=21" alt="NYC러버"
 									class="w-4 h-4 rounded-full object-cover"><span
@@ -826,9 +767,8 @@ request.setAttribute("activePage", "home");
 					</div>
 				</a> <a
 					href="${pageContext.request.contextPath}/view/travel/scheduleDetail.jsp?id=7"
-					class="jsp-home-schedule-card shrink-0 bg-white rounded-2xl overflow-hidden cursor-pointer border"
-					style="width: 204px; position: relative; z-index: 1; border-color: #e5e7eb; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07); transform: scale(1); transition: transform .25s cubic-bezier(.22, 1, .36, 1), box-shadow .25s, border-color .2s, z-index 0s">
-					<div class="relative overflow-hidden" style="aspect-ratio: 4/3">
+					class="jsp-home-schedule-card home-popular-card shrink-0 bg-white rounded-2xl overflow-hidden cursor-pointer border">
+					<div class="home-popular-card-image relative overflow-hidden">
 						<img
 							src="https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=600&amp;h=400&amp;fit=crop"
 							alt="도쿄 3박 4일 완전 정복"
@@ -836,8 +776,7 @@ request.setAttribute("activePage", "home");
 						<div
 							class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
 						<span
-							class="absolute top-2 left-2 text-[10px] font-bold px-2 py-0.5 rounded-full text-white"
-							style="background-color: #6369D1">도쿄</span>
+							class="home-popular-location absolute top-2 left-2 text-[10px] font-bold px-2 py-0.5 rounded-full text-white">도쿄</span>
 						<button
 							class="absolute top-2 right-2 w-6 h-6 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-sm transition-transform hover:scale-110"
 							type="button" data-bookmark aria-label="북마크">
@@ -852,8 +791,7 @@ request.setAttribute("activePage", "home");
 					</div>
 					<div class="p-3">
 						<h3
-							class="font-bold text-[13px] leading-snug mb-0.5 line-clamp-2 transition-colors"
-							style="color: #18181b">도쿄 3박 4일 완전 정복</h3>
+							class="home-popular-title font-bold text-[13px] leading-snug mb-0.5 line-clamp-2 transition-colors">도쿄 3박 4일 완전 정복</h3>
 						<p
 							class="text-gray-500 text-[11px] line-clamp-1 mb-2 leading-relaxed">시부야,
 							아키하바라, 아사쿠사! 도쿄의 모든 것을 담은 알찬 일정.</p>
@@ -874,8 +812,7 @@ request.setAttribute("activePage", "home");
 										stroke-width="2"
 										d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>4,210</span>
 						</div>
-						<div class="flex items-center justify-between border-t pt-2"
-							style="border-color: #D1D2F9">
+						<div class="home-popular-author flex items-center justify-between border-t pt-2">
 							<div class="flex items-center gap-1.5">
 								<img src="https://i.pravatar.cc/40?img=13" alt="재팬러버"
 									class="w-4 h-4 rounded-full object-cover"><span
@@ -886,32 +823,28 @@ request.setAttribute("activePage", "home");
 					</div>
 				</a> <a href="https://example.com/tripstay" target="_blank"
 					rel="noreferrer"
-					class="jsp-home-ad-card shrink-0 rounded-2xl overflow-hidden cursor-pointer group relative border bg-white"
-					style="width: 204px; z-index: 1; position: relative; border-color: #e5e7eb; box-shadow: 0 2px 8px rgba(0, 0, 0, .07); transform: scale(1); transition: transform .25s cubic-bezier(.22, 1, .36, 1), box-shadow .25s">
-					<div class="relative overflow-hidden" style="aspect-ratio: 4/3">
+					class="jsp-home-ad-card home-popular-ad-card shrink-0 rounded-2xl overflow-hidden cursor-pointer group relative border bg-white">
+					<div class="home-popular-card-image relative overflow-hidden">
 						<img
 							src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=900&q=80"
 							alt="도쿄 숙소 최대 15% 할인"
 							class="w-full h-full object-cover transition-transform duration-300">
-						<div class="absolute inset-0"
-							style="background: linear-gradient(to top, rgba(10, 5, 40, .8) 0%, rgba(10, 5, 40, .25) 60%, transparent 100%)"></div>
+						<div class="home-popular-ad-overlay absolute inset-0"></div>
 						<span
 							class="absolute top-2 left-2 text-[9px] font-bold px-2 py-0.5 rounded-full bg-yellow-400 text-gray-900">AD</span>
 					</div>
-					<div class="p-3"
-						style="background: linear-gradient(135deg, #f4f4ff 0%, #fff9df 100%)">
+					<div class="home-popular-ad-content p-3">
 						<div class="text-[10px] text-gray-400 mb-0.5 font-semibold">TripStay</div>
 						<h3
 							class="font-bold text-[12px] text-gray-800 line-clamp-2 leading-snug mb-2">도쿄
 							숙소 최대 15% 할인</h3>
-						<div class="text-[10px] font-bold" style="color: var(--brand)">광고
+						<div class="home-popular-ad-link text-[10px] font-bold">광고
 							보기 →</div>
 					</div>
 				</a> <a
 					href="${pageContext.request.contextPath}/view/travel/scheduleDetail.jsp?id=10"
-					class="jsp-home-schedule-card shrink-0 bg-white rounded-2xl overflow-hidden cursor-pointer border"
-					style="width: 204px; position: relative; z-index: 1; border-color: #e5e7eb; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07); transform: scale(1); transition: transform .25s cubic-bezier(.22, 1, .36, 1), box-shadow .25s, border-color .2s, z-index 0s">
-					<div class="relative overflow-hidden" style="aspect-ratio: 4/3">
+					class="jsp-home-schedule-card home-popular-card shrink-0 bg-white rounded-2xl overflow-hidden cursor-pointer border">
+					<div class="home-popular-card-image relative overflow-hidden">
 						<img
 							src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=600&amp;h=400&amp;fit=crop"
 							alt="발리 5박 6일 힐링 휴양"
@@ -919,8 +852,7 @@ request.setAttribute("activePage", "home");
 						<div
 							class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
 						<span
-							class="absolute top-2 left-2 text-[10px] font-bold px-2 py-0.5 rounded-full text-white"
-							style="background-color: #6369D1">발리</span>
+							class="home-popular-location absolute top-2 left-2 text-[10px] font-bold px-2 py-0.5 rounded-full text-white">발리</span>
 						<button
 							class="absolute top-2 right-2 w-6 h-6 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-sm transition-transform hover:scale-110"
 							type="button" data-bookmark aria-label="북마크">
@@ -935,8 +867,7 @@ request.setAttribute("activePage", "home");
 					</div>
 					<div class="p-3">
 						<h3
-							class="font-bold text-[13px] leading-snug mb-0.5 line-clamp-2 transition-colors"
-							style="color: #18181b">발리 5박 6일 힐링 휴양</h3>
+							class="home-popular-title font-bold text-[13px] leading-snug mb-0.5 line-clamp-2 transition-colors">발리 5박 6일 힐링 휴양</h3>
 						<p
 							class="text-gray-500 text-[11px] line-clamp-1 mb-2 leading-relaxed">우붓
 							라이스테라스, 울루와뚜 사원, 짱구 카페까지 발리 완전정복.</p>
@@ -957,8 +888,7 @@ request.setAttribute("activePage", "home");
 										stroke-width="2"
 										d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>3,890</span>
 						</div>
-						<div class="flex items-center justify-between border-t pt-2"
-							style="border-color: #D1D2F9">
+						<div class="home-popular-author flex items-center justify-between border-t pt-2">
 							<div class="flex items-center gap-1.5">
 								<img src="https://i.pravatar.cc/40?img=19" alt="발리덕후"
 									class="w-4 h-4 rounded-full object-cover"><span
@@ -969,9 +899,8 @@ request.setAttribute("activePage", "home");
 					</div>
 				</a> <a
 					href="${pageContext.request.contextPath}/view/travel/scheduleDetail.jsp?id=14"
-					class="jsp-home-schedule-card shrink-0 bg-white rounded-2xl overflow-hidden cursor-pointer border"
-					style="width: 204px; position: relative; z-index: 1; border-color: #e5e7eb; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07); transform: scale(1); transition: transform .25s cubic-bezier(.22, 1, .36, 1), box-shadow .25s, border-color .2s, z-index 0s">
-					<div class="relative overflow-hidden" style="aspect-ratio: 4/3">
+					class="jsp-home-schedule-card home-popular-card shrink-0 bg-white rounded-2xl overflow-hidden cursor-pointer border">
+					<div class="home-popular-card-image relative overflow-hidden">
 						<img
 							src="https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?w=600&amp;h=400&amp;fit=crop"
 							alt="다낭 3박 4일 바다 &amp; 리조트"
@@ -979,8 +908,7 @@ request.setAttribute("activePage", "home");
 						<div
 							class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
 						<span
-							class="absolute top-2 left-2 text-[10px] font-bold px-2 py-0.5 rounded-full text-white"
-							style="background-color: #6369D1">다낭</span>
+							class="home-popular-location absolute top-2 left-2 text-[10px] font-bold px-2 py-0.5 rounded-full text-white">다낭</span>
 						<button
 							class="absolute top-2 right-2 w-6 h-6 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-sm transition-transform hover:scale-110"
 							type="button" data-bookmark aria-label="북마크">
@@ -995,8 +923,7 @@ request.setAttribute("activePage", "home");
 					</div>
 					<div class="p-3">
 						<h3
-							class="font-bold text-[13px] leading-snug mb-0.5 line-clamp-2 transition-colors"
-							style="color: #18181b">다낭 3박 4일 바다 &amp; 리조트</h3>
+							class="home-popular-title font-bold text-[13px] leading-snug mb-0.5 line-clamp-2 transition-colors">다낭 3박 4일 바다 &amp; 리조트</h3>
 						<p
 							class="text-gray-500 text-[11px] line-clamp-1 mb-2 leading-relaxed">미케
 							비치, 바나힐, 호이안 올드타운까지! 베트남 중부의 진주.</p>
@@ -1017,8 +944,7 @@ request.setAttribute("activePage", "home");
 										stroke-width="2"
 										d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>3,200</span>
 						</div>
-						<div class="flex items-center justify-between border-t pt-2"
-							style="border-color: #D1D2F9">
+						<div class="home-popular-author flex items-center justify-between border-t pt-2">
 							<div class="flex items-center gap-1.5">
 								<img src="https://i.pravatar.cc/40?img=27" alt="다낭러버"
 									class="w-4 h-4 rounded-full object-cover"><span
@@ -1029,9 +955,8 @@ request.setAttribute("activePage", "home");
 					</div>
 				</a> <a
 					href="${pageContext.request.contextPath}/view/travel/scheduleDetail.jsp?id=8"
-					class="jsp-home-schedule-card shrink-0 bg-white rounded-2xl overflow-hidden cursor-pointer border"
-					style="width: 204px; position: relative; z-index: 1; border-color: #e5e7eb; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07); transform: scale(1); transition: transform .25s cubic-bezier(.22, 1, .36, 1), box-shadow .25s, border-color .2s, z-index 0s">
-					<div class="relative overflow-hidden" style="aspect-ratio: 4/3">
+					class="jsp-home-schedule-card home-popular-card shrink-0 bg-white rounded-2xl overflow-hidden cursor-pointer border">
+					<div class="home-popular-card-image relative overflow-hidden">
 						<img
 							src="https://images.unsplash.com/photo-1506665531195-3566af2b548e?w=600&amp;h=400&amp;fit=crop"
 							alt="방콕 4박 5일 사원 &amp; 야시장"
@@ -1039,8 +964,7 @@ request.setAttribute("activePage", "home");
 						<div
 							class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
 						<span
-							class="absolute top-2 left-2 text-[10px] font-bold px-2 py-0.5 rounded-full text-white"
-							style="background-color: #6369D1">방콕</span>
+							class="home-popular-location absolute top-2 left-2 text-[10px] font-bold px-2 py-0.5 rounded-full text-white">방콕</span>
 						<button
 							class="absolute top-2 right-2 w-6 h-6 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-sm transition-transform hover:scale-110"
 							type="button" data-bookmark aria-label="북마크">
@@ -1055,8 +979,7 @@ request.setAttribute("activePage", "home");
 					</div>
 					<div class="p-3">
 						<h3
-							class="font-bold text-[13px] leading-snug mb-0.5 line-clamp-2 transition-colors"
-							style="color: #18181b">방콕 4박 5일 사원 &amp; 야시장</h3>
+							class="home-popular-title font-bold text-[13px] leading-snug mb-0.5 line-clamp-2 transition-colors">방콕 4박 5일 사원 &amp; 야시장</h3>
 						<p
 							class="text-gray-500 text-[11px] line-clamp-1 mb-2 leading-relaxed">왕궁,
 							왓포, 차오프라야강과 야시장까지! 방콕의 매력에 빠져봐요.</p>
@@ -1077,8 +1000,7 @@ request.setAttribute("activePage", "home");
 										stroke-width="2"
 										d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>3,100</span>
 						</div>
-						<div class="flex items-center justify-between border-t pt-2"
-							style="border-color: #D1D2F9">
+						<div class="home-popular-author flex items-center justify-between border-t pt-2">
 							<div class="flex items-center gap-1.5">
 								<img src="https://i.pravatar.cc/40?img=15" alt="태국덕후"
 									class="w-4 h-4 rounded-full object-cover"><span
@@ -1089,9 +1011,8 @@ request.setAttribute("activePage", "home");
 					</div>
 				</a> <a
 					href="${pageContext.request.contextPath}/view/travel/scheduleDetail.jsp?id=12"
-					class="jsp-home-schedule-card shrink-0 bg-white rounded-2xl overflow-hidden cursor-pointer border"
-					style="width: 204px; position: relative; z-index: 1; border-color: #e5e7eb; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07); transform: scale(1); transition: transform .25s cubic-bezier(.22, 1, .36, 1), box-shadow .25s, border-color .2s, z-index 0s">
-					<div class="relative overflow-hidden" style="aspect-ratio: 4/3">
+					class="jsp-home-schedule-card home-popular-card shrink-0 bg-white rounded-2xl overflow-hidden cursor-pointer border">
+					<div class="home-popular-card-image relative overflow-hidden">
 						<img
 							src="https://images.unsplash.com/photo-1539037116277-4db20889f2d4?w=600&amp;h=400&amp;fit=crop"
 							alt="바르셀로나 4박 5일 가우디 투어"
@@ -1099,8 +1020,7 @@ request.setAttribute("activePage", "home");
 						<div
 							class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
 						<span
-							class="absolute top-2 left-2 text-[10px] font-bold px-2 py-0.5 rounded-full text-white"
-							style="background-color: #6369D1">바르셀로나</span>
+							class="home-popular-location absolute top-2 left-2 text-[10px] font-bold px-2 py-0.5 rounded-full text-white">바르셀로나</span>
 						<button
 							class="absolute top-2 right-2 w-6 h-6 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-sm transition-transform hover:scale-110"
 							type="button" data-bookmark aria-label="북마크">
@@ -1115,8 +1035,7 @@ request.setAttribute("activePage", "home");
 					</div>
 					<div class="p-3">
 						<h3
-							class="font-bold text-[13px] leading-snug mb-0.5 line-clamp-2 transition-colors"
-							style="color: #18181b">바르셀로나 4박 5일 가우디 투어</h3>
+							class="home-popular-title font-bold text-[13px] leading-snug mb-0.5 line-clamp-2 transition-colors">바르셀로나 4박 5일 가우디 투어</h3>
 						<p
 							class="text-gray-500 text-[11px] line-clamp-1 mb-2 leading-relaxed">사그라다
 							파밀리아, 구엘공원, 바르셀로나 해변까지 가우디의 도시.</p>
@@ -1137,8 +1056,7 @@ request.setAttribute("activePage", "home");
 										stroke-width="2"
 										d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>2,890</span>
 						</div>
-						<div class="flex items-center justify-between border-t pt-2"
-							style="border-color: #D1D2F9">
+						<div class="home-popular-author flex items-center justify-between border-t pt-2">
 							<div class="flex items-center gap-1.5">
 								<img src="https://i.pravatar.cc/40?img=23" alt="스페인러버"
 									class="w-4 h-4 rounded-full object-cover"><span
@@ -1149,9 +1067,8 @@ request.setAttribute("activePage", "home");
 					</div>
 				</a> <a
 					href="${pageContext.request.contextPath}/view/travel/scheduleDetail.jsp?id=3"
-					class="jsp-home-schedule-card shrink-0 bg-white rounded-2xl overflow-hidden cursor-pointer border"
-					style="width: 204px; position: relative; z-index: 1; border-color: #e5e7eb; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07); transform: scale(1); transition: transform .25s cubic-bezier(.22, 1, .36, 1), box-shadow .25s, border-color .2s, z-index 0s">
-					<div class="relative overflow-hidden" style="aspect-ratio: 4/3">
+					class="jsp-home-schedule-card home-popular-card shrink-0 bg-white rounded-2xl overflow-hidden cursor-pointer border">
+					<div class="home-popular-card-image relative overflow-hidden">
 						<img
 							src="https://images.unsplash.com/photo-1538485399081-7191377e8241?w=600&amp;h=400&amp;fit=crop"
 							alt="부산 1박 2일 바다 여행"
@@ -1159,8 +1076,7 @@ request.setAttribute("activePage", "home");
 						<div
 							class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
 						<span
-							class="absolute top-2 left-2 text-[10px] font-bold px-2 py-0.5 rounded-full text-white"
-							style="background-color: #6369D1">부산</span>
+							class="home-popular-location absolute top-2 left-2 text-[10px] font-bold px-2 py-0.5 rounded-full text-white">부산</span>
 						<button
 							class="absolute top-2 right-2 w-6 h-6 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-sm transition-transform hover:scale-110"
 							type="button" data-bookmark aria-label="북마크">
@@ -1175,8 +1091,7 @@ request.setAttribute("activePage", "home");
 					</div>
 					<div class="p-3">
 						<h3
-							class="font-bold text-[13px] leading-snug mb-0.5 line-clamp-2 transition-colors"
-							style="color: #18181b">부산 1박 2일 바다 여행</h3>
+							class="home-popular-title font-bold text-[13px] leading-snug mb-0.5 line-clamp-2 transition-colors">부산 1박 2일 바다 여행</h3>
 						<p
 							class="text-gray-500 text-[11px] line-clamp-1 mb-2 leading-relaxed">해운대와
 							광안리, 자갈치시장까지! 부산 핵심 코스.</p>
@@ -1197,8 +1112,7 @@ request.setAttribute("activePage", "home");
 										stroke-width="2"
 										d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>2,341</span>
 						</div>
-						<div class="flex items-center justify-between border-t pt-2"
-							style="border-color: #D1D2F9">
+						<div class="home-popular-author flex items-center justify-between border-t pt-2">
 							<div class="flex items-center gap-1.5">
 								<img src="https://i.pravatar.cc/40?img=5" alt="바다러버"
 									class="w-4 h-4 rounded-full object-cover"><span
@@ -1210,6 +1124,7 @@ request.setAttribute("activePage", "home");
 				</a>
 			</div>
 		</section>
+
 
 		<section class="mt-20 mb-20 px-4 md:px-8 max-w-6xl mx-auto">
 			<div class="grid grid-cols-1 md:grid-cols-2 gap-10">

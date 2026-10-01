@@ -1,13 +1,192 @@
 @charset "UTF-8";
 
 /* =========================
-   HOME - MAIN HERO
+   HOME - 전체 영역
+   홈 화면에서 사용하는 기본 글꼴 설정
 ========================= */
+.home-main {
+    font-family: 'Plus Jakarta Sans', 'Noto Sans KR', sans-serif;
+}
 
+/* =========================
+   HOME - 메인 배너
+   화면 전체 높이에서 헤더 높이를 제외한 만큼
+   메인 배너 높이를 자동으로 설정
+========================= */
 .home-hero {
     width: 100%;
     height: calc(100dvh - var(--header-height, 0px));
-    min-height: 560px;
     position: relative;
     overflow: hidden;
+}
+
+/* 메인 배너 배경 이미지 */
+.home-hero-bg {
+    background-image: url('https://images.unsplash.com/photo-1786049129855-3fdf58f32d72?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx5b3VuZyUyMHRyYXZlbGVycyUyMGFkdmVudHVyZSUyMGZyaWVuZHMlMjBtb3VudGFpbiUyMGdvbGRlbiUyMGhvdXJ8ZW58MXx8fHwxNzg5ODI5NTA4fDA&ixlib=rb-4.1.0&q=80&w=1600');
+}
+
+/* 메인 배너 배경 어두운 그라데이션 */
+.home-hero-overlay {
+    background: linear-gradient(
+        to bottom,
+        rgba(15, 10, 40, 0.55) 0%,
+        rgba(15, 10, 40, 0.45) 50%,
+        rgba(15, 10, 40, 0.65) 100%
+    );
+}
+
+/* 메인 배너 문구 위치 조정 */
+.home-hero-content {
+    margin-top: -40px;
+}
+
+/* 메인 배너 상단 Travel Plan Share 배지 */
+.home-hero-badge {
+    background-color: var(--brand-yellow);
+    color: #1a1a2e;
+}
+
+/* 메인 배너 메인 제목 */
+.home-hero-title {
+    font-family: 'Instrument Serif', Georgia, serif;
+    font-style: italic;
+    font-size: clamp(2.6rem, 5.5vw, 5rem);
+    text-shadow: 0 2px 20px rgba(0, 0, 0, 0.4);
+}
+
+/* 메인 제목 Wander 강조 색상 */
+.home-hero-title-highlight {
+    color: var(--brand-light);
+}
+
+/* 메인 배너 설명 문구 그림자 */
+.home-hero-description {
+    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.4);
+}
+
+/* 메인 배너 검색창 반투명 배경과 블러 효과 설정 */
+.home-hero-search {
+    background-color: rgba(255, 255, 255, 0.18);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+}
+
+/* 메인 배너 검색 버튼 사이트 메인 브랜드 색상을 배경색으로 사용 */
+.home-hero-search-btn {
+    background-color: var(--brand);
+}
+
+/* ========================================
+   HOME - 인기 여행일정 슬라이드
+======================================== */
+
+/* 섹션 상단 영문 문구 */
+.home-popular-eyebrow {
+    color: var(--brand);
+}
+
+/* 여행일정 카드가 자동으로 흐르는 영역 */
+.home-popular-carousel {
+    scroll-behavior: auto;
+    overflow: hidden;
+    padding-top: 24px;
+    padding-bottom: 24px;
+}
+
+/* 여행일정 카드 기본 디자인 */
+.home-popular-card {
+    width: 204px;
+    position: relative;
+    z-index: 1;
+    border-color: #e5e7eb;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+    transform: scale(1);
+
+    transition:
+        transform 0.25s cubic-bezier(.22, 1, .36, 1),
+        box-shadow 0.25s,
+        border-color 0.2s,
+        z-index 0s;
+}
+
+/* 여행일정 카드 이미지 영역 */
+.home-popular-card-image {
+    aspect-ratio: 4 / 3;
+}
+
+/* 여행 지역 배지 */
+.home-popular-location {
+    background-color: #6369D1;
+}
+
+/* 여행일정 제목 */
+.home-popular-title {
+    color: #18181b;
+}
+
+/* 작성자 영역 위쪽 구분선 */
+.home-popular-author {
+    border-color: #D1D2F9;
+}
+
+/* 광고 카드 기본 디자인 */
+.home-popular-ad-card {
+    width: 204px;
+    z-index: 1;
+    position: relative;
+    border-color: #e5e7eb;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+    transform: scale(1);
+
+    transition:
+        transform 0.25s cubic-bezier(.22, 1, .36, 1),
+        box-shadow 0.25s;
+}
+
+/* 광고 이미지 위 그라데이션 */
+.home-popular-ad-overlay {
+    background: linear-gradient(
+        to top,
+        rgba(10, 5, 40, 0.8) 0%,
+        rgba(10, 5, 40, 0.25) 60%,
+        transparent 100%
+    );
+}
+
+/* 광고 카드 내용 영역 */
+.home-popular-ad-content {
+    background: linear-gradient(
+        135deg,
+        #f4f4ff 0%,
+        #fff9df 100%
+    );
+}
+
+/* 광고 보기 문구 */
+.home-popular-ad-link {
+    color: var(--brand);
+}
+
+/* 여행일정 카드에 마우스를 올렸을 때 */
+.home-popular-card:hover {
+    transform: scale(1.05);
+    z-index: 10;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.16);
+}
+
+/* 여행일정 카드 hover 시 이미지 확대 */
+.home-popular-card:hover .home-popular-card-image img {
+    transform: scale(1.05);
+}
+
+/* 광고 카드에 마우스를 올렸을 때 */
+.home-popular-ad-card:hover {
+    transform: scale(1.05);
+    z-index: 10;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.16);
+}
+
+/* 광고 카드 hover 시 이미지 확대 */
+.home-popular-ad-card:hover .home-popular-card-image img {
+    transform: scale(1.05);
 }
