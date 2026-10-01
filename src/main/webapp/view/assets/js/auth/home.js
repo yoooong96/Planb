@@ -364,3 +364,272 @@ document.querySelectorAll('[data-rotate-group]').forEach(function (rotateGroup) 
     sync();
   });
 })();
+
+/* ========================================
+   HOME - 우측 점 네비게이션
+======================================== */
+(function () {
+
+    /* ========================================
+       점
+    ======================================== */
+    const dot1 = document.getElementById('homeScrollDot1');
+    const dot2 = document.getElementById('homeScrollDot2');
+    const dot3 = document.getElementById('homeScrollDot3');
+
+
+    /* ========================================
+       이동할 구역
+    ======================================== */
+    const area1 = document.getElementById('homeArea1');
+    const area2 = document.getElementById('popularPlans');
+    const area3 = document.getElementById('homeArea3');
+
+
+    /* ========================================
+       점 네비게이션 전체
+    ======================================== */
+    const indicator =
+        document.querySelector('.home-scroll-indicator');
+
+
+    /* 필요한 요소가 없으면 종료 */
+    if (
+        !dot1 ||
+        !dot2 ||
+        !dot3 ||
+        !area1 ||
+        !area2 ||
+        !area3 ||
+        !indicator
+    ) {
+        return;
+    }
+
+
+    /* ========================================
+       활성화된 점 변경
+    ======================================== */
+    function setActiveDot(activeDot) {
+
+        dot1.classList.remove('active');
+        dot2.classList.remove('active');
+        dot3.classList.remove('active');
+
+        activeDot.classList.add('active');
+    }
+
+
+    /* ========================================
+       1번 점 - 메인 배너
+    ======================================== */
+    dot1.addEventListener('click', function () {
+
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+
+        setActiveDot(dot1);
+    });
+
+
+    /* ========================================
+       2번 점 - 인기 여행일정
+    ======================================== */
+    dot2.addEventListener('click', function () {
+
+        const targetPosition =
+            area2.getBoundingClientRect().top +
+            window.scrollY;
+
+        /* 화면 높이의 16%만큼 위 */
+        const offset =
+            window.innerHeight * 0.16;
+
+        window.scrollTo({
+            top: targetPosition - offset,
+            behavior: 'smooth'
+        });
+
+        setActiveDot(dot2);
+    });
+
+
+    /* ========================================
+       3번 점
+    ======================================== */
+    dot3.addEventListener('click', function () {
+
+        const targetPosition =
+            area3.getBoundingClientRect().top +
+            window.scrollY;
+
+        /* 화면 높이의 15%만큼 위 */
+        const offset =
+            window.innerHeight * 0.15;
+
+        window.scrollTo({
+            top: targetPosition - offset,
+            behavior: 'smooth'
+        });
+
+        setActiveDot(dot3);
+    });
+
+
+    /* ========================================
+       현재 위치에 따라 활성 점 변경
+    ======================================== */
+    function updateActiveDotByScroll() {
+
+        const scrollTop =
+            window.scrollY;
+
+        const scrollHeight =
+            document.documentElement.scrollHeight;
+
+        const windowHeight =
+            window.innerHeight;
+
+        const maxScroll =
+            scrollHeight - windowHeight;
+
+
+        /* 페이지가 스크롤되지 않는 경우 */
+        if (maxScroll <= 0) {
+            setActiveDot(dot1);
+            return;
+        }
+
+
+        /* 현재 스크롤 진행률 */
+        const scrollRatio =
+            scrollTop / maxScroll;
+
+
+        /* ========================================
+           현재 위치 판정
+        ======================================== */
+
+        /* 상단 */
+        if (scrollRatio < 0.30) {
+
+            setActiveDot(dot1);
+        }
+
+        /* 중간 */
+        else if (scrollRatio < 0.70) {
+
+            setActiveDot(dot2);
+        }
+
+        /* 하단 */
+        else {
+
+            setActiveDot(dot3);
+        }
+    }
+
+
+    /* ========================================
+       마우스 움직일 때 네비게이션 표시
+    ======================================== */
+    let hideTimer;
+
+    document.addEventListener('mousemove', function () {
+
+        indicator.classList.add('visible');
+
+        clearTimeout(hideTimer);
+
+        hideTimer = setTimeout(function () {
+
+            indicator.classList.remove('visible');
+
+        }, 1500);
+    });
+
+
+    /* ========================================
+       스크롤할 때 현재 위치 확인
+    ======================================== */
+    window.addEventListener(
+        'scroll',
+        updateActiveDotByScroll,
+        { passive: true }
+    );
+
+
+    /* ========================================
+       처음 페이지가 열렸을 때도 확인
+    ======================================== */
+    updateActiveDotByScroll();
+
+})();
+/* ========================================
+   현재 스크롤 위치에 따라 활성 점 변경
+======================================== */
+function updateActiveDotByScroll() {
+
+    const scrollTop = window.scrollY;
+
+
+    /* ========================================
+       2번 점이 이동하는 실제 위치 계산
+    ======================================== */
+    const area2Position =
+        area2.getBoundingClientRect().top +
+        window.scrollY;
+
+    const area2Offset =
+        window.innerHeight * 0.16;
+
+    const dot2Position =
+        area2Position - area2Offset;
+
+
+    /* ========================================
+       3번 점이 이동하는 실제 위치 계산
+    ======================================== */
+    const area3Position =
+        area3.getBoundingClientRect().top +
+        window.scrollY;
+
+    const area3Offset =
+        window.innerHeight * 0.15;
+
+    const dot3Position =
+        area3Position - area3Offset;
+
+
+    /* ========================================
+       현재 위치 판정
+    ======================================== */
+
+    if (scrollTop < dot2Position) {
+
+        setActiveDot(dot1);
+
+    } else if (scrollTop < dot3Position) {
+
+        setActiveDot(dot2);
+
+    } else {
+
+        setActiveDot(dot3);
+
+    }
+}
+
+
+/* 스크롤할 때마다 현재 위치 확인 */
+window.addEventListener(
+    'scroll',
+    updateActiveDotByScroll,
+    { passive: true }
+);
+
+
+/* 처음 페이지가 열렸을 때도 확인 */
+updateActiveDotByScroll();
