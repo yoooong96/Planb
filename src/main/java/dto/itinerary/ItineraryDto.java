@@ -176,6 +176,44 @@ public class ItineraryDto {
 				+ sourceItineraryId + ", status=" + status + ", deletedByuserId=" + deletedByuserId + ", deletedAt="
 				+ deletedAt + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + "]";
 	}
+	// 목록 카드에서 보여줄 조회 결과 26.10.01 추가.
+	private String nickname;
+	private int likeCount;
+	private int commentCount;
+
+	public String getNickname() {
+	    return nickname;
+	}
+
+	public void setNickname(String nickname) {
+	    this.nickname = nickname;
+	}
+
+	public int getLikeCount() {
+	    return likeCount;
+	}
+
+	public void setLikeCount(int likeCount) {
+	    this.likeCount = likeCount;
+	}
+
+	public int getCommentCount() {
+	    return commentCount;
+	}
+
+	public void setCommentCount(int commentCount) {
+	    this.commentCount = commentCount;
+	}
 	
+	//로그인한 회원의 게시글일 때는 전체 일정 조회에서 북마크 토글 아이콘을 숨김. 26.10.01 추가.
+	private boolean bookmarked;
+
+	public boolean isBookmarked() {
+	    return bookmarked;
+	}
+
+	public void setBookmarked(boolean bookmarked) {
+	    this.bookmarked = bookmarked;
+	}
 	
 }

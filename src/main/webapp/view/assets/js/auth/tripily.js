@@ -88,6 +88,38 @@
 	========================================================= */
 
 	document.addEventListener("click", function(event) {
+		// 북마크 관련 이벤트. 26.10.01 김상민
+		/* -------------------------
+		   DB 일정 카드 북마크
+		------------------------- */
+
+		const bookmarkButton =
+			event.target.closest("[data-schedule-bookmark]");
+
+		if (bookmarkButton) {
+
+			event.preventDefault();
+			event.stopPropagation();
+
+			const loggedIn =
+				bookmarkButton.dataset.loggedIn === "true";
+
+			if (!loggedIn) {
+
+				tripilyToast("로그인 후 이용할 수 있습니다.");
+
+				return;
+			}
+
+			const itineraryId =
+				bookmarkButton.dataset.itineraryId;
+
+			// 북마크 Servlet 연결 전 임시 안내
+			tripilyToast("북마크 처리 기능은 아직 연결되지 않았습니다.");
+
+			return;
+		}
+
 
 		/* -------------------------
 		   Modal 열기
