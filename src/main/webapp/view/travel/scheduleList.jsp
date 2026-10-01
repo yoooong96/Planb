@@ -18,7 +18,7 @@ request.setAttribute("activePage", "travel");
 				class="text-xs font-bold text-gray-400 uppercase tracking-widest px-3 mb-1">여행
 				일정</div>
 			<a
-				href="${pageContext.request.contextPath}/view/travel/myItineraries.jsp"
+				href="${pageContext.request.contextPath}/view/profile/myProfile.jsp"
 				class="flex items-center justify-between px-3 py-2.5 rounded-lg transition-colors group"><span
 				class="flex items-center gap-2 text-sm font-semibold text-gray-700"><svg
 						width="16" height="16" viewBox="0 0 24 24" fill="none"
@@ -28,7 +28,7 @@ request.setAttribute("activePage", "travel");
 						<polyline points="14 2 14 8 20 8" /></svg>내가 작성한 글</span><span
 				class="text-xs rounded-full px-2 py-0.5 font-semibold"
 				style="background: var(- -brand-light); color: var(- -brand)">3</span></a>
-			<button type="button"
+			<!-- <button type="button"
 				class="flex items-center justify-between px-3 py-2.5 rounded-lg hover:bg-gray-50 transition-colors group mb-3">
 				<span
 					class="flex items-center gap-2 text-sm font-semibold text-gray-700 group-hover:text-gray-900"><svg
@@ -37,7 +37,7 @@ request.setAttribute("activePage", "travel");
 						<circle cx="12" cy="12" r="10" />
 						<polyline points="12 6 12 12 16 14" /></svg>최근 조회한 글</span><span
 					class="text-xs bg-gray-100 text-gray-500 rounded-full px-2 py-0.5 font-semibold">3</span>
-			</button>
+			</button> -->
 			<div class="border-t border-gray-100 mb-3"></div>
 			<button type="button"
 				class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl transition-all mb-1"

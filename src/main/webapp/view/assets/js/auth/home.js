@@ -1,28 +1,37 @@
 /* ========================================
-   HOME - Main Hero
+   HOME - 메인 배너 높이 자동 조절
+   현재 화면의 헤더 높이를 자동으로 계산해서
+   메인 배너가 화면 크기에 맞게 표시되도록 하는 기능
 ======================================== */
 
-/* 메인 배너 높이 자동 계산 */
 (function () {
 
+    // 헤더의 실제 높이를 계산하는 함수
     function setHomeHeroHeight() {
 
-        const header = document.querySelector('header');
+        // 현재 페이지의 헤더 찾기
+        const header = document.querySelector('.site-header');
 
+        // 헤더를 찾지 못하면 실행 중지
         if (!header) {
             return;
         }
 
+        // 현재 헤더의 실제 높이(px) 가져오기
         const headerHeight = header.getBoundingClientRect().height;
 
+        // 계산한 헤더 높이를 CSS 변수로 전달
+        // CSS에서 var(--header-height)로 사용할 수 있음
         document.documentElement.style.setProperty(
             '--header-height',
             headerHeight + 'px'
         );
     }
 
+    // 페이지가 처음 열렸을 때 한 번 실행
     setHomeHeroHeight();
 
+    // 브라우저 창 크기가 변경될 때마다 다시 계산
     window.addEventListener('resize', setHomeHeroHeight);
 
 })();
@@ -50,34 +59,110 @@
   }
 })();
 
-/* Home interactions from 통합본(9) */
-(function(){
-  var carousel=document.querySelector('[data-home-carousel]');
-  if(carousel){
-    var paused=false;
-    carousel.addEventListener('mouseenter',function(){paused=true;});
-    carousel.addEventListener('mouseleave',function(){paused=false;});
-    function step(){ if(!paused){ carousel.scrollLeft+=0.7; var loopWidth=Number(carousel.getAttribute('data-loop-width'))||((carousel.scrollWidth)/2); if(carousel.scrollLeft>=loopWidth) carousel.scrollLeft=0; } requestAnimationFrame(step); }
-    requestAnimationFrame(step);
-  }
-  document.querySelectorAll('[data-bookmark]').forEach(function(btn){ btn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();btn.classList.toggle('saved');}); });
-  var scroll=document.querySelector('[data-scroll-popular]');
-  var scroll = document.querySelector('[data-scroll-popular]');
+/* ========================================
+   HOME - 인기 여행일정 자동 슬라이드
+======================================== */
+(function () {
+    // 여행일정 슬라이드 영역 찾기
+    const carousel =
+        document.querySelector('[data-home-carousel]');
+    // 여행일정 슬라이드가 없으면 실행하지 않음
+    if (!carousel) {
+        return;
+    }
+    // 자동 슬라이드 정지 여부
+    let paused = false;
+    /* ----------------------------------------
+       마우스를 올리면 자동 슬라이드 정지
+    ---------------------------------------- */
+    carousel.addEventListener(
+        'mouseenter',
+        function () {
+            paused = true;
+        }
+    );
+    /* ----------------------------------------
+       마우스가 빠져나가면 다시 시작
+    ---------------------------------------- */
+    carousel.addEventListener(
+        'mouseleave',
+        function () {
+            paused = false;
+        }
+    );
+    /* ----------------------------------------
+       자동 슬라이드 실행
+    ---------------------------------------- */
+    function moveCarousel() {
+        if (!paused) {
+            // 오른쪽으로 조금씩 이동
+            carousel.scrollLeft += 0.7;
+            // JSP의 data-loop-width 값 사용
+            const loopWidth =
+                Number(
+                    carousel.getAttribute(
+                        'data-loop-width'
+                    )
+                )
+                || carousel.scrollWidth / 2;
 
-	if (scroll) {
-	    scroll.addEventListener('click', function () {
-	        var target = document.getElementById('popularPlans');
-	        if (target) {
-	            var targetPosition = target.getBoundingClientRect().top + window.pageYOffset;
-	
-	            window.scrollTo({
-	                top: targetPosition - 130,
-	                behavior: 'smooth'
-	            });
-	        }
-	    });
-	}
+            // 첫 번째 카드 묶음이 끝나면
+            // 처음 위치로 이동
+            if (
+               carousel.scrollLeft >= loopWidth
+            ) {
+                carousel.scrollLeft = 0;
+           	}
+        }
+        // 다음 화면에서도 계속 실행
+        requestAnimationFrame(
+            moveCarousel
+        );
+    }
+    // 자동 슬라이드 시작
+    requestAnimationFrame(
+        moveCarousel
+    );
 })();
+
+/* ========================================
+   HOME - 여행일정 북마크 버튼
+======================================== */
+document
+	.querySelectorAll('[data-bookmark]')
+	.forEach(function (btn) {
+		btn.addEventListener(
+           'click',
+			function (e) {
+				// 카드 상세 페이지로
+                // 이동하지 않도록 막음
+                e.preventDefault();
+                e.stopPropagation();
+                // 저장 상태 표시
+                btn.classList.toggle(
+                    'saved'
+            );
+		}
+	);
+});
+var scroll=document.querySelector('[data-scroll-popular]');
+
+if (scroll) {
+    scroll.addEventListener('click', function () {
+        var target = document.getElementById('popularPlans');
+
+        if (target) {
+            var targetPosition =
+                target.getBoundingClientRect().top
+                + window.pageYOffset;
+
+            window.scrollTo({
+                top: targetPosition - 130,
+                behavior: 'smooth'
+            });
+        }
+    });
+}
 
 /* 여행꿀팁 + 여행메이트 게시글/진행바 로테이션 */
 document.querySelectorAll('[data-rotate-group]').forEach(function (rotateGroup) {
