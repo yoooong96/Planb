@@ -1,0 +1,240 @@
+package controller.itinerary;
+
+import java.io.IOException;
+import java.lang.reflect.Type;
+import java.sql.Date;
+import java.sql.Time;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
+
+import dto.itinerary.ItineraryDto;
+import dto.member.UserDto;
+import service.itinerary.ItineraryService;
+import service.itinerary.ItineraryServiceImpl;
+
+@WebServlet("/itinerary/write")
+public class ItineraryWrite extends HttpServlet {
+
+    private static final long serialVersionUID = 1L;
+
+    private ItineraryService itineraryService;
+    private Gson gson;
+
+    public ItineraryWrite() {
+        itineraryService = new ItineraryServiceImpl();
+        gson = createGson();
+    }
+
+    @Override
+    protected void doPost(
+            HttpServletRequest request,
+            HttpServletResponse response)
+            throws ServletException, IOException {
+
+        request.setCharacterEncoding("UTF-8");
+
+        HttpSession session = request.getSession(false);
+
+        if (session == null || session.getAttribute("user") == null) {
+            response.sendRedirect(
+                    request.getContextPath() + "/auth/login"
+            );
+            return;
+        }
+
+        UserDto loginUser =
+                (UserDto) session.getAttribute("user");
+
+        try {
+
+            String json =
+                    request.getParameter("itineraryJson");
+
+            if (json == null || json.trim().isEmpty()) {
+                throw new IllegalArgumentException(
+                        "저장할 일정 데이터가 없습니다."
+                );
+            }
+
+            ItineraryDto itineraryDto =
+                    gson.fromJson(
+                            json,
+                            ItineraryDto.class
+                    );
+
+            validateRequiredFields(itineraryDto);
+
+            /*
+             * 클라이언트의 userId는 사용하지 않는다.
+             * 로그인한 회원의 세션 값으로 강제한다.
+             */
+            itineraryDto.setUserId(
+                    loginUser.getUserId()
+            );
+
+            /*
+             * 신규 작성은 itineraryId를 무조건 null 처리한다.
+             */
+            itineraryDto.setItineraryId(null);
+
+            Long itineraryId =
+                    itineraryService.writeItinerary(
+                            itineraryDto
+                    );
+
+            /*
+             * 기능명세서:
+             * 저장 성공 -> 일정 상세페이지 이동
+             *
+             * 현재 Planb 프로젝트의 상세페이지 링크 규칙:
+             * /view/travel/scheduleDetail.jsp?id=일정번호
+             */
+            response.sendRedirect(
+                    request.getContextPath()
+                    + "/view/travel/scheduleDetail.jsp?id="
+                    + itineraryId
+            );
+
+        } catch (IllegalArgumentException e) {
+
+            request.setAttribute(
+                    "err",
+                    e.getMessage()
+            );
+
+            request.getRequestDispatcher(
+                    "/view/itinerary/planner.jsp"
+            ).forward(request, response);
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
+            throw new ServletException(
+                    "일정 저장 중 오류가 발생했습니다.",
+                    e
+            );
+        }
+    }
+
+
+    private void validateRequiredFields(
+            ItineraryDto itineraryDto) {
+
+        if (itineraryDto == null) {
+            throw new IllegalArgumentException(
+                    "일정 데이터가 없습니다."
+            );
+        }
+
+        if (itineraryDto.getTitle() == null
+                || itineraryDto.getTitle()
+                        .trim().isEmpty()) {
+
+            throw new IllegalArgumentException(
+                    "여행 제목은 필수입니다."
+            );
+        }
+
+        if (itineraryDto.getCountry() == null
+                || itineraryDto.getCountry()
+                        .trim().isEmpty()) {
+
+            throw new IllegalArgumentException(
+                    "국가는 필수입니다."
+            );
+        }
+
+        if (itineraryDto.getTravelerCount() != null
+                && itineraryDto.getTravelerCount() < 1) {
+
+            throw new IllegalArgumentException(
+                    "여행 인원은 1명 이상이어야 합니다."
+            );
+        }
+
+        if (itineraryDto.getStartDate() != null
+                && itineraryDto.getEndDate() != null
+                && itineraryDto.getEndDate()
+                        .before(itineraryDto.getStartDate())) {
+
+            throw new IllegalArgumentException(
+                    "종료일은 시작일보다 빠를 수 없습니다."
+            );
+        }
+    }
+
+
+    private Gson createGson() {
+
+        GsonBuilder builder =
+                new GsonBuilder();
+
+        builder.registerTypeAdapter(
+                Date.class,
+                new JsonDeserializer<Date>() {
+
+                    @Override
+                    public Date deserialize(
+                            JsonElement json,
+                            Type typeOfT,
+                            JsonDeserializationContext context)
+                            throws JsonParseException {
+
+                        if (json == null
+                                || json.isJsonNull()
+                                || json.getAsString().trim().isEmpty()) {
+                            return null;
+                        }
+
+                        return Date.valueOf(
+                                json.getAsString()
+                        );
+                    }
+                }
+        );
+
+        builder.registerTypeAdapter(
+                Time.class,
+                new JsonDeserializer<Time>() {
+
+                    @Override
+                    public Time deserialize(
+                            JsonElement json,
+                            Type typeOfT,
+                            JsonDeserializationContext context)
+                            throws JsonParseException {
+
+                        if (json == null
+                                || json.isJsonNull()
+                                || json.getAsString().trim().isEmpty()) {
+                            return null;
+                        }
+
+                        String value =
+                                json.getAsString();
+
+                        if (value.length() == 5) {
+                            value += ":00";
+                        }
+
+                        return Time.valueOf(value);
+                    }
+                }
+        );
+
+        return builder.create();
+    }
+}

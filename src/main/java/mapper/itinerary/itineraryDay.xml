@@ -1,21 +1,77 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
-	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-	
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
 <mapper namespace="mapper.itinerary.itineraryDay">
-	<insert id="insertItineraryDay" parameterType="itineraryDay">
-		
-	</insert>
-	
-	<select id="selectItineraryDay" resultType="itineraryDay" parameterType="String">
-	
-	</select>
-	
-	<update id="updateItineraryDay" parameterType="itineraryDay">
-	
-	</update>
-	
-	<delete id="deleteItineraryDay" parameterType="itineraryDay">
-	
-	</delete>
+    <!-- DAY 저장 -->
+    <insert id="insertItineraryDay"
+            parameterType="dto.itinerary.ItineraryDayDto"
+            useGeneratedKeys="true"
+            keyProperty="dayId"
+            keyColumn="day_id">
+
+        INSERT INTO TB_ITINERARY_DAY (
+            itinerary_id,
+            day_order,
+            day_date,
+            title,
+            source_day_id
+        )
+        VALUES (
+            #{itineraryId},
+            #{dayOrder},
+            #{dayDate},
+            #{title},
+            #{sourceDayId}
+        )
+
+    </insert>
+
+
+    <!-- 특정 일정의 DAY 목록 조회 -->
+    <select id="selectItineraryDays"
+            parameterType="long"
+            resultType="itineraryDay">
+
+        SELECT
+            day_id,
+            itinerary_id,
+            day_order,
+            day_date,
+            title,
+            source_day_id,
+            created_at
+        FROM TB_ITINERARY_DAY
+        WHERE itinerary_id = #{itineraryId}
+        ORDER BY day_order ASC
+
+    </select>
+
+
+    <!-- DAY 수정 -->
+    <update id="updateItineraryDay"
+            parameterType="dto.itinerary.ItineraryDayDto">
+
+        UPDATE TB_ITINERARY_DAY
+        SET
+            day_order = #{dayOrder},
+            day_date = #{dayDate},
+            title = #{title},
+            source_day_id = #{sourceDayId}
+        WHERE day_id = #{dayId}
+          AND itinerary_id = #{itineraryId}
+
+    </update>
+
+
+    <!-- 일정 수정 시 기존 DAY 전체 삭제 -->
+    <delete id="deleteItineraryDaysByItineraryId"
+            parameterType="long">
+
+        DELETE FROM TB_ITINERARY_DAY
+        WHERE itinerary_id = #{itineraryId}
+
+    </delete>
+
 </mapper>

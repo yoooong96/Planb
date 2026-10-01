@@ -94,7 +94,7 @@
 	    <!-- 여행 일정 -->
 	    <mapper resource="mapper/itinerary/itinerary.xml"/>
 	    <mapper resource="mapper/itinerary/itineraryBlock.xml"/>
-	    <!-- <mapper resource="mapper/itinerary/itineraryBlockImage.xml"/> -->
+		<mapper resource="mapper/itinerary/itineraryBlockImage.xml"/>
 	    <mapper resource="mapper/itinerary/itineraryBookmark.xml"/>
 	    <mapper resource="mapper/itinerary/itineraryComment.xml"/>
 	    <!-- <mapper resource="mapper/itinerary/itineraryCart.xml"/> -->

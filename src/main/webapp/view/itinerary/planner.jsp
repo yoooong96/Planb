@@ -519,6 +519,10 @@ request.setAttribute("activePage", "planner");
                             </svg>
                             <span id="plannerSaveLabel">저장하기</span>
                         </button>
+
+                        <form id="plannerSubmitForm" method="post" class="hidden">
+                            <input type="hidden" id="plannerItineraryJson" name="itineraryJson">
+                        </form>
                     </div>
 
                     <button id="plannerVisibility"
@@ -1678,12 +1682,133 @@ request.setAttribute("activePage", "planner");
                     dirty=false;
                 }catch(e){ sessionStorage.removeItem(DRAFT_KEY); }
             }
+            function plannerBlockTypeToDb(type){
+                var map={
+                    sightseeing:'ATTRACTION',
+                    meal:'MEAL',
+                    accommodation:'LODGING',
+                    transport:'TRANSPORT',
+                    activity:'ACTIVITY'
+                };
+                return map[type] || 'ATTRACTION';
+            }
+
+            function normalizePlannerTime(value){
+                if(!value) return null;
+                return value.length===5 ? value+':00' : value;
+            }
+
+            function collectPlannerImages(card){
+                var images=[];
+                var gallery=$('[data-photo-gallery]',card);
+                if(!gallery) return images;
+
+                $$('.planner-photo-thumb',gallery).forEach(function(thumb,index){
+                    var src=thumb.dataset.src || '';
+                    if(!src){
+                        var img=$('img',thumb);
+                        if(img) src=img.getAttribute('src') || '';
+                    }
+
+                    src=String(src || '').trim();
+
+                    // 비어 있는 슬롯은 전송하지 않음
+                    if(!src) return;
+
+                    images.push({
+                        imageUrl:src,
+                        imageOrder:index+1
+                    });
+                });
+
+                return images;
+            }
+
+            function collectPlannerPayload(){
+                var days=[];
+
+                $$('.planner-day').forEach(function(day,dayIndex){
+                    var blocks=[];
+
+                    $$('.planner-block-card',day).forEach(function(card,blockIndex){
+                        var title=$('.planner-item-title',card);
+                        var start=$('.planner-start-time',card);
+                        var end=$('.planner-end-time',card);
+                        var cost=$('.planner-item-cost',card);
+                        var memo=$('.planner-item-note',card);
+
+                        blocks.push({
+                            sourceBlockId:null,
+                            placeId:null,
+                            blockType:plannerBlockTypeToDb(card.dataset.itemType),
+                            blockOrder:blockIndex+1,
+                            title:title ? title.value.trim() : '',
+                            memo:memo ? memo.value.trim() : '',
+                            cost:cost && cost.value ? Number(cost.value) : 0,
+                            startTime:normalizePlannerTime(start ? start.value : ''),
+                            endTime:normalizePlannerTime(end ? end.value : ''),
+                            images:collectPlannerImages(card)
+                        });
+                    });
+
+                    var dayTitle=$('.planner-day-title',day);
+
+                    days.push({
+                        sourceDayId:null,
+                        dayOrder:dayIndex+1,
+                        dayDate:null,
+                        title:dayTitle ? dayTitle.textContent.trim() : ('Day '+(dayIndex+1)),
+                        blocks:blocks
+                    });
+                });
+
+                return {
+                    itineraryId:plannerItineraryId ? Number(plannerItineraryId) : null,
+                    sourceItineraryId:null,
+                    title:$('#tripTitle') ? $('#tripTitle').value.trim() : '',
+                    summary:null,
+                    continent:null,
+                    country:$('#plannerCountry') ? $('#plannerCountry').value.trim() : '',
+                    city:$('#plannerRegion') && $('#plannerRegion').value.trim()
+                        ? $('#plannerRegion').value.trim()
+                        : null,
+                    travelerCount:$('#plannerTravelerCount')
+                        ? Number($('#plannerTravelerCount').value || 1)
+                        : 1,
+                    startDate:startDate && startDate.value ? startDate.value : null,
+                    endDate:endDate && endDate.value ? endDate.value : null,
+                    visibility:visibility && visibility.dataset.visibility
+                        ? visibility.dataset.visibility
+                        : 'PRIVATE',
+                    days:days
+                };
+            }
+
             var save=$('#plannerSaveBtn');
             if(save) save.addEventListener('click',function(){
                 if(!validatePlannerRequiredFields()) return;
-                sessionStorage.setItem(DRAFT_KEY,JSON.stringify(collectDraft()));
+
+                var form=$('#plannerSubmitForm');
+                var jsonInput=$('#plannerItineraryJson');
+
+                if(!form || !jsonInput){
+                    toast('저장 폼을 찾을 수 없습니다.');
+                    return;
+                }
+
+                var payload=collectPlannerPayload();
+
+                jsonInput.value=JSON.stringify(payload);
+
+                if(plannerItineraryId){
+                    form.action='${pageContext.request.contextPath}/itinerary/modify';
+                }else{
+                    form.action='${pageContext.request.contextPath}/itinerary/write';
+                }
+
                 dirty=false;
-                toast(plannerItineraryId?'수정할 일정 데이터가 준비되었습니다.':'저장할 일정 데이터가 준비되었습니다.');
+                sessionStorage.removeItem(DRAFT_KEY);
+                form.submit();
             });
             ['#tripTitle','#plannerCountry','#plannerRegion','#plannerTravelerCount'].forEach(function(sel){var el=$(sel);if(el)el.addEventListener('input',markDirty)});
             var travelerCountInput=$('#plannerTravelerCount');

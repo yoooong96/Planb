@@ -1,21 +1,96 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
-	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-	
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
 <mapper namespace="mapper.itinerary.itineraryBlock">
-	<insert id="insertItineraryBlock" parameterType="itineraryBlock">
-		
-	</insert>
-	
-	<select id="selectItineraryBlock" resultType="itineraryBlock" parameterType="String">
-		
-	</select>
-	
-	<update id="updateItineraryBlock" parameterType="itineraryBlock">
-	
-	</update>
-	
-	<delete id="deleteItineraryBlock" parameterType="itineraryBlock">
-	
-	</delete>
+    <!-- 블록 저장 -->
+    <insert id="insertItineraryBlock"
+            parameterType="dto.itinerary.ItineraryBlockDto"
+            useGeneratedKeys="true"
+            keyProperty="blockId"
+            keyColumn="block_id">
+
+        INSERT INTO TB_ITINERARY_BLOCK (
+            day_id,
+            place_id,
+            source_block_id,
+            block_type,
+            block_order,
+            title,
+            memo,
+            cost,
+            start_time,
+            end_time
+        )
+        VALUES (
+            #{dayId},
+            #{placeId},
+            #{sourceBlockId},
+            #{blockType},
+            #{blockOrder},
+            #{title},
+            #{memo},
+            #{cost},
+            #{startTime},
+            #{endTime}
+        )
+
+    </insert>
+
+
+    <!-- 특정 DAY의 블록 목록 조회 -->
+    <select id="selectItineraryBlocks"
+            parameterType="long"
+            resultType="itineraryBlock">
+
+        SELECT
+            block_id,
+            day_id,
+            place_id,
+            source_block_id,
+            block_type,
+            block_order,
+            title,
+            memo,
+            cost,
+            start_time,
+            end_time
+        FROM TB_ITINERARY_BLOCK
+        WHERE day_id = #{dayId}
+        ORDER BY block_order ASC
+
+    </select>
+
+
+    <!-- 블록 수정 -->
+    <update id="updateItineraryBlock"
+            parameterType="dto.itinerary.ItineraryBlockDto">
+
+        UPDATE TB_ITINERARY_BLOCK
+        SET
+            place_id = #{placeId},
+            source_block_id = #{sourceBlockId},
+            block_type = #{blockType},
+            block_order = #{blockOrder},
+            title = #{title},
+            memo = #{memo},
+            cost = #{cost},
+            start_time = #{startTime},
+            end_time = #{endTime}
+        WHERE block_id = #{blockId}
+          AND day_id = #{dayId}
+
+    </update>
+
+
+    <!-- DAY의 블록 전체 삭제 -->
+    <delete id="deleteItineraryBlocksByDayId"
+            parameterType="long">
+
+        DELETE FROM TB_ITINERARY_BLOCK
+        WHERE day_id = #{dayId}
+
+    </delete>
+
 </mapper>
