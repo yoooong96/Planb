@@ -4,9 +4,13 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.sql.Date;
 import java.sql.Time;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,6 +29,11 @@ import service.itinerary.ItineraryService;
 import service.itinerary.ItineraryServiceImpl;
 
 @WebServlet("/itinerary/modify")
+@MultipartConfig(
+        maxFileSize = 1024 * 1024 * 10,
+        maxRequestSize = 1024 * 1024 * 100,
+        fileSizeThreshold = 1024 * 1024
+)
 public class ItineraryModify extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
@@ -56,6 +65,9 @@ public class ItineraryModify extends HttpServlet {
 
         UserDto loginUser =
                 (UserDto) session.getAttribute("user");
+
+        List<File> uploadedFiles =
+                new ArrayList<File>();
 
         try {
 
@@ -115,9 +127,33 @@ public class ItineraryModify extends HttpServlet {
                     loginUser.getUserId()
             );
 
+            /*
+             * 새로 선택한 사진만 실제 파일로 저장하고
+             * ImageDto.imageUrl을 채운다.
+             *
+             * 기존 사진은 기존 imageUrl을 그대로 사용.
+             */
+            uploadedFiles =
+                    ItineraryImageUploadUtil
+                            .bindUploadedImages(
+                                    request,
+                                    itineraryDto
+                            );
+
             itineraryService.modifyItinerary(
                     itineraryDto
             );
+
+            /*
+             * DB 수정 성공 후에만
+             * 화면에서 제거된 기존 이미지의 실제 파일을 삭제한다.
+             */
+            ItineraryImageUploadUtil
+                    .deleteRemovedImages(
+                            request.getServletContext(),
+                            savedItinerary,
+                            itineraryDto
+                    );
 
             /*
              * 기능명세서:
@@ -131,6 +167,11 @@ public class ItineraryModify extends HttpServlet {
 
         } catch (IllegalArgumentException e) {
 
+            ItineraryImageUploadUtil
+                    .deleteCreatedFiles(
+                            uploadedFiles
+                    );
+
             request.setAttribute(
                     "err",
                     e.getMessage()
@@ -141,6 +182,11 @@ public class ItineraryModify extends HttpServlet {
             ).forward(request, response);
 
         } catch (Exception e) {
+
+            ItineraryImageUploadUtil
+                    .deleteCreatedFiles(
+                            uploadedFiles
+                    );
 
             e.printStackTrace();
 

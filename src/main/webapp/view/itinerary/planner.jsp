@@ -600,7 +600,7 @@ request.setAttribute("activePage", "planner");
                             <span id="plannerSaveLabel">저장하기</span>
                         </button>
 
-                        <form id="plannerSubmitForm" method="post" class="hidden">
+                        <form id="plannerSubmitForm" method="post" enctype="multipart/form-data" class="hidden">
                             <input type="hidden" id="plannerItineraryJson" name="itineraryJson">
                         </form>
                     </div>
@@ -2400,18 +2400,73 @@ request.setAttribute("activePage", "planner");
 
                     src=String(src || '').trim();
 
-                    if(!src) return;
+                    /*
+                     * 새로 선택한 로컬 파일은 blob: URL이므로
+                     * DB에 blob URL을 넣지 않는다.
+                     *
+                     * 대신 imageUrl=null 상태의 ImageDto를 JSON에 넣고,
+                     * 실제 파일은 multipart Part로 별도 전송한다.
+                     * 서버가 저장 후 imageUrl을 실제 경로로 채운다.
+                     */
+                    if(thumb._plannerFile){
+                        images.push({
+                            imageUrl:null,
+                            imageOrder:index+1
+                        });
+                        return;
+                    }
 
-                    // blob: URL은 브라우저 미리보기용 임시 주소
-                    if(src.indexOf('blob:')===0) return;
-
-                    images.push({
-                        imageUrl:src,
-                        imageOrder:index+1
-                    });
+                    /*
+                     * 수정 모드에서 기존 DB 이미지라면
+                     * 기존 imageUrl을 그대로 유지한다.
+                     */
+                    if(src && src.indexOf('blob:')!==0){
+                        images.push({
+                            imageUrl:src,
+                            imageOrder:index+1
+                        });
+                    }
                 });
 
                 return images;
+            }
+
+            function appendPlannerImageParts(form){
+                /*
+                 * 이전 저장 시 생성한 동적 file input 제거
+                 */
+                $$('.planner-upload-part',form).forEach(function(input){
+                    input.remove();
+                });
+
+                $$('.planner-day').forEach(function(day,dayIndex){
+                    $$('.planner-block-card',day).forEach(function(card,blockIndex){
+                        var gallery=$('[data-photo-gallery]',card);
+                        if(!gallery) return;
+
+                        $$('.planner-photo-thumb',gallery).forEach(function(thumb,index){
+                            var file=thumb._plannerFile;
+                            if(!file) return;
+
+                            var dt=new DataTransfer();
+                            dt.items.add(file);
+
+                            var input=document.createElement('input');
+                            input.type='file';
+                            input.name=
+                                'blockImage_'
+                                + dayIndex + '_'
+                                + blockIndex + '_'
+                                + (index+1);
+
+                            input.className='planner-upload-part';
+                            input.files=dt.files;
+                            input.hidden=true;
+
+                            form.appendChild(input);
+                        });
+                    });
+                });
             }
 
             function collectPlannerPayload(){
@@ -2489,6 +2544,12 @@ request.setAttribute("activePage", "planner");
                 }
 
                 var payload=collectPlannerPayload();
+
+                /*
+                 * 실제 이미지 파일을 multipart input으로 구성한 뒤
+                 * JSON과 함께 같은 form으로 전송한다.
+                 */
+                appendPlannerImageParts(form);
 
                 jsonInput.value=JSON.stringify(payload);
 

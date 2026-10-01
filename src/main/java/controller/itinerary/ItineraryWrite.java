@@ -4,9 +4,13 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.sql.Date;
 import java.sql.Time;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,6 +29,11 @@ import service.itinerary.ItineraryService;
 import service.itinerary.ItineraryServiceImpl;
 
 @WebServlet("/itinerary/write")
+@MultipartConfig(
+        maxFileSize = 1024 * 1024 * 10,
+        maxRequestSize = 1024 * 1024 * 100,
+        fileSizeThreshold = 1024 * 1024
+)
 public class ItineraryWrite extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
@@ -56,6 +65,9 @@ public class ItineraryWrite extends HttpServlet {
 
         UserDto loginUser =
                 (UserDto) session.getAttribute("user");
+
+        List<File> uploadedFiles =
+                new ArrayList<File>();
 
         try {
 
@@ -89,6 +101,17 @@ public class ItineraryWrite extends HttpServlet {
              */
             itineraryDto.setItineraryId(null);
 
+            /*
+             * multipart 이미지 파일 저장
+             * -> 각 ItineraryBlockImageDto.imageUrl 채움
+             */
+            uploadedFiles =
+                    ItineraryImageUploadUtil
+                            .bindUploadedImages(
+                                    request,
+                                    itineraryDto
+                            );
+
             Long itineraryId =
                     itineraryService.writeItinerary(
                             itineraryDto
@@ -109,6 +132,11 @@ public class ItineraryWrite extends HttpServlet {
 
         } catch (IllegalArgumentException e) {
 
+            ItineraryImageUploadUtil
+                    .deleteCreatedFiles(
+                            uploadedFiles
+                    );
+
             request.setAttribute(
                     "err",
                     e.getMessage()
@@ -119,6 +147,11 @@ public class ItineraryWrite extends HttpServlet {
             ).forward(request, response);
 
         } catch (Exception e) {
+
+            ItineraryImageUploadUtil
+                    .deleteCreatedFiles(
+                            uploadedFiles
+                    );
 
             e.printStackTrace();
 
