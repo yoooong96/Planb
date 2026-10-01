@@ -10,7 +10,7 @@ request.setAttribute("activePage", "profile");
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>사용자 프로필 · Tripily</title><jsp:include
 	page="/common/headStyles.jsp" /><link rel="stylesheet"
-	href="${pageContext.request.contextPath}/view/assets/css/profile.css">
+	href="${pageContext.request.contextPath}/view/assets/css/auth/profile.css">
 </head>
 <body class="site-shell"><jsp:include page="/common/header.jsp" />
 	<div class="app-root app-root--inner">
