@@ -1,10 +1,30 @@
 package dao.itinerary;
 
+import java.util.List;
+
+import org.apache.ibatis.session.SqlSession;
+
 import dto.itinerary.ItineraryBlockDto;
 
 public interface ItineraryBlockDao {
-	void insertItineraryBlock(ItineraryBlockDto itineraryBlockDto) throws Exception;
-	void selectItineraryBlock(ItineraryBlockDto itineraryBlockDto) throws Exception;
-	void updateItineraryBlock(ItineraryBlockDto itineraryBlockDto) throws Exception;
-	void deleteItineraryBlock(ItineraryBlockDto itineraryBlockDto) throws Exception;
+
+    int insertItineraryBlock(
+            SqlSession sqlSession,
+            ItineraryBlockDto itineraryBlockDto
+    ) throws Exception;
+
+    List<ItineraryBlockDto> selectItineraryBlocks(
+            SqlSession sqlSession,
+            Long dayId
+    ) throws Exception;
+
+    int updateItineraryBlock(
+            SqlSession sqlSession,
+            ItineraryBlockDto itineraryBlockDto
+    ) throws Exception;
+
+    int deleteItineraryBlocksByDayId(
+            SqlSession sqlSession,
+            Long dayId
+    ) throws Exception;
 }

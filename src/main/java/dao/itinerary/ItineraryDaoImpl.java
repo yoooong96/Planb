@@ -1,6 +1,7 @@
 package dao.itinerary;
 
 import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
@@ -9,31 +10,6 @@ import config.MybatisSqlSessionFactory;
 import dto.itinerary.ItineraryDto;
 
 public class ItineraryDaoImpl implements ItineraryDao {
-
-	@Override
-	public void insertItinerary(ItineraryDto itineraryDto) throws Exception {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void selectItinerary(ItineraryDto itineraryDto) throws Exception {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void updateItinerary(ItineraryDto itineraryDto) throws Exception {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void deleteItinerary(ItineraryDto itineraryDto) throws Exception {
-		// TODO Auto-generated method stub
-
-	}
-
 	//26.10.01 추가.
 	@Override
 	public List<ItineraryDto> selectScheduleList(Map<String, Object> params) throws Exception {
@@ -42,4 +18,42 @@ public class ItineraryDaoImpl implements ItineraryDao {
 		}
 	}
 
+    private static final String NAMESPACE = "mapper.itinerary.itinerary.";
+
+    @Override
+    public int insertItinerary(SqlSession sqlSession, ItineraryDto itineraryDto) throws Exception {
+        return sqlSession.insert(
+                NAMESPACE + "insertItinerary",
+                itineraryDto
+        );
+    }
+
+    @Override
+    public ItineraryDto selectItinerary(SqlSession sqlSession, Long itineraryId) throws Exception {
+        return sqlSession.selectOne(
+                NAMESPACE + "selectItinerary",
+                itineraryId
+        );
+    }
+
+    @Override
+    public int updateItinerary(SqlSession sqlSession, ItineraryDto itineraryDto) throws Exception {
+        return sqlSession.update(
+                NAMESPACE + "updateItinerary",
+                itineraryDto
+        );
+    }
+
+    @Override
+    public int deleteItinerary(SqlSession sqlSession, Long itineraryId, Long userId) throws Exception {
+
+        Map<String, Object> param = new HashMap<>();
+        param.put("itineraryId", itineraryId);
+        param.put("userId", userId);
+
+        return sqlSession.update(
+                NAMESPACE + "deleteItinerary",
+                param
+        );
+    }
 }

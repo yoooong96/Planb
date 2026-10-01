@@ -13,10 +13,37 @@ request.setAttribute("activePage", "home");
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/view/assets/css/auth/home.css">
 	<script defer src="${pageContext.request.contextPath}/view/assets/js/auth/home.js"></script>
 </head>
+<!-- ========================================
+     HOME - 커스텀 스크롤바
+========================================= -->
+<!-- ========================================
+     HOME - 섹션 네비게이션
+========================================= -->
+<div class="home-scroll-indicator">
+
+    <button type="button"
+        id="homeScrollDot1"
+        class="home-scroll-dot active"
+        aria-label="첫 번째 구역으로 이동">
+    </button>
+
+    <button type="button"
+        id="homeScrollDot2"
+        class="home-scroll-dot"
+        aria-label="두 번째 구역으로 이동">
+    </button>
+
+    <button type="button"
+        id="homeScrollDot3"
+        class="home-scroll-dot"
+        aria-label="세 번째 구역으로 이동">
+    </button>
+
+</div>
 <body class="site-shell">
 	<jsp:include page="/common/header.jsp" />
 	<main class="home-main">
-		<section class="home-hero relative flex flex-col items-center justify-center">
+		<section id="homeArea1" class="home-hero relative flex flex-col items-center justify-center">
 			<div class="home-hero-bg absolute inset-0 bg-cover bg-center"></div>
 			<div class="home-hero-overlay absolute inset-0"></div>
 			<div class="home-hero-content relative z-10 flex flex-col items-center text-center px-4 w-full">
@@ -1126,7 +1153,7 @@ request.setAttribute("activePage", "home");
 		</section>
 
 
-		<section class="mt-20 mb-20 px-4 md:px-8 max-w-6xl mx-auto">
+		<section id="homeArea3" class="mt-20 mb-20 px-4 md:px-8 max-w-6xl mx-auto">
 			<div class="grid grid-cols-1 md:grid-cols-2 gap-10">
 				<div>
 					<div class="flex items-end justify-between mb-6">

@@ -3,34 +3,46 @@ package dto.itinerary;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.List;
 
 public class ItineraryDto {
-	private long itineraryId;		// 일정 고유번호
-	private long userId;			// 작성 회원
-	private String title;			// 여행 제목
-	private String summary;			// 일정 소개
-	private String continent;		// 대륙
-	private String country;			// 나라	
-	private String city;			// 도시
-	private Date startDate;			// 시작일
-	private Date endDate;			// 종료일	
-	private BigDecimal totalBudget;	// 총 예산
-	private String visibility;		// 공개 설정
-	private String thumbnailImg;	// 대표 이미지
-	private int viewCount;			// 유효 조회수
-	private long sourceItineraryId; // 원본 일정 번호
-	private String status;			// 일정 상태
-	private long deletedByuserId;	// 삭제 처리자
-	private Timestamp deletedAt;	// 삭제 일시
-	private Timestamp createdAt;	// 작성 일자
-	private Timestamp updatedAt;	// 수정 일자
+	private Long itineraryId;              // 일정 고유번호
+	private Long userId;                   // 작성 회원
+	private String title;                  // 여행 제목
+    private String summary;                // 일정 소개
+    private String continent;              // 대륙
+    private String country;                // 나라
+    private String city;                   // 도시 (선택)
+
+    private Integer travelerCount;         // 여행 인원수, DB DEFAULT 1
+    
+    private Date startDate;                // 시작일 (선택)
+    private Date endDate;                  // 종료일 (선택)
+	
+    private BigDecimal totalBudget;        // 총 예산
+    private String visibility;             // PUBLIC / PRIVATE
+    private String thumbnailImg;           // 대표 이미지
+    
+    private Integer viewCount;             // 조회수
+    private Long sourceItineraryId;        // 원본 일정 번호
+    private String status;                 // ACTIVE / DELETED
+    
+    private Long deletedByUserId;          // 삭제 처리자
+    private Timestamp deletedAt;           // 삭제 일시
+    private Timestamp createdAt;           // 작성 일시
+    private Timestamp updatedAt;           // 수정 일시
+
+    // 일정 -> DAY 계층
+    private List<ItineraryDayDto> days;
+    
 	public ItineraryDto() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
+	
 	public ItineraryDto(long itineraryId, long userId, String title, String summary, String continent, String country,
 			String city, Date startDate, Date endDate, BigDecimal totalBudget, String visibility, String thumbnailImg,
-			int viewCount, long sourceItineraryId, String status, long deletedByuserId, Timestamp deletedAt,
+			int viewCount, long sourceItineraryId, String status, long deletedByUserId, Timestamp deletedAt,
 			Timestamp createdAt, Timestamp updatedAt) {
 		super();
 		this.itineraryId = itineraryId;
@@ -48,134 +60,204 @@ public class ItineraryDto {
 		this.viewCount = viewCount;
 		this.sourceItineraryId = sourceItineraryId;
 		this.status = status;
-		this.deletedByuserId = deletedByuserId;
+		this.deletedByUserId = deletedByUserId;
 		this.deletedAt = deletedAt;
 		this.createdAt = createdAt;
 		this.updatedAt = updatedAt;
 	}
-	public long getItineraryId() {
-		return itineraryId;
-	}
-	public void setItineraryId(long itineraryId) {
-		this.itineraryId = itineraryId;
-	}
-	public long getUserId() {
-		return userId;
-	}
-	public void setUserId(long userId) {
-		this.userId = userId;
-	}
-	public String getTitle() {
-		return title;
-	}
-	public void setTitle(String title) {
-		this.title = title;
-	}
-	public String getSummary() {
-		return summary;
-	}
-	public void setSummary(String summary) {
-		this.summary = summary;
-	}
-	public String getContinent() {
-		return continent;
-	}
-	public void setContinent(String continent) {
-		this.continent = continent;
-	}
-	public String getCountry() {
-		return country;
-	}
-	public void setCountry(String country) {
-		this.country = country;
-	}
-	public String getCity() {
-		return city;
-	}
-	public void setCity(String city) {
-		this.city = city;
-	}
-	public Date getStartDate() {
-		return startDate;
-	}
-	public void setStartDate(Date startDate) {
-		this.startDate = startDate;
-	}
-	public Date getEndDate() {
-		return endDate;
-	}
-	public void setEndDate(Date endDate) {
-		this.endDate = endDate;
-	}
-	public BigDecimal getTotalBudget() {
-		return totalBudget;
-	}
-	public void setTotalBudget(BigDecimal totalBudget) {
-		this.totalBudget = totalBudget;
-	}
-	public String getVisibility() {
-		return visibility;
-	}
-	public void setVisibility(String visibility) {
-		this.visibility = visibility;
-	}
-	public String getThumbnailImg() {
-		return thumbnailImg;
-	}
-	public void setThumbnailImg(String thumbnailImg) {
-		this.thumbnailImg = thumbnailImg;
-	}
-	public int getViewCount() {
-		return viewCount;
-	}
-	public void setViewCount(int viewCount) {
-		this.viewCount = viewCount;
-	}
-	public long getSourceItineraryId() {
-		return sourceItineraryId;
-	}
-	public void setSourceItineraryId(long sourceItineraryId) {
-		this.sourceItineraryId = sourceItineraryId;
-	}
-	public String getStatus() {
-		return status;
-	}
-	public void setStatus(String status) {
-		this.status = status;
-	}
-	public long getDeletedByuserId() {
-		return deletedByuserId;
-	}
-	public void setDeletedByuserId(long deletedByuserId) {
-		this.deletedByuserId = deletedByuserId;
-	}
-	public Timestamp getDeletedAt() {
-		return deletedAt;
-	}
-	public void setDeletedAt(Timestamp deletedAt) {
-		this.deletedAt = deletedAt;
-	}
-	public Timestamp getCreatedAt() {
-		return createdAt;
-	}
-	public void setCreatedAt(Timestamp createdAt) {
-		this.createdAt = createdAt;
-	}
-	public Timestamp getUpdatedAt() {
-		return updatedAt;
-	}
-	public void setUpdatedAt(Timestamp updatedAt) {
-		this.updatedAt = updatedAt;
-	}
+	
+	public Long getItineraryId() {
+        return itineraryId;
+    }
+
+    public void setItineraryId(Long itineraryId) {
+        this.itineraryId = itineraryId;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getSummary() {
+        return summary;
+    }
+
+    public void setSummary(String summary) {
+        this.summary = summary;
+    }
+
+    public String getContinent() {
+        return continent;
+    }
+
+    public void setContinent(String continent) {
+        this.continent = continent;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public Integer getTravelerCount() {
+        return travelerCount;
+    }
+
+    public void setTravelerCount(Integer travelerCount) {
+        this.travelerCount = travelerCount;
+    }
+
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
+
+    public BigDecimal getTotalBudget() {
+        return totalBudget;
+    }
+
+    public void setTotalBudget(BigDecimal totalBudget) {
+        this.totalBudget = totalBudget;
+    }
+
+    public String getVisibility() {
+        return visibility;
+    }
+
+    public void setVisibility(String visibility) {
+        this.visibility = visibility;
+    }
+
+    public String getThumbnailImg() {
+        return thumbnailImg;
+    }
+
+    public void setThumbnailImg(String thumbnailImg) {
+        this.thumbnailImg = thumbnailImg;
+    }
+
+    public Integer getViewCount() {
+        return viewCount;
+    }
+
+    public void setViewCount(Integer viewCount) {
+        this.viewCount = viewCount;
+    }
+
+    public Long getSourceItineraryId() {
+        return sourceItineraryId;
+    }
+
+    public void setSourceItineraryId(Long sourceItineraryId) {
+        this.sourceItineraryId = sourceItineraryId;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public Long getDeletedByUserId() {
+        return deletedByUserId;
+    }
+
+    public void setDeletedByUserId(Long deletedByUserId) {
+        this.deletedByUserId = deletedByUserId;
+    }
+
+    public Timestamp getDeletedAt() {
+        return deletedAt;
+    }
+
+    public void setDeletedAt(Timestamp deletedAt) {
+        this.deletedAt = deletedAt;
+    }
+
+    public Timestamp getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Timestamp createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Timestamp getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Timestamp updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public List<ItineraryDayDto> getDays() {
+        return days;
+    }
+
+    public void setDays(List<ItineraryDayDto> days) {
+        this.days = days;
+    }
+	
 	@Override
-	public String toString() {
-		return "ItineraryDto [itineraryId=" + itineraryId + ", userId=" + userId + ", title=" + title + ", summary="
-				+ summary + ", continent=" + continent + ", country=" + country + ", city=" + city + ", startDate="
-				+ startDate + ", endDate=" + endDate + ", totalBudget=" + totalBudget + ", visibility=" + visibility
-				+ ", thumbnailImg=" + thumbnailImg + ", viewCount=" + viewCount + ", sourceItineraryId="
-				+ sourceItineraryId + ", status=" + status + ", deletedByuserId=" + deletedByuserId + ", deletedAt="
-				+ deletedAt + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + "]";
-	}
+    public String toString() {
+        return "ItineraryDto [itineraryId=" + itineraryId
+                + ", userId=" + userId
+                + ", title=" + title
+                + ", summary=" + summary
+                + ", continent=" + continent
+                + ", country=" + country
+                + ", city=" + city
+                + ", travelerCount=" + travelerCount
+                + ", startDate=" + startDate
+                + ", endDate=" + endDate
+                + ", totalBudget=" + totalBudget
+                + ", visibility=" + visibility
+                + ", thumbnailImg=" + thumbnailImg
+                + ", viewCount=" + viewCount
+                + ", sourceItineraryId=" + sourceItineraryId
+                + ", status=" + status
+                + ", deletedByUserId=" + deletedByUserId
+                + ", deletedAt=" + deletedAt
+                + ", createdAt=" + createdAt
+                + ", updatedAt=" + updatedAt
+                + ", days=" + days + "]";
+    }
 	// 목록 카드에서 보여줄 조회 결과 26.10.01 추가.
 	private String nickname;
 	private int likeCount;
@@ -215,5 +297,4 @@ public class ItineraryDto {
 	public void setBookmarked(boolean bookmarked) {
 	    this.bookmarked = bookmarked;
 	}
-	
 }

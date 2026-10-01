@@ -18,7 +18,7 @@
 }
 
 html, body, #root { min-height: 100%; }
-html { scroll-behavior: smooth; }
+/* html { scroll-behavior: smooth; } */
 body { margin: 0; font-family: 'Noto Sans KR', sans-serif; color: #18181b; }
 * { box-sizing: border-box; }
 
@@ -35,9 +35,9 @@ body { margin: 0; font-family: 'Noto Sans KR', sans-serif; color: #18181b; }
 .timeline-dot { width:10px; height:10px; border-radius:50%; border:2px solid white; flex-shrink:0; }
 .timeline-line { width:2px; background:#D1D2F9; flex-shrink:0; margin-left:4px; }
 
-::-webkit-scrollbar { width:5px; height:5px; }
+/* ::-webkit-scrollbar { width:30px; height:5px; }
 ::-webkit-scrollbar-track { background:transparent; }
-::-webkit-scrollbar-thumb { background:#D1D2F9; border-radius:999px; }
+::-webkit-scrollbar-thumb { background:#D1D2F9; border-radius:999px; } */
 
 /* ============================================================
    Tripily unified visual system

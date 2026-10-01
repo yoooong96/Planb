@@ -364,3 +364,435 @@ document.querySelectorAll('[data-rotate-group]').forEach(function (rotateGroup) 
     sync();
   });
 })();
+
+/* ========================================
+   HOME - 우측 점 네비게이션
+======================================== */
+(function () {
+
+    /* ========================================
+       점
+    ======================================== */
+    const dot1 = document.getElementById('homeScrollDot1');
+    const dot2 = document.getElementById('homeScrollDot2');
+    const dot3 = document.getElementById('homeScrollDot3');
+
+
+    /* ========================================
+       이동할 구역
+    ======================================== */
+    const area1 = document.getElementById('homeArea1');
+    const area2 = document.getElementById('popularPlans');
+    const area3 = document.getElementById('homeArea3');
+
+
+    /* ========================================
+       점 네비게이션
+    ======================================== */
+    const indicator =
+        document.querySelector('.home-scroll-indicator');
+
+
+    /* 필요한 요소가 없으면 종료 */
+    if (
+        !dot1 ||
+        !dot2 ||
+        !dot3 ||
+        !area1 ||
+        !area2 ||
+        !area3 ||
+        !indicator
+    ) {
+        return;
+    }
+
+
+    /* ========================================
+       현재 구역
+       0 = 1번
+       1 = 2번
+       2 = 3번
+    ======================================== */
+    let currentSection = 0;
+
+    /* 구역 이동 중인지 확인 */
+    let isMoving = false;
+
+    /* 현재 실행 중인 애니메이션 */
+    let animationFrameId = null;
+
+
+    /* ========================================
+       활성화된 점 변경
+    ======================================== */
+    function setActiveDot(activeDot) {
+
+        dot1.classList.remove('active');
+        dot2.classList.remove('active');
+        dot3.classList.remove('active');
+
+        activeDot.classList.add('active');
+    }
+
+
+    /* ========================================
+	   부드러운 스크롤 이동
+	   - 처음부터 끝까지 일정한 속도
+	======================================== */
+	function smoothScrollTo(targetY, duration, callback) {
+	
+	    /* 기존 애니메이션이 있으면 취소 */
+	    if (animationFrameId !== null) {
+	        cancelAnimationFrame(animationFrameId);
+	    }
+	
+	    const startY = window.scrollY;
+	    const distance = targetY - startY;
+	    const startTime = performance.now();
+	
+	
+	    function animation(currentTime) {
+	
+	        const elapsed =
+	            currentTime - startTime;
+	
+	        const progress =
+	            Math.min(elapsed / duration, 1);
+	
+	
+	        /* 일정한 속도로 이동 */
+	        window.scrollTo(
+	            0,
+	            startY + distance * progress
+	        );
+	
+	
+	        /* 아직 이동 중 */
+	        if (progress < 1) {
+	
+	            animationFrameId =
+	                requestAnimationFrame(animation);
+	
+	        }
+	
+	        /* 이동 완료 */
+	        else {
+	
+	            animationFrameId = null;
+	
+	            if (callback) {
+	                callback();
+	            }
+	        }
+	    }
+	
+	
+	    animationFrameId =
+	        requestAnimationFrame(animation);
+	}
+
+
+    /* ========================================
+       각 구역의 실제 이동 위치 계산
+    ======================================== */
+    function getSectionPosition(sectionIndex) {
+
+        /* 1번 - 페이지 맨 위 */
+        if (sectionIndex === 0) {
+
+            return 0;
+        }
+
+
+        /* 2번 - 인기 여행일정 */
+        if (sectionIndex === 1) {
+
+            const targetPosition =
+                area2.getBoundingClientRect().top +
+                window.scrollY;
+
+            const offset =
+                window.innerHeight * 0.16;
+
+            return targetPosition - offset;
+        }
+
+
+        /* 3번 */
+        if (sectionIndex === 2) {
+
+            const targetPosition =
+                area3.getBoundingClientRect().top +
+                window.scrollY;
+
+            const offset =
+                window.innerHeight * 0.15;
+
+            return targetPosition - offset;
+        }
+
+
+        return 0;
+    }
+    /* ========================================
+	   해당 구역으로 이동
+	======================================== */
+	function moveToSection(sectionIndex) {
+	
+	    /* 범위 제한 */
+	    if (sectionIndex < 0 || sectionIndex > 2) {
+	        return;
+	    }
+	
+	
+	    /* 이미 이동 중이면 무시 */
+	    if (isMoving) {
+	        return;
+	    }
+	
+	
+	    /* 이동 시작 */
+	    isMoving = true;
+	
+	
+	    /*
+	     * 논리적인 현재 구역은
+	     * 휠 입력 즉시 다음 구역으로 변경
+	     */
+	    currentSection = sectionIndex;
+	
+	
+	    /* 이동할 위치 계산 */
+	    const targetY =
+	        getSectionPosition(sectionIndex);
+	
+	
+	    /* 화면 이동 */
+	    smoothScrollTo(
+	        targetY,
+	        10,
+	        function () {
+	
+	            /*
+	             * 화면 이동이 끝난 뒤
+	             * 활성 점 변경
+	             */
+	            if (sectionIndex === 0) {
+	
+	                setActiveDot(dot1);
+	
+	            } else if (sectionIndex === 1) {
+	
+	                setActiveDot(dot2);
+	
+	            } else {
+	
+	                setActiveDot(dot3);
+	            }
+	
+	
+	            /* 이동 완료 */
+	            isMoving = false;
+	        }
+	    );
+	}
+
+
+    /* ========================================
+       점 클릭
+    ======================================== */
+
+    /* 1번 */
+    dot1.addEventListener('click', function () {
+
+        if (currentSection === 0 && window.scrollY === 0) {
+            return;
+        }
+
+        isMoving = false;
+
+        moveToSection(0);
+    });
+
+
+    /* 2번 */
+    dot2.addEventListener('click', function () {
+
+        isMoving = false;
+
+        moveToSection(1);
+    });
+
+
+    /* 3번 */
+    dot3.addEventListener('click', function () {
+
+        isMoving = false;
+
+        moveToSection(2);
+    });
+
+
+    /* ========================================
+	   마우스 휠
+	   - 휠 입력 즉시 다음 구역으로 이동
+	======================================== */
+	window.addEventListener(
+	    'wheel',
+	    function (event) {
+	
+	        /* 브라우저 기본 스크롤 방지 */
+	        event.preventDefault();
+	
+	
+	        /* 이미 화면 이동 중이면 추가 입력 무시 */
+	        if (isMoving) {
+	            return;
+	        }
+	
+	
+	        /* 아래로 휠 */
+	        if (event.deltaY > 0) {
+	
+	            if (currentSection < 2) {
+	
+	                moveToSection(
+	                    currentSection + 1
+	                );
+	            }
+	
+	            return;
+	        }
+	
+	
+	        /* 위로 휠 */
+	        if (event.deltaY < 0) {
+	
+	            if (currentSection > 0) {
+	
+	                moveToSection(
+	                    currentSection - 1
+	                );
+	            }
+	        }
+	
+	    },
+	    {
+	        passive: false
+	    }
+	);
+
+
+    /* ========================================
+       마우스를 움직이면 점 표시
+    ======================================== */
+    let hideTimer;
+
+    document.addEventListener(
+        'mousemove',
+        function () {
+
+            indicator.classList.add('visible');
+
+            clearTimeout(hideTimer);
+
+            hideTimer =
+                setTimeout(function () {
+
+                    indicator.classList.remove(
+                        'visible'
+                    );
+
+                }, 1500);
+        }
+    );
+
+
+    /* ========================================
+	   현재 스크롤 위치에 맞게 초기 구역 설정
+	======================================== */
+	function initializeCurrentSection() {
+	
+	    const scrollY =
+	        window.scrollY;
+	
+	
+	    /* 각 구역의 이동 위치 */
+	    const section1Position =
+	        getSectionPosition(0);
+	
+	    const section2Position =
+	        getSectionPosition(1);
+	
+	    const section3Position =
+	        getSectionPosition(2);
+	
+	
+	    /*
+	     * 1번과 2번 사이의 중간 지점
+	     */
+	    const boundary1 =
+	        (section1Position + section2Position) / 2;
+	
+	
+	    /*
+	     * 2번과 3번 사이의 중간 지점
+	     */
+	    const boundary2 =
+	        (section2Position + section3Position) / 2;
+	
+	
+	    /* ========================================
+	       1번 구역
+	    ======================================== */
+	    if (scrollY < boundary1) {
+	
+	        currentSection = 0;
+	
+	        setActiveDot(dot1);
+	    }
+	
+	
+	    /* ========================================
+	       2번 구역
+	    ======================================== */
+	    else if (scrollY < boundary2) {
+	
+	        currentSection = 1;
+	
+	        setActiveDot(dot2);
+	    }
+	
+	
+	    /* ========================================
+	       3번 구역
+	    ======================================== */
+	    else {
+	
+	        currentSection = 2;
+	
+	        setActiveDot(dot3);
+	    }
+	}
+	
+	
+	/* ========================================
+	   페이지가 완전히 열린 후 현재 위치 확인
+	======================================== */
+	window.addEventListener(
+	    'load',
+	    function () {
+	
+	        /*
+	         * 브라우저가 새로고침 전 스크롤 위치를
+	         * 복원한 다음 확인
+	         */
+	        requestAnimationFrame(function () {
+	
+	            initializeCurrentSection();
+	
+	        });
+	    }
+	);
+
+})();

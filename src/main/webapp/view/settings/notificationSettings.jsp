@@ -1,2 +1,212 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%><% request.setAttribute("activePage","profile"); %>
-<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>알림 설정 · Tripily</title><jsp:include page="/common/headStyles.jsp" /><link rel="stylesheet" href="${pageContext.request.contextPath}/view/assets/css/profile.css"></head><body class="site-shell"><jsp:include page="/common/header.jsp" /><div class="settings-page"><div class="settings-shell"><aside class="settings-sidebar"><div class="settings-sidebar-head"><a class="back-icon" href="${pageContext.request.contextPath}/view/profile/myProfile.jsp">‹</a><div><span>MY PAGE</span><h2>설정</h2></div></div><nav><a class="" href="${pageContext.request.contextPath}/view/settings/profileEdit.jsp">◯<span>프로필 편집</span></a><a class="" href="${pageContext.request.contextPath}/view/settings/passwordChange.jsp">▣<span>비밀번호 변경</span></a><a class="active" href="${pageContext.request.contextPath}/view/settings/notificationSettings.jsp">♢<span>알림 설정</span></a><a class="" href="${pageContext.request.contextPath}/view/settings/privacySettings.jsp">▤<span>개인정보 및 공개범위</span></a><a class="" href="${pageContext.request.contextPath}/view/settings/securityActivity.jsp">⚙<span>보안 및 로그인 활동</span></a><a class="" href="${pageContext.request.contextPath}/view/support/support.jsp">▧<span>고객지원</span></a></nav><div class="settings-sidebar-bottom"><a href="${pageContext.request.contextPath}/view/auth/login.jsp">↪<span>로그아웃</span></a><a class="danger" href="${pageContext.request.contextPath}/view/auth/withdraw.jsp">♜<span>회원 탈퇴</span></a></div></aside><main class="settings-main"><div class="settings-content"><header class="settings-title"><span class="settings-eyebrow">SETTINGS</span><h1>알림 설정</h1><p>필요한 알림만 선택해서 받아볼 수 있습니다.</p></header><section class="settings-panel settings-list-panel"><div class="toggle-row"><div class="toggle-copy"><strong>좋아요 알림</strong><span>내 게시물의 좋아요를 알려드립니다.</span></div><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div><div class="toggle-row"><div class="toggle-copy"><strong>댓글 알림</strong><span>내 게시물에 새 댓글이 달리면 알려드립니다.</span></div><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div><div class="toggle-row"><div class="toggle-copy"><strong>마케팅 및 이벤트</strong><span>Tripily의 새로운 소식과 이벤트를 받아봅니다.</span></div><label class="switch"><input type="checkbox" ><span class="slider"></span></label></div></section></div></main></div></div><jsp:include page="/common/footer.jsp" /></body></html>
+<%@ page language="java"
+    contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"
+    import="dto.member.UserDto" %>
+
+<%
+request.setAttribute("activePage", "profile");
+request.setAttribute("settingsPage", "notification");
+
+String ctx = request.getContextPath();
+
+UserDto user =
+        (UserDto) session.getAttribute("user");
+
+if (user == null) {
+    response.sendRedirect(ctx + "/view/auth/login.jsp");
+    return;
+}
+%>
+
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1">
+
+<title>알림 설정 · Planb</title>
+
+<jsp:include page="/common/headStyles.jsp" />
+
+<link
+    rel="stylesheet"
+    href="<%=ctx%>/view/assets/css/setting/settings.css">
+
+</head>
+
+
+<body class="site-shell">
+
+<jsp:include page="/common/header.jsp" />
+
+
+<div class="settings-page">
+
+    <div class="settings-shell">
+
+
+        <jsp:include page="/common/settingsSidebar.jsp" />
+
+
+        <main class="settings-main">
+
+            <div class="settings-content">
+
+
+                <header class="settings-title">
+
+                    <span class="settings-eyebrow">
+                        SETTINGS
+                    </span>
+
+                    <h1>
+                        알림 설정
+                    </h1>
+
+                    <p>
+                        필요한 활동 알림만 선택해서 받을 수 있습니다.
+                    </p>
+
+                </header>
+
+
+                <!--
+                    TB_USER
+                    notify_like
+                    notify_comment
+                    notify_post
+                    항목과 연결할 수 있도록 name을 지정했습니다.
+                -->
+                <form method="post">
+
+
+                    <section class="settings-panel settings-list-panel">
+
+
+                        <div class="toggle-row">
+
+                            <div class="toggle-copy">
+
+                                <strong>
+                                    좋아요 알림
+                                </strong>
+
+                                <span>
+                                    내 게시물에 좋아요가 등록되면 알려드립니다.
+                                </span>
+
+                            </div>
+
+
+                            <label class="switch">
+
+                                <input
+                                    type="checkbox"
+                                    name="notifyLike"
+                                    value="1"
+                                    checked>
+
+                                <span class="slider"></span>
+
+                            </label>
+
+                        </div>
+
+
+                        <div class="toggle-row">
+
+                            <div class="toggle-copy">
+
+                                <strong>
+                                    댓글 알림
+                                </strong>
+
+                                <span>
+                                    내 게시물에 새 댓글이 등록되면 알려드립니다.
+                                </span>
+
+                            </div>
+
+
+                            <label class="switch">
+
+                                <input
+                                    type="checkbox"
+                                    name="notifyComment"
+                                    value="1"
+                                    checked>
+
+                                <span class="slider"></span>
+
+                            </label>
+
+                        </div>
+
+
+                        <div class="toggle-row">
+
+                            <div class="toggle-copy">
+
+                                <strong>
+                                    새 게시물 알림
+                                </strong>
+
+                                <span>
+                                    새 여행 게시물 관련 알림을 받습니다.
+                                </span>
+
+                            </div>
+
+
+                            <label class="switch">
+
+                                <input
+                                    type="checkbox"
+                                    name="notifyPost"
+                                    value="1"
+                                    checked>
+
+                                <span class="slider"></span>
+
+                            </label>
+
+                        </div>
+
+
+                    </section>
+
+
+                    <div class="settings-actions">
+
+                        <button
+                            class="settings-primary-btn"
+                            type="button">
+
+                            알림 설정 저장
+
+                        </button>
+
+                    </div>
+
+
+                </form>
+
+
+            </div>
+
+        </main>
+
+
+    </div>
+
+</div>
+
+
+<jsp:include page="/common/footer.jsp" />
+
+</body>
+</html>

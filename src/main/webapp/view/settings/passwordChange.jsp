@@ -1,2 +1,176 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%><% request.setAttribute("activePage","profile"); %>
-<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>비밀번호 변경 · Tripily</title><jsp:include page="/common/headStyles.jsp" /><link rel="stylesheet" href="${pageContext.request.contextPath}/view/assets/css/profile.css"></head><body class="site-shell"><jsp:include page="/common/header.jsp" /><div class="settings-page"><div class="settings-shell"><aside class="settings-sidebar"><div class="settings-sidebar-head"><a class="back-icon" href="${pageContext.request.contextPath}/view/profile/myProfile.jsp">‹</a><div><span>MY PAGE</span><h2>설정</h2></div></div><nav><a class="" href="${pageContext.request.contextPath}/view/settings/profileEdit.jsp">◯<span>프로필 편집</span></a><a class="active" href="${pageContext.request.contextPath}/view/settings/passwordChange.jsp">▣<span>비밀번호 변경</span></a><a class="" href="${pageContext.request.contextPath}/view/settings/notificationSettings.jsp">♢<span>알림 설정</span></a><a class="" href="${pageContext.request.contextPath}/view/settings/privacySettings.jsp">▤<span>개인정보 및 공개범위</span></a><a class="" href="${pageContext.request.contextPath}/view/settings/securityActivity.jsp">⚙<span>보안 및 로그인 활동</span></a><a class="" href="${pageContext.request.contextPath}/view/support/support.jsp">▧<span>고객지원</span></a></nav><div class="settings-sidebar-bottom"><a href="${pageContext.request.contextPath}/view/auth/login.jsp">↪<span>로그아웃</span></a><a class="danger" href="${pageContext.request.contextPath}/view/auth/withdraw.jsp">♜<span>회원 탈퇴</span></a></div></aside><main class="settings-main"><div class="settings-content"><header class="settings-title"><span class="settings-eyebrow">SETTINGS</span><h1>비밀번호 변경</h1><p>안전한 계정 사용을 위해 새로운 비밀번호를 설정하세요.</p></header><section class="settings-panel settings-form-panel"><div class="settings-form"><label class="settings-field"><span class="settings-field-label">현재 비밀번호</span><input type="password" placeholder="현재 비밀번호"></label><label class="settings-field"><span class="settings-field-label">새 비밀번호</span><input type="password" placeholder="새 비밀번호"><small>영문, 숫자, 특수문자를 포함해 8자 이상 입력해주세요.</small></label><label class="settings-field"><span class="settings-field-label">새 비밀번호 확인</span><input type="password" placeholder="새 비밀번호 다시 입력"></label></div></section><div class="settings-actions"><button class="btn-primary" type="button">비밀번호 변경</button></div></div></main></div></div><jsp:include page="/common/footer.jsp" /></body></html>
+<%@ page language="java"
+    contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"
+    import="dto.member.UserDto" %>
+
+<%
+request.setAttribute("activePage", "profile");
+request.setAttribute("settingsPage", "password");
+
+String ctx = request.getContextPath();
+
+UserDto user =
+        (UserDto) session.getAttribute("user");
+
+if (user == null) {
+    response.sendRedirect(ctx + "/view/auth/login.jsp");
+    return;
+}
+%>
+
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1">
+
+<title>비밀번호 변경 · Planb</title>
+
+<jsp:include page="/common/headStyles.jsp" />
+
+<link
+    rel="stylesheet"
+    href="<%=ctx%>/view/assets/css/setting/settings.css">
+
+</head>
+
+
+<body class="site-shell">
+
+<jsp:include page="/common/header.jsp" />
+
+
+<div class="settings-page">
+
+    <div class="settings-shell">
+
+
+        <jsp:include page="/common/settingsSidebar.jsp" />
+
+
+        <main class="settings-main">
+
+            <div class="settings-content">
+
+
+                <header class="settings-title">
+
+                    <span class="settings-eyebrow">
+                        SETTINGS
+                    </span>
+
+                    <h1>
+                        비밀번호 변경
+                    </h1>
+
+                    <p>
+                        안전한 계정 사용을 위해
+                        새로운 비밀번호를 설정하세요.
+                    </p>
+
+                </header>
+
+
+                <!--
+                    기능 구현 시 실제 Servlet URL을 action에 연결하세요.
+                -->
+                <form method="post">
+
+
+                    <section class="settings-panel settings-form-panel">
+
+                        <div class="settings-form">
+
+
+                            <label class="settings-field">
+
+                                <span class="settings-field-label">
+                                    현재 비밀번호
+                                </span>
+
+                                <input
+                                    type="password"
+                                    name="currentPassword"
+                                    autocomplete="current-password"
+                                    placeholder="현재 비밀번호"
+                                    required>
+
+                            </label>
+
+
+                            <label class="settings-field">
+
+                                <span class="settings-field-label">
+                                    새 비밀번호
+                                </span>
+
+                                <input
+                                    type="password"
+                                    name="newPassword"
+                                    autocomplete="new-password"
+                                    placeholder="새 비밀번호"
+                                    required>
+
+                                <small>
+                                    영문, 숫자, 특수문자를 포함해
+                                    8자 이상 입력해주세요.
+                                </small>
+
+                            </label>
+
+
+                            <label class="settings-field">
+
+                                <span class="settings-field-label">
+                                    새 비밀번호 확인
+                                </span>
+
+                                <input
+                                    type="password"
+                                    name="confirmPassword"
+                                    autocomplete="new-password"
+                                    placeholder="새 비밀번호 다시 입력"
+                                    required>
+
+                            </label>
+
+
+                        </div>
+
+                    </section>
+
+
+                    <div class="settings-actions">
+
+                        <button
+                            class="settings-primary-btn"
+                            type="button">
+
+                            비밀번호 변경
+
+                        </button>
+
+                    </div>
+
+
+                </form>
+
+
+            </div>
+
+        </main>
+
+
+    </div>
+
+</div>
+
+
+<jsp:include page="/common/footer.jsp" />
+
+</body>
+</html>

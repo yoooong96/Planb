@@ -1,2 +1,262 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%><% request.setAttribute("activePage","profile"); %>
-<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>개인정보 및 공개범위 · Tripily</title><jsp:include page="/common/headStyles.jsp" /><link rel="stylesheet" href="${pageContext.request.contextPath}/view/assets/css/profile.css"></head><body class="site-shell"><jsp:include page="/common/header.jsp" /><div class="settings-page"><div class="settings-shell"><aside class="settings-sidebar"><div class="settings-sidebar-head"><a class="back-icon" href="${pageContext.request.contextPath}/view/profile/myProfile.jsp">‹</a><div><span>MY PAGE</span><h2>설정</h2></div></div><nav><a class="" href="${pageContext.request.contextPath}/view/settings/profileEdit.jsp">◯<span>프로필 편집</span></a><a class="" href="${pageContext.request.contextPath}/view/settings/passwordChange.jsp">▣<span>비밀번호 변경</span></a><a class="" href="${pageContext.request.contextPath}/view/settings/notificationSettings.jsp">♢<span>알림 설정</span></a><a class="active" href="${pageContext.request.contextPath}/view/settings/privacySettings.jsp">▤<span>개인정보 및 공개범위</span></a><a class="" href="${pageContext.request.contextPath}/view/settings/securityActivity.jsp">⚙<span>보안 및 로그인 활동</span></a><a class="" href="${pageContext.request.contextPath}/view/support/support.jsp">▧<span>고객지원</span></a></nav><div class="settings-sidebar-bottom"><a href="${pageContext.request.contextPath}/view/auth/login.jsp">↪<span>로그아웃</span></a><a class="danger" href="${pageContext.request.contextPath}/view/auth/withdraw.jsp">♜<span>회원 탈퇴</span></a></div></aside><main class="settings-main"><div class="settings-content"><header class="settings-title"><span class="settings-eyebrow">SETTINGS</span><h1>개인정보 및 공개범위</h1><p>프로필과 피드에 노출되는 정보를 항목별로 관리합니다.</p></header><section class="settings-panel settings-list-panel"><div class="toggle-row"><div class="toggle-copy"><strong>비공개 계정</strong><span>내 게시물과 프로필 활동을 다른 사용자에게 공개하지 않습니다.</span></div><label class="switch"><input type="checkbox" ><span class="slider"></span></label></div><div class="toggle-row"><div class="toggle-copy"><strong>북마크한 게시글 공개</strong><span>내 프로필의 ‘북마크한 게시글’ 탭을 다른 사용자에게 공개합니다.</span></div><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div><div class="toggle-row"><div class="toggle-copy"><strong>좋아요한 게시글 공개</strong><span>내 프로필의 ‘좋아요한 게시글’ 탭을 다른 사용자에게 공개합니다.</span></div><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div><div class="toggle-row"><div class="toggle-copy"><strong>프로필 추천 허용</strong><span>관심사가 비슷한 사용자에게 내 프로필을 추천합니다.</span></div><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div></section><p class="settings-footnote">공개 범위 변경은 즉시 프로필 탭에 반영됩니다. 비공개 항목은 프로필에서 자물쇠로 표시됩니다.</p></div></main></div></div><jsp:include page="/common/footer.jsp" /></body></html>
+<%@ page language="java"
+    contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"
+    import="dto.member.UserDto" %>
+
+<%
+request.setAttribute("activePage", "profile");
+request.setAttribute("settingsPage", "privacy");
+
+String ctx = request.getContextPath();
+
+UserDto user =
+        (UserDto) session.getAttribute("user");
+
+if (user == null) {
+    response.sendRedirect(ctx + "/view/auth/login.jsp");
+    return;
+}
+%>
+
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1">
+
+<title>개인정보 및 공개범위 · Planb</title>
+
+<jsp:include page="/common/headStyles.jsp" />
+
+<link
+    rel="stylesheet"
+    href="<%=ctx%>/view/assets/css/setting/settings.css">
+
+</head>
+
+
+<body class="site-shell">
+
+<jsp:include page="/common/header.jsp" />
+
+
+<div class="settings-page">
+
+    <div class="settings-shell">
+
+
+        <jsp:include page="/common/settingsSidebar.jsp" />
+
+
+        <main class="settings-main">
+
+            <div class="settings-content">
+
+
+                <header class="settings-title">
+
+                    <span class="settings-eyebrow">
+                        SETTINGS
+                    </span>
+
+                    <h1>
+                        개인정보 및 공개범위
+                    </h1>
+
+                    <p>
+                        프로필과 피드에 노출되는 정보를
+                        항목별로 관리합니다.
+                    </p>
+
+                </header>
+
+
+                <form method="post">
+
+
+                    <!-- 프로필 공개 여부 -->
+                    <section class="settings-panel">
+
+                        <div class="panel-head">
+
+                            <h3>
+                                프로필 공개범위
+                            </h3>
+
+                            <p>
+                                다른 사용자가 내 프로필을
+                                볼 수 있는 범위를 선택합니다.
+                            </p>
+
+                        </div>
+
+
+                        <div class="visibility-options">
+
+
+                            <label class="visibility-option">
+
+                                <input
+                                    type="radio"
+                                    name="profileVisibility"
+                                    value="PUBLIC"
+                                    checked>
+
+                                <span>
+
+                                    <strong>
+                                        공개
+                                    </strong>
+
+                                    <small>
+                                        다른 사용자가 내 프로필과
+                                        공개 게시물을 볼 수 있습니다.
+                                    </small>
+
+                                </span>
+
+                            </label>
+
+
+                            <label class="visibility-option">
+
+                                <input
+                                    type="radio"
+                                    name="profileVisibility"
+                                    value="PRIVATE">
+
+                                <span>
+
+                                    <strong>
+                                        비공개
+                                    </strong>
+
+                                    <small>
+                                        내 프로필과 활동 정보의
+                                        노출을 제한합니다.
+                                    </small>
+
+                                </span>
+
+                            </label>
+
+
+                        </div>
+
+                    </section>
+
+
+                    <!-- 좋아요/북마크 공개 설정 -->
+                    <section class="settings-panel settings-list-panel">
+
+
+                        <div class="toggle-row">
+
+                            <div class="toggle-copy">
+
+                                <strong>
+                                    북마크한 게시글 공개
+                                </strong>
+
+                                <span>
+                                    내 프로필의 북마크한 게시글 탭을
+                                    다른 사용자에게 공개합니다.
+                                </span>
+
+                            </div>
+
+
+                            <label class="switch">
+
+                                <input
+                                    type="checkbox"
+                                    name="showBookmarkedItinerary"
+                                    value="1"
+                                    checked>
+
+                                <span class="slider"></span>
+
+                            </label>
+
+                        </div>
+
+
+                        <div class="toggle-row">
+
+                            <div class="toggle-copy">
+
+                                <strong>
+                                    좋아요한 게시글 공개
+                                </strong>
+
+                                <span>
+                                    내 프로필의 좋아요한 게시글 탭을
+                                    다른 사용자에게 공개합니다.
+                                </span>
+
+                            </div>
+
+
+                            <label class="switch">
+
+                                <input
+                                    type="checkbox"
+                                    name="showLikedItinerary"
+                                    value="1"
+                                    checked>
+
+                                <span class="slider"></span>
+
+                            </label>
+
+                        </div>
+
+
+                    </section>
+
+
+                    <p class="settings-footnote">
+
+                        공개범위 설정은 TB_USER의
+                        profile_visibility,
+                        show_liked_itinerary,
+                        show_bookmarked_itinerary 항목과
+                        연결하면 됩니다.
+
+                    </p>
+
+
+                    <div class="settings-actions">
+
+                        <button
+                            class="settings-primary-btn"
+                            type="button">
+
+                            공개범위 저장
+
+                        </button>
+
+                    </div>
+
+
+                </form>
+
+
+            </div>
+
+        </main>
+
+
+    </div>
+
+</div>
+
+
+<jsp:include page="/common/footer.jsp" />
+
+</body>
+</html>
