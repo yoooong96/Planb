@@ -454,7 +454,7 @@ if (user != null
 
                 <a
                     class="site-icon-btn"
-                    href="<%=ctx%>/view/travel/scheduleList.jsp?view=cart"
+                    href="<%=ctx%>/view/travel/cart.jsp"
                     title="일정 장바구니"
                     aria-label="일정 장바구니">
 
