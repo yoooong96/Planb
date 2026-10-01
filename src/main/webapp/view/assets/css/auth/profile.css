@@ -869,3 +869,451 @@
     padding: 28px 14px 60px;
   }
 }
+
+/* ============================================================
+   PROFILE EDIT MODAL
+   ============================================================ */
+
+body.profile-modal-open {
+    overflow: hidden;
+}
+
+
+/* 배경 */
+.profile-edit-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 24px;
+
+    background: rgba(18, 18, 22, .48);
+
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+
+    opacity: 0;
+    visibility: hidden;
+
+    transition:
+        opacity .18s ease,
+        visibility .18s ease;
+}
+
+
+.profile-edit-modal-backdrop.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+
+/* 모달 본체 */
+.profile-edit-modal {
+    width: min(480px, 100%);
+
+    max-height: calc(100vh - 48px);
+
+    overflow-y: auto;
+
+    border-radius: 18px;
+
+    background: #fff;
+
+    box-shadow:
+        0 30px 90px
+        rgba(15, 16, 25, .22);
+
+    transform: translateY(12px)
+               scale(.985);
+
+    transition:
+        transform .2s ease;
+}
+
+
+.profile-edit-modal-backdrop.show
+.profile-edit-modal {
+
+    transform:
+        translateY(0)
+        scale(1);
+}
+
+
+/* 헤더 */
+.profile-edit-modal-header {
+    min-height: 76px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    padding: 18px 20px;
+
+    border-bottom:
+        1px solid #ececf0;
+}
+
+
+.profile-edit-modal-header h2 {
+    margin: 0;
+
+    color: #17171c;
+
+    font-size: 18px;
+    font-weight: 760;
+
+    letter-spacing: -.03em;
+}
+
+
+.profile-edit-modal-header p {
+    margin: 5px 0 0;
+
+    color: #92939c;
+
+    font-size: 11px;
+}
+
+
+.profile-edit-modal-close {
+    width: 34px;
+    height: 34px;
+
+    flex: 0 0 34px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0;
+
+    border: 0;
+    border-radius: 9px;
+
+    background: transparent;
+
+    color: #7d7f88;
+
+    font-size: 23px;
+    font-weight: 300;
+
+    cursor: pointer;
+}
+
+
+.profile-edit-modal-close:hover {
+    background: #f5f5f7;
+    color: #22232a;
+}
+
+
+/* 본문 */
+.profile-edit-modal-body {
+    padding: 20px;
+}
+
+
+/* 사진 */
+.profile-edit-photo-row {
+    display: grid;
+
+    grid-template-columns:
+        72px minmax(0, 1fr);
+
+    align-items: center;
+
+    gap: 15px;
+
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+
+    border-bottom:
+        1px solid #eeeeF2;
+}
+
+
+.profile-edit-preview {
+    width: 72px;
+    height: 72px;
+
+    overflow: hidden;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #d1d2f9;
+
+    color: #5056bb;
+}
+
+
+.profile-edit-preview img {
+    width: 100%;
+    height: 100%;
+
+    display: block;
+
+    object-fit: cover;
+}
+
+
+.profile-edit-preview-empty {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.profile-edit-photo-copy {
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    gap: 4px;
+}
+
+
+.profile-edit-photo-copy strong {
+    color: #17171c;
+
+    font-size: 13px;
+    font-weight: 720;
+}
+
+
+.profile-edit-photo-copy > span {
+    color: #92939c;
+
+    font-size: 10.5px;
+}
+
+
+/* 사진 변경 버튼 */
+.profile-edit-photo-btn {
+    min-height: 32px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-top: 5px;
+
+    padding: 0 12px;
+
+    border:
+        1px solid #dedfe5;
+
+    border-radius: 8px;
+
+    background: #fff;
+
+    color: #55565e;
+
+    font-size: 11px;
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+
+.profile-edit-photo-btn:hover {
+    background: #f6f6f8;
+}
+
+
+.profile-edit-photo-btn input {
+    position: absolute;
+
+    width: 1px;
+    height: 1px;
+
+    opacity: 0;
+
+    pointer-events: none;
+}
+
+
+/* 입력 필드 */
+.profile-edit-field {
+    display: block;
+
+    margin-bottom: 17px;
+}
+
+
+.profile-edit-field:last-child {
+    margin-bottom: 0;
+}
+
+
+.profile-edit-field > span {
+    display: block;
+
+    margin-bottom: 7px;
+
+    color: #34353c;
+
+    font-size: 11.5px;
+    font-weight: 690;
+}
+
+
+.profile-edit-field input,
+.profile-edit-field textarea {
+    width: 100%;
+
+    display: block;
+
+    box-sizing: border-box;
+
+    margin: 0;
+
+    padding: 11px 12px;
+
+    border:
+        1px solid #dadbe1;
+
+    border-radius: 10px;
+
+    outline: none;
+
+    background: #fff;
+
+    color: #17171c;
+
+    font: inherit;
+    font-size: 12px;
+
+    line-height: 1.5;
+}
+
+
+.profile-edit-field input {
+    min-height: 43px;
+}
+
+
+.profile-edit-field textarea {
+    min-height: 92px;
+
+    resize: vertical;
+}
+
+
+.profile-edit-field input:focus,
+.profile-edit-field textarea:focus {
+    border-color:
+        rgba(99, 105, 209, .72);
+
+    box-shadow:
+        0 0 0 3px
+        rgba(99, 105, 209, .09);
+}
+
+
+.profile-edit-field small {
+    display: block;
+
+    margin-top: 6px;
+
+    color: #92939c;
+
+    font-size: 10px;
+}
+
+
+/* 하단 버튼 */
+.profile-edit-modal-actions {
+    display: flex;
+    justify-content: flex-end;
+
+    gap: 8px;
+
+    padding: 15px 20px 18px;
+
+    border-top:
+        1px solid #ececf0;
+
+    background: #fff;
+}
+
+
+.profile-edit-cancel-btn,
+.profile-edit-save-btn {
+    min-width: 86px;
+    height: 38px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0 15px;
+
+    border-radius: 9px;
+
+    font: inherit;
+    font-size: 12px;
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+
+.profile-edit-cancel-btn {
+    border:
+        1px solid #dadbe1;
+
+    background: #fff;
+
+    color: #55565e;
+}
+
+
+.profile-edit-cancel-btn:hover {
+    background: #f6f6f8;
+}
+
+
+.profile-edit-save-btn {
+    border:
+        1px solid #6369D1;
+
+    background: #6369D1;
+
+    color: #fff;
+}
+
+
+.profile-edit-save-btn:hover {
+    border-color: #5056bb;
+    background: #5056bb;
+}
+
+
+@media (max-width: 560px) {
+
+    .profile-edit-modal-backdrop {
+        padding: 12px;
+    }
+
+    .profile-edit-modal {
+        max-height:
+            calc(100vh - 24px);
+    }
+
+}

@@ -297,13 +297,14 @@ if (bookmarkCount == null) {
                     <div class="profile-actions">
 
 
-                        <a
-                            class="btn-soft"
-                            href="<%=ctx%>/view/settings/profileEdit.jsp">
-
-                            프로필 편집
-
-                        </a>
+                        <button
+						    type="button"
+						    class="btn-soft"
+						    id="openProfileEditModal">
+						
+						    프로필 편집
+						
+						</button>
 
 
                         <a
@@ -1192,6 +1193,250 @@ if (bookmarkCount == null) {
 
 </div>
 
+<!-- =========================================================
+     프로필 편집 모달
+========================================================= -->
+
+<div
+    class="profile-edit-modal-backdrop"
+    id="profileEditModal"
+    aria-hidden="true">
+
+    <div
+        class="profile-edit-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="profileEditModalTitle">
+
+
+        <!-- 모달 헤더 -->
+        <div class="profile-edit-modal-header">
+
+            <div>
+
+                <h2 id="profileEditModalTitle">
+                    프로필 편집
+                </h2>
+
+                <p>
+                    내 피드에 표시되는 정보를 수정합니다.
+                </p>
+
+            </div>
+
+
+            <button
+                type="button"
+                class="profile-edit-modal-close"
+                id="closeProfileEditModal"
+                aria-label="닫기">
+
+                ×
+
+            </button>
+
+        </div>
+
+
+
+        <!--
+            추후 기능 연결 시 action에
+            프로필 수정 Servlet URL을 넣으면 됩니다.
+        -->
+        <form
+            id="profileEditModalForm"
+            method="post"
+            enctype="multipart/form-data">
+
+
+            <div class="profile-edit-modal-body">
+
+
+                <!-- 프로필 이미지 -->
+                <div class="profile-edit-photo-row">
+
+
+                    <div class="profile-edit-preview">
+
+                        <% if (!profileImg.isEmpty()) { %>
+
+                            <img
+                                id="profileEditPreviewImage"
+                                src="<%=ctx%><%=profilePath%>/<%=profileImg%>"
+                                alt="<%=nickname%> 프로필 이미지">
+
+                        <% } else { %>
+
+                            <div
+                                class="profile-edit-preview-empty"
+                                id="profileEditPreviewEmpty">
+
+                                <svg
+                                    width="34"
+                                    height="34"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="1.6">
+
+                                    <circle
+                                        cx="12"
+                                        cy="8"
+                                        r="4"/>
+
+                                    <path
+                                        d="M4 21c0-4.3 3.6-7 8-7s8 2.7 8 7"/>
+
+                                </svg>
+
+                            </div>
+
+                        <% } %>
+
+                    </div>
+
+
+
+                    <div class="profile-edit-photo-copy">
+
+                        <strong>
+                            <%=nickname%>
+                        </strong>
+
+                        <span>
+                            프로필 사진을 변경할 수 있습니다.
+                        </span>
+
+
+                        <label class="profile-edit-photo-btn">
+
+                            사진 변경
+
+                            <input
+                                type="file"
+                                name="profileImage"
+                                id="profileEditImageInput"
+                                accept="image/*">
+
+                        </label>
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- 닉네임 -->
+                <label class="profile-edit-field">
+
+                    <span>
+                        닉네임
+                    </span>
+
+                    <input
+                        type="text"
+                        name="nickname"
+                        value="<%=nickname%>"
+                        maxlength="50"
+                        required>
+
+                </label>
+
+
+
+                <!-- 이름 -->
+                <label class="profile-edit-field">
+
+                    <span>
+                        이름
+                    </span>
+
+                    <input
+                        type="text"
+                        name="name"
+                        value="<%=name%>"
+                        maxlength="50"
+                        required>
+
+                </label>
+
+
+
+                <!-- 소개 -->
+                <label class="profile-edit-field">
+
+                    <span>
+                        소개
+                    </span>
+
+                    <textarea
+                        name="bio"
+                        rows="4"
+                        maxlength="300"><%=bio%></textarea>
+
+                    <small>
+                        프로필에 공개되는 소개글입니다.
+                    </small>
+
+                </label>
+
+
+
+                <!-- 지역 -->
+                <label class="profile-edit-field">
+
+                    <span>
+                        지역
+                    </span>
+
+                    <input
+                        type="text"
+                        name="region"
+                        value="<%=region%>"
+                        maxlength="100">
+
+                </label>
+
+
+            </div>
+
+
+
+            <!-- 모달 하단 -->
+            <div class="profile-edit-modal-actions">
+
+                <button
+                    type="button"
+                    class="profile-edit-cancel-btn"
+                    id="cancelProfileEditModal">
+
+                    취소
+
+                </button>
+
+
+                <!--
+                    프로필 수정 Servlet을 만들면
+                    type="submit" 으로 변경
+                -->
+                <button
+                    type="button"
+                    class="profile-edit-save-btn">
+
+                    저장
+
+                </button>
+
+            </div>
+
+
+        </form>
+
+    </div>
+
+</div>
+
 
 
 <!-- =========================
@@ -1392,7 +1637,217 @@ document.addEventListener(
 );
 
 </script>
+<script>
 
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        const modal =
+            document.getElementById(
+                "profileEditModal"
+            );
+
+        const openBtn =
+            document.getElementById(
+                "openProfileEditModal"
+            );
+
+        const closeBtn =
+            document.getElementById(
+                "closeProfileEditModal"
+            );
+
+        const cancelBtn =
+            document.getElementById(
+                "cancelProfileEditModal"
+            );
+
+        const imageInput =
+            document.getElementById(
+                "profileEditImageInput"
+            );
+
+
+        /* =========================
+           모달 열기
+        ========================== */
+
+        function openProfileModal() {
+
+            modal.classList.add("show");
+
+            modal.setAttribute(
+                "aria-hidden",
+                "false"
+            );
+
+            document.body.classList.add(
+                "profile-modal-open"
+            );
+
+        }
+
+
+        /* =========================
+           모달 닫기
+        ========================== */
+
+        function closeProfileModal() {
+
+            modal.classList.remove("show");
+
+            modal.setAttribute(
+                "aria-hidden",
+                "true"
+            );
+
+            document.body.classList.remove(
+                "profile-modal-open"
+            );
+
+        }
+
+
+        openBtn.addEventListener(
+            "click",
+            openProfileModal
+        );
+
+
+        closeBtn.addEventListener(
+            "click",
+            closeProfileModal
+        );
+
+
+        cancelBtn.addEventListener(
+            "click",
+            closeProfileModal
+        );
+
+
+
+        /* 바깥 영역 클릭 */
+        modal.addEventListener(
+            "click",
+            function (event) {
+
+                if (event.target === modal) {
+
+                    closeProfileModal();
+
+                }
+
+            }
+        );
+
+
+
+        /* ESC */
+        document.addEventListener(
+            "keydown",
+            function (event) {
+
+                if (
+                    event.key === "Escape"
+                    && modal.classList.contains("show")
+                ) {
+
+                    closeProfileModal();
+
+                }
+
+            }
+        );
+
+
+
+        /* =========================
+           이미지 미리보기
+        ========================== */
+
+        if (imageInput) {
+
+            imageInput.addEventListener(
+                "change",
+                function () {
+
+                    const file =
+                        this.files[0];
+
+                    if (!file) {
+                        return;
+                    }
+
+
+                    const reader =
+                        new FileReader();
+
+
+                    reader.onload =
+                        function (event) {
+
+
+                            let preview =
+                                document.getElementById(
+                                    "profileEditPreviewImage"
+                                );
+
+
+                            const empty =
+                                document.getElementById(
+                                    "profileEditPreviewEmpty"
+                                );
+
+
+                            if (empty) {
+                                empty.style.display =
+                                    "none";
+                            }
+
+
+                            if (!preview) {
+
+                                preview =
+                                    document.createElement(
+                                        "img"
+                                    );
+
+                                preview.id =
+                                    "profileEditPreviewImage";
+
+
+                                document
+                                    .querySelector(
+                                        ".profile-edit-preview"
+                                    )
+                                    .appendChild(
+                                        preview
+                                    );
+
+                            }
+
+
+                            preview.src =
+                                event.target.result;
+
+                        };
+
+
+                    reader.readAsDataURL(
+                        file
+                    );
+
+                }
+            );
+
+        }
+
+    }
+);
+
+</script>
 
 </body>
 
