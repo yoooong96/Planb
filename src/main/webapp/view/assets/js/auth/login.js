@@ -248,5 +248,22 @@ document.addEventListener("DOMContentLoaded", function () {
 
         }
     );
+    
+    const loginErrorModal = document.getElementById('loginErrorModal');
+
+	if (loginErrorModal) {
+	    loginErrorModal.showModal();
+	
+	    // 배경(바깥) 클릭 시 닫기
+	    loginErrorModal.addEventListener('click', (e) => {
+	        if (e.target === loginErrorModal) loginErrorModal.close();
+	    });
+	
+	    // 닫히면 비밀번호 칸으로 포커스
+	    loginErrorModal.addEventListener('close', () => {
+	        document.getElementById('password')?.focus();
+	    });
+	}
 
 });
+

@@ -5,6 +5,7 @@
 <%
 request.setAttribute("activePage", "auth");
 %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <!DOCTYPE html>
 <html lang="ko">
@@ -99,6 +100,7 @@ request.setAttribute("activePage", "auth");
                         type="text"
                         id="loginId"
                         name="loginId"
+                        value="<c:out value='${param.loginId}' />"
                         maxlength="50"
                         placeholder="아이디를 입력하세요"
                         autocomplete="username"
@@ -239,7 +241,17 @@ request.setAttribute("activePage", "auth");
         </p>
 
     </div>
-
+	<c:if test="${not empty err}">
+	    <dialog id="loginErrorModal" class="login-modal">
+	        <div class="login-modal-box">
+	            <p class="login-modal-title">로그인 실패</p>
+	            <p class="login-modal-message"><c:out value="${err}" /></p>
+	            <form method="dialog">
+	                <button type="submit" class="login-modal-btn" autofocus>확인</button>
+	            </form>
+	        </div>
+	    </dialog>
+	</c:if>
 </main>
 
 

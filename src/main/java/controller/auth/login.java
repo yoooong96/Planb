@@ -45,39 +45,20 @@ public class login extends HttpServlet {
 	    String password = request.getParameter("password");
 
 	    UserService service = new UserServiceImpl();
+	    UserDto user;
 
 	    try {
-
-	        UserDto user = service.login(id, password);
-
-	        if (user == null) {
-	            throw new Exception("아이디 또는 비밀번호가 올바르지 않습니다.");
-	        }
-
-	        HttpSession session = request.getSession();
-
-	        // 로그인 회원 정보 전체를 세션에 저장
-	        session.setAttribute("user", user);
-
-	        // 로그인 성공 후 홈으로 이동
-	        response.sendRedirect(
-	            request.getContextPath()
-	            + "/view/home/home.jsp"
-	        );
-
+	        user = service.login(id, password);
 	    } catch (Exception e) {
-
 	        e.printStackTrace();
-
-	        request.setAttribute(
-	            "err",
-	            e.getMessage()
-	        );
-
-	        request.getRequestDispatcher(
-	            "/view/auth/login.jsp"
-	        ).forward(request, response);
+	        request.setAttribute("err", e.getMessage());
+	        request.getRequestDispatcher("/view/auth/login.jsp").forward(request, response);
+	        return;
 	    }
+
+	    HttpSession session = request.getSession();
+	    session.setAttribute("user", user);
+	    response.sendRedirect(request.getContextPath() + "/view/home/home.jsp");
 	}
 
 }
