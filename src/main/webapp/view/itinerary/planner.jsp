@@ -24,7 +24,7 @@ request.setAttribute("activePage", "planner");
         border: 2px solid #D7E600;
         border-radius: 12px;
         overflow: hidden;
-        background: #111827;
+        background: #E5E7EB;
         min-height: 310px;
     }
 
@@ -39,13 +39,16 @@ request.setAttribute("activePage", "planner");
         position: absolute;
         inset: 0;
         display: flex;
+        flex-direction: column;
+        gap: 8px;
         align-items: center;
         justify-content: center;
-        color: rgba(255, 255, 255, 0.7);
+        color: #9CA3AF;
         font-size: 12px;
         font-weight: 600;
         letter-spacing: -0.02em;
     }
+
 
     .planner-photo-thumbs {
         display: grid;
@@ -56,18 +59,108 @@ request.setAttribute("activePage", "planner");
 
     .planner-photo-thumb {
         position: relative;
-        border: 2px solid #06B6F0;
+        border: 2px solid #D1D5DB;
         border-radius: 12px;
         overflow: hidden;
-        background: #111827;
+        background: #E5E7EB;
         min-height: 82px;
-        cursor: grab;
-        transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+        cursor: pointer;
+        transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease, background .18s ease;
     }
 
     .planner-photo-thumb:hover {
         transform: translateY(-1px);
         box-shadow: 0 8px 18px rgba(99, 105, 209, 0.14);
+    }
+
+    .planner-photo-thumb::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: rgba(17, 24, 39, 0.42);
+        opacity: 0;
+        transition: opacity .16s ease;
+        z-index: 2;
+        pointer-events: none;
+    }
+
+    .planner-photo-thumb:hover::after {
+        opacity: 1;
+    }
+
+    .planner-photo-plus {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        color: #9CA3AF;
+        font-size: 30px;
+        font-weight: 300;
+        line-height: 1;
+        z-index: 1;
+        pointer-events: none;
+    }
+
+    .planner-photo-thumb.has-image .planner-photo-plus {
+        display: none;
+    }
+
+    .planner-photo-hover-label {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        color: #FFFFFF;
+        font-size: 11px;
+        font-weight: 700;
+        white-space: nowrap;
+        opacity: 0;
+        transition: opacity .16s ease;
+        z-index: 3;
+        pointer-events: none;
+    }
+
+    .planner-photo-thumb:hover .planner-photo-hover-label {
+        opacity: 1;
+    }
+
+    .planner-photo-delete {
+        position: absolute;
+        right: 6px;
+        bottom: 6px;
+        width: 24px;
+        height: 24px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.96);
+        color: #6B7280;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(2px);
+        transition: opacity .16s ease, transform .16s ease, background .16s ease, color .16s ease;
+        z-index: 10;
+        cursor: pointer;
+        padding: 0;
+        box-shadow: 0 1px 4px rgba(0,0,0,.18);
+    }
+
+    .planner-photo-thumb.has-image:hover .planner-photo-delete {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+
+    .planner-photo-delete:hover {
+        background: #FFFFFF;
+        color: #DC2626;
+    }
+
+    .planner-photo-delete svg {
+        width: 13px;
+        height: 13px;
+        pointer-events: none;
     }
 
     .planner-photo-thumb.dragging {
@@ -86,27 +179,13 @@ request.setAttribute("activePage", "planner");
     }
 
     .planner-photo-thumb img {
+        position: absolute;
+        inset: 0;
         width: 100%;
         height: 100%;
         object-fit: cover;
         display: block;
-    }
-
-    .planner-photo-order {
-        position: absolute;
-        left: 8px;
-        top: 8px;
-        min-width: 22px;
-        height: 22px;
-        border-radius: 999px;
-        background: rgba(17, 24, 39, 0.75);
-        color: #fff;
-        font-size: 11px;
-        font-weight: 700;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        padding: 0 6px;
+        z-index: 1;
     }
 
     .planner-photo-badge {
@@ -120,6 +199,7 @@ request.setAttribute("activePage", "planner");
         font-size: 10px;
         font-weight: 700;
         line-height: 1.2;
+        z-index: 4;
     }
 
     .planner-photo-guide {
@@ -689,34 +769,68 @@ request.setAttribute("activePage", "planner");
                                         <div>
                                             <div class="planner-photo-layout" data-photo-gallery>
                                             <div class="planner-photo-preview">
-                                                <img class="planner-photo-preview-img" src="images/figma/image-1.png" alt="확대 미리보기">
-                                                <div class="planner-photo-empty hidden">사진을 선택하면 크게 보여집니다.</div>
+                                                <img class="planner-photo-preview-img" alt="" style="display:none;">
+                                                <div class="planner-photo-empty">
+                                                    <span>미리보기</span>
+                                                </div>
                                             </div>
 
                                             <div class="planner-photo-thumbs">
-                                                <button type="button" class="planner-photo-thumb active" draggable="true"
-                                                    data-src="images/figma/image-1.png" data-index="0">
-                                                    <img src="images/figma/image-1.png" alt="블록 사진 1">
-                                                    <span class="planner-photo-order">1</span>
-                                                    <span class="planner-photo-badge">대표</span>
+                                                <button type="button" class="planner-photo-thumb is-empty" draggable="true"
+                                                    data-src="" data-index="0">
+                                                    <span class="planner-photo-plus">+</span>
+                                                    <span class="planner-photo-hover-label">이미지 등록하기</span>
+                                                    <span class="planner-photo-delete" role="button" tabindex="0" aria-label="이미지 삭제">
+                                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                            <polyline points="3 6 5 6 21 6"></polyline>
+                                                            <path d="M19 6l-1 14H6L5 6"></path>
+                                                            <path d="M10 11v6"></path>
+                                                            <path d="M14 11v6"></path>
+                                                            <path d="M9 6V4h6v2"></path>
+                                                        </svg>
+                                                    </span>
                                                 </button>
 
-                                                <button type="button" class="planner-photo-thumb" draggable="true"
-                                                    data-src="images/figma/image-2.png" data-index="1">
-                                                    <img src="images/figma/image-2.png" alt="블록 사진 2">
-                                                    <span class="planner-photo-order">2</span>
+                                                <button type="button" class="planner-photo-thumb is-empty" draggable="true"
+                                                    data-src="" data-index="1">
+                                                    <span class="planner-photo-plus">+</span>
+                                                    <span class="planner-photo-hover-label">이미지 등록하기</span>
+                                                    <span class="planner-photo-delete" role="button" tabindex="0" aria-label="이미지 삭제">
+                                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                            <polyline points="3 6 5 6 21 6"></polyline>
+                                                            <path d="M19 6l-1 14H6L5 6"></path>
+                                                            <path d="M10 11v6"></path>
+                                                            <path d="M14 11v6"></path>
+                                                            <path d="M9 6V4h6v2"></path>
+                                                        </svg>
+                                                    </span>
                                                 </button>
 
-                                                <button type="button" class="planner-photo-thumb" draggable="true"
-                                                    data-src="images/figma/image-3.png" data-index="2">
-                                                    <img src="images/figma/image-3.png" alt="블록 사진 3">
-                                                    <span class="planner-photo-order">3</span>
+                                                <button type="button" class="planner-photo-thumb is-empty" draggable="true"
+                                                    data-src="" data-index="2">
+                                                    <span class="planner-photo-plus">+</span>
+                                                    <span class="planner-photo-hover-label">이미지 등록하기</span>
+                                                    <span class="planner-photo-delete" role="button" tabindex="0" aria-label="이미지 삭제">
+                                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                            <polyline points="3 6 5 6 21 6"></polyline>
+                                                            <path d="M19 6l-1 14H6L5 6"></path>
+                                                            <path d="M10 11v6"></path>
+                                                            <path d="M14 11v6"></path>
+                                                            <path d="M9 6V4h6v2"></path>
+                                                        </svg>
+                                                    </span>
                                                 </button>
                                             </div>
+
+                                            <input type="file" class="planner-photo-file-input hidden" accept="image/*">
                                         </div>
                                                                                     <div class="planner-photo-guide">
                                             <span>• 썸네일 3장까지 등록 가능</span>
-                                            <span>• 클릭하면 왼쪽 크게 보기</span>
+                                            <span>• 클릭해서 이미지 등록 / 변경</span>
+                                            <span>• 등록 후 왼쪽에서 크게 보기</span>
                                             <span>• 드래그로 순서 변경</span>
                                             <span>• 1번 사진이 대표 이미지</span>
                                         </div>
@@ -862,6 +976,7 @@ request.setAttribute("activePage", "planner");
                 var list=$('#plannerSavedPlansList'); if(!list)return; list.innerHTML='';
                 SAVED_PLANS.forEach(function(plan){
                     var card=document.createElement('div'); card.className='planner-saved-plan rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden';
+                    card.dataset.country=plan.country||'';
                     card.dataset.search=(plan.title+' '+plan.country+' '+plan.region+' '+plan.daySchedules.map(function(d){return d.theme+' '+d.items.map(function(i){return i.name+' '+i.location}).join(' ')}).join(' ')).toLowerCase();
                     var head=document.createElement('div'); head.className='planner-saved-plan-head flex items-center gap-2.5 px-3 py-2.5 cursor-pointer hover:bg-gray-50 transition-colors select-none'; head.draggable=true;
                     head.innerHTML='<span class="text-gray-300 text-xs">⠿</span><div class="w-8 h-8 rounded-lg flex items-center justify-center text-white text-[11px] font-black shrink-0" style="background:'+plan.color+'">'+plan.countryCode+'</div><div class="flex-1 min-w-0"><p class="text-xs font-bold text-gray-800 truncate">'+plan.title+'</p><p class="text-[10px] text-gray-400">'+plan.country+' · '+plan.nights+'박 '+plan.days+'일</p></div><span class="planner-plan-chevron text-gray-400 text-xs">⌄</span>';
@@ -888,8 +1003,28 @@ request.setAttribute("activePage", "planner");
                 filterPlans();
             }
             function filterPlans(){
-                var q=(search&&search.value||'').trim().toLowerCase(), visible=0;
-                $$('.planner-saved-plan').forEach(function(card){ var ok=!q || (card.dataset.search||card.textContent).toLowerCase().indexOf(q)>-1; card.classList.toggle('is-hidden',!ok); if(ok) visible++; });
+                var q=(search&&search.value||'').trim().toLowerCase();
+                var countryInput=$('#plannerCountry');
+                var matchedCountry=countryInput ? findPlannerCountry(countryInput.value) : null;
+                var selectedCountry=matchedCountry ? matchedCountry.name : '';
+                var visible=0;
+
+                $$('.planner-saved-plan').forEach(function(card){
+                    var searchOk=!q
+                        || (card.dataset.search||card.textContent)
+                            .toLowerCase()
+                            .indexOf(q)>-1;
+
+                    var countryOk=!selectedCountry
+                        || (card.dataset.country||'')===selectedCountry;
+
+                    var ok=searchOk && countryOk;
+
+                    card.classList.toggle('is-hidden',!ok);
+
+                    if(ok) visible++;
+                });
+
                 if(count) count.textContent=visible+'개';
             }
             if(search) search.addEventListener('input', filterPlans);
@@ -941,11 +1076,274 @@ request.setAttribute("activePage", "planner");
             });
 
             function setupPhotoGallery(galleryEl) {
-                var previewImg = $('.planner-photo-preview-img', galleryEl); var thumbs = $$('.planner-photo-thumb', galleryEl); var dragIndex = null;
-                function renderBadge(){ thumbs.forEach(function(t,i){ t.dataset.index=i; var o=$('.planner-photo-order',t); if(o)o.textContent=String(i+1); var b=$('.planner-photo-badge',t); if(i===0&&!b){b=document.createElement('span');b.className='planner-photo-badge';b.textContent='대표';t.appendChild(b);} else if(i!==0&&b)b.remove(); }); }
-                function active(t){ thumbs.forEach(function(x){x.classList.toggle('active',x===t)}); if(previewImg&&t)previewImg.src=t.dataset.src; }
-                function swap(a,b){ if(a==null||b==null||a===b)return; var x=thumbs[a],y=thumbs[b],xs=x.dataset.src,ys=y.dataset.src,ax=$('.planner-photo-thumb.active',galleryEl),as=ax?ax.dataset.src:null; x.dataset.src=ys;y.dataset.src=xs; $('img',x).src=ys;$('img',y).src=xs; if(as===xs)active(y);else if(as===ys)active(x);renderBadge();markDirty(); }
-                thumbs.forEach(function(t,i){ t.dataset.index=i; t.addEventListener('click',function(){active(t)}); t.addEventListener('dragstart',function(e){dragIndex=+t.dataset.index;t.classList.add('dragging');e.dataTransfer.effectAllowed='move'}); t.addEventListener('dragend',function(){dragIndex=null;thumbs.forEach(function(x){x.classList.remove('dragging','drag-over')})}); t.addEventListener('dragover',function(e){e.preventDefault();t.classList.add('drag-over')}); t.addEventListener('dragleave',function(){t.classList.remove('drag-over')}); t.addEventListener('drop',function(e){e.preventDefault();swap(dragIndex,+t.dataset.index)}); }); renderBadge(); if(thumbs[0])active(thumbs[0]);
+                if(!galleryEl || galleryEl.dataset.photoReady==='1') return;
+                galleryEl.dataset.photoReady='1';
+
+                var previewImg=$('.planner-photo-preview-img',galleryEl);
+                var previewEmpty=$('.planner-photo-empty',galleryEl);
+                var thumbs=$$('.planner-photo-thumb',galleryEl);
+                var fileInput=$('.planner-photo-file-input',galleryEl);
+                var dragIndex=null;
+                var didDrag=false;
+
+                if(!fileInput){
+                    fileInput=document.createElement('input');
+                    fileInput.type='file';
+                    fileInput.accept='image/*';
+                    fileInput.className='planner-photo-file-input hidden';
+                    galleryEl.appendChild(fileInput);
+                }
+
+                function getSrc(t){
+                    return String(t && t.dataset.src ? t.dataset.src : '').trim();
+                }
+
+                function updateThumbState(t){
+                    var src=getSrc(t);
+                    var img=$('img',t);
+                    var label=$('.planner-photo-hover-label',t);
+
+                    if(src){
+                        t.classList.add('has-image');
+                        t.classList.remove('is-empty');
+
+                        if(!img){
+                            img=document.createElement('img');
+                            img.alt='블록 이미지';
+                            t.insertBefore(img,t.firstChild);
+                        }
+
+                        img.src=src;
+
+                        if(label) label.textContent='이미지 변경하기';
+                    }else{
+                        t.classList.remove('has-image');
+                        t.classList.add('is-empty');
+
+                        if(img) img.remove();
+
+                        if(label) label.textContent='이미지 등록하기';
+                    }
+                }
+
+                function renderBadge(){
+                    thumbs.forEach(function(t,i){
+                        t.dataset.index=i;
+
+                        var badge=$('.planner-photo-badge',t);
+
+                        // 현재 첫 번째 위치의 이미지가 항상 대표
+                        if(i===0 && getSrc(t)){
+                            if(!badge){
+                                badge=document.createElement('span');
+                                badge.className='planner-photo-badge';
+                                badge.textContent='대표';
+                                t.appendChild(badge);
+                            }
+                        }else if(badge){
+                            badge.remove();
+                        }
+
+                        updateThumbState(t);
+                    });
+                }
+
+                function active(t){
+                    thumbs.forEach(function(x){
+                        x.classList.toggle('active',x===t && !!getSrc(x));
+                    });
+
+                    var src=getSrc(t);
+
+                    if(previewImg){
+                        if(src){
+                            previewImg.src=src;
+                            previewImg.style.display='block';
+                        }else{
+                            previewImg.removeAttribute('src');
+                            previewImg.style.display='none';
+                        }
+                    }
+
+                    if(previewEmpty){
+                        previewEmpty.style.display=src ? 'none' : 'flex';
+                    }
+                }
+
+                function openPicker(t){
+                    if(!t || !fileInput) return;
+
+                    fileInput.dataset.targetIndex=t.dataset.index;
+                    fileInput.value='';
+                    fileInput.click();
+                }
+
+                function swap(a,b){
+                    if(a==null || b==null || a===b) return;
+
+                    var x=thumbs[a];
+                    var y=thumbs[b];
+
+                    if(!x || !y) return;
+
+                    var xSrc=getSrc(x);
+                    var ySrc=getSrc(y);
+                    var xFile=x._plannerFile || null;
+                    var yFile=y._plannerFile || null;
+                    var activeThumb=$('.planner-photo-thumb.active',galleryEl);
+                    var activeIndex=activeThumb ? Number(activeThumb.dataset.index) : null;
+
+                    x.dataset.src=ySrc;
+                    y.dataset.src=xSrc;
+                    x._plannerFile=yFile;
+                    y._plannerFile=xFile;
+
+                    renderBadge();
+
+                    if(activeIndex===a){
+                        active(y);
+                    }else if(activeIndex===b){
+                        active(x);
+                    }else{
+                        var firstWithImage=thumbs.find(function(t){ return !!getSrc(t); });
+                        active(firstWithImage || null);
+                    }
+
+                    markDirty();
+                }
+
+                fileInput.addEventListener('change',function(){
+                    var index=Number(fileInput.dataset.targetIndex);
+                    var target=thumbs[index];
+                    var file=fileInput.files && fileInput.files[0];
+
+                    if(!target || !file) return;
+
+                    if(file.type && file.type.indexOf('image/')!==0){
+                        if(typeof toast==='function') toast('이미지 파일만 등록할 수 있습니다.');
+                        return;
+                    }
+
+                    if(target.dataset.objectUrl){
+                        try{
+                            URL.revokeObjectURL(target.dataset.objectUrl);
+                        }catch(e){}
+                    }
+
+                    var objectUrl=URL.createObjectURL(file);
+
+                    target.dataset.objectUrl=objectUrl;
+                    target.dataset.src=objectUrl;
+                    target._plannerFile=file;
+
+                    renderBadge();
+                    active(target);
+                    markDirty();
+                });
+
+                thumbs.forEach(function(t,i){
+                    t.dataset.index=i;
+
+                    t.addEventListener('mouseenter',function(){
+                        if(getSrc(t)){
+                            active(t);
+                        }
+                    });
+
+                    var deleteBtn=$('.planner-photo-delete',t);
+
+                    if(deleteBtn){
+                        function removeThumbImage(e){
+                            if(e){
+                                e.preventDefault();
+                                e.stopPropagation();
+                            }
+
+                            if(!getSrc(t)) return;
+
+                            if(t.dataset.objectUrl){
+                                try{
+                                    URL.revokeObjectURL(t.dataset.objectUrl);
+                                }catch(err){}
+                            }
+
+                            t.dataset.objectUrl='';
+                            t.dataset.src='';
+                            t._plannerFile=null;
+
+                            updateThumbState(t);
+                            renderBadge();
+
+                            var nextWithImage=thumbs.find(function(x){
+                                return !!getSrc(x);
+                            });
+
+                            active(nextWithImage || null);
+                            markDirty();
+                        }
+
+                        deleteBtn.addEventListener('click',removeThumbImage);
+                        deleteBtn.addEventListener('keydown',function(e){
+                            if(e.key==='Enter' || e.key===' '){
+                                removeThumbImage(e);
+                            }
+                        });
+                    }
+
+                    t.addEventListener('click',function(e){
+                        e.preventDefault();
+
+                        if(didDrag){
+                            didDrag=false;
+                            return;
+                        }
+
+                        active(t);
+                        openPicker(t);
+                    });
+
+                    t.addEventListener('dragstart',function(e){
+                        dragIndex=Number(t.dataset.index);
+                        didDrag=true;
+                        t.classList.add('dragging');
+                        e.dataTransfer.effectAllowed='move';
+                    });
+
+                    t.addEventListener('dragend',function(){
+                        dragIndex=null;
+
+                        thumbs.forEach(function(x){
+                            x.classList.remove('dragging','drag-over');
+                        });
+
+                        setTimeout(function(){
+                            didDrag=false;
+                        },0);
+                    });
+
+                    t.addEventListener('dragover',function(e){
+                        e.preventDefault();
+                        t.classList.add('drag-over');
+                    });
+
+                    t.addEventListener('dragleave',function(){
+                        t.classList.remove('drag-over');
+                    });
+
+                    t.addEventListener('drop',function(e){
+                        e.preventDefault();
+                        t.classList.remove('drag-over');
+                        swap(dragIndex,Number(t.dataset.index));
+                    });
+                });
+
+                renderBadge();
+
+                var firstWithImage=thumbs.find(function(t){
+                    return !!getSrc(t);
+                });
+
+                active(firstWithImage || null);
             }
             $$('[data-photo-gallery]').forEach(setupPhotoGallery);
 
@@ -1369,7 +1767,14 @@ request.setAttribute("activePage", "planner");
             function normalizePlannerText(v){ return String(v||'').trim(); }
             function findPlannerCountry(name){
                 var n=normalizePlannerText(name);
-                return PLANNER_COUNTRIES.find(function(c){ return c.name===n; }) || null;
+
+                if(!Array.isArray(PLANNER_COUNTRIES)){
+                    return null;
+                }
+
+                return PLANNER_COUNTRIES.find(function(c){
+                    return c.name===n;
+                }) || null;
             }
             function refreshCountryStatus(){
                 var input=$('#plannerCountry');
@@ -1468,6 +1873,7 @@ request.setAttribute("activePage", "planner");
                         refreshRegionOptions(true);
                         syncCountryLock();
                         updateCountryClear();
+                        filterPlans();
                         markDirty();
                     });
 
@@ -1605,6 +2011,7 @@ request.setAttribute("activePage", "planner");
                     refreshRegionOptions(true);
                     syncCountryLock();
                     updateCountryClear();
+                    filterPlans();
                     closePlannerDropdowns('plannerCountryDropdown');
                     renderCountryDropdown();
                 });
@@ -1617,6 +2024,7 @@ request.setAttribute("activePage", "planner");
                     refreshRegionOptions(false);
                     syncCountryLock();
                     updateCountryClear();
+                    filterPlans();
                 });
             }
             if(plannerCountryClear){
@@ -1626,6 +2034,7 @@ request.setAttribute("activePage", "planner");
                     refreshRegionOptions(true);
                     syncCountryLock();
                     updateCountryClear();
+                    filterPlans();
                     plannerCountryDropdown.classList.add('hidden');
                     plannerCountryInput.focus();
                     markDirty();
@@ -1699,12 +2108,14 @@ request.setAttribute("activePage", "planner");
             }
 
             function collectPlannerImages(card){
-                var images=[];
                 var gallery=$('[data-photo-gallery]',card);
-                if(!gallery) return images;
+                if(!gallery) return [];
+
+                var images=[];
 
                 $$('.planner-photo-thumb',gallery).forEach(function(thumb,index){
                     var src=thumb.dataset.src || '';
+
                     if(!src){
                         var img=$('img',thumb);
                         if(img) src=img.getAttribute('src') || '';
@@ -1712,8 +2123,10 @@ request.setAttribute("activePage", "planner");
 
                     src=String(src || '').trim();
 
-                    // 비어 있는 슬롯은 전송하지 않음
                     if(!src) return;
+
+                    // blob: URL은 브라우저 미리보기용 임시 주소
+                    if(src.indexOf('blob:')===0) return;
 
                     images.push({
                         imageUrl:src,
@@ -1840,6 +2253,10 @@ request.setAttribute("activePage", "planner");
             updateRegionClear();
             syncCountryLock();
 
+            if(typeof filterPlans==='function'){
+                filterPlans();
+            }
+
             function plannerMapQuery(){
                 var region=$('#plannerRegion') ? $('#plannerRegion').value.trim() : '';
                 var country=$('#plannerCountry') ? $('#plannerCountry').value.trim() : '';
@@ -1874,14 +2291,40 @@ request.setAttribute("activePage", "planner");
                 var el=$(sel);
                 if(el) el.addEventListener('change',function(){ if($('#plannerGoogleMap') && $('#plannerGoogleMap').dataset.fallback==='1') showPlannerMapFallback(true); });
             });
-            var plannerRequiredClose=$('#plannerRequiredClose');
-            var plannerRequiredBackdrop=$('#plannerRequiredBackdrop');
-            if(plannerRequiredClose) plannerRequiredClose.addEventListener('click',closeRequiredFieldsModal);
-            if(plannerRequiredBackdrop) plannerRequiredBackdrop.addEventListener('click',function(e){
-                if(e.target===plannerRequiredBackdrop) closeRequiredFieldsModal();
-            });
+            function setupRequiredFieldsModal(){
+                var plannerRequiredClose=$('#plannerRequiredClose');
+                var plannerRequiredBackdrop=$('#plannerRequiredBackdrop');
+
+                if(plannerRequiredClose && !plannerRequiredClose.dataset.bound){
+                    plannerRequiredClose.dataset.bound='1';
+                    plannerRequiredClose.addEventListener('click',function(e){
+                        e.preventDefault();
+                        closeRequiredFieldsModal();
+                    });
+                }
+
+                if(plannerRequiredBackdrop && !plannerRequiredBackdrop.dataset.bound){
+                    plannerRequiredBackdrop.dataset.bound='1';
+                    plannerRequiredBackdrop.addEventListener('click',function(e){
+                        if(e.target===plannerRequiredBackdrop){
+                            closeRequiredFieldsModal();
+                        }
+                    });
+                }
+            }
+
+            if(document.readyState==='loading'){
+                document.addEventListener('DOMContentLoaded',setupRequiredFieldsModal);
+            }else{
+                setupRequiredFieldsModal();
+            }
+
             document.addEventListener('keydown',function(e){
-                if(e.key==='Escape' && plannerRequiredBackdrop && plannerRequiredBackdrop.classList.contains('is-open')){
+                var plannerRequiredBackdrop=$('#plannerRequiredBackdrop');
+
+                if(e.key==='Escape'
+                        && plannerRequiredBackdrop
+                        && plannerRequiredBackdrop.classList.contains('is-open')){
                     closeRequiredFieldsModal();
                 }
             });
