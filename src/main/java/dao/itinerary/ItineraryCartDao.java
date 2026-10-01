@@ -1,10 +1,107 @@
 package dao.itinerary;
 
-import dto.itinerary.ItineraryCartDto;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.session.SqlSession;
+
+import dto.itinerary.ItineraryBlockDto;
+import dto.itinerary.ItineraryDayDto;
+import dto.itinerary.ItineraryDto;
 
 public interface ItineraryCartDao {
-	void insertCartItem(ItineraryCartDto cartItemDto) throws Exception;
-	void selectCartItem(ItineraryCartDto cartItemDto) throws Exception;
-	void updateCartItem(ItineraryCartDto cartItemDto) throws Exception;
-	void deleteCartItem(ItineraryCartDto cartItemDto) throws Exception;
+
+    /*
+     * TB_ITINERARY_CART의 원본 참조 목록 조회.
+     * 별도 Cart DTO를 만들지 않고 Map으로 내부 처리한다.
+     */
+    List<Map<String, Object>> selectCartItems(
+            SqlSession sqlSession,
+            Long userId
+    ) throws Exception;
+
+
+    /*
+     * 원본 일정의 기본정보만 조회.
+     */
+    ItineraryDto selectSourceItinerary(
+            SqlSession sqlSession,
+            Long itineraryId
+    ) throws Exception;
+
+
+    /*
+     * DAY 하나의 기본정보 조회.
+     */
+    ItineraryDayDto selectSourceDay(
+            SqlSession sqlSession,
+            Long dayId
+    ) throws Exception;
+
+
+    /*
+     * BLOCK 하나의 기본정보 조회.
+     */
+    ItineraryBlockDto selectSourceBlock(
+            SqlSession sqlSession,
+            Long blockId
+    ) throws Exception;
+
+
+    /*
+     * source DAY/BLOCK이 어느 일정에 속하는지 찾을 때 사용.
+     */
+    Long selectItineraryIdByDayId(
+            SqlSession sqlSession,
+            Long dayId
+    ) throws Exception;
+
+    Long selectItineraryIdByBlockId(
+            SqlSession sqlSession,
+            Long blockId
+    ) throws Exception;
+
+
+    /*
+     * 카트 담기
+     */
+    int insertItinerary(
+            SqlSession sqlSession,
+            Long userId,
+            Long itineraryId
+    ) throws Exception;
+
+    int insertDay(
+            SqlSession sqlSession,
+            Long userId,
+            Long dayId
+    ) throws Exception;
+
+    int insertBlock(
+            SqlSession sqlSession,
+            Long userId,
+            Long blockId
+    ) throws Exception;
+
+
+    /*
+     * 카트에서 삭제
+     */
+    int deleteItinerary(
+            SqlSession sqlSession,
+            Long userId,
+            Long itineraryId
+    ) throws Exception;
+
+    int deleteDay(
+            SqlSession sqlSession,
+            Long userId,
+            Long dayId
+    ) throws Exception;
+
+    int deleteBlock(
+            SqlSession sqlSession,
+            Long userId,
+            Long blockId
+    ) throws Exception;
 }

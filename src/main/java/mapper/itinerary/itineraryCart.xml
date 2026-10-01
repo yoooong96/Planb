@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.itinerary.itineraryCart">
+
+
+    <!-- =====================================================
+         카트 전체 조회
+         ===================================================== -->
+    <select
+        id="selectCartItems"
+        parameterType="long"
+        resultType="map">
+
+        SELECT
+            user_id AS userId,
+            item_type AS itemType,
+            source_itinerary_id AS sourceItineraryId,
+            source_day_id AS sourceDayId,
+            source_block_id AS sourceBlockId,
+            added_at AS addedAt
+
+        FROM TB_ITINERARY_CART
+
+        WHERE user_id = #{value}
+
+        ORDER BY added_at DESC
+
+    </select>
+
+
+    <!-- =====================================================
+         원본 일정 조회
+         ===================================================== -->
+    <select
+        id="selectSourceItinerary"
+        parameterType="long"
+        resultType="itinerary">
+
+        SELECT
+            *
+
+        FROM TB_ITINERARY
+
+        WHERE itinerary_id = #{value}
+
+    </select>
+
+
+    <!-- =====================================================
+         원본 DAY 조회
+         ===================================================== -->
+    <select
+        id="selectSourceDay"
+        parameterType="long"
+        resultType="itineraryDay">
+
+        SELECT
+            *
+
+        FROM TB_ITINERARY_DAY
+
+        WHERE day_id = #{value}
+
+    </select>
+
+
+    <!-- =====================================================
+         원본 BLOCK 조회
+         ===================================================== -->
+    <select
+        id="selectSourceBlock"
+        parameterType="long"
+        resultType="itineraryBlock">
+
+        SELECT
+            *
+
+        FROM TB_ITINERARY_BLOCK
+
+        WHERE block_id = #{value}
+
+    </select>
+
+
+    <!-- =====================================================
+         DAY ID -> ITINERARY ID
+         ===================================================== -->
+    <select
+        id="selectItineraryIdByDayId"
+        parameterType="long"
+        resultType="long">
+
+        SELECT
+            itinerary_id
+
+        FROM TB_ITINERARY_DAY
+
+        WHERE day_id = #{value}
+
+    </select>
+
+
+    <!-- =====================================================
+         BLOCK ID -> ITINERARY ID
+         ===================================================== -->
+    <select
+        id="selectItineraryIdByBlockId"
+        parameterType="long"
+        resultType="long">
+
+        SELECT
+            d.itinerary_id
+
+        FROM TB_ITINERARY_BLOCK b
+
+        JOIN TB_ITINERARY_DAY d
+          ON b.day_id = d.day_id
+
+        WHERE b.block_id = #{value}
+
+    </select>
+
+
+    <!-- =====================================================
+         일정 전체 카트 추가
+         ===================================================== -->
+    <insert id="insertItinerary">
+
+        INSERT INTO TB_ITINERARY_CART (
+            user_id,
+            item_type,
+            source_itinerary_id
+        )
+        VALUES (
+            #{userId},
+            'ITINERARY',
+            #{itineraryId}
+        )
+
+    </insert>
+
+
+    <!-- =====================================================
+         DAY 카트 추가
+         ===================================================== -->
+    <insert id="insertDay">
+
+        INSERT INTO TB_ITINERARY_CART (
+            user_id,
+            item_type,
+            source_day_id
+        )
+        VALUES (
+            #{userId},
+            'DAY',
+            #{dayId}
+        )
+
+    </insert>
+
+
+    <!-- =====================================================
+         BLOCK 카트 추가
+         ===================================================== -->
+    <insert id="insertBlock">
+
+        INSERT INTO TB_ITINERARY_CART (
+            user_id,
+            item_type,
+            source_block_id
+        )
+        VALUES (
+            #{userId},
+            'BLOCK',
+            #{blockId}
+        )
+
+    </insert>
+
+
+    <!-- =====================================================
+         일정 전체 카트 삭제
+         ===================================================== -->
+    <delete id="deleteItinerary">
+
+        DELETE
+        FROM TB_ITINERARY_CART
+
+        WHERE user_id = #{userId}
+          AND item_type = 'ITINERARY'
+          AND source_itinerary_id = #{itineraryId}
+
+    </delete>
+
+
+    <!-- =====================================================
+         DAY 카트 삭제
+         ===================================================== -->
+    <delete id="deleteDay">
+
+        DELETE
+        FROM TB_ITINERARY_CART
+
+        WHERE user_id = #{userId}
+          AND item_type = 'DAY'
+          AND source_day_id = #{dayId}
+
+    </delete>
+
+
+    <!-- =====================================================
+         BLOCK 카트 삭제
+         ===================================================== -->
+    <delete id="deleteBlock">
+
+        DELETE
+        FROM TB_ITINERARY_CART
+
+        WHERE user_id = #{userId}
+          AND item_type = 'BLOCK'
+          AND source_block_id = #{blockId}
+
+    </delete>
+
+
+</mapper>

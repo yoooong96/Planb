@@ -937,20 +937,121 @@ request.setAttribute("activePage", "planner");
             function $(sel, root){ return (root||document).querySelector(sel); }
             function $$(sel, root){ return Array.prototype.slice.call((root||document).querySelectorAll(sel)); }
             var blockTemplate = $('.planner-block-card') ? $('.planner-block-card').cloneNode(true) : null;
-            var SAVED_PLANS = [
-                {id:'plan-tokyo',title:'도쿄 벚꽃 시즌 4박 5일',country:'일본',countryCode:'JP',region:'도쿄',nights:4,days:5,color:'#FF6B9D',daySchedules:[
-                    {dayNum:1,theme:'아사쿠사 · 우에노',items:[
-                        {type:'sightseeing',name:'센소지',time:'10:00',location:'아사쿠사',cost:'0'},
-                        {type:'meal',name:'우에노 라멘',time:'13:00',location:'우에노',cost:'15000'}]},
-                    {dayNum:2,theme:'시부야 · 신주쿠',items:[
-                        {type:'activity',name:'시부야 스카이',time:'16:00',location:'시부야',cost:'25000'}]}
-                ]},
-                {id:'plan-osaka',title:'오사카 먹방 여행 3박 4일',country:'일본',countryCode:'JP',region:'오사카',nights:3,days:4,color:'#FF8C42',daySchedules:[
-                    {dayNum:1,theme:'도톤보리',items:[
-                        {type:'meal',name:'도톤보리 맛집',time:'18:00',location:'난바',cost:'30000'}]}
-                ]}
-            ];
+            /*
+             * PlannerServlet에서 전달한 카트 조회 결과.
+             *
+             * List<ItineraryDto>
+             *  └ days
+             *      └ blocks
+             */
+            var IMPORT_ITINERARIES =
+                ${empty importListJson ? '[]' : importListJson};
+
+            function dbBlockTypeToPlanner(type){
+                var map={
+                    ATTRACTION:'sightseeing',
+                    MEAL:'meal',
+                    LODGING:'accommodation',
+                    TRANSPORT:'transport',
+                    ACTIVITY:'activity'
+                };
+
+                return map[type] || 'sightseeing';
+            }
+
+            function shortTime(value){
+                if(!value) return '';
+                value=String(value);
+                return value.length>=5 ? value.substring(0,5) : value;
+            }
+
+            function calculateTripDays(startDate,endDate,fallback){
+                if(startDate && endDate){
+                    var s=new Date(startDate+'T00:00:00');
+                    var e=new Date(endDate+'T00:00:00');
+
+                    if(!isNaN(s.getTime()) && !isNaN(e.getTime())){
+                        return Math.max(
+                            1,
+                            Math.round((e-s)/(1000*60*60*24))+1
+                        );
+                    }
+                }
+
+                return Math.max(1,fallback||1);
+            }
+
+            function normalizeImportItinerary(itinerary,index){
+                itinerary=itinerary||{};
+
+                var rawDays=Array.isArray(itinerary.days)
+                    ? itinerary.days
+                    : [];
+
+                var tripDays=calculateTripDays(
+                    itinerary.startDate,
+                    itinerary.endDate,
+                    rawDays.length
+                );
+
+                return {
+                    id:'cart-itinerary-'+(itinerary.itineraryId||index),
+                    sourceItineraryId:itinerary.itineraryId||null,
+                    title:itinerary.title||'제목 없는 일정',
+                    country:itinerary.country||'',
+                    countryCode:'',
+                    region:itinerary.city||'',
+                    travelerCount:itinerary.travelerCount == null
+                        ? 1
+                        : Number(itinerary.travelerCount),
+                    nights:Math.max(0,tripDays-1),
+                    days:tripDays,
+                    color:'#6369D1',
+
+                    daySchedules:rawDays.map(function(day,dayIndex){
+                        day=day||{};
+
+                        var rawBlocks=Array.isArray(day.blocks)
+                            ? day.blocks
+                            : [];
+
+                        return {
+                            sourceDayId:day.dayId||null,
+                            dayNum:day.dayOrder||dayIndex+1,
+                            theme:day.title||('Day '+(day.dayOrder||dayIndex+1)),
+
+                            items:rawBlocks.map(function(block){
+                                block=block||{};
+
+                                return {
+                                    sourceBlockId:block.blockId||null,
+                                    type:dbBlockTypeToPlanner(block.blockType),
+                                    name:block.title||'새 일정',
+                                    time:shortTime(block.startTime),
+                                    endTime:shortTime(block.endTime),
+                                    location:'',
+                                    cost:block.cost==null ? 0 : block.cost,
+                                    note:block.memo||''
+                                };
+                            })
+                        };
+                    })
+                };
+            }
+
+            var SAVED_PLANS=IMPORT_ITINERARIES.map(
+                normalizeImportItinerary
+            );
+
             function money(v){ var n=parseInt(String(v||'').replace(/[^0-9]/g,''),10)||0; return n.toLocaleString('ko-KR')+'원'; }
+            function escapeImportHtml(value){
+                return String(value==null?'':value)
+                    .replace(/&/g,'&amp;')
+                    .replace(/</g,'&lt;')
+                    .replace(/>/g,'&gt;')
+                    .replace(/"/g,'&quot;')
+                    .replace(/'/g,'&#39;');
+            }
             function toast(msg){
                 var old=$('.planner-save-message'); if(old) old.remove();
                 var el=document.createElement('div'); el.className='planner-save-message'; el.textContent=msg; document.body.appendChild(el);
@@ -971,7 +1072,124 @@ request.setAttribute("activePage", "planner");
                 e.dataTransfer.effectAllowed='copy';
                 e.dataTransfer.setData('application/x-tripily-import', JSON.stringify(payload));
                 e.dataTransfer.setData('text/plain', payload.kind);
+
+                /*
+                 * 국가 미선택 상태에서도 '일정 가져오기'는 가능해야 하므로
+                 * 가져오기 드래그 중에만 중앙 영역 잠금을 임시 해제한다.
+                 */
+                var center=$('#plannerCenterPanel');
+                if(center){
+                    center.dataset.importDragActive='1';
+                    center.classList.remove('is-country-locked');
+                    center.setAttribute('aria-disabled','false');
+                }
             }
+
+            function finishImportDrag(){
+                var center=$('#plannerCenterPanel');
+
+                if(center){
+                    delete center.dataset.importDragActive;
+                }
+
+                syncCountryLock();
+                syncCountryEditLock();
+            }
+
+            function importHeaderMeta(plan){
+                return {
+                    country:plan && plan.country ? plan.country : '',
+                    region:plan && plan.region ? plan.region : '',
+                    travelerCount:plan && plan.travelerCount
+                        ? Number(plan.travelerCount)
+                        : 1
+                };
+            }
+
+            function plannerHasBlocks(){
+                return $$('.planner-day .planner-block-card').length > 0;
+            }
+
+            /*
+             * 가져오기 전에 아직 작성된 블록이 없고 국가도 비어 있으면
+             * 원본 일정의 국가 / 지역 / 인원을 자동 입력한다.
+             *
+             * 제목과 여행기간은 의도적으로 건드리지 않는다.
+             */
+            function applyImportHeaderDefaults(payload){
+                if(!payload || !payload.importMeta) return;
+                if(plannerHasBlocks()) return;
+
+                var country=$('#plannerCountry');
+                var region=$('#plannerRegion');
+                var traveler=$('#plannerTravelerCount');
+
+                if(!country || normalizePlannerText(country.value)) return;
+
+                var meta=payload.importMeta;
+
+                if(meta.country){
+                    country.value=meta.country;
+                    refreshCountryStatus();
+                    refreshRegionOptions(true);
+                }
+
+                if(region && meta.region){
+                    /*
+                     * 국가 선택 후 refreshRegionOptions()가 region을 활성화하므로
+                     * 그 다음 실제 지역명을 넣는다.
+                     */
+                    region.value=meta.region;
+                    updateRegionClear();
+                }
+
+                if(traveler){
+                    var n=parseInt(meta.travelerCount,10);
+                    if(!Number.isFinite(n) || n<1) n=1;
+                    if(n>99) n=99;
+                    traveler.value=String(n);
+                }
+
+                updateCountryClear();
+                filterPlans();
+                syncCountryLock();
+                markDirty();
+            }
+
+            /*
+             * DAY 아래에 블록이 하나라도 존재하면 국가 변경 금지.
+             * 블록을 모두 삭제하면 다시 국가 수정 가능.
+             */
+            function syncCountryEditLock(){
+                var input=$('#plannerCountry');
+                var clearBtn=$('#plannerCountryClear');
+                var dropdown=$('#plannerCountryDropdown');
+                if(!input) return;
+
+                var locked=plannerHasBlocks();
+
+                input.disabled=locked;
+                input.setAttribute('aria-disabled',locked ? 'true' : 'false');
+
+                if(clearBtn){
+                    clearBtn.disabled=locked;
+                    if(locked){
+                        clearBtn.classList.add('hidden');
+                    }else{
+                        updateCountryClear();
+                    }
+                }
+
+                if(dropdown && locked){
+                    dropdown.classList.add('hidden');
+                }
+
+                var field=$('#plannerCountryField');
+                if(field){
+                    field.style.backgroundColor=locked ? '#F8FAFC' : '';
+                }
+            }
+
             function renderSavedPlans(){
                 var list=$('#plannerSavedPlansList'); if(!list)return; list.innerHTML='';
                 SAVED_PLANS.forEach(function(plan){
@@ -979,27 +1197,55 @@ request.setAttribute("activePage", "planner");
                     card.dataset.country=plan.country||'';
                     card.dataset.search=(plan.title+' '+plan.country+' '+plan.region+' '+plan.daySchedules.map(function(d){return d.theme+' '+d.items.map(function(i){return i.name+' '+i.location}).join(' ')}).join(' ')).toLowerCase();
                     var head=document.createElement('div'); head.className='planner-saved-plan-head flex items-center gap-2.5 px-3 py-2.5 cursor-pointer hover:bg-gray-50 transition-colors select-none'; head.draggable=true;
-                    head.innerHTML='<span class="text-gray-300 text-xs">⠿</span><div class="w-8 h-8 rounded-lg flex items-center justify-center text-white text-[11px] font-black shrink-0" style="background:'+plan.color+'">'+plan.countryCode+'</div><div class="flex-1 min-w-0"><p class="text-xs font-bold text-gray-800 truncate">'+plan.title+'</p><p class="text-[10px] text-gray-400">'+plan.country+' · '+plan.nights+'박 '+plan.days+'일</p></div><span class="planner-plan-chevron text-gray-400 text-xs">⌄</span>';
+                    var countryMark=plan.countryCode || (plan.country ? plan.country.substring(0,2) : '—');
+                    head.innerHTML='<span class="text-gray-300 text-xs">⠿</span><div class="w-8 h-8 rounded-lg flex items-center justify-center text-white text-[10px] font-black shrink-0" style="background:'+plan.color+'">'+escapeImportHtml(countryMark)+'</div><div class="flex-1 min-w-0"><p class="text-xs font-bold text-gray-800 truncate">'+escapeImportHtml(plan.title)+'</p><p class="text-[10px] text-gray-400">'+escapeImportHtml(plan.country)+' · '+plan.nights+'박 '+plan.days+'일</p></div><span class="planner-plan-chevron text-gray-400 text-xs">⌄</span>';
                     var body=document.createElement('div'); body.className='planner-saved-plan-body hidden border-t border-gray-100';
                     plan.daySchedules.forEach(function(day){
                         var wrap=document.createElement('div'); wrap.className='border-b border-gray-50 last:border-0';
                         var row=document.createElement('div'); row.className='planner-saved-day flex items-center gap-2 px-3 py-2 cursor-pointer hover:bg-purple-50 select-none'; row.draggable=true;
-                        row.innerHTML='<span class="text-gray-200 text-xs">⠿</span><span class="text-[10px] font-black text-white px-1.5 py-0.5 rounded" style="background:'+plan.color+'">D'+day.dayNum+'</span><span class="text-[11px] font-semibold text-gray-700 flex-1 truncate">'+day.theme+'</span><span class="text-[10px] text-gray-400">'+day.items.length+'개</span><span class="planner-day-chevron text-gray-400 text-xs">⌄</span>';
+                        row.innerHTML='<span class="text-gray-200 text-xs">⠿</span><span class="text-[10px] font-black text-white px-1.5 py-0.5 rounded" style="background:'+plan.color+'">D'+day.dayNum+'</span><span class="text-[11px] font-semibold text-gray-700 flex-1 truncate">'+escapeImportHtml(day.theme)+'</span><span class="text-[10px] text-gray-400">'+day.items.length+'개</span><span class="planner-day-chevron text-gray-400 text-xs">⌄</span>';
                         var items=document.createElement('div'); items.className='planner-saved-items hidden pl-6 pr-3 pb-2 flex flex-col gap-1';
                         day.items.forEach(function(item){
                             var cfg=TYPE_CONFIG[item.type]||TYPE_CONFIG.sightseeing; var ir=document.createElement('div'); ir.className='planner-saved-item flex items-center gap-2 px-2 py-1.5 rounded-lg cursor-grab hover:bg-gray-50 border select-none'; ir.draggable=true;
-                            ir.innerHTML='<span class="text-gray-200 text-[10px]">⠿</span><span class="w-5 h-5 rounded flex items-center justify-center text-[9px] font-bold" style="background:'+cfg.bg+';color:'+cfg.color+'">'+cfg.label.substring(0,1)+'</span><span class="text-[11px] text-gray-700 flex-1 truncate font-medium">'+item.name+'</span><span class="text-[10px] text-gray-400">'+(item.time||'')+'</span>';
-                            ir.addEventListener('dragstart',function(e){e.stopPropagation();dragPayload(e,{kind:'item',item:item});});
+                            ir.innerHTML='<span class="text-gray-200 text-[10px]">⠿</span><span class="w-5 h-5 rounded flex items-center justify-center text-[9px] font-bold" style="background:'+cfg.bg+';color:'+cfg.color+'">'+cfg.label.substring(0,1)+'</span><span class="text-[11px] text-gray-700 flex-1 truncate font-medium">'+escapeImportHtml(item.name)+'</span><span class="text-[10px] text-gray-400">'+escapeImportHtml(item.time||'')+'</span>';
+                            ir.addEventListener('dragstart',function(e){
+                                e.stopPropagation();
+                                dragPayload(e,{
+                                    kind:'item',
+                                    item:item,
+                                    importMeta:importHeaderMeta(plan)
+                                });
+                            });
                             items.appendChild(ir);
                         });
                         row.addEventListener('click',function(){items.classList.toggle('hidden'); var c=$('.planner-day-chevron',row);if(c)c.textContent=items.classList.contains('hidden')?'⌄':'⌃';});
-                        row.addEventListener('dragstart',function(e){e.stopPropagation();dragPayload(e,{kind:'day',day:day});});
+                        row.addEventListener('dragstart',function(e){
+                            e.stopPropagation();
+                            dragPayload(e,{
+                                kind:'day',
+                                day:day,
+                                importMeta:importHeaderMeta(plan)
+                            });
+                        });
                         wrap.appendChild(row); wrap.appendChild(items); body.appendChild(wrap);
                     });
                     head.addEventListener('click',function(){body.classList.toggle('hidden'); var c=$('.planner-plan-chevron',head);if(c)c.textContent=body.classList.contains('hidden')?'⌄':'⌃';});
-                    head.addEventListener('dragstart',function(e){dragPayload(e,{kind:'plan',plan:plan});});
+                    head.addEventListener('dragstart',function(e){
+                        dragPayload(e,{
+                            kind:'plan',
+                            plan:plan,
+                            importMeta:importHeaderMeta(plan)
+                        });
+                    });
                     card.appendChild(head); card.appendChild(body); list.appendChild(card);
                 });
+                if(SAVED_PLANS.length===0){
+                    var empty=document.createElement('div');
+                    empty.className='px-3 py-8 text-center text-xs text-gray-400';
+                    empty.textContent='가져올 일정이 없습니다.';
+                    list.appendChild(empty);
+                }
+
                 filterPlans();
             }
             function filterPlans(){
@@ -1190,13 +1436,29 @@ request.setAttribute("activePage", "planner");
                     var ySrc=getSrc(y);
                     var xFile=x._plannerFile || null;
                     var yFile=y._plannerFile || null;
+
+                    /*
+                     * blob URL도 이미지 자체의 상태이므로
+                     * src / File과 함께 반드시 자리 이동해야 한다.
+                     *
+                     * 기존에는 objectUrl이 원래 칸에 남아 있어서
+                     * 이동 후 한 이미지를 삭제하면 다른 칸으로 이동한
+                     * 이미지의 URL까지 revoke되는 문제가 있었다.
+                     */
+                    var xObjectUrl=x.dataset.objectUrl || '';
+                    var yObjectUrl=y.dataset.objectUrl || '';
+
                     var activeThumb=$('.planner-photo-thumb.active',galleryEl);
                     var activeIndex=activeThumb ? Number(activeThumb.dataset.index) : null;
 
                     x.dataset.src=ySrc;
                     y.dataset.src=xSrc;
+
                     x._plannerFile=yFile;
                     y._plannerFile=xFile;
+
+                    x.dataset.objectUrl=yObjectUrl;
+                    y.dataset.objectUrl=xObjectUrl;
 
                     renderBadge();
 
@@ -1367,6 +1629,7 @@ request.setAttribute("activePage", "planner");
                 if(!template) return null;
                 var card=template.cloneNode(true);
                 card.dataset.itemType=prefill.type||'sightseeing';
+                card.dataset.sourceBlockId=prefill.sourceBlockId||'';
                 card.querySelectorAll('[id]').forEach(function(el){ el.removeAttribute('id'); });
                 card.querySelectorAll('label[for]').forEach(function(el){ el.removeAttribute('for'); });
                 var title=$('.planner-item-title',card), label=$('.planner-block-title-label',card);
@@ -1398,7 +1661,9 @@ request.setAttribute("activePage", "planner");
                 body.insertBefore(card,addBtn||null);
                 if(body.classList.contains('is-collapsed')) body.classList.remove('is-collapsed');
                 updateDayDeleteButtons();
-                syncBudget(); markDirty();
+                syncBudget();
+                syncCountryEditLock();
+                markDirty();
                 var ti=$('.planner-item-title',card); if(ti && !prefill?.title) ti.focus();
             }
 
@@ -1423,22 +1688,33 @@ request.setAttribute("activePage", "planner");
                     if(!raw)return; e.preventDefault(); body.classList.remove('is-drop-target');
                     try{
                         var d=JSON.parse(raw);
+
+                        /*
+                         * 첫 가져오기라면 원본 일정 기준으로
+                         * 국가 / 지역 / 인원을 먼저 채운다.
+                         */
+                        applyImportHeaderDefaults(d);
+
                         var startIndex=$$('.planner-day').indexOf(day);
                         if(d.kind==='item'){
-                            addBlockToDay(day,{title:d.item.name,type:d.item.type,startTime:d.item.time||'',cost:d.item.cost||'',place:d.item.location||'',note:d.item.note||''});
+                            addBlockToDay(day,{sourceBlockId:d.item.sourceBlockId||null,title:d.item.name,type:d.item.type,startTime:d.item.time||'',endTime:d.item.endTime||'',cost:d.item.cost||'',place:d.item.location||'',note:d.item.note||''});
                             toast('일정 블록 1개를 가져왔습니다.');
                         } else if(d.kind==='day'){
-                            (d.day.items||[]).forEach(function(item){addBlockToDay(day,{title:item.name,type:item.type,startTime:item.time||'',cost:item.cost||'',place:item.location||'',note:item.note||''});});
+                            (d.day.items||[]).forEach(function(item){addBlockToDay(day,{sourceBlockId:item.sourceBlockId||null,title:item.name,type:item.type,startTime:item.time||'',endTime:item.endTime||'',cost:item.cost||'',place:item.location||'',note:item.note||''});});
                             toast('D'+d.day.dayNum+' 일정을 가져왔습니다.');
                         } else if(d.kind==='plan'){
                             var schedules=d.plan.daySchedules||[];
                             var needed=Math.max(1,schedules.length);
                             while($$('.planner-day').length < startIndex + needed){ $('#plannerAddDay').click(); }
                             var targets=$$('.planner-day');
-                            schedules.forEach(function(ds,di){(ds.items||[]).forEach(function(item){addBlockToDay(targets[startIndex+di],{title:item.name,type:item.type,startTime:item.time||'',cost:item.cost||'',place:item.location||'',note:item.note||''});});});
+                            schedules.forEach(function(ds,di){(ds.items||[]).forEach(function(item){addBlockToDay(targets[startIndex+di],{sourceBlockId:item.sourceBlockId||null,title:item.name,type:item.type,startTime:item.time||'',endTime:item.endTime||'',cost:item.cost||'',place:item.location||'',note:item.note||''});});});
                             toast('Day '+(startIndex+1)+'부터 '+needed+'개 Day를 가져왔습니다.');
                         }
-                    }catch(err){ console.error(err); }
+                    }catch(err){
+                        console.error(err);
+                    }finally{
+                        finishImportDrag();
+                    }
                 });
             }
 
@@ -2029,6 +2305,7 @@ request.setAttribute("activePage", "planner");
             }
             if(plannerCountryClear){
                 plannerCountryClear.addEventListener('click',function(){
+                    if(plannerCountryInput.disabled) return;
                     plannerCountryInput.value='';
                     refreshCountryStatus();
                     refreshRegionOptions(true);
@@ -2151,7 +2428,9 @@ request.setAttribute("activePage", "planner");
                         var memo=$('.planner-item-note',card);
 
                         blocks.push({
-                            sourceBlockId:null,
+                            sourceBlockId:card.dataset.sourceBlockId
+                                ? Number(card.dataset.sourceBlockId)
+                                : null,
                             placeId:null,
                             blockType:plannerBlockTypeToDb(card.dataset.itemType),
                             blockOrder:blockIndex+1,
@@ -2237,21 +2516,67 @@ request.setAttribute("activePage", "planner");
             function syncCountryLock(){
                 var center=$('#plannerCenterPanel');
                 if(!center) return;
-                var locked=!findPlannerCountry($('#plannerCountry') ? $('#plannerCountry').value : '');
-                center.classList.toggle('is-country-locked',locked);
-                center.setAttribute('aria-disabled',locked?'true':'false');
+
+                /*
+                 * 일정 가져오기 드래그 중에는 국가가 비어 있어도
+                 * DAY 영역이 dragover/drop 이벤트를 받을 수 있게 한다.
+                 */
+                if(center.dataset.importDragActive==='1'){
+                    center.classList.remove('is-country-locked');
+                    center.setAttribute('aria-disabled','false');
+                    return;
+                }
+
+                var locked=!findPlannerCountry(
+                    $('#plannerCountry')
+                        ? $('#plannerCountry').value
+                        : ''
+                );
+
+                center.classList.toggle(
+                    'is-country-locked',
+                    locked
+                );
+
+                center.setAttribute(
+                    'aria-disabled',
+                    locked ? 'true' : 'false'
+                );
             }
             var countryInput=$('#plannerCountry');
             if(countryInput){
                 countryInput.addEventListener('input',syncCountryLock);
                 countryInput.addEventListener('change',syncCountryLock);
             }
+
+            /*
+             * 드래그를 중간에 취소한 경우에도
+             * 원래 국가 잠금 상태로 복귀시킨다.
+             */
+            document.addEventListener('dragend',function(){
+                finishImportDrag();
+            });
             restoreDraft();
             refreshCountryStatus();
             refreshRegionOptions(false);
             updateCountryClear();
             updateRegionClear();
             syncCountryLock();
+            syncCountryEditLock();
+
+            /*
+             * 블록/DAY 삭제 경로가 여러 곳이라 DOM 변화를 기준으로
+             * 국가 잠금 상태를 항상 다시 계산한다.
+             */
+            var plannerDaysRoot=$('#plannerDays');
+            if(plannerDaysRoot && window.MutationObserver){
+                new MutationObserver(function(){
+                    syncCountryEditLock();
+                }).observe(plannerDaysRoot,{
+                    childList:true,
+                    subtree:true
+                });
+            }
 
             if(typeof filterPlans==='function'){
                 filterPlans();
