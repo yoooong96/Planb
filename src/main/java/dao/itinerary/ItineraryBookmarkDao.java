@@ -1,10 +1,17 @@
 package dao.itinerary;
 
+import org.apache.ibatis.session.SqlSession;
+
 import dto.itinerary.ItineraryBookmarkDto;
+import dto.itinerary.ItineraryDto;
 
 public interface ItineraryBookmarkDao {
-	void insertItineraryBookmark(ItineraryBookmarkDto itineraryBookmarkDto) throws Exception;
-	void selectItineraryBookmark(ItineraryBookmarkDto itineraryBookmarkDto) throws Exception;
-	void updateItineraryBookmark(ItineraryBookmarkDto itineraryBookmarkDto) throws Exception;
-	void deleteItineraryBookmark(ItineraryBookmarkDto itineraryBookmarkDto) throws Exception;
+
+    int insertItineraryBookmark(SqlSession sqlSession,ItineraryBookmarkDto bookmark) throws Exception;
+
+    boolean selectItineraryBookmark(SqlSession sqlSession,ItineraryBookmarkDto bookmark) throws Exception;
+
+    int deleteItineraryBookmark(SqlSession sqlSession,ItineraryBookmarkDto bookmark) throws Exception;
+    
+    ItineraryDto selectBookmarkTargetForUpdate(SqlSession sqlSession,Long itineraryId) throws Exception;
 }
