@@ -48,7 +48,7 @@ request.setAttribute("activePage", "travel");
 					class="sticky top-0 z-20 bg-white/90 backdrop-blur-sm border-b px-5 py-3 flex items-center gap-3"
 					style="border-color: #D1D2F9">
 					<a
-						href="${pageContext.request.contextPath}/view/travel/scheduleList.jsp"
+						href="${pageContext.request.contextPath}/schedules"
 						class="flex items-center gap-1.5 text-[12.5px] font-semibold text-gray-500 hover:text-gray-900 transition-colors"><svg
 							class="w-4 h-4" fill="none" stroke="currentColor"
 							viewBox="0 0 24 24">

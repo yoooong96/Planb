@@ -140,7 +140,7 @@ if (user != null
             <!-- 여행 일정 -->
             <a
                 class="<%=homeHeader ? "site-nav-pill" : "site-nav-link"%> <%="travel".equals(activePage) ? "active" : ""%>"
-                href="<%=ctx%>/view/travel/scheduleList.jsp">
+                href="<%=ctx%>/schedules">
 
                 여행일정
 

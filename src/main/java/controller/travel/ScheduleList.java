@@ -1,9 +1,7 @@
 package controller.travel;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -49,12 +47,6 @@ public class ScheduleList extends HttpServlet {
 			if (loginUser != null) {
 				loginUserId = loginUser.getUserId();
 			}
-
-			// 	SQL에 전달할 값
-			Map<String, Object> params = new HashMap<>();
-			params.put("loginUserId", loginUserId);
-			params.put("limit", 12);
-			params.put("offset", 0);
 			
 			ItineraryService service = new ItineraryServiceImpl();
 			
