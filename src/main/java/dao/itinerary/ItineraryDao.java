@@ -1,11 +1,18 @@
 package dao.itinerary;
 
+import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.session.SqlSession;
 
 import dto.itinerary.ItineraryDto;
 
-public interface ItineraryDao {
 
+public interface ItineraryDao {	
+	
+	// 공개 일정 목록 조회 26.10.01 추가
+    List<ItineraryDto> selectScheduleList(Map<String, Object> params) throws Exception;
+    
     int insertItinerary(SqlSession sqlSession, ItineraryDto itineraryDto) throws Exception;
 
     ItineraryDto selectItinerary(SqlSession sqlSession, Long itineraryId) throws Exception;

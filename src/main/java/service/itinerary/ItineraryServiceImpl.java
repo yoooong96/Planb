@@ -1,7 +1,9 @@
 package service.itinerary;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 
@@ -33,6 +35,15 @@ public class ItineraryServiceImpl implements ItineraryService {
         itineraryBlockImageDao = new ItineraryBlockImageDaoImpl();
     }
 
+	@Override
+	public List<ItineraryDto> getScheduleList(Long loginUserId) throws Exception {
+		 Map<String, Object> params = new HashMap<>();
+	     params.put("loginUserId", loginUserId);
+	     params.put("limit", 12);
+	     params.put("offset", 0);
+	     return itineraryDao.selectScheduleList(params);
+	}
+    
     /*
      * 신규 일정 저장
      *

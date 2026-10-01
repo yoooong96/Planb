@@ -1,13 +1,22 @@
 package dao.itinerary;
 
+import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 
+import config.MybatisSqlSessionFactory;
 import dto.itinerary.ItineraryDto;
 
 public class ItineraryDaoImpl implements ItineraryDao {
+	//26.10.01 추가.
+	@Override
+	public List<ItineraryDto> selectScheduleList(Map<String, Object> params) throws Exception {
+		try(SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()){
+			return sqlSession.selectList("mapper.itinerary.itinerary.selectScheduleList",params);
+		}
+	}
 
     private static final String NAMESPACE = "mapper.itinerary.itinerary.";
 

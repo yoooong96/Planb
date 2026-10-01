@@ -1,8 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%
 request.setAttribute("activePage", "travel");
 %>
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -27,21 +29,11 @@ request.setAttribute("activePage", "travel");
 							d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
 						<polyline points="14 2 14 8 20 8" /></svg>내가 작성한 글</span><span
 				class="text-xs rounded-full px-2 py-0.5 font-semibold"
-				style="background: var(- -brand-light); color: var(- -brand)">3</span></a>
-			<!-- <button type="button"
-				class="flex items-center justify-between px-3 py-2.5 rounded-lg hover:bg-gray-50 transition-colors group mb-3">
-				<span
-					class="flex items-center gap-2 text-sm font-semibold text-gray-700 group-hover:text-gray-900"><svg
-						width="16" height="16" viewBox="0 0 24 24" fill="none"
-						stroke="currentColor" stroke-width="2">
-						<circle cx="12" cy="12" r="10" />
-						<polyline points="12 6 12 12 16 14" /></svg>최근 조회한 글</span><span
-					class="text-xs bg-gray-100 text-gray-500 rounded-full px-2 py-0.5 font-semibold">3</span>
-			</button> -->
+				style="background: var(--brand-light); color: var(--brand)">3</span></a>
 			<div class="border-t border-gray-100 mb-3"></div>
 			<button type="button"
 				class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl transition-all mb-1"
-				style="background: var(- -brand); color: #fff">
+				style="background: var(--brand); color: #fff">
 				<span class="flex items-center gap-2 text-sm font-semibold"><svg
 						width="16" height="16" viewBox="0 0 24 24" fill="none"
 						stroke="#fff" stroke-width="2">
@@ -55,146 +47,211 @@ request.setAttribute("activePage", "travel");
 			<div
 				class="text-xs font-bold text-gray-400 uppercase tracking-widest px-3 mb-1 mt-1">여행
 				지역</div>
+			<div class="border-t border-gray-100 mb-3"></div>
+			<div
+				class="text-xs font-bold text-gray-400 uppercase tracking-widest px-3 mb-1">대륙별
+				보기</div>
 			<div>
 				<button type="button"
 					class="continent-toggle w-full flex items-center justify-between px-3 py-2.5 rounded-xl transition-all"
-					data-continent-toggle style="color: #374151">
+					data-continent-toggle>
 					<span class="flex items-center gap-2.5 text-sm font-semibold"><svg
 							viewBox="0 0 48 48" width="24" height="24" aria-hidden="true">
-							<path
+								<path
 								d="M10 8L18 5L27 6L36 9L40 15L37 21L40 27L34 32L29 38L22 40L17 35L11 34L7 27L6 19Z"
 								fill="#6369D1" opacity=".88" /></svg>아시아</span>
 					<svg
 						class="continent-chevron w-3.5 h-3.5 shrink-0 transition-transform"
 						viewBox="0 0 24 24" fill="none" stroke="#9ca3af"
 						stroke-width="2.5">
-						<path d="m6 9 6 6 6-6" /></svg>
+							<path d="m6 9 6 6 6-6" /></svg>
 				</button>
 				<div
 					class="continent-panel ml-2 mb-1 flex-col gap-0.5 border-l-2 pl-3 pt-1"
-					style="border-color: var(- -brand-light)">
-					<button type="button"
-						class="flex items-center justify-between text-sm py-1.5 px-2 rounded-md transition-colors"
-						style="color: #6b7280">
-						<span>한국</span><span
-							class="text-[10px] rounded-full px-1.5 py-0.5 ml-1"
-							style="background: var(- -brand-light); color: var(- -brand)">8</span>
-					</button>
+					style="border-color: var(--brand-light)">
+					<button
+						class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">대한민국</button>
+					<button
+						class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">일본</button>
+					<button
+						class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">태국</button>
+					<button
+						class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">베트남</button>
+					<button
+						class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">중국</button>
+					<button
+						class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">대만</button>
+					<button
+						class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">싱가포르</button>
 				</div>
 			</div>
 			<div>
 				<button type="button"
 					class="continent-toggle w-full flex items-center justify-between px-3 py-2.5 rounded-xl transition-all"
-					data-continent-toggle style="color: #374151">
+					data-continent-toggle>
 					<span class="flex items-center gap-2.5 text-sm font-semibold"><svg
 							viewBox="0 0 48 48" width="24" height="24" aria-hidden="true">
-							<path
+								<path
 								d="M10 8L18 5L27 6L36 9L40 15L37 21L40 27L34 32L29 38L22 40L17 35L11 34L7 27L6 19Z"
 								fill="#8B5CF6" opacity=".88" /></svg>유럽</span>
 					<svg
 						class="continent-chevron w-3.5 h-3.5 shrink-0 transition-transform"
 						viewBox="0 0 24 24" fill="none" stroke="#9ca3af"
 						stroke-width="2.5">
-						<path d="m6 9 6 6 6-6" /></svg>
+							<path d="m6 9 6 6 6-6" /></svg>
 				</button>
 				<div
 					class="continent-panel ml-2 mb-1 flex-col gap-0.5 border-l-2 pl-3 pt-1"
-					style="border-color: var(- -brand-light)"></div>
+					style="border-color: var(--brand-light)">
+					<button
+						class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">프랑스</button>
+					<button
+						class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">영국</button>
+					<button
+						class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">이탈리아</button>
+					<button
+						class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">스페인</button>
+					<button
+						class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">독일</button>
+					<button
+						class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">포르투갈</button>
+					<button
+						class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">그리스</button>
+				</div>
 			</div>
 			<div>
 				<button type="button"
 					class="continent-toggle w-full flex items-center justify-between px-3 py-2.5 rounded-xl transition-all"
-					data-continent-toggle style="color: #374151">
+					data-continent-toggle>
 					<span class="flex items-center gap-2.5 text-sm font-semibold"><svg
 							viewBox="0 0 48 48" width="24" height="24" aria-hidden="true">
-							<path
+								<path
 								d="M10 8L18 5L27 6L36 9L40 15L37 21L40 27L34 32L29 38L22 40L17 35L11 34L7 27L6 19Z"
 								fill="#10B981" opacity=".88" /></svg>북아메리카</span>
 					<svg
 						class="continent-chevron w-3.5 h-3.5 shrink-0 transition-transform"
 						viewBox="0 0 24 24" fill="none" stroke="#9ca3af"
 						stroke-width="2.5">
-						<path d="m6 9 6 6 6-6" /></svg>
+							<path d="m6 9 6 6 6-6" /></svg>
 				</button>
 				<div
 					class="continent-panel ml-2 mb-1 flex-col gap-0.5 border-l-2 pl-3 pt-1"
-					style="border-color: var(- -brand-light)"></div>
+					style="border-color: var(--brand-light)">
+					<button
+						class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">미국</button>
+					<button
+						class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">캐나다</button>
+					<button
+						class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">멕시코</button>
+				</div>
 			</div>
 			<div>
 				<button type="button"
 					class="continent-toggle w-full flex items-center justify-between px-3 py-2.5 rounded-xl transition-all"
-					data-continent-toggle style="color: #374151">
+					data-continent-toggle>
 					<span class="flex items-center gap-2.5 text-sm font-semibold"><svg
 							viewBox="0 0 48 48" width="24" height="24" aria-hidden="true">
-							<path
+								<path
 								d="M10 8L18 5L27 6L36 9L40 15L37 21L40 27L34 32L29 38L22 40L17 35L11 34L7 27L6 19Z"
 								fill="#F59E0B" opacity=".88" /></svg>남아메리카</span>
 					<svg
 						class="continent-chevron w-3.5 h-3.5 shrink-0 transition-transform"
 						viewBox="0 0 24 24" fill="none" stroke="#9ca3af"
 						stroke-width="2.5">
-						<path d="m6 9 6 6 6-6" /></svg>
+							<path d="m6 9 6 6 6-6" /></svg>
 				</button>
 				<div
 					class="continent-panel ml-2 mb-1 flex-col gap-0.5 border-l-2 pl-3 pt-1"
-					style="border-color: var(- -brand-light)"></div>
+					style="border-color: var(--brand-light)">
+					<button
+						class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">브라질</button>
+					<button
+						class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">페루</button>
+					<button
+						class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">아르헨티나</button>
+					<button
+						class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">칠레</button>
+				</div>
 			</div>
 			<div>
 				<button type="button"
 					class="continent-toggle w-full flex items-center justify-between px-3 py-2.5 rounded-xl transition-all"
-					data-continent-toggle style="color: #374151">
+					data-continent-toggle>
 					<span class="flex items-center gap-2.5 text-sm font-semibold"><svg
 							viewBox="0 0 48 48" width="24" height="24" aria-hidden="true">
-							<path
+								<path
 								d="M10 8L18 5L27 6L36 9L40 15L37 21L40 27L34 32L29 38L22 40L17 35L11 34L7 27L6 19Z"
 								fill="#EF4444" opacity=".88" /></svg>아프리카</span>
 					<svg
 						class="continent-chevron w-3.5 h-3.5 shrink-0 transition-transform"
 						viewBox="0 0 24 24" fill="none" stroke="#9ca3af"
 						stroke-width="2.5">
-						<path d="m6 9 6 6 6-6" /></svg>
+							<path d="m6 9 6 6 6-6" /></svg>
 				</button>
 				<div
 					class="continent-panel ml-2 mb-1 flex-col gap-0.5 border-l-2 pl-3 pt-1"
-					style="border-color: var(- -brand-light)"></div>
+					style="border-color: var(--brand-light)">
+					<button
+						class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">이집트</button>
+					<button
+						class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">모로코</button>
+					<button
+						class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">남아프리카</button>
+					<button
+						class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">케냐</button>
+				</div>
 			</div>
 			<div>
 				<button type="button"
 					class="continent-toggle w-full flex items-center justify-between px-3 py-2.5 rounded-xl transition-all"
-					data-continent-toggle style="color: #374151">
+					data-continent-toggle>
 					<span class="flex items-center gap-2.5 text-sm font-semibold"><svg
 							viewBox="0 0 48 48" width="24" height="24" aria-hidden="true">
-							<path
+								<path
 								d="M10 8L18 5L27 6L36 9L40 15L37 21L40 27L34 32L29 38L22 40L17 35L11 34L7 27L6 19Z"
 								fill="#06B6D4" opacity=".88" /></svg>오세아니아</span>
 					<svg
 						class="continent-chevron w-3.5 h-3.5 shrink-0 transition-transform"
 						viewBox="0 0 24 24" fill="none" stroke="#9ca3af"
 						stroke-width="2.5">
-						<path d="m6 9 6 6 6-6" /></svg>
+							<path d="m6 9 6 6 6-6" /></svg>
 				</button>
 				<div
 					class="continent-panel ml-2 mb-1 flex-col gap-0.5 border-l-2 pl-3 pt-1"
-					style="border-color: var(- -brand-light)"></div>
+					style="border-color: var(--brand-light)">
+					<button
+						class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">호주</button>
+					<button
+						class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">뉴질랜드</button>
+					<button
+						class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">피지</button>
+				</div>
 			</div>
 			<div>
 				<button type="button"
 					class="continent-toggle w-full flex items-center justify-between px-3 py-2.5 rounded-xl transition-all"
-					data-continent-toggle style="color: #374151">
+					data-continent-toggle>
 					<span class="flex items-center gap-2.5 text-sm font-semibold"><svg
 							viewBox="0 0 48 48" width="24" height="24" aria-hidden="true">
-							<path
+								<path
 								d="M10 8L18 5L27 6L36 9L40 15L37 21L40 27L34 32L29 38L22 40L17 35L11 34L7 27L6 19Z"
 								fill="#D97706" opacity=".88" /></svg>중동</span>
 					<svg
 						class="continent-chevron w-3.5 h-3.5 shrink-0 transition-transform"
 						viewBox="0 0 24 24" fill="none" stroke="#9ca3af"
 						stroke-width="2.5">
-						<path d="m6 9 6 6 6-6" /></svg>
+							<path d="m6 9 6 6 6-6" /></svg>
 				</button>
 				<div
 					class="continent-panel ml-2 mb-1 flex-col gap-0.5 border-l-2 pl-3 pt-1"
-					style="border-color: var(- -brand-light)"></div>
+					style="border-color: var(--brand-light)">
+					<button
+						class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">UAE</button>
+					<button
+						class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">터키</button>
+					<button
+						class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">이스라엘</button>
+				</div>
 			</div>
 		</aside>
 		<main class="flex-1 px-6 py-8 min-w-0">
@@ -305,6 +362,137 @@ request.setAttribute("activePage", "travel");
 			</div>
 			<div class="grid gap-5"
 				style="grid-template-columns: repeat(4, minmax(0, 1fr))">
+				<!-- 실제로 db에 들어있는 데이터들로 보여줄 여행카드 목록들 26.10.01-->
+				<c:forEach var="schedule" items="${scheduleList}">
+					<c:url var="scheduleDetailUrl"
+						value="/view/travel/scheduleDetail.jsp">
+						<c:param name="id" value="${schedule.itineraryId}" />
+					</c:url>
+
+					<article
+						class="jsp-schedule-card bg-white rounded-2xl overflow-hidden
+               transition-all duration-200 border group"
+						style="border-color: #D1D2F9; box-shadow: 0 2px 8px rgba(0, 0, 0, .07)">
+
+						<div class="relative overflow-hidden" style="aspect-ratio: 4/3">
+
+							<a href="${scheduleDetailUrl}" class="block w-full h-full"> <c:choose>
+									<c:when test="${not empty schedule.thumbnailImg}">
+										<img src="<c:out value='${schedule.thumbnailImg}'/>"
+											alt="<c:out value='${schedule.title}'/>"
+											class="w-full h-full object-cover
+                                   transition-transform duration-300
+                                   group-hover:scale-105">
+									</c:when>
+
+									<c:otherwise>
+										<div class="w-full h-full flex items-center justify-center"
+											style="background: #F0F0FF; color: #6369D1">여행 일정</div>
+									</c:otherwise>
+								</c:choose>
+
+							</a> <span
+								class="absolute top-2.5 left-2.5 text-[10px]
+                       font-bold px-2 py-0.5 rounded-full"
+								style="background: #6369D1; color: white"> <c:out
+									value="${schedule.country}" /> · <c:out
+									value="${schedule.city}" />
+
+							</span>
+
+							<!-- 비로그인 또는 타인 일정에서만 표시 -->
+							<c:if
+								test="${empty sessionScope.user
+                          or schedule.userId ne sessionScope.user.userId}">
+
+								<button type="button" data-schedule-bookmark
+									data-itinerary-id="${schedule.itineraryId}"
+									data-logged-in="${not empty sessionScope.user}"
+									aria-pressed="${schedule.bookmarked}" aria-label="북마크"
+									class="absolute top-2.5 right-2.5 w-7 h-7
+                           rounded-full bg-white/90 backdrop-blur-sm
+                           flex items-center justify-center shadow-sm
+                           transition-all hover:scale-110">
+
+									<svg width="13" height="13" viewBox="0 0 24 24"
+										fill="${schedule.bookmarked ? '#6369D1' : 'none'}"
+										stroke="${schedule.bookmarked ? '#6369D1' : '#9ca3af'}"
+										stroke-width="2">
+
+                        <path stroke-linecap="round"
+											stroke-linejoin="round"
+											d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+
+                    </svg>
+
+								</button>
+
+							</c:if>
+
+						</div>
+
+						<div class="p-3.5">
+
+							<a href="${scheduleDetailUrl}">
+								<h3
+									class="font-bold text-[14px] leading-snug mb-1
+                           line-clamp-2 transition-colors
+                           group-hover:text-[#6369D1]"
+									style="color: #18181b">
+
+									<c:out value="${schedule.title}" />
+
+								</h3>
+							</a>
+
+							<p
+								class="text-gray-500 text-[12px] line-clamp-1
+                       mb-2.5 leading-relaxed">
+
+								<c:out value="${schedule.summary}" />
+
+							</p>
+
+							<p class="text-[11px] text-gray-400 mb-2">
+								<fmt:formatDate value="${schedule.startDate}"
+									pattern="yyyy.MM.dd" />
+								~
+								<fmt:formatDate value="${schedule.endDate}" pattern="yyyy.MM.dd" />
+							</p>
+
+							<div
+								class="flex items-center gap-2.5
+                       text-[11px] text-gray-400 mb-3">
+
+								<span> 좋아요 <fmt:formatNumber
+										value="${schedule.likeCount}" />
+								</span> <span> 댓글 <fmt:formatNumber
+										value="${schedule.commentCount}" />
+								</span> <span> 조회 <fmt:formatNumber
+										value="${schedule.viewCount}" />
+								</span>
+
+							</div>
+
+							<div class="flex items-center justify-between border-t pt-2.5"
+								style="border-color: #D1D2F9">
+
+								<span class="text-[11px] text-gray-500 font-medium"> <c:out
+										value="${schedule.nickname}" />
+								</span> <span class="text-[10px] text-gray-400"> <fmt:formatDate
+										value="${schedule.createdAt}" pattern="yyyy.MM.dd" />
+								</span>
+
+							</div>
+
+						</div>
+
+					</article>
+
+				</c:forEach>
+
+
+				<!-- 아래는 예시데이터 코드들 -->
 				<a
 					href="${pageContext.request.contextPath}/view/travel/scheduleDetail.jsp?id=9"
 					class="jsp-schedule-card bg-white rounded-2xl overflow-hidden cursor-pointer transition-all duration-200 border group"
@@ -319,14 +507,15 @@ request.setAttribute("activePage", "travel");
 						<span
 							class="absolute top-2.5 left-2.5 text-[10px] font-bold px-2 py-0.5 rounded-full"
 							style="background: #6369D1; color: white">파리</span>
-						<button type="button"
-							class="absolute top-2.5 right-2.5 w-7 h-7 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-sm transition-all hover:scale-110"
-							data-bookmark aria-label="북마크">
-							<svg width="13" height="13" viewBox="0 0 24 24" fill="none"
-								stroke="#9ca3af" stroke-width="2">
+							<button type="button" data-itinerary-id="${schedule.itineraryId}"
+								aria-pressed="${schedule.bookmarked}"
+								class="absolute top-2.5 right-2.5 w-7 h-7 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-sm transition-all hover:scale-110"
+								data-bookmark aria-label="북마크">
+								<svg width="13" height="13" viewBox="0 0 24 24" fill="none"
+									stroke="#9ca3af" stroke-width="2">
 								<path stroke-linecap="round" stroke-linejoin="round"
-									d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" /></svg>
-						</button>
+										d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" /></svg>
+							</button>
 						<span
 							class="absolute bottom-2.5 left-2.5 text-white text-[11px] font-bold bg-black/50 rounded-full px-2.5 py-1">5박
 							6일</span>

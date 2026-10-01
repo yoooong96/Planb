@@ -6,29 +6,27 @@ import java.sql.Timestamp;
 import java.util.List;
 
 public class ItineraryDto {
-
-    private Long itineraryId;              // 일정 고유번호
-    private Long userId;                   // 작성 회원
-
-    private String title;                  // 여행 제목
+	private Long itineraryId;              // 일정 고유번호
+	private Long userId;                   // 작성 회원
+	private String title;                  // 여행 제목
     private String summary;                // 일정 소개
     private String continent;              // 대륙
     private String country;                // 나라
     private String city;                   // 도시 (선택)
 
     private Integer travelerCount;         // 여행 인원수, DB DEFAULT 1
-
+    
     private Date startDate;                // 시작일 (선택)
     private Date endDate;                  // 종료일 (선택)
-
+	
     private BigDecimal totalBudget;        // 총 예산
     private String visibility;             // PUBLIC / PRIVATE
     private String thumbnailImg;           // 대표 이미지
-
+    
     private Integer viewCount;             // 조회수
     private Long sourceItineraryId;        // 원본 일정 번호
     private String status;                 // ACTIVE / DELETED
-
+    
     private Long deletedByUserId;          // 삭제 처리자
     private Timestamp deletedAt;           // 삭제 일시
     private Timestamp createdAt;           // 작성 일시
@@ -36,11 +34,39 @@ public class ItineraryDto {
 
     // 일정 -> DAY 계층
     private List<ItineraryDayDto> days;
-
-    public ItineraryDto() {
-    }
-
-    public Long getItineraryId() {
+    
+	public ItineraryDto() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+	
+	public ItineraryDto(long itineraryId, long userId, String title, String summary, String continent, String country,
+			String city, Date startDate, Date endDate, BigDecimal totalBudget, String visibility, String thumbnailImg,
+			int viewCount, long sourceItineraryId, String status, long deletedByUserId, Timestamp deletedAt,
+			Timestamp createdAt, Timestamp updatedAt) {
+		super();
+		this.itineraryId = itineraryId;
+		this.userId = userId;
+		this.title = title;
+		this.summary = summary;
+		this.continent = continent;
+		this.country = country;
+		this.city = city;
+		this.startDate = startDate;
+		this.endDate = endDate;
+		this.totalBudget = totalBudget;
+		this.visibility = visibility;
+		this.thumbnailImg = thumbnailImg;
+		this.viewCount = viewCount;
+		this.sourceItineraryId = sourceItineraryId;
+		this.status = status;
+		this.deletedByUserId = deletedByUserId;
+		this.deletedAt = deletedAt;
+		this.createdAt = createdAt;
+		this.updatedAt = updatedAt;
+	}
+	
+	public Long getItineraryId() {
         return itineraryId;
     }
 
@@ -207,8 +233,8 @@ public class ItineraryDto {
     public void setDays(List<ItineraryDayDto> days) {
         this.days = days;
     }
-
-    @Override
+	
+	@Override
     public String toString() {
         return "ItineraryDto [itineraryId=" + itineraryId
                 + ", userId=" + userId
@@ -232,4 +258,43 @@ public class ItineraryDto {
                 + ", updatedAt=" + updatedAt
                 + ", days=" + days + "]";
     }
+	// 목록 카드에서 보여줄 조회 결과 26.10.01 추가.
+	private String nickname;
+	private int likeCount;
+	private int commentCount;
+
+	public String getNickname() {
+	    return nickname;
+	}
+
+	public void setNickname(String nickname) {
+	    this.nickname = nickname;
+	}
+
+	public int getLikeCount() {
+	    return likeCount;
+	}
+
+	public void setLikeCount(int likeCount) {
+	    this.likeCount = likeCount;
+	}
+
+	public int getCommentCount() {
+	    return commentCount;
+	}
+
+	public void setCommentCount(int commentCount) {
+	    this.commentCount = commentCount;
+	}
+	
+	//로그인한 회원의 게시글일 때는 전체 일정 조회에서 북마크 토글 아이콘을 숨김. 26.10.01 추가.
+	private boolean bookmarked;
+
+	public boolean isBookmarked() {
+	    return bookmarked;
+	}
+
+	public void setBookmarked(boolean bookmarked) {
+	    this.bookmarked = bookmarked;
+	}
 }
