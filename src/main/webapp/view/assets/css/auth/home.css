@@ -352,7 +352,7 @@ html::-webkit-scrollbar {
    여행일정 만들기 CTA
 ======================================== */
 .home-create-plan {
-    min-height: calc(100vh - 130px);
+    min-height: 100vh;
 
     display: flex;
     align-items: center;
@@ -380,6 +380,14 @@ html::-webkit-scrollbar {
             #6369d1 45%,
             #777ce0 100%
         );
+    position: relative;
+    overflow: hidden;
+}
+
+/* 실제 콘텐츠는 장식보다 위 */
+.home-create-plan-content {
+    position: relative;
+    z-index: 2;
 }
 
 /* 3번 구역 내용 */
@@ -458,3 +466,83 @@ html::-webkit-scrollbar {
     box-shadow:
         0 14px 34px rgba(20, 20, 70, 0.3);
 }
+
+/* ========================================
+   HOME - 일정 만들기 여행 경로 장식
+======================================== */
+.home-create-plan-route {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 190px;
+    margin: 0 auto 22px;
+}
+
+.home-create-plan-route-point {
+    width: 7px;
+    height: 7px;
+
+    flex-shrink: 0;
+
+    border: 2px solid rgba(255, 255, 255, 0.9);
+    border-radius: 50%;
+}
+
+.home-create-plan-route-line {
+    flex: 1;
+
+    margin: 0 9px;
+
+    border-top: 1px dashed rgba(255, 255, 255, 0.45);
+}
+
+.home-create-plan-route-plane {
+    color: #ffd447;
+
+    font-size: 19px;
+    line-height: 1;
+
+    transform: rotate(8deg);
+}
+
+#homeArea4 {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    margin-bottom: 50px;
+}
+
+.home-area4-content {
+    padding-top: 80px;
+    padding-bottom: 80px;
+}
+
+/* ========================================
+   HOME - 3번 구역
+   한 화면을 정확히 차지
+======================================== */
+#homeArea3 {
+    height: 100vh;
+    min-height: 100vh;
+    box-sizing: border-box;
+}
+
+/* ========================================
+   HOME - 4번 구역 레이아웃 간격 조정
+======================================== */
+
+/* 여행꿀팁 + 여행메이트 두 영역 사이 */
+#homeArea4 .home-area4-content {
+    column-gap: clamp(48px, 5vw, 100px);
+}
+
+/* ========================================
+   HOME 4번 구역 - 게시글 사이 간격
+======================================== */
+#homeArea4 .home-rotate-page {
+    gap: clamp(30px, 3vh, 44px);
+}
+
+
+    
