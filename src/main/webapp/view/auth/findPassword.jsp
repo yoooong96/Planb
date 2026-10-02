@@ -318,8 +318,9 @@ String phone = request.getParameter("phone") == null ? "" : request.getParameter
 				<!-- 전화번호 -->
 				<label class="find-password-field"> <span
 					class="find-password-field-label"> 전화번호 </span> <input type="tel"
-					name="phone" value="<%=phone%>" placeholder="010-1234-5678"
-					autocomplete="tel" maxlength="20" required>
+					id="phone" name="phone" value="<%=phone%>"
+					placeholder="010-1234-5678" autocomplete="tel" maxlength="13"
+					required>
 
 				</label>
 
@@ -382,7 +383,61 @@ String phone = request.getParameter("phone") == null ? "" : request.getParameter
 
 
 	</div>
+	<script>
+		document.addEventListener("DOMContentLoaded",
+				function() {
+					var phone = document.getElementById("phone");
+					if (!phone) {
+						return;
+					}
 
+					function formatPhoneNumber(value) {
+						/*
+						 * 숫자가 아닌 문자는 전부 제거
+						 */
+						var numbers = value.replace(/[^0-9]/g, "");
+						/*
+						 * 휴대전화 최대 11자리
+						 */
+						if (numbers.length > 11) {
+							numbers = numbers.substring(0, 11);
+						}
+
+						/*
+						 * 010
+						 */
+						if (numbers.length <= 3) {
+							return numbers;
+						}
+
+						/*
+						 * 010-1234
+						 */
+						if (numbers.length <= 7) {
+							return numbers.substring(0, 3) + "-"
+									+ numbers.substring(3);
+						}
+
+						/*
+						 * 010-1234-5678
+						 */
+						return numbers.substring(0, 3) + "-"
+								+ numbers.substring(3, 7) + "-"
+								+ numbers.substring(7, 11);
+					}
+
+					phone.addEventListener("input", function() {
+						this.value = formatPhoneNumber(this.value);
+					});
+
+					/*
+					 * 서버에서 기존 값이 다시 들어온 경우에도
+					 * 자동으로 하이픈 적용
+					 */
+					phone.value = formatPhoneNumber(phone.value);
+
+				});
+	</script>
 
 </body>
 

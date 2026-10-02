@@ -28,10 +28,14 @@ public class UserDto {
 	private String postcode;			// 사용자 우편번호
 	private String address; 			// 사용자 주소
 	private String addressDetail; 		// 사용자 상세 주소
+	private String provider; 			// 로그인 유형(로컬 or google)
+	private String providerUserId;		// 구글 로그인 고유 아이디
+	
 	public UserDto() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
+	
 	public UserDto(long userId, String loginId, String password, String name, String nickName, String email,
 			String phone, Date birthDate, String profileImg, String bio, String role, String status,
 			Timestamp lastLoginAt, Timestamp createdAt, Timestamp updatedAt, String profileVisibility,
@@ -87,12 +91,7 @@ public class UserDto {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public String getNickName() {
-		return nickname;
-	}
-	public void setNickName(String nickName) {
-		this.nickname = nickName;
-	}
+	
 	public String getEmail() {
 		return email;
 	}
@@ -192,7 +191,18 @@ public class UserDto {
 		this.region = region;
 	}
 	
-	
+	public String getNickName() {
+		return nickname;
+	}
+	public void setNickName(String nickname) {
+		this.nickname = nickname;
+	}
+	public String getProviderUserId() {
+		return providerUserId;
+	}
+	public void setProviderUserId(String providerUserId) {
+		this.providerUserId = providerUserId;
+	}
 	
 	public String getPostcode() {
 		return postcode;
@@ -212,6 +222,16 @@ public class UserDto {
 	public void setAddressDetail(String addressDetail) {
 		this.addressDetail = addressDetail;
 	}
+	
+	
+	public String getProvider() {
+		return provider;
+	}
+
+	public void setProvider(String provider) {
+		this.provider = provider;
+	}
+
 	@Override
 	public String toString() {
 		return "UserDto [userId=" + userId + ", loginId=" + loginId + ", password=" + password + ", name=" + name

@@ -122,4 +122,15 @@ public class UserServiceImpl implements UserService {
 		return userDao.countEmail(email) == 0;
 	}
 
+	@Override
+	public UserDto findSocialUser(String provider, String providerUserId) throws Exception {
+		return userDao.findSocialUser(provider, providerUserId);
+	}
+
+	@Override
+	public void signupGoogle(UserDto user) throws Exception {
+		userDao.insertGoogleUser(user);
+		
+	}
+
 }

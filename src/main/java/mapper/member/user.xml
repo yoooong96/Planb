@@ -190,5 +190,109 @@
 	
 	</select>
 	
+	<select
+	    id="findSocialUser"
+	    parameterType="map"
+	    resultType="user">
+	
+	    SELECT
+	
+	        user_id
+	            AS userId,
+	
+	        login_id
+	            AS loginId,
+	
+	        password,
+	
+	        name,
+	
+	        nickname
+	            AS nickName,
+	
+	        email,
+	
+	        phone,
+	
+	        birth_date
+	            AS birthDate,
+	
+	        profile_img
+	            AS profileImg,
+	
+	        region,
+	
+	        postcode,
+	
+	        address,
+	
+	        address_detail
+	            AS addressDetail,
+	
+	        bio,
+	
+	        provider,
+	
+	        provider_user_id
+	            AS providerUserId,
+	
+	        role,
+	
+	        status
+	
+	    FROM TB_USER
+	
+	    WHERE provider =
+	        #{provider}
+	
+	      AND provider_user_id =
+	        #{providerUserId}
+	
+	      AND status =
+	        'ACTIVE'
+	
+	</select>
+	
+	<insert
+	    id="insertGoogleUser"
+	    parameterType="user">
+	
+	    INSERT INTO TB_USER
+	    (
+	        login_id,
+	        password,
+	        name,
+	        nickname,
+	        email,
+	        phone,
+	        profile_img,
+	        postcode,
+	        address,
+	        address_detail,
+	        provider,
+	        provider_user_id,
+	        role,
+	        status
+	    )
+	
+	    VALUES
+	    (
+	        #{loginId},
+	        NULL,
+	        #{name},
+	        #{nickName},
+	        #{email},
+	        #{phone},
+	        #{profileImg},
+	        #{postcode},
+	        #{address},
+	        #{addressDetail},
+	        'GOOGLE',
+	        #{providerUserId},
+	        'USER',
+	        'ACTIVE'
+	    )
+	
+	</insert>
 	
 </mapper>

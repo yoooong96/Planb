@@ -13,4 +13,6 @@ public interface UserDao {
 	int countLoginId(String loginId);
 	int countNickname(String nickname);
 	int countEmail(String email);
+	UserDto findSocialUser(String provider,String providerUserId) throws Exception;
+	int insertGoogleUser(UserDto user) throws Exception;
 }
