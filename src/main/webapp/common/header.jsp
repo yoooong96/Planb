@@ -150,7 +150,7 @@ if (user != null
             <!-- 일정 만들기 -->
             <a
                 class="<%=homeHeader ? "site-nav-pill" : "site-nav-link"%> <%="planner".equals(activePage) ? "active" : ""%>"
-                href="<%=ctx%>/view/itinerary/planner.jsp">
+                href="<%=ctx%>/planner">
 
                 일정 만들기
 
