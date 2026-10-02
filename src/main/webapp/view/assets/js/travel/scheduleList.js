@@ -1,5 +1,57 @@
 (function () {
+	
+	  /* 상세 조건 패널 열기·닫기 */
+    const filterToggle =
+        document.getElementById("scheduleFilterToggle");
 
+    const filterPanel =
+        document.getElementById("scheduleFilterPanel");
+
+    if (filterToggle && filterPanel) {
+
+        function setFilterPanelOpen(open) {
+            filterPanel.classList.toggle("hidden", !open);
+
+            filterToggle.setAttribute(
+                "aria-expanded",
+                String(open)
+            );
+
+            const arrow = filterToggle.querySelector("svg");
+
+            if (arrow) {
+                arrow.style.transform =
+                    open ? "rotate(180deg)" : "";
+            }
+        }
+
+        filterToggle.addEventListener("click", function () {
+            const isOpen =
+                filterToggle.getAttribute("aria-expanded") === "true";
+
+            setFilterPanelOpen(!isOpen);
+        });
+
+        // 검색 영역 밖을 클릭하면 닫기
+        document.addEventListener("click", function (event) {
+            const searchForm =
+                document.getElementById("scheduleSearchForm");
+
+            if (searchForm && !searchForm.contains(event.target)) {
+                setFilterPanelOpen(false);
+            }
+        });
+
+        // Escape 키로 닫기
+        document.addEventListener("keydown", function (event) {
+            if (event.key === "Escape") {
+                setFilterPanelOpen(false);
+            }
+        });
+    }
+    
+    
+	// 클릭 이벤트
     document.addEventListener("click", function (event) {
 
         const button =

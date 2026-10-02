@@ -270,23 +270,21 @@ request.setAttribute("activePage", "travel");
 					<input type="text" id="scheduleKeyword" name="keyword" value="<c:out value='${keyword}'/>"
    						class="flex-1 text-[13px] outline-none text-gray-800 placeholder-gray-400 bg-transparent"
     					placeholder="제목, 지역, 닉네임, 인원, 예산 검색">
-    				<button type="submit"
-        				class="px-6 py-2 text-[12px] font-bold text-white rounded-xl"
-        				style="background: #6369D1">
-    					검색하기
-					</button>
 					<!-- <input
 						class="flex-1 text-[13px] outline-none text-gray-800 placeholder-gray-400 bg-transparent"
-						placeholder="어디로 여행을 떠나고 싶으신가요? (예: 제주도, 도쿄, 파리...)">
-					<button type="button" id="scheduleFilterToggle"
-						class="shrink-0 flex items-center gap-1 text-[11px] font-medium transition-colors"
-						style="color: #94a3b8">
+						placeholder="어디로 여행을 떠나고 싶으신가요? (예: 제주도, 도쿄, 파리...)"> -->
+					<button type="button"
+        					id="scheduleFilterToggle"
+        					aria-expanded="false"
+        					aria-controls="scheduleFilterPanel"
+        					class="shrink-0 flex items-center gap-1 text-[11px] font-medium transition-colors"
+        					style="color: #94a3b8">
 						<svg class="w-4 h-4 transition-transform" fill="none"
 							stroke="currentColor" viewBox="0 0 24 24">
 							<path stroke-linecap="round" stroke-linejoin="round"
 								stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
 						상세조건
-					</button> -->
+					</button>
 				</div>
 				<div id="scheduleFilterPanel"
 					class="hidden absolute left-0 right-0 top-full mt-1.5 bg-white border rounded-2xl shadow-xl z-30 overflow-hidden"
@@ -353,7 +351,7 @@ request.setAttribute("activePage", "travel");
 						class="px-5 py-3.5 flex items-center justify-between bg-gray-50">
 						<button type="button"
 							class="text-[12px] text-gray-400 hover:text-gray-600 font-medium flex items-center gap-1.5">초기화</button>
-						<button type="button"
+						<button type="submit"
 							class="px-6 py-2 text-[12px] font-bold text-white rounded-xl"
 							style="background: #6369D1">검색하기</button>
 					</div>
@@ -1492,7 +1490,7 @@ request.setAttribute("activePage", "travel");
 		
 	</script>
 	<script
-		src="${pageContext.request.contextPath}/view/assets/js/travel/scheduleList.js">
+		src="${pageContext.request.contextPath}/view/assets/js/travel/scheduleList.js?v=2">
 		
 	</script>
 </body>
