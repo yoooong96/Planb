@@ -6,75 +6,35 @@ request.setAttribute("activePage", "mate");
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>여행 메이트 · Tripily</title><jsp:include
-	page="/common/headStyles.jsp" /></head>
-<body class="site-shell"><jsp:include page="/common/header.jsp" />
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Planb</title>
+	<jsp:include page="/common/headStyles.jsp" />
+</head>
+<body class="site-shell">
+	<jsp:include page="/common/header.jsp" />
 	<div class="min-h-screen bg-white">
-		<div class="relative flex flex-col items-center justify-center"
-			style="height: 240px">
-			<img
-				src="https://images.unsplash.com/photo-1539635278303-d4002c07eae3?fit=crop&w=1600&q=80"
-				alt="hero"
-				class="absolute inset-0 w-full h-full object-cover object-[center_40%]">
-			<div class="absolute inset-0"
-				style="background: linear-gradient(to bottom, rgba(30, 20, 80, .72) 0%, rgba(30, 20, 80, .50) 50%, rgba(30, 20, 80, .65) 100%)"></div>
-			<div
-				class="relative z-10 flex flex-col items-center text-center px-4 w-full gap-4"
-				style="padding-top: 64px">
-				<div>
-					<p
-						style="font-family: Georgia, serif; text-shadow: 0 2px 12px rgba(0, 0, 0, .4)"
-						class="text-white text-xl md:text-2xl italic leading-snug font-bold">
-						좋은 사람과 함께하면, <span style="color: #FFD447">여행은 더 특별</span>해집니다.
-					</p>
-					<p class="text-white/80 text-sm mt-2">여행 메이트와 함께 잊지 못할 추억을
-						만들어보세요.</p>
-				</div>
-				<div class="w-full max-w-2xl">
-					<div
-						class="bg-white rounded-full shadow-xl flex items-center gap-3 px-5 py-3 border border-white/20">
-						<svg class="text-gray-400 shrink-0" width="18" height="18"
-							viewBox="0 0 24 24" fill="none" stroke="currentColor"
-							stroke-width="2">
-							<circle cx="11" cy="11" r="8" />
-							<path d="m21 21-4.35-4.35" /></svg>
-						<input type="text" placeholder="어떤 여행을 함께하고 싶으신가요?"
-							class="flex-1 text-sm text-gray-700 placeholder-gray-400 outline-none bg-transparent">
-						<button
-							class="shrink-0 px-5 py-1.5 text-white text-sm font-semibold rounded-full"
-							style="background: var(- -brand)">검색</button>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="flex max-w-7xl mx-auto px-4 pt-8 pb-16 gap-6">
-			<aside class="shrink-0 w-48 hidden md:flex flex-col gap-1">
-				<div
-					class="text-xs font-bold text-gray-400 uppercase tracking-widest px-3 mb-1">여행
-					메이트</div>
-				<a
-					href="${pageContext.request.contextPath}/view/mate/mateList.jsp?mine=1"
-					class="flex items-center justify-between px-3 py-2.5 rounded-lg transition-colors group"><span
-					class="flex items-center gap-2 text-sm font-semibold text-gray-700"><svg
-							width="16" height="16" viewBox="0 0 24 24" fill="none"
-							stroke="currentColor" stroke-width="2">
-							<path
-								d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-							<polyline points="14 2 14 8 20 8" /></svg>내가 작성한 글</span><span
-					class="text-xs rounded-full px-2 py-0.5 font-semibold"
-					style="background: var(- -brand-light); color: var(- -brand)">3</span></a>
-				<button
-					class="flex items-center justify-between px-3 py-2.5 rounded-lg hover:bg-gray-50 transition-colors group mb-3">
-					<span
-						class="flex items-center gap-2 text-sm font-semibold text-gray-700"><svg
-							width="16" height="16" viewBox="0 0 24 24" fill="none"
-							stroke="currentColor" stroke-width="2">
-							<circle cx="12" cy="12" r="10" />
-							<polyline points="12 6 12 12 16 14" /></svg>최근 조회한 글</span><span
-						class="text-xs bg-gray-100 text-gray-500 rounded-full px-2 py-0.5 font-semibold">3</span>
-				</button>
+		
+		<div class="flex" style="min-height: calc(100vh - 68px)">
+			<aside
+		    class="shrink-0 w-48 hidden md:flex flex-col gap-1 bg-white py-5 px-2 border-r overflow-y-auto"
+		    style="border-color: #ebebf5">
+			<div class="text-xs font-bold text-gray-400 uppercase tracking-widest px-3 mb-1">여행 메이트</div>
+				<a href="${pageContext.request.contextPath}/view/mate/mateList.jsp?mine=1"
+					class="flex items-center justify-between px-3 py-2.5 rounded-lg transition-colors group">
+					<span class="flex items-center gap-2 text-sm font-semibold text-gray-700">
+						<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+							<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+							<polyline points="14 2 14 8 20 8" />
+						</svg>
+						내가 작성한 글
+					</span>
+					<span class="text-xs rounded-full px-2 py-0.5 font-semibold"
+						style="background: var(--brand-light); color: var(--brand)">
+						3
+					</span>
+				</a>
+				
 				<div class="border-t border-gray-100 mb-3"></div>
 				<button
 					class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl transition-all mb-1 bg-[#6369D1] text-white">
@@ -87,9 +47,11 @@ request.setAttribute("activePage", "mate");
 								d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" /></svg>전체보기</span><span
 						class="text-xs rounded-full px-2 py-0.5 font-semibold bg-white/25 text-white">9</span>
 				</button>
-				<div
-					class="text-xs font-bold text-gray-400 uppercase tracking-widest px-3 mb-1 mt-1">여행
-					지역</div>
+				<div class="text-xs font-bold text-gray-400 uppercase tracking-widest px-3 mb-1 mt-1">여행 지역</div>
+				
+				<div class="border-t border-gray-100 mb-3"></div>
+				
+				<div class="text-xs font-bold text-gray-400 uppercase tracking-widest px-3 mb-1">대륙별 보기</div>
 				<div>
 					<button type="button"
 						class="continent-toggle w-full flex items-center justify-between px-3 py-2.5 rounded-xl transition-all"
@@ -293,23 +255,77 @@ request.setAttribute("activePage", "mate");
 					</div>
 				</div>
 			</aside>
-			<div class="flex-1 min-w-0">
-				<div class="flex items-center justify-between mb-5">
-					<a
-						href="${pageContext.request.contextPath}/view/mate/mateWrite.jsp"
-						class="flex items-center gap-2 px-5 py-2.5 text-white text-sm font-semibold rounded-full"
-						style="background: var(- -brand)"><svg width="14" height="14"
-							viewBox="0 0 24 24" fill="none" stroke="currentColor"
-							stroke-width="2.5">
-							<path
-								d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
-							<path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" /></svg>글쓰기</a>
-					<div class="flex gap-4">
-						<button
-							class="text-sm pb-0.5 text-[#6369D1] font-semibold border-b-2 border-[#6369D1]">최신순</button>
-						<button class="text-sm pb-0.5 text-gray-400">조회순</button>
-						<button class="text-sm pb-0.5 text-gray-400">댓글순</button>
-					</div>
+			<main class="flex-1 px-6 py-8 min-w-0">
+				<!-- 여행 메이트 검색 -->
+			    <div class="mb-6 relative max-w-2xl">
+			        <div id="scheduleSearchBar"
+			            class="flex items-center gap-2.5 bg-white border-2 rounded-xl px-4 py-2.5 shadow-sm transition-all cursor-text"
+			            style="border-color: #D1D2F9">
+			            <svg class="w-4 h-4 shrink-0" style="color: #94a3b8" fill="none"
+			                stroke="currentColor" viewBox="0 0 24 24">
+				            <path
+				                stroke-linecap="round"
+				                stroke-linejoin="round"
+				                stroke-width="2"
+				                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" 
+				            />
+			            </svg>
+			            <input
+			                class="flex-1 min-w-0 text-[13px] outline-none text-gray-800 placeholder-gray-400 bg-transparent"
+			                placeholder="어떤 여행을 함께하고 싶으신가요?">
+			            <button type="button"
+			                id="scheduleFilterToggle"
+			                class="shrink-0 flex items-center gap-1 text-[11px] font-medium transition-colors"
+			                style="color: #94a3b8">
+			                <svg class="w-4 h-4 transition-transform"
+			                    fill="none"
+			                    stroke="currentColor"
+			                    viewBox="0 0 24 24">
+			                    <path
+			                        stroke-linecap="round"
+			                        stroke-linejoin="round"
+			                        stroke-width="2"
+			                        d="M19 9l-7 7-7-7" 
+			                    />
+			                </svg>
+			                상세조건
+			            </button>
+			        </div>
+			    </div>
+				<div class="flex items-center justify-between mb-5 gap-4 flex-wrap">
+				    <!-- 왼쪽 : 전체 게시글 수 -->
+				    <p class="text-[12px] font-medium text-gray-500">
+				        총 <span class="font-bold" style="color: #6369D1">9</span>개의 여행 메이트
+				    </p>
+				    <!-- 오른쪽 : 정렬 + 글쓰기 -->
+				    <div class="flex items-center gap-4 flex-wrap">
+				        <!-- 정렬 -->
+				        <div class="flex gap-4">
+				            <button class="text-sm pb-0.5 transition-colors" style="color: #6369D1; font-weight: 600; border-bottom: 2px solid #6369D1">
+				                최신순
+				            </button>
+				            <button class="text-sm pb-0.5 transition-colors" style="color: #9ca3af">
+				                조회순
+				            </button>
+				            <button class="text-sm pb-0.5 transition-colors" style="color: #9ca3af">
+				                댓글순
+				            </button>
+				        </div>
+				        <!-- 기존 글쓰기 -->
+				        <a href="${pageContext.request.contextPath}/view/mate/mateWrite.jsp"
+				            class="flex items-center gap-2 px-4 py-2 text-white text-sm font-semibold rounded-lg transition-colors shrink-0"
+					        style="background: #6369D1">
+					        <svg width="14" height="14"
+					            viewBox="0 0 24 24"
+					            fill="none"
+					            stroke="currentColor"
+					            stroke-width="2.5">
+					            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+								<path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+							 </svg>
+				            글쓰기
+				        </a>
+				    </div>
 				</div>
 				<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
 					<a
@@ -623,7 +639,9 @@ request.setAttribute("activePage", "mate");
 				<div class="h-12 flex items-center justify-center mt-4">
 					<span class="text-xs text-gray-300">모든 게시글을 확인했어요.</span>
 				</div>
-			</div>
+			</main>
 		</div>
-	</div><jsp:include page="/common/footer.jsp" /></body>
+	</div>
+	<jsp:include page="/common/footer.jsp" />
+</body>
 </html>

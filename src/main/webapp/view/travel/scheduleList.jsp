@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%
 request.setAttribute("activePage", "travel");
 %>
@@ -30,11 +30,11 @@ request.setAttribute("activePage", "travel");
 							d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
 						<polyline points="14 2 14 8 20 8" /></svg>내가 작성한 글</span><span
 				class="text-xs rounded-full px-2 py-0.5 font-semibold"
-				style="background: var(- -brand-light); color: var(- -brand)">3</span></a>
+				style="background: var(--brand-light); color: var(--brand)">3</span></a>
 			<div class="border-t border-gray-100 mb-3"></div>
 			<button type="button"
 				class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl transition-all mb-1"
-				style="background: var(- -brand); color: #fff">
+				style="background: var(--brand); color: #fff">
 				<span class="flex items-center gap-2 text-sm font-semibold"><svg
 						width="16" height="16" viewBox="0 0 24 24" fill="none"
 						stroke="#fff" stroke-width="2">
@@ -69,7 +69,7 @@ request.setAttribute("activePage", "travel");
 				</button>
 				<div
 					class="continent-panel ml-2 mb-1 flex-col gap-0.5 border-l-2 pl-3 pt-1"
-					style="border-color: var(- -brand-light)">
+					style="border-color: var(--brand-light)">
 					<button
 						class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">대한민국</button>
 					<button
@@ -103,7 +103,7 @@ request.setAttribute("activePage", "travel");
 				</button>
 				<div
 					class="continent-panel ml-2 mb-1 flex-col gap-0.5 border-l-2 pl-3 pt-1"
-					style="border-color: var(- -brand-light)">
+					style="border-color: var(--brand-light)">
 					<button
 						class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">프랑스</button>
 					<button
@@ -137,7 +137,7 @@ request.setAttribute("activePage", "travel");
 				</button>
 				<div
 					class="continent-panel ml-2 mb-1 flex-col gap-0.5 border-l-2 pl-3 pt-1"
-					style="border-color: var(- -brand-light)">
+					style="border-color: var(--brand-light)">
 					<button
 						class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">미국</button>
 					<button
@@ -163,7 +163,7 @@ request.setAttribute("activePage", "travel");
 				</button>
 				<div
 					class="continent-panel ml-2 mb-1 flex-col gap-0.5 border-l-2 pl-3 pt-1"
-					style="border-color: var(- -brand-light)">
+					style="border-color: var(--brand-light)">
 					<button
 						class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">브라질</button>
 					<button
@@ -191,7 +191,7 @@ request.setAttribute("activePage", "travel");
 				</button>
 				<div
 					class="continent-panel ml-2 mb-1 flex-col gap-0.5 border-l-2 pl-3 pt-1"
-					style="border-color: var(- -brand-light)">
+					style="border-color: var(--brand-light)">
 					<button
 						class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">이집트</button>
 					<button
@@ -219,7 +219,7 @@ request.setAttribute("activePage", "travel");
 				</button>
 				<div
 					class="continent-panel ml-2 mb-1 flex-col gap-0.5 border-l-2 pl-3 pt-1"
-					style="border-color: var(- -brand-light)">
+					style="border-color: var(--brand-light)">
 					<button
 						class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">호주</button>
 					<button
@@ -245,7 +245,7 @@ request.setAttribute("activePage", "travel");
 				</button>
 				<div
 					class="continent-panel ml-2 mb-1 flex-col gap-0.5 border-l-2 pl-3 pt-1"
-					style="border-color: var(- -brand-light)">
+					style="border-color: var(--brand-light)">
 					<button
 						class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">UAE</button>
 					<button
@@ -362,57 +362,51 @@ request.setAttribute("activePage", "travel");
 				</div>
 			</div>
 			<div class="grid gap-5"
-				style="grid-template-columns: repeat(4, minmax(0, 1fr))">
-
-
+				 style="grid-template-columns: repeat(4, minmax(0, 1fr))">
+				
+				
 				<!-- 실제로 db에 들어있는 데이터들로 보여줄 여행카드 목록들 26.10.01-->
-				<c:forEach var="schedule" items="${scheduleList}">
+				<c:forEach var="schedule" 
+				           items="${scheduleList}">
 					<c:url var="scheduleDetailUrl"
-						value="/view/travel/scheduleDetail.jsp">
-						<c:param name="id" value="${schedule.itineraryId}" />
+						   value="/view/travel/scheduleDetail.jsp">
+						<c:param name="id" 
+						         value="${schedule.itineraryId}" />
 					</c:url>
-
-					<article
-						class="jsp-schedule-card bg-white rounded-2xl overflow-hidden transition-all duration-200 border group"
-						style="border-color: #D1D2F9; box-shadow: 0 2px 8px rgba(0, 0, 0, .07)">
-						<div class="relative overflow-hidden" style="aspect-ratio: 4/3">
-							<a href="${scheduleDetailUrl}" class="block w-full h-full"> <c:choose>
+					
+					<article class="jsp-schedule-card bg-white rounded-2xl overflow-hidden transition-all duration-200 border group"
+						     style="border-color: #D1D2F9; box-shadow: 0 2px 8px rgba(0, 0, 0, .07)">
+						<div class="relative overflow-hidden" 
+						     style="aspect-ratio: 4/3">
+							<a href="${scheduleDetailUrl}" 
+							   class="block w-full h-full">
+							   <c:choose>
 									<c:when test="${not empty schedule.thumbnailImg}">
-										<c:choose>
-											<c:when test="${schedule.thumbnailImg.startsWith('/')}">
-												<c:url var="thumbnailUrl" value="${schedule.thumbnailImg}" />
-											</c:when>
-
-											<c:otherwise>
-												<c:url var="thumbnailUrl" value="/${schedule.thumbnailImg}" />
-											</c:otherwise>
-										</c:choose>
-										<img src="<c:out value='${thumbnailUrl}'/>"
-											alt="<c:out value='${schedule.title}'/>"
-											class="w-full h-full object-cover
-           										transition-transform duration-300
-           										group-hover:scale-105">
+										<img src="<c:out value='${schedule.thumbnailImg}'/>"
+											 alt="<c:out value='${schedule.title}'/>"
+											 class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
 									</c:when>
 									<c:otherwise>
 										<div class="w-full h-full flex items-center justify-center"
-											style="background: #F0F0FF; color: #6369D1">여행 일정</div>
+											 style="background: #F0F0FF; color: #6369D1">
+											 여행 일정
+										</div>
 									</c:otherwise>
 								</c:choose>
 							</a> 
-							<span
-								class="absolute top-2.5 left-2.5 text-[10px] font-bold px-2 py-0.5 rounded-full"
-								style="background: #6369D1; color: white"> <c:out
-									value="${schedule.country}" /> · <c:out
-									value="${schedule.city}" />
+							<span class="absolute top-2.5 left-2.5 text-[10px] font-bold px-2 py-0.5 rounded-full"
+								  style="background: #6369D1; color: white"> 
+								  <c:out value="${schedule.country}" /> · <c:out value="${schedule.city}" />
 							</span>
 							<!-- 비로그인 또는 타인 일정에서만 표시 -->
-							<c:if
-								test="${empty sessionScope.user or schedule.userId ne sessionScope.user.userId}">
-								<button type="button" data-schedule-bookmark
+							<c:if test="${empty sessionScope.user or schedule.userId ne sessionScope.user.userId}">
+								<button type="button" 
+									data-schedule-bookmark
 									data-bookmark-url="${pageContext.request.contextPath}/itinerary/bookmark"
 									data-itinerary-id="${schedule.itineraryId}"
 									data-logged-in="${not empty sessionScope.user}"
-									aria-pressed="${schedule.bookmarked}" aria-label="북마크"
+									aria-pressed="${schedule.bookmarked}" 
+									aria-label="북마크"
 									class="absolute top-2.5 right-2.5 w-7 h-7
                            				rounded-full bg-white/90 backdrop-blur-sm
                            				flex items-center justify-center shadow-sm
@@ -428,10 +422,6 @@ request.setAttribute("activePage", "travel");
                     				</svg>
 								</button>
 							</c:if>
-							<span
-							class="absolute bottom-2.5 left-2.5 text-white text-[11px] 
-								font-bold bg-black/50 rounded-full px-2.5 py-1">
-								<c:out value="${schedule.durationText}" /></span>
 						</div>
 
 						<div class="p-3.5">
@@ -455,39 +445,25 @@ request.setAttribute("activePage", "travel");
 
 							</p>
 
-							
-							<div class="flex items-center gap-2.5
+							<p class="text-[11px] text-gray-400 mb-2">
+								<fmt:formatDate value="${schedule.startDate}"
+									pattern="yyyy.MM.dd" />
+								~
+								<fmt:formatDate value="${schedule.endDate}" pattern="yyyy.MM.dd" />
+							</p>
+
+							<div
+								class="flex items-center gap-2.5
                        text-[11px] text-gray-400 mb-3">
-								<span class="schedule-card-stat inline-flex items-center gap-1 whitespace-nowrap" title="좋아요">
-									<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2">
-										<path stroke-linecap="round" stroke-linejoin="round" d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78Z" />
-										
-									</svg>
-									<fmt:formatNumber  value="${schedule.likeCount}" pattern="#,##0" />
+
+								<span> 좋아요 <fmt:formatNumber
+										value="${schedule.likeCount}" />
+								</span> <span> 댓글 <fmt:formatNumber
+										value="${schedule.commentCount}" />
+								</span> <span> 조회 <fmt:formatNumber
+										value="${schedule.viewCount}" />
 								</span>
-									<!-- <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-										stroke-width="2" stroke-linecap="round"
-										stroke-linejoin="round" aria-hidden="true">
-            							<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78Z" />
-        							</svg>  -->
-        							<!-- <span class="schedule-stat-label">좋아요 수</span>  -->
-								<span class="schedule-card-stat inline-flex items-center gap-1 whitespace-nowrap" title="댓글"> 
-									<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2">
-            							<path stroke-linecap="round" stroke-linejoin="round" d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" />
-        							</svg> 
-        							<fmt:formatNumber value="${schedule.commentCount}" pattern="#,##0" />
-								</span> 
-								<span class="schedule-card-stat inline-flex items-center gap-1 whitespace-nowrap" title="조회"> 
-									<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2">
-            							<path
-            								stroke-linecap="round" stroke-linejoin="round"
-            								d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" />
-            							<circle cx="12" cy="12" r="3" />
-        							</svg>
-        							<fmt:formatNumber
-										value="${empty schedule.viewCount ? 0 : schedule.viewCount}"
-										pattern="#,##0" />
-								</span>
+
 							</div>
 
 							<div class="flex items-center justify-between border-t pt-2.5"
@@ -523,15 +499,15 @@ request.setAttribute("activePage", "travel");
 						<span
 							class="absolute top-2.5 left-2.5 text-[10px] font-bold px-2 py-0.5 rounded-full"
 							style="background: #6369D1; color: white">파리</span>
-						<button type="button" data-itinerary-id="${schedule.itineraryId}"
-							aria-pressed="${schedule.bookmarked}"
-							class="absolute top-2.5 right-2.5 w-7 h-7 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-sm transition-all hover:scale-110"
-							data-bookmark aria-label="북마크">
-							<svg width="13" height="13" viewBox="0 0 24 24" fill="none"
-								stroke="#9ca3af" stroke-width="2">
+							<button type="button" data-itinerary-id="${schedule.itineraryId}"
+								aria-pressed="${schedule.bookmarked}"
+								class="absolute top-2.5 right-2.5 w-7 h-7 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-sm transition-all hover:scale-110"
+								data-bookmark aria-label="북마크">
+								<svg width="13" height="13" viewBox="0 0 24 24" fill="none"
+									stroke="#9ca3af" stroke-width="2">
 								<path stroke-linecap="round" stroke-linejoin="round"
-									d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" /></svg>
-						</button>
+										d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" /></svg>
+							</button>
 						<span
 							class="absolute bottom-2.5 left-2.5 text-white text-[11px] font-bold bg-black/50 rounded-full px-2.5 py-1">5박
 							6일</span>
@@ -543,24 +519,22 @@ request.setAttribute("activePage", "travel");
 						<p
 							class="text-gray-500 text-[12px] line-clamp-1 mb-2.5 leading-relaxed">에펠탑,
 							루브르, 몽마르트! 낭만의 도시 파리를 온전히 즐기는 일정.</p>
-						<div class="flex items-center gap-2.5 text-[11px] text-gray-400 mb-3">
-							<span class="flex items-center gap-1">
-								<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2">
-									<path stroke-linecap="round" stroke-linejoin="round" d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78Z" />
-								</svg>
-								<span class="font-medium">1,234</span>
-							</span> 
-							<span class="flex items-center gap-1">
-								<svg width="12"
+						<div
+							class="flex items-center gap-2.5 text-[11px] text-gray-400 mb-3">
+							<span class="flex items-center gap-1"><svg width="12"
+									height="12" viewBox="0 0 24 24" fill="none" stroke="#9ca3af"
+									stroke-width="2">
+									<path stroke-linecap="round" stroke-linejoin="round"
+										d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" /></svg><span
+								class="font-medium">1,234</span></span> <span
+								class="flex items-center gap-1"><svg width="12"
 									height="12" fill="none" stroke="currentColor"
 									viewBox="0 0 24 24">
 									<path stroke-linecap="round" stroke-linejoin="round"
 										stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
 									<path stroke-linecap="round" stroke-linejoin="round"
 										stroke-width="2"
-										d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-								</svg>5,670
-							</span>
+										d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>5,670</span>
 						</div>
 						<div class="flex items-center justify-between border-t pt-2.5"
 							style="border-color: #D1D2F9">
@@ -1397,7 +1371,7 @@ request.setAttribute("activePage", "travel");
 								class="text-[10px] text-gray-400">2026.08.15</span>
 						</div>
 					</div>
-				</a> <a
+				</a><a
 					href="${pageContext.request.contextPath}/view/travel/scheduleDetail.jsp?id=4"
 					class="jsp-schedule-card bg-white rounded-2xl overflow-hidden cursor-pointer transition-all duration-200 border group"
 					style="border-color: #D1D2F9; box-shadow: 0 2px 8px rgba(0, 0, 0, .07)">
@@ -1462,11 +1436,9 @@ request.setAttribute("activePage", "travel");
 	</div>
 	<script
 		src="${pageContext.request.contextPath}/view/assets/js/auth/tripily.js">
-		
 	</script>
 	<script
-		src="${pageContext.request.contextPath}/view/assets/js/travel/scheduleList.js">
-		
+    	src="${pageContext.request.contextPath}/view/assets/js/travel/scheduleList.js">
 	</script>
 </body>
 </html>

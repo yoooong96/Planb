@@ -6,77 +6,68 @@ request.setAttribute("activePage", "tips");
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>여행꿀팁 · Tripily</title><jsp:include page="/common/headStyles.jsp" /></head>
-<body class="site-shell"><jsp:include page="/common/header.jsp" />
-	<div class="min-h-screen bg-white">
-		<div class="relative flex flex-col items-center justify-center"
-			style="height: 260px">
-			<img
-				src="https://images.unsplash.com/photo-1613395877344-13d4a8e0d49e?fit=crop&w=1600&q=80"
-				alt="hero"
-				class="absolute inset-0 w-full h-full object-cover object-[center_40%]">
-			<div class="absolute inset-0"
-				style="background: linear-gradient(to bottom, rgba(20, 12, 60, .70) 0%, rgba(20, 12, 60, .55) 50%, rgba(20, 12, 60, .72) 100%)"></div>
-			<div
-				class="relative z-10 flex flex-col items-center text-center px-4 w-full gap-4"
-				style="padding-top: 64px">
-				<div>
-					<p class="text-white leading-snug"
-						style="font-family: Georgia, serif; font-size: clamp(1.15rem, 2.5vw, 1.6rem); font-style: italic; text-shadow: 0 2px 12px rgba(0, 0, 0, .4)">
-						여행자의 경험이 누군가에게는 <span class="font-bold" style="color: #FFD447">특별한
-							가이드</span>가 됩니다.
-					</p>
-					<p class="text-white/70 text-sm mt-1">여행 꿀팁을 공유하고, 더 풍성한 여행을
-						만들어보세요.</p>
-				</div>
-				<form class="w-full max-w-2xl">
-					<div
-						class="bg-white rounded-full shadow-xl flex items-center gap-3 px-5 py-3 border border-white/20">
-						<svg class="text-gray-400 shrink-0" width="18" height="18"
-							viewBox="0 0 24 24" fill="none" stroke="currentColor"
-							stroke-width="2">
-							<circle cx="11" cy="11" r="8" />
-							<path d="m21 21-4.35-4.35" /></svg>
-						<input type="text" placeholder="어떤 여행 정보가 궁금하신가요?"
-							class="flex-1 text-sm text-gray-700 placeholder-gray-400 outline-none bg-transparent">
-						<button
-							class="shrink-0 px-5 py-1.5 text-white text-sm font-semibold rounded-full"
-							style="background: var(- -brand)">검색</button>
-					</div>
-				</form>
-			</div>
-		</div>
-		<div class="flex max-w-7xl mx-auto px-4 pt-8 pb-16 gap-6">
-			<aside class="shrink-0 w-48 hidden md:flex flex-col gap-1">
-				<div
-					class="text-xs font-bold text-gray-400 uppercase tracking-widest px-3 mb-1">여행꿀팁</div>
-				<a
-					href="${pageContext.request.contextPath}/view/tips/tipList.jsp?mine=1"
-					class="flex items-center justify-between px-3 py-2.5 rounded-lg transition-colors group"><span
-					class="flex items-center gap-2 text-sm font-semibold text-gray-700"><svg
-							width="16" height="16" viewBox="0 0 24 24" fill="none"
-							stroke="currentColor" stroke-width="2">
-							<path
-								d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-							<polyline points="14 2 14 8 20 8" /></svg>내가 작성한 글</span><span
-					class="text-xs rounded-full px-2 py-0.5 font-semibold"
-					style="background: var(- -brand-light); color: var(- -brand)">3</span></a>
-				<button
-					class="flex items-center justify-between px-3 py-2.5 rounded-lg hover:bg-gray-50 transition-colors group mb-3">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Planb</title>
+	<jsp:include page="/common/headStyles.jsp" />
+</head>
+<body class="site-shell">
+	<jsp:include page="/common/header.jsp" />
+	<div class="tips-page-layout">
+		
+		<div class="flex" style="min-height: calc(100vh - 68px)">
+		<aside
+			class="shrink-0 w-48 hidden md:flex flex-col gap-1 bg-white py-5 px-2 border-r overflow-y-auto"
+			style="border-color: #ebebf5">
+				<div class="text-xs font-bold text-gray-400 uppercase tracking-widest px-3 mb-1">여행 꿀팁</div>
+				<a href="${pageContext.request.contextPath}/view/tips/tipList.jsp?mine=1"
+					class="flex items-center justify-between px-3 py-2.5 rounded-lg transition-colors group">
+					<span class="flex items-center gap-2 text-sm font-semibold text-gray-700">
+						<svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+							 stroke="currentColor" stroke-width="2">
+							<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+							<polyline points="14 2 14 8 20 8" />
+						</svg>
+						내가 작성한 글
+					</span>
 					<span
-						class="flex items-center gap-2 text-sm font-semibold text-gray-700"><svg
-							width="16" height="16" viewBox="0 0 24 24" fill="none"
-							stroke="currentColor" stroke-width="2">
-							<circle cx="12" cy="12" r="10" />
-							<polyline points="12 6 12 12 16 14" /></svg>최근 조회한 글</span><span
-						class="text-xs bg-gray-100 text-gray-500 rounded-full px-2 py-0.5 font-semibold">3</span>
-				</button>
+						class="text-xs rounded-full px-2 py-0.5 font-semibold"
+						style="background: var(--brand-light); color: var(--brand)">
+						3
+					</span>
+				</a>
+				
 				<div class="border-t border-gray-100 mb-3"></div>
+				
+				<button type="button" class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl transition-all mb-1"
+				    style="background: var(--brand); color: #fff">
+				    <span class="flex items-center gap-2 text-sm font-semibold">
+				        <svg width="16" height="16"
+				            viewBox="0 0 24 24"
+				            fill="none"
+				            stroke="#fff"
+				            stroke-width="2">
+				            <circle cx="12" cy="12" r="10" />
+				            <line x1="2" y1="12" x2="22" y2="12" />
+				            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+				        </svg>
+				        전체보기
+				    </span>
+				
+				    <span
+				        class="text-xs rounded-full px-2 py-0.5 font-semibold"
+				        style="background: rgba(255, 255, 255, .25); color: #fff">
+				        8
+				    </span>
+				</button>
 				<div
-					class="text-xs font-bold text-gray-400 uppercase tracking-widest px-3 mb-1">대륙별
-					보기</div>
+					class="text-xs font-bold text-gray-400 uppercase tracking-widest px-3 mb-1 mt-1">여행 지역
+				</div>
+				
+				<div class="border-t border-gray-100 mb-3"></div>
+				
+				<div class="text-xs font-bold text-gray-400 uppercase tracking-widest px-3 mb-1">대륙별 보기</div>
+				
 				<div>
 					<button type="button"
 						class="continent-toggle w-full flex items-center justify-between px-3 py-2.5 rounded-xl transition-all"
@@ -280,56 +271,78 @@ request.setAttribute("activePage", "tips");
 					</div>
 				</div>
 			</aside>
-			<div class="flex-1 min-w-0">
-				<div class="flex items-center justify-between mb-4 gap-4 flex-wrap">
-					<div class="flex items-center gap-2 flex-wrap">
-						<button type="button" data-filter="전체"
-							class="px-5 py-2 rounded-full text-sm font-medium transition-all border active"
-							style="background: #6369D1; color: #fff; border-color: #6369D1">전체</button>
-						<button type="button" data-filter="교통"
-							class="px-5 py-2 rounded-full text-sm font-medium transition-all border "
-							style="background: #fff; color: #4b5563; border-color: #e5e7eb">교통</button>
-						<button type="button" data-filter="숙박"
-							class="px-5 py-2 rounded-full text-sm font-medium transition-all border "
-							style="background: #fff; color: #4b5563; border-color: #e5e7eb">숙박</button>
-						<button type="button" data-filter="음식"
-							class="px-5 py-2 rounded-full text-sm font-medium transition-all border "
-							style="background: #fff; color: #4b5563; border-color: #e5e7eb">음식</button>
-						<button type="button" data-filter="문화"
-							class="px-5 py-2 rounded-full text-sm font-medium transition-all border "
-							style="background: #fff; color: #4b5563; border-color: #e5e7eb">문화</button>
-						<button type="button" data-filter="기타"
-							class="px-5 py-2 rounded-full text-sm font-medium transition-all border "
-							style="background: #fff; color: #4b5563; border-color: #e5e7eb">기타</button>
-					</div>
-					<a href="${pageContext.request.contextPath}/view/tips/tipWrite.jsp"
-						class="flex items-center gap-2 px-5 py-2 text-white text-sm font-semibold rounded-full"
-						style="background: var(- -brand)"><svg width="14" height="14"
-							viewBox="0 0 24 24" fill="none" stroke="currentColor"
-							stroke-width="2.5">
-							<path
-								d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
-							<path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" /></svg>글쓰기</a>
+			<main class="flex-1 px-6 py-8 min-w-0">
+
+				<!-- 여행꿀팁 검색 -->
+				<div class="mb-6 relative w-full max-w-2xl">
+					<div id="scheduleSearchBar"
+				    	class="flex items-center gap-2.5 bg-white border-2 rounded-xl px-4 py-2.5 shadow-sm transition-all cursor-text"
+				        style="border-color: #D1D2F9">
+						<svg class="w-4 h-4 shrink-0"
+				        	style="color: #94a3b8"
+				            fill="none"
+				            stroke="currentColor"
+				            viewBox="0 0 24 24">
+			                <path
+			                    stroke-linecap="round"
+			                    stroke-linejoin="round"
+			                    stroke-width="2"
+			                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+				     	</svg>
+						<input
+				               class="flex-1 min-w-0 text-[13px] outline-none text-gray-800 placeholder-gray-400 bg-transparent"
+				               placeholder="어떤 여행 정보가 궁금하신가요?">
+				    </div>
 				</div>
-				<div class="flex justify-end gap-4 mb-5">
-					<button
-						class="text-sm pb-0.5 text-[#6369D1] font-semibold border-b-2 border-[#6369D1]">최신순</button>
-					<button class="text-sm pb-0.5 text-gray-400">조회순</button>
-					<button class="text-sm pb-0.5 text-gray-400">좋아요순</button>
+				<div class="flex items-center justify-between mb-5 gap-4 flex-wrap">
+					<!-- 왼쪽 : 게시글 수 -->
+					<p class="text-[12px] font-medium text-gray-500">
+				        총 <span class="font-bold" style="color: #6369D1">8</span>개의 여행 꿀팁
+				    </p>
+				    <!-- 오른쪽 : 정렬 + 글쓰기 -->
+				    <div class="flex items-center gap-4 flex-wrap">	
+						<!-- 정렬 -->
+					    <div class="flex gap-4">
+				            <button
+				                class="text-sm pb-0.5 transition-colors"
+				                style="color: #6369D1; font-weight: 600; border-bottom: 2px solid #6369D1">
+				                최신순
+				            </button>
+							<button
+					            class="text-sm pb-0.5 transition-colors"
+					            style="color: #9ca3af">
+					            조회순
+					        </button>
+							<button
+					            class="text-sm pb-0.5 transition-colors"
+					            style="color: #9ca3af">
+				                좋아요순
+				            </button>
+				        </div>
+					    <!-- 글쓰기 -->
+					    <a href="${pageContext.request.contextPath}/view/tips/tipWrite.jsp"
+					        class="flex items-center gap-2 px-4 py-2 text-white text-sm font-semibold rounded-lg transition-colors shrink-0"
+					        style="background: #6369D1">
+					        <svg width="14" height="14"
+					            viewBox="0 0 24 24"
+					            fill="none"
+					            stroke="currentColor"
+					            stroke-width="2.5">
+					            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+								<path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+							 </svg>
+							글쓰기
+					    </a>
+				    </div>
 				</div>
-				<div class="grid grid-cols-2 lg:grid-cols-4 gap-4" data-card-grid>
-					<a
-						href="${pageContext.request.contextPath}/view/tips/tipDetail.jsp?id=1"
-						data-card-category="교통"
-						class="relative bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow cursor-pointer group overflow-hidden flex flex-col"
-						style="height: 300px"><div
-							class="relative shrink-0 overflow-hidden" style="height: 144px">
+				<div class="grid gap-5" style="grid-template-columns: repeat(4, minmax(0, 1fr))" data-card-grid>
+					<a href="${pageContext.request.contextPath}/view/tips/tipDetail.jsp?id=1" data-card-category="교통"
+						class="relative bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow cursor-pointer group overflow-hidden flex flex-col">
+						<div class="relative shrink-0 overflow-hidden" style="aspect-ratio: 4 / 3">
 							<img
 								src="https://images.unsplash.com/photo-1585208798174-6cedd86e019a?fit=crop&w=600&q=80"
 								alt="리스본 대중교통 완벽 가이드 (트램, 지하철, 교통카드)"
-								class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"><span
-								class="absolute bottom-2 left-2 text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full"
-								style="background: #EC4899">교통</span>
+								class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
 						</div>
 						<div class="flex flex-col flex-1 p-3 min-h-0">
 							<h3
@@ -351,18 +364,16 @@ request.setAttribute("activePage", "tips");
 									<span>♡ 24</span><span>▢ 8</span>
 								</div>
 							</div>
-						</div></a><a
-						href="${pageContext.request.contextPath}/view/tips/tipDetail.jsp?id=2"
-						data-card-category="숙박"
-						class="relative bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow cursor-pointer group overflow-hidden flex flex-col"
-						style="height: 300px"><div
-							class="relative shrink-0 overflow-hidden" style="height: 144px">
+						</div>
+					</a>
+					<a href="${pageContext.request.contextPath}/view/tips/tipDetail.jsp?id=2" data-card-category="숙박"
+						class="relative bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow cursor-pointer group overflow-hidden flex flex-col">
+						<div
+							class="relative shrink-0 overflow-hidden" style="aspect-ratio: 4 / 3">
 							<img
 								src="https://images.unsplash.com/photo-1549294413-26f195200c16?fit=crop&w=600&q=80"
 								alt="제주도 숙소 추천 오션뷰 가성비 숙소 모음"
-								class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"><span
-								class="absolute bottom-2 left-2 text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full"
-								style="background: #3B82F6">숙박</span>
+								class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
 						</div>
 						<div class="flex flex-col flex-1 p-3 min-h-0">
 							<h3
@@ -384,18 +395,15 @@ request.setAttribute("activePage", "tips");
 									<span>♡ 42</span><span>▢ 15</span>
 								</div>
 							</div>
-						</div></a><a
-						href="${pageContext.request.contextPath}/view/tips/tipDetail.jsp?id=3"
-						data-card-category="음식"
-						class="relative bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow cursor-pointer group overflow-hidden flex flex-col"
-						style="height: 300px"><div
-							class="relative shrink-0 overflow-hidden" style="height: 144px">
+						</div>
+					</a>
+					<a href="${pageContext.request.contextPath}/view/tips/tipDetail.jsp?id=3" data-card-category="음식"
+						class="relative bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow cursor-pointer group overflow-hidden flex flex-col">
+						<div class="relative shrink-0 overflow-hidden" style="aspect-ratio: 4 / 3">
 							<img
 								src="https://images.unsplash.com/photo-1591814468924-caf88d1232e1?fit=crop&w=600&q=80"
 								alt="후쿠오카에서 꼭 먹어야 하는 현지 음식 7가지"
-								class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"><span
-								class="absolute bottom-2 left-2 text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full"
-								style="background: #F59E0B">음식</span>
+								class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
 						</div>
 						<div class="flex flex-col flex-1 p-3 min-h-0">
 							<h3
@@ -417,18 +425,15 @@ request.setAttribute("activePage", "tips");
 									<span>♡ 67</span><span>▢ 20</span>
 								</div>
 							</div>
-						</div></a><a
-						href="${pageContext.request.contextPath}/view/tips/tipDetail.jsp?id=4"
-						data-card-category="문화"
-						class="relative bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow cursor-pointer group overflow-hidden flex flex-col"
-						style="height: 300px"><div
-							class="relative shrink-0 overflow-hidden" style="height: 144px">
+						</div>
+					</a>
+					<a href="${pageContext.request.contextPath}/view/tips/tipDetail.jsp?id=4" data-card-category="문화"
+						class="relative bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow cursor-pointer group overflow-hidden flex flex-col">
+						<div class="relative shrink-0 overflow-hidden" style="aspect-ratio: 4 / 3">
 							<img
 								src="https://images.unsplash.com/photo-1488415032361-b7e238421f1b?fit=crop&w=600&q=80"
 								alt="아이슬란드 오로라 여행 팁 (시기, 준비물, 촬영방법)"
-								class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"><span
-								class="absolute bottom-2 left-2 text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full"
-								style="background: #10B981">문화</span>
+								class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
 						</div>
 						<div class="flex flex-col flex-1 p-3 min-h-0">
 							<h3
@@ -450,18 +455,15 @@ request.setAttribute("activePage", "tips");
 									<span>♡ 53</span><span>▢ 12</span>
 								</div>
 							</div>
-						</div></a><a
-						href="${pageContext.request.contextPath}/view/tips/tipDetail.jsp?id=5"
-						data-card-category="기타"
-						class="relative bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow cursor-pointer group overflow-hidden flex flex-col"
-						style="height: 300px"><div
-							class="relative shrink-0 overflow-hidden" style="height: 144px">
+						</div>
+					</a>
+					<a href="${pageContext.request.contextPath}/view/tips/tipDetail.jsp?id=5" data-card-category="기타"
+						class="relative bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow cursor-pointer group overflow-hidden flex flex-col">
+						<div class="relative shrink-0 overflow-hidden" style="aspect-ratio: 4 / 3">
 							<img
 								src="https://images.unsplash.com/photo-1619794578892-cbdd3ff81c95?fit=crop&w=600&q=80"
 								alt="파리 여행 준비 체크리스트 (비자, 환전, 유심 등)"
-								class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"><span
-								class="absolute bottom-2 left-2 text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full"
-								style="background: #6B7280">기타</span>
+								class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
 						</div>
 						<div class="flex flex-col flex-1 p-3 min-h-0">
 							<h3
@@ -483,18 +485,17 @@ request.setAttribute("activePage", "tips");
 									<span>♡ 38</span><span>▢ 9</span>
 								</div>
 							</div>
-						</div></a><a
-						href="${pageContext.request.contextPath}/view/tips/tipDetail.jsp?id=6"
-						data-card-category="숙박"
-						class="relative bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow cursor-pointer group overflow-hidden flex flex-col"
-						style="height: 300px"><div
-							class="relative shrink-0 overflow-hidden" style="height: 144px">
+						</div>
+					</a>
+					<a
+						href="${pageContext.request.contextPath}/view/tips/tipDetail.jsp?id=6" data-card-category="숙박"
+						class="relative bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow cursor-pointer group overflow-hidden flex flex-col">
+						<div
+							class="relative shrink-0 overflow-hidden" style="aspect-ratio: 4 / 3">
 							<img
 								src="https://images.unsplash.com/photo-1561501900-3701fa6a0864?fit=crop&w=600&q=80"
 								alt="발리 숙소 지역별 추천 (꾸따, 스미냑, 우붓 비교)"
-								class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"><span
-								class="absolute bottom-2 left-2 text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full"
-								style="background: #3B82F6">숙박</span>
+								class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
 						</div>
 						<div class="flex flex-col flex-1 p-3 min-h-0">
 							<h3
@@ -516,18 +517,15 @@ request.setAttribute("activePage", "tips");
 									<span>♡ 61</span><span>▢ 18</span>
 								</div>
 							</div>
-						</div></a><a
-						href="${pageContext.request.contextPath}/view/tips/tipDetail.jsp?id=7"
-						data-card-category="교통"
-						class="relative bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow cursor-pointer group overflow-hidden flex flex-col"
-						style="height: 300px"><div
-							class="relative shrink-0 overflow-hidden" style="height: 144px">
+						</div>
+					</a>
+					<a href="${pageContext.request.contextPath}/view/tips/tipDetail.jsp?id=7" data-card-category="교통"
+						class="relative bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow cursor-pointer group overflow-hidden flex flex-col">
+						<div class="relative shrink-0 overflow-hidden" style="aspect-ratio: 4 / 3">
 							<img
 								src="https://images.unsplash.com/photo-1572414323397-e7918784a4b7?fit=crop&w=600&q=80"
 								alt="뉴욕 지하철 이용 방법 (메트로카드, 노선, 주의사항)"
-								class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"><span
-								class="absolute bottom-2 left-2 text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full"
-								style="background: #EC4899">교통</span>
+								class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
 						</div>
 						<div class="flex flex-col flex-1 p-3 min-h-0">
 							<h3
@@ -549,18 +547,15 @@ request.setAttribute("activePage", "tips");
 									<span>♡ 29</span><span>▢ 7</span>
 								</div>
 							</div>
-						</div></a><a
-						href="${pageContext.request.contextPath}/view/tips/tipDetail.jsp?id=8"
-						data-card-category="문화"
-						class="relative bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow cursor-pointer group overflow-hidden flex flex-col"
-						style="height: 300px"><div
-							class="relative shrink-0 overflow-hidden" style="height: 144px">
+						</div>
+					</a>
+					<a href="${pageContext.request.contextPath}/view/tips/tipDetail.jsp?id=8" data-card-category="문화"
+						class="relative bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow cursor-pointer group overflow-hidden flex flex-col">
+						<div class="relative shrink-0 overflow-hidden" style="aspect-ratio: 4 / 3">
 							<img
 								src="https://images.unsplash.com/photo-1600520611035-84157ad4084d?fit=crop&w=600&q=80"
 								alt="이집트 여행 전 알아두면 좋은 현지 문화와 예절"
-								class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"><span
-								class="absolute bottom-2 left-2 text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full"
-								style="background: #10B981">문화</span>
+								class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
 						</div>
 						<div class="flex flex-col flex-1 p-3 min-h-0">
 							<h3
@@ -582,12 +577,12 @@ request.setAttribute("activePage", "tips");
 									<span>♡ 45</span><span>▢ 14</span>
 								</div>
 							</div>
-						</div></a>
+						</div>
+					</a>
 				</div>
 				<div class="mt-10 flex flex-col items-center gap-3">
 					<p class="text-xs text-gray-400 py-4">모든 꿀팁을 확인했습니다 ✓</p>
 				</div>
-			</div>
-		</div>
+			</main>
 	</div><jsp:include page="/common/footer.jsp" /></body>
 </html>
