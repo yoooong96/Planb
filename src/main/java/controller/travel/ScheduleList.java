@@ -42,25 +42,38 @@ public class ScheduleList extends HttpServlet {
 				loginUser = (UserDto) session.getAttribute("user");
 			}
 			
-			// 	비로그인이면 null
+			//	비로그인이면 null
 			Long loginUserId = null;
 			if (loginUser != null) {
 				loginUserId = loginUser.getUserId();
 			}
 			
+			// 검색어가 없으면 전체 공개 일정 조회
+	        String keyword = request.getParameter("keyword");
+	        
+	        if (keyword == null) {
+	            keyword = "";
+	        }
+
+	        keyword = keyword.trim();
+			
 			ItineraryService service = new ItineraryServiceImpl();
 			
-			// Service를 통해 목록 조회
-            List<ItineraryDto> scheduleList = service.getScheduleList(loginUserId);
+			// 목록 조회
+            List<ItineraryDto> scheduleList = service.getScheduleList(loginUserId, keyword);
 
             // JSP에 전달
             request.setAttribute("scheduleList",scheduleList);
 
+            // 조회 후에도 검색창에 입력한 검색어 유지
+            request.setAttribute("keyword", keyword);
+            
 			// 화면 출력
 			request.getRequestDispatcher("/view/travel/scheduleList.jsp").forward(request, response);
 			
 		} catch (Exception e) {
-			e.printStackTrace();
+	        e.printStackTrace();
+	        response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 		}
 	}
 }
