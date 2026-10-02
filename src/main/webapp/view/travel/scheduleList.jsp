@@ -362,78 +362,69 @@ request.setAttribute("activePage", "travel");
 				</div>
 			</div>
 			<div class="grid gap-5"
-				style="grid-template-columns: repeat(4, minmax(0, 1fr))">
+				 style="grid-template-columns: repeat(4, minmax(0, 1fr))">
+				
+				
 				<!-- 실제로 db에 들어있는 데이터들로 보여줄 여행카드 목록들 26.10.01-->
-				<c:forEach var="schedule" items="${scheduleList}">
+				<c:forEach var="schedule" 
+				           items="${scheduleList}">
 					<c:url var="scheduleDetailUrl"
-						value="/view/travel/scheduleDetail.jsp">
-						<c:param name="id" value="${schedule.itineraryId}" />
+						   value="/view/travel/scheduleDetail.jsp">
+						<c:param name="id" 
+						         value="${schedule.itineraryId}" />
 					</c:url>
-
-					<article
-						class="jsp-schedule-card bg-white rounded-2xl overflow-hidden
-               transition-all duration-200 border group"
-						style="border-color: #D1D2F9; box-shadow: 0 2px 8px rgba(0, 0, 0, .07)">
-
-						<div class="relative overflow-hidden" style="aspect-ratio: 4/3">
-
-							<a href="${scheduleDetailUrl}" class="block w-full h-full"> <c:choose>
+					
+					<article class="jsp-schedule-card bg-white rounded-2xl overflow-hidden transition-all duration-200 border group"
+						     style="border-color: #D1D2F9; box-shadow: 0 2px 8px rgba(0, 0, 0, .07)">
+						<div class="relative overflow-hidden" 
+						     style="aspect-ratio: 4/3">
+							<a href="${scheduleDetailUrl}" 
+							   class="block w-full h-full">
+							   <c:choose>
 									<c:when test="${not empty schedule.thumbnailImg}">
 										<img src="<c:out value='${schedule.thumbnailImg}'/>"
-											alt="<c:out value='${schedule.title}'/>"
-											class="w-full h-full object-cover
-                                   transition-transform duration-300
-                                   group-hover:scale-105">
+											 alt="<c:out value='${schedule.title}'/>"
+											 class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
 									</c:when>
-
 									<c:otherwise>
 										<div class="w-full h-full flex items-center justify-center"
-											style="background: #F0F0FF; color: #6369D1">여행 일정</div>
+											 style="background: #F0F0FF; color: #6369D1">
+											 여행 일정
+										</div>
 									</c:otherwise>
 								</c:choose>
-
-							</a> <span
-								class="absolute top-2.5 left-2.5 text-[10px]
-                       font-bold px-2 py-0.5 rounded-full"
-								style="background: #6369D1; color: white"> <c:out
-									value="${schedule.country}" /> · <c:out
-									value="${schedule.city}" />
-
+							</a> 
+							<span class="absolute top-2.5 left-2.5 text-[10px] font-bold px-2 py-0.5 rounded-full"
+								  style="background: #6369D1; color: white"> 
+								  <c:out value="${schedule.country}" /> · <c:out value="${schedule.city}" />
 							</span>
-
 							<!-- 비로그인 또는 타인 일정에서만 표시 -->
-							<c:if
-								test="${empty sessionScope.user
-                          or schedule.userId ne sessionScope.user.userId}">
-
-								<button type="button" data-schedule-bookmark
+							<c:if test="${empty sessionScope.user or schedule.userId ne sessionScope.user.userId}">
+								<button type="button" 
+									data-schedule-bookmark
+									data-bookmark-url="${pageContext.request.contextPath}/itinerary/bookmark"
 									data-itinerary-id="${schedule.itineraryId}"
 									data-logged-in="${not empty sessionScope.user}"
-									aria-pressed="${schedule.bookmarked}" aria-label="북마크"
+									aria-pressed="${schedule.bookmarked}" 
+									aria-label="북마크"
 									class="absolute top-2.5 right-2.5 w-7 h-7
-                           rounded-full bg-white/90 backdrop-blur-sm
-                           flex items-center justify-center shadow-sm
-                           transition-all hover:scale-110">
-
+                           				rounded-full bg-white/90 backdrop-blur-sm
+                           				flex items-center justify-center shadow-sm
+                           				transition-all hover:scale-110">
 									<svg width="13" height="13" viewBox="0 0 24 24"
 										fill="${schedule.bookmarked ? '#6369D1' : 'none'}"
 										stroke="${schedule.bookmarked ? '#6369D1' : '#9ca3af'}"
 										stroke-width="2">
 
-                        <path stroke-linecap="round"
+                        				<path stroke-linecap="round"
 											stroke-linejoin="round"
 											d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
-
-                    </svg>
-
+                    				</svg>
 								</button>
-
 							</c:if>
-
 						</div>
 
 						<div class="p-3.5">
-
 							<a href="${scheduleDetailUrl}">
 								<h3
 									class="font-bold text-[14px] leading-snug mb-1
@@ -1444,6 +1435,10 @@ request.setAttribute("activePage", "travel");
 		</main>
 	</div>
 	<script
-		src="${pageContext.request.contextPath}/view/assets/js/tripily.js"></script>
+		src="${pageContext.request.contextPath}/view/assets/js/auth/tripily.js">
+	</script>
+	<script
+    	src="${pageContext.request.contextPath}/view/assets/js/travel/scheduleList.js">
+	</script>
 </body>
 </html>

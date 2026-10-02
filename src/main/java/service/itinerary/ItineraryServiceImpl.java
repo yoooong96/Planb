@@ -12,12 +12,15 @@ import dao.itinerary.ItineraryBlockDao;
 import dao.itinerary.ItineraryBlockDaoImpl;
 import dao.itinerary.ItineraryBlockImageDao;
 import dao.itinerary.ItineraryBlockImageDaoImpl;
+import dao.itinerary.ItineraryBookmarkDao;
+import dao.itinerary.ItineraryBookmarkDaoImpl;
 import dao.itinerary.ItineraryDao;
 import dao.itinerary.ItineraryDaoImpl;
 import dao.itinerary.ItineraryDayDao;
 import dao.itinerary.ItineraryDayDaoImpl;
 import dto.itinerary.ItineraryBlockDto;
 import dto.itinerary.ItineraryBlockImageDto;
+import dto.itinerary.ItineraryBookmarkDto;
 import dto.itinerary.ItineraryDayDto;
 import dto.itinerary.ItineraryDto;
 
@@ -27,12 +30,14 @@ public class ItineraryServiceImpl implements ItineraryService {
     private ItineraryDayDao itineraryDayDao;
     private ItineraryBlockDao itineraryBlockDao;
     private ItineraryBlockImageDao itineraryBlockImageDao;
+    private ItineraryBookmarkDao itineraryBookmarkDao;
 
     public ItineraryServiceImpl() {
         itineraryDao = new ItineraryDaoImpl();
         itineraryDayDao = new ItineraryDayDaoImpl();
         itineraryBlockDao = new ItineraryBlockDaoImpl();
         itineraryBlockImageDao = new ItineraryBlockImageDaoImpl();
+        itineraryBookmarkDao = new ItineraryBookmarkDaoImpl();
     }
 
 	@Override
@@ -451,4 +456,57 @@ public class ItineraryServiceImpl implements ItineraryService {
             itineraryDto.setVisibility("PRIVATE");
         }
     }
+
+	@Override
+	public boolean toggleBookmark(Long itineraryId, Long loginUserId) throws Exception {
+		 // 로그인 여부는 Servlet에서도 확인할 예정
+	    if (loginUserId == null || loginUserId <= 0) {
+	    	throw new SecurityException("로그인 후 이용할 수 있습니다.");
+	    }
+
+	    if (itineraryId == null || itineraryId <= 0) {
+	        throw new IllegalArgumentException("올바른 일정 번호가 아닙니다.");
+	    }
+
+	    try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession(false)) {
+	        try {
+	            // 일정 조회 및 잠금
+	            ItineraryDto itinerary = itineraryBookmarkDao.selectBookmarkTargetForUpdate(sqlSession,itineraryId);
+	            if (itinerary == null || !"ACTIVE".equals(itinerary.getStatus())) {
+	                throw new IllegalArgumentException("일정을 찾을 수 없습니다.");
+	            }
+	            // 본인 일정 북마크 차단
+	            if (loginUserId.equals(itinerary.getUserId())) {
+	            	throw new SecurityException("본인이 작성한 일정은 북마크할 수 없습니다.");
+	            }
+
+	            if (!"PUBLIC".equals(itinerary.getVisibility())) {
+	                throw new SecurityException("공개된 일정만 북마크할 수 있습니다.");
+	            }
+
+	            ItineraryBookmarkDto bookmark = new ItineraryBookmarkDto();
+
+	            bookmark.setItineraryId(itineraryId);
+	            bookmark.setUserId(loginUserId);
+
+	            // 현재 북마크 상태 확인
+	            boolean alreadyBookmarked = itineraryBookmarkDao.selectItineraryBookmark(sqlSession,bookmark);
+
+	            if (alreadyBookmarked) {
+	                itineraryBookmarkDao.deleteItineraryBookmark(sqlSession,bookmark);
+	            } else {
+	                itineraryBookmarkDao.insertItineraryBookmark(sqlSession,bookmark);
+	            }
+
+	            sqlSession.commit();
+
+	            // 처리 후 상태 반환
+	            return !alreadyBookmarked;
+
+	        } catch (Exception e) {
+	            sqlSession.rollback();
+	            throw e;
+	        }
+	    }
+	}
 }

@@ -14,4 +14,6 @@ public interface ItineraryService {
     ItineraryDto getItinerary(Long itineraryId) throws Exception;
 
     void deleteItinerary(Long itineraryId, Long userId) throws Exception;
+    
+    boolean toggleBookmark(Long itineraryId,Long loginUserId) throws Exception;
 }
