@@ -454,8 +454,12 @@ request.setAttribute("activePage", "travel");
 								</h3>
 							</a>
 
-							<p
-								class="text-gray-500 text-[12px] line-clamp-1 mb-2.5 leading-relaxed">
+							<p class="text-gray-500 text-[12px] mb-2.5"
+   								style="height: 20px;
+          							line-height: 20px;
+          							white-space: nowrap;
+          							overflow: hidden;
+          							text-overflow: ellipsis;">
 								<c:out value="${schedule.summary}" />
 							</p>
 

@@ -39,14 +39,23 @@ public class ItineraryServiceImpl implements ItineraryService {
         itineraryBlockImageDao = new ItineraryBlockImageDaoImpl();
         itineraryBookmarkDao = new ItineraryBookmarkDaoImpl();
     }
+	
+	@Override
+	public List<ItineraryDto> getScheduleList(Long loginUserId)throws Exception {
+	    return getScheduleList(loginUserId, "");
+	}
 
 	@Override
-	public List<ItineraryDto> getScheduleList(Long loginUserId) throws Exception {
-		 Map<String, Object> params = new HashMap<>();
-	     params.put("loginUserId", loginUserId);
-	     params.put("limit", 12);
-	     params.put("offset", 0);
-	     return itineraryDao.selectScheduleList(params);
+	public List<ItineraryDto> getScheduleList(Long loginUserId, String keyword) throws Exception {
+
+	    Map<String, Object> params = new HashMap<>();
+
+	    params.put("loginUserId", loginUserId);
+	    params.put("keyword", keyword == null ? "" : keyword.trim());
+	    params.put("limit", 12);
+	    params.put("offset", 0);
+
+	    return itineraryDao.selectScheduleList(params);
 	}
     
     /*

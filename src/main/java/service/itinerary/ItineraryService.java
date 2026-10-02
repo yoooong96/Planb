@@ -6,6 +6,8 @@ import dto.itinerary.ItineraryDto;
 
 public interface ItineraryService {
 	List<ItineraryDto> getScheduleList(Long loginUserId) throws Exception;
+
+    List<ItineraryDto> getScheduleList(Long loginUserId, String keyword) throws Exception;
 	
     Long writeItinerary(ItineraryDto itineraryDto) throws Exception;
 
@@ -16,4 +18,5 @@ public interface ItineraryService {
     void deleteItinerary(Long itineraryId, Long userId) throws Exception;
     
     boolean toggleBookmark(Long itineraryId,Long loginUserId) throws Exception;
+
 }
