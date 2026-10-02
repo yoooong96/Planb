@@ -3314,28 +3314,12 @@ request.setAttribute("activePage", "planner");
                     plannerPublishConfirm.addEventListener('click',function(){
                         var summaryInput=$('#plannerPublishSummary');
 
+                        /*
+                         * summary / thumbnail은 선택사항.
+                         * 비어 있어도 최종 저장을 진행한다.
+                         */
                         plannerPublishState.summary=
                             summaryInput ? summaryInput.value : '';
-
-                        var ok=true;
-
-                        if(!plannerPublishState.imageKey){
-                            var photoError=$('#plannerPublishPhotoError');
-                            if(photoError){
-                                photoError.classList.add('is-visible');
-                            }
-                            ok=false;
-                        }
-
-                        if(!plannerPublishState.summary.trim()){
-                            var summaryError=$('#plannerPublishSummaryError');
-                            if(summaryError){
-                                summaryError.classList.add('is-visible');
-                            }
-                            ok=false;
-                        }
-
-                        if(!ok) return;
 
                         closePublishPreviewModal();
                         submitPlannerAfterPreview();
@@ -3539,7 +3523,7 @@ request.setAttribute("activePage", "planner");
             <div class="planner-publish-head flex items-center justify-between px-6 py-5 border-b" style="border-color:#ECEEF5">
                 <div>
                     <h3 id="plannerPublishTitle" class="text-lg font-black text-gray-900">여행 일정 미리보기</h3>
-                    <p class="mt-1 text-xs text-gray-500">여행일정 목록에 표시될 카드입니다. 대표 사진과 일정 소개를 입력해 주세요.</p>
+                    <p class="mt-1 text-xs text-gray-500">여행일정 목록에 표시될 카드입니다. 대표 사진과 일정 소개는 선택사항입니다.</p>
                 </div>
                 <button type="button" id="plannerPublishClose"
                     class="w-9 h-9 rounded-full hover:bg-gray-100 text-gray-500 text-xl">×</button>
@@ -3608,7 +3592,7 @@ request.setAttribute("activePage", "planner");
 
                         <div class="mb-5">
                             <div class="flex items-center justify-between mb-2 gap-3">
-                                <label class="text-xs font-bold text-gray-700">대표 이미지 선택</label>
+                                <label class="text-xs font-bold text-gray-700">대표 이미지 선택 <span class="font-normal text-gray-400">(선택)</span></label>
                                 <span class="text-[10px] text-gray-400">일정에 등록한 사진 중 1장</span>
                             </div>
 
@@ -3620,14 +3604,13 @@ request.setAttribute("activePage", "planner");
                                 일정 블록에 사진을 먼저 등록해 주세요.
                             </p>
 
-                            <p id="plannerPublishPhotoError"
-                                class="planner-publish-error">대표 이미지를 1장 선택해 주세요.</p>
+                            
                         </div>
 
                         <div id="plannerPublishSummarySection" style="display:block; visibility:visible;">
                             <div class="flex items-center justify-between mb-2">
                                 <label for="plannerPublishSummary"
-                                    class="text-xs font-bold text-gray-700">일정 소개</label>
+                                    class="text-xs font-bold text-gray-700">일정 소개 <span class="font-normal text-gray-400">(선택)</span></label>
 
                                 <span id="plannerPublishSummaryCount"
                                     class="text-[10px] text-gray-400">0자</span>
@@ -3638,8 +3621,7 @@ request.setAttribute("activePage", "planner");
                                 class="planner-publish-summary"
                                 placeholder="이 여행 일정의 특징이나 추천 포인트를 작성해 주세요."></textarea>
 
-                            <p id="plannerPublishSummaryError"
-                                class="planner-publish-error">일정 소개를 작성해 주세요.</p>
+                            
                         </div>
 
                     </div>
