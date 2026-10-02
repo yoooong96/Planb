@@ -109,7 +109,7 @@
 		<mapper resource="mapper/itinerary/itineraryBlockImage.xml"/>
 	    <mapper resource="mapper/itinerary/itineraryBookmark.xml"/>
 	    <mapper resource="mapper/itinerary/itineraryComment.xml"/>
-	    <!-- <mapper resource="mapper/itinerary/itineraryCart.xml"/> -->
+	    <mapper resource="mapper/itinerary/itineraryCart.xml"/>
 	    <mapper resource="mapper/itinerary/itineraryDay.xml"/>
 	    <mapper resource="mapper/itinerary/itineraryLike.xml"/>
 	

@@ -140,6 +140,21 @@ public class ItineraryModify extends HttpServlet {
                                     itineraryDto
                             );
 
+            String thumbnailImageKey =
+                    request.getParameter(
+                            "thumbnailImageKey"
+                    );
+
+            itineraryDto.setThumbnailImg(
+                    ItineraryImageUploadUtil
+                            .resolveThumbnailImageUrl(
+                                    itineraryDto,
+                                    thumbnailImageKey
+                            )
+            );
+
+            validatePublishFields(itineraryDto);
+
             itineraryService.modifyItinerary(
                     itineraryDto
             );
@@ -240,6 +255,29 @@ public class ItineraryModify extends HttpServlet {
 
             throw new IllegalArgumentException(
                     "종료일은 시작일보다 빠를 수 없습니다."
+            );
+        }
+    }
+
+
+    private void validatePublishFields(
+            ItineraryDto itineraryDto) {
+
+        if (itineraryDto.getSummary() == null
+                || itineraryDto.getSummary()
+                        .trim().isEmpty()) {
+
+            throw new IllegalArgumentException(
+                    "일정 소개를 작성해 주세요."
+            );
+        }
+
+        if (itineraryDto.getThumbnailImg() == null
+                || itineraryDto.getThumbnailImg()
+                        .trim().isEmpty()) {
+
+            throw new IllegalArgumentException(
+                    "대표 이미지를 선택해 주세요."
             );
         }
     }

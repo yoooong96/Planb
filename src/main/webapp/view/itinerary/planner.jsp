@@ -428,6 +428,332 @@ request.setAttribute("activePage", "planner");
     .planner-day.is-day-dragging { opacity:.48; }
     .planner-day.is-day-drag-over { outline:2px solid rgba(99,105,209,.35); outline-offset:3px; border-radius:14px; }
 
+
+    .planner-publish-backdrop {
+        position: fixed;
+        inset: 0;
+        z-index: 10050;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        background: rgba(17, 24, 39, .52);
+        backdrop-filter: blur(3px);
+    }
+    .planner-publish-backdrop.is-open { display: flex; }
+
+    .planner-publish-modal {
+        width: min(1080px, calc(100vw - 32px));
+        height: auto;
+        max-height: calc(100vh - 40px);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        border-radius: 22px;
+        background: #fff;
+        box-shadow: 0 24px 70px rgba(0,0,0,.24);
+    }
+
+    .planner-publish-head,
+    .planner-publish-footer {
+        flex: 0 0 auto;
+        background: #fff;
+    }
+
+    .planner-publish-body {
+        flex: 0 1 auto;
+        min-height: 0;
+        max-height: calc(100vh - 180px);
+        overflow-y: auto;
+        overflow-x: hidden;
+        padding: 22px 24px;
+    }
+
+    .planner-publish-grid {
+        width: 100%;
+        min-width: 0;
+        display: grid;
+        grid-template-columns: minmax(420px, 460px) minmax(360px, 1fr);
+        gap: 30px;
+        align-items: start;
+    }
+
+    .planner-publish-column {
+        min-width: 0;
+        display: block;
+        visibility: visible;
+        opacity: 1;
+    }
+
+    .planner-publish-controls {
+        display: block !important;
+        min-width: 0;
+        padding: 16px;
+        border: 1px solid #ECEEF5;
+        border-radius: 16px;
+        background: #FAFBFF;
+        transition: box-shadow .18s ease, border-color .18s ease;
+    }
+
+    .planner-publish-controls.is-emphasis {
+        border-color: #6369D1;
+        box-shadow: 0 0 0 4px rgba(99,105,209,.10);
+    }
+
+    /*
+     * scheduleList.jsp의 실제 여행일정 카드 구조에 맞춘 미리보기 카드
+     */
+    .planner-publish-card {
+        width: 100%;
+        min-height: 520px;
+        overflow: hidden;
+        border: 1px solid #D1D2F9;
+        border-radius: 16px;
+        background: #fff;
+        box-shadow: 0 2px 8px rgba(0,0,0,.07);
+    }
+
+    .planner-publish-cover {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 16 / 11;
+        overflow: hidden;
+        background: #F0F0FF;
+        cursor: pointer;
+    }
+
+    .planner-publish-cover img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: none;
+        transition: transform .3s ease;
+    }
+
+    .planner-publish-cover.has-image img {
+        display: block;
+    }
+
+    .planner-publish-cover.has-image:hover img {
+        transform: scale(1.035);
+    }
+
+    .planner-publish-cover-empty {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        color: #6369D1;
+        font-size: 12px;
+        font-weight: 800;
+    }
+
+    .planner-publish-cover.has-image .planner-publish-cover-empty {
+        display: none;
+    }
+
+    .planner-publish-cover-change {
+        position: absolute;
+        inset: 0;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        background: rgba(17,24,39,.42);
+        color: #fff;
+        font-size: 12px;
+        font-weight: 800;
+    }
+
+    .planner-publish-cover.has-image:hover .planner-publish-cover-change {
+        display: flex;
+    }
+
+    .planner-publish-bookmark {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        z-index: 3;
+        width: 28px;
+        height: 28px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 999px;
+        background: rgba(255,255,255,.92);
+        box-shadow: 0 1px 5px rgba(0,0,0,.10);
+        pointer-events: none;
+    }
+
+    .planner-publish-card-body {
+        padding: 14px;
+    }
+
+    .planner-publish-card-title {
+        margin: 0 0 4px;
+        color: #18181B;
+        font-size: 14px;
+        font-weight: 700;
+        line-height: 1.45;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        overflow: hidden;
+    }
+
+    .planner-publish-card-summary {
+        margin: 0 0 10px;
+        color: #6B7280;
+        font-size: 12px;
+        line-height: 1.6;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .planner-publish-card-dates {
+        margin: 0 0 8px;
+        color: #9CA3AF;
+        font-size: 11px;
+    }
+
+    .planner-publish-card-stats {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 12px;
+        color: #9CA3AF;
+        font-size: 11px;
+    }
+
+    .planner-publish-card-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding-top: 10px;
+        border-top: 1px solid #D1D2F9;
+    }
+
+    .planner-publish-card-author {
+        min-width: 0;
+        color: #6B7280;
+        font-size: 11px;
+        font-weight: 600;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .planner-publish-card-created {
+        flex: 0 0 auto;
+        color: #9CA3AF;
+        font-size: 10px;
+    }
+
+    .planner-publish-photo-list {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 10px;
+        max-height: 250px;
+        overflow-y: auto;
+        overflow-x: hidden;
+        padding: 2px 4px 2px 2px;
+    }
+
+    .planner-publish-photo-option {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 4 / 3;
+        padding: 0;
+        overflow: hidden;
+        border: 2px solid transparent;
+        border-radius: 12px;
+        background: #F3F4F6;
+        cursor: pointer;
+        box-sizing: border-box;
+    }
+
+    .planner-publish-photo-option img {
+        width:100%;
+        height:100%;
+        object-fit:cover;
+        display:block;
+    }
+
+    .planner-publish-photo-option.is-selected {
+        border-color:#6369D1;
+        box-shadow:0 0 0 2px rgba(99,105,209,.12);
+    }
+
+    .planner-publish-photo-option.is-selected::after {
+        content: '선택';
+        position: absolute;
+        right: 6px;
+        bottom: 6px;
+        padding: 3px 7px;
+        border-radius: 999px;
+        background: #6369D1;
+        color: #fff;
+        font-size: 10px;
+        font-weight: 800;
+    }
+
+    .planner-publish-summary {
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        min-height: 140px;
+        max-height: 230px;
+        resize: vertical;
+        box-sizing: border-box;
+        border: 1px solid #D1D5DB;
+        border-radius: 12px;
+        padding: 12px 13px;
+        outline: none;
+        color: #374151;
+        background: #fff;
+        font-size: 13px;
+        line-height: 1.6;
+    }
+
+    .planner-publish-summary:focus {
+        border-color:#6369D1;
+        box-shadow:0 0 0 3px rgba(99,105,209,.10);
+    }
+
+    .planner-publish-error {
+        display: none;
+        margin-top: 8px;
+        color: #DC2626;
+        font-size: 11px;
+        font-weight: 700;
+    }
+
+    .planner-publish-error.is-visible {
+        display:block;
+    }
+
+    @media (max-width: 800px) {
+        .planner-publish-modal {
+            height: auto;
+            max-height: calc(100vh - 24px);
+        }
+
+        .planner-publish-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .planner-publish-card {
+            max-width: 390px;
+            margin: 0 auto;
+        }
+    }
 </style>
 </head>
 <body class="site-shell">
@@ -602,6 +928,7 @@ request.setAttribute("activePage", "planner");
 
                         <form id="plannerSubmitForm" method="post" enctype="multipart/form-data" class="hidden">
                             <input type="hidden" id="plannerItineraryJson" name="itineraryJson">
+                            <input type="hidden" id="plannerThumbnailImageKey" name="thumbnailImageKey">
                         </form>
                     </div>
 
@@ -946,6 +1273,9 @@ request.setAttribute("activePage", "planner");
              */
             var IMPORT_ITINERARIES =
                 ${empty importListJson ? '[]' : importListJson};
+
+            var EDIT_ITINERARY =
+                ${empty editItineraryJson ? 'null' : editItineraryJson};
 
             function dbBlockTypeToPlanner(type){
                 var map={
@@ -1474,32 +1804,118 @@ request.setAttribute("activePage", "planner");
                     markDirty();
                 }
 
+                function readThumbState(t){
+                    return {
+                        src:getSrc(t),
+                        file:t._plannerFile || null,
+                        objectUrl:t.dataset.objectUrl || ''
+                    };
+                }
+
+                function writeThumbState(t,state){
+                    state=state || {
+                        src:'',
+                        file:null,
+                        objectUrl:''
+                    };
+
+                    t.dataset.src=state.src || '';
+                    t.dataset.objectUrl=state.objectUrl || '';
+                    t._plannerFile=state.file || null;
+                }
+
+                /*
+                 * 사진 슬롯은 항상 왼쪽부터 연속해서 채운다.
+                 *
+                 * 예)
+                 * [빈칸, 사진B, 사진C]
+                 * → [사진B, 사진C, 빈칸]
+                 */
+                function compactThumbs(){
+                    var states=[];
+
+                    thumbs.forEach(function(t){
+                        var state=readThumbState(t);
+
+                        if(state.src){
+                            states.push(state);
+                        }
+                    });
+
+                    thumbs.forEach(function(t,index){
+                        writeThumbState(
+                            t,
+                            states[index] || null
+                        );
+                    });
+
+                    renderBadge();
+
+                    var firstWithImage=thumbs.find(function(t){
+                        return !!getSrc(t);
+                    });
+
+                    active(firstWithImage || null);
+                }
+
+                function firstEmptyThumb(){
+                    return thumbs.find(function(t){
+                        return !getSrc(t);
+                    }) || null;
+                }
+
                 fileInput.addEventListener('change',function(){
                     var index=Number(fileInput.dataset.targetIndex);
-                    var target=thumbs[index];
+                    var clickedTarget=thumbs[index];
                     var file=fileInput.files && fileInput.files[0];
 
-                    if(!target || !file) return;
+                    if(!clickedTarget || !file) return;
 
                     if(file.type && file.type.indexOf('image/')!==0){
-                        if(typeof toast==='function') toast('이미지 파일만 등록할 수 있습니다.');
+                        if(typeof toast==='function'){
+                            toast('이미지 파일만 등록할 수 있습니다.');
+                        }
                         return;
                     }
 
+                    /*
+                     * 이미 사진이 있는 슬롯을 눌렀다면 '변경'이므로
+                     * 해당 위치의 사진을 그대로 교체한다.
+                     *
+                     * 빈 슬롯을 눌러 '등록'하는 경우에는 사용자가
+                     * 2번/3번을 눌렀더라도 가장 앞의 빈 슬롯을 우선 사용한다.
+                     */
+                    var target=getSrc(clickedTarget)
+                        ? clickedTarget
+                        : firstEmptyThumb();
+
+                    if(!target) return;
+
                     if(target.dataset.objectUrl){
                         try{
-                            URL.revokeObjectURL(target.dataset.objectUrl);
+                            URL.revokeObjectURL(
+                                target.dataset.objectUrl
+                            );
                         }catch(e){}
                     }
 
-                    var objectUrl=URL.createObjectURL(file);
+                    var objectUrl=
+                        URL.createObjectURL(file);
 
-                    target.dataset.objectUrl=objectUrl;
-                    target.dataset.src=objectUrl;
-                    target._plannerFile=file;
+                    target.dataset.objectUrl=
+                        objectUrl;
 
-                    renderBadge();
-                    active(target);
+                    target.dataset.src=
+                        objectUrl;
+
+                    target._plannerFile=
+                        file;
+
+                    /*
+                     * 기존 데이터에 빈 슬롯이 끼어 있는 경우까지
+                     * 정리해서 1 → 2 → 3 순으로 붙여 둔다.
+                     */
+                    compactThumbs();
                     markDirty();
                 });
 
@@ -1533,14 +1949,11 @@ request.setAttribute("activePage", "planner");
                             t.dataset.src='';
                             t._plannerFile=null;
 
-                            updateThumbState(t);
-                            renderBadge();
-
-                            var nextWithImage=thumbs.find(function(x){
-                                return !!getSrc(x);
-                            });
-
-                            active(nextWithImage || null);
+                            /*
+                             * 삭제 후에도 중간 빈칸이 남지 않도록
+                             * 뒤쪽 사진을 앞으로 당긴다.
+                             */
+                            compactThumbs();
                             markDirty();
                         }
 
@@ -1599,13 +2012,7 @@ request.setAttribute("activePage", "planner");
                     });
                 });
 
-                renderBadge();
-
-                var firstWithImage=thumbs.find(function(t){
-                    return !!getSrc(t);
-                });
-
-                active(firstWithImage || null);
+                compactThumbs();
             }
             $$('[data-photo-gallery]').forEach(setupPhotoGallery);
 
@@ -2513,7 +2920,7 @@ request.setAttribute("activePage", "planner");
                     itineraryId:plannerItineraryId ? Number(plannerItineraryId) : null,
                     sourceItineraryId:null,
                     title:$('#tripTitle') ? $('#tripTitle').value.trim() : '',
-                    summary:null,
+                    summary:plannerPublishState.summary || null,
                     continent:null,
                     country:$('#plannerCountry') ? $('#plannerCountry').value.trim() : '',
                     city:$('#plannerRegion') && $('#plannerRegion').value.trim()
@@ -2527,30 +2934,235 @@ request.setAttribute("activePage", "planner");
                     visibility:visibility && visibility.dataset.visibility
                         ? visibility.dataset.visibility
                         : 'PRIVATE',
+                    thumbnailImg:plannerPublishState.thumbnailUrl || null,
                     days:days
                 };
             }
 
-            var save=$('#plannerSaveBtn');
-            if(save) save.addEventListener('click',function(){
-                if(!validatePlannerRequiredFields()) return;
+            var plannerPublishState={
+                imageKey:'',
+                thumbnailUrl:'',
+                summary:EDIT_ITINERARY && EDIT_ITINERARY.summary
+                    ? EDIT_ITINERARY.summary
+                    : ''
+            };
 
+            function collectPublishPhotoCandidates(){
+                var result=[];
+
+                $$('.planner-day').forEach(function(day,dayIndex){
+                    $$('.planner-block-card',day).forEach(function(card,blockIndex){
+                        var gallery=$('[data-photo-gallery]',card);
+                        if(!gallery) return;
+
+                        $$('.planner-photo-thumb',gallery).forEach(function(thumb,index){
+                            var src=String(thumb.dataset.src || '').trim();
+                            if(!src){
+                                var img=$('img',thumb);
+                                if(img) src=String(img.getAttribute('src') || '').trim();
+                            }
+                            if(!src) return;
+
+                            result.push({
+                                key:dayIndex+':'+blockIndex+':'+(index+1),
+                                src:src,
+                                dayIndex:dayIndex,
+                                blockIndex:blockIndex,
+                                imageOrder:index+1
+                            });
+                        });
+                    });
+                });
+
+                return result;
+            }
+
+            function formatPlannerCardDate(value){
+                if(!value) return '';
+                return String(value).replace(/-/g,'.');
+            }
+
+            function refreshPublishCard(){
+                var title=$('#plannerPublishCardTitle');
+                var badge=$('#plannerPublishCountryBadge');
+                var dates=$('#plannerPublishCardDates');
+                var summary=$('#plannerPublishCardSummary');
+                var cover=$('#plannerPublishCover');
+                var coverImg=$('#plannerPublishCoverImg');
+                var created=$('#plannerPublishCardCreated');
+
+                if(title) title.textContent=$('#tripTitle')?.value.trim() || '제목 없는 일정';
+
+                var country=$('#plannerCountry')?.value.trim() || '';
+                var city=$('#plannerRegion')?.value.trim() || '';
+                if(badge) badge.textContent=[country,city].filter(Boolean).join(' · ');
+
+                var s=startDate && startDate.value ? formatPlannerCardDate(startDate.value) : '';
+                var e=endDate && endDate.value ? formatPlannerCardDate(endDate.value) : '';
+                if(dates) dates.textContent=s && e ? s+' ~ '+e : (s || e || '');
+
+                if(created){
+                    var today=new Date();
+                    var yyyy=today.getFullYear();
+                    var mm=String(today.getMonth()+1).padStart(2,'0');
+                    var dd=String(today.getDate()).padStart(2,'0');
+                    created.textContent=yyyy+'.'+mm+'.'+dd;
+                }
+
+                if(summary){
+                    summary.textContent=plannerPublishState.summary.trim()
+                        ? plannerPublishState.summary.trim()
+                        : '일정 소개를 입력해 주세요.';
+                }
+
+                if(cover && coverImg){
+                    if(plannerPublishState.thumbnailUrl){
+                        coverImg.src=plannerPublishState.thumbnailUrl;
+                        cover.classList.add('has-image');
+                    }else{
+                        coverImg.removeAttribute('src');
+                        cover.classList.remove('has-image');
+                    }
+                }
+            }
+
+            function selectPublishImage(candidate){
+                plannerPublishState.imageKey=candidate ? candidate.key : '';
+                plannerPublishState.thumbnailUrl=candidate ? candidate.src : '';
+
+                $$('.planner-publish-photo-option').forEach(function(btn){
+                    btn.classList.toggle(
+                        'is-selected',
+                        !!candidate && btn.dataset.imageKey===candidate.key
+                    );
+                });
+
+                var err=$('#plannerPublishPhotoError');
+                if(err) err.classList.remove('is-visible');
+                refreshPublishCard();
+            }
+
+            function renderPublishPhotoCandidates(){
+                var list=$('#plannerPublishPhotoList');
+                var empty=$('#plannerPublishPhotoEmpty');
+                if(!list) return;
+
+                var candidates=collectPublishPhotoCandidates();
+                list.innerHTML='';
+
+                if(empty){
+                    empty.classList.toggle('hidden',candidates.length>0);
+                }
+                list.classList.toggle('hidden',candidates.length===0);
+
+                candidates.forEach(function(candidate){
+                    var btn=document.createElement('button');
+                    btn.type='button';
+                    btn.className='planner-publish-photo-option';
+                    btn.dataset.imageKey=candidate.key;
+
+                    var img=document.createElement('img');
+                    img.src=candidate.src;
+                    img.alt='대표 이미지 후보';
+                    btn.appendChild(img);
+
+                    btn.addEventListener('click',function(){
+                        selectPublishImage(candidate);
+                    });
+
+                    list.appendChild(btn);
+                });
+
+                /*
+                 * 수정 모드에서는 기존 thumbnailImg와 동일한 사진이 있으면
+                 * 자동으로 다시 선택 상태를 복원한다.
+                 */
+                if(!plannerPublishState.imageKey
+                        && EDIT_ITINERARY
+                        && EDIT_ITINERARY.thumbnailImg){
+
+                    var existing=candidates.find(function(candidate){
+                        return candidate.src===EDIT_ITINERARY.thumbnailImg;
+                    });
+
+                    if(existing) selectPublishImage(existing);
+                }
+
+                /* 이미 선택했던 사진이 아직 존재하면 선택 표시 유지 */
+                if(plannerPublishState.imageKey){
+                    var selected=candidates.find(function(candidate){
+                        return candidate.key===plannerPublishState.imageKey;
+                    });
+
+                    if(selected){
+                        selectPublishImage(selected);
+                    }else{
+                        plannerPublishState.imageKey='';
+                        plannerPublishState.thumbnailUrl='';
+                        refreshPublishCard();
+                    }
+                }
+            }
+
+            function openPublishPreviewModal(){
+                var backdrop=$('#plannerPublishBackdrop');
+                var summaryInput=$('#plannerPublishSummary');
+
+                if(!backdrop) return;
+
+                if(summaryInput){
+                    summaryInput.value=plannerPublishState.summary || '';
+                    var count=$('#plannerPublishSummaryCount');
+                    if(count) count.textContent=summaryInput.value.length+' / 500자';
+                }
+
+                renderPublishPhotoCandidates();
+                refreshPublishCard();
+
+                var controls=$('#plannerPublishControls');
+                if(controls){
+                    controls.style.display='block';
+                    controls.style.visibility='visible';
+                    controls.style.opacity='1';
+                }
+
+                var summarySection=$('#plannerPublishSummarySection');
+                if(summarySection){
+                    summarySection.style.display='block';
+                    summarySection.style.visibility='visible';
+                }
+
+                $('#plannerPublishPhotoError')?.classList.remove('is-visible');
+                $('#plannerPublishSummaryError')?.classList.remove('is-visible');
+
+                backdrop.classList.add('is-open');
+                backdrop.setAttribute('aria-hidden','false');
+                document.body.style.overflow='hidden';
+            }
+
+            function closePublishPreviewModal(){
+                var backdrop=$('#plannerPublishBackdrop');
+                if(!backdrop) return;
+                backdrop.classList.remove('is-open');
+                backdrop.setAttribute('aria-hidden','true');
+                document.body.style.overflow='';
+            }
+
+            function submitPlannerAfterPreview(){
                 var form=$('#plannerSubmitForm');
                 var jsonInput=$('#plannerItineraryJson');
+                var thumbInput=$('#plannerThumbnailImageKey');
 
-                if(!form || !jsonInput){
+                if(!form || !jsonInput || !thumbInput){
                     toast('저장 폼을 찾을 수 없습니다.');
                     return;
                 }
 
                 var payload=collectPlannerPayload();
 
-                /*
-                 * 실제 이미지 파일을 multipart input으로 구성한 뒤
-                 * JSON과 함께 같은 form으로 전송한다.
-                 */
                 appendPlannerImageParts(form);
 
+                thumbInput.value=plannerPublishState.imageKey;
                 jsonInput.value=JSON.stringify(payload);
 
                 if(plannerItineraryId){
@@ -2562,6 +3174,157 @@ request.setAttribute("activePage", "planner");
                 dirty=false;
                 sessionStorage.removeItem(DRAFT_KEY);
                 form.submit();
+            }
+
+            function setupPublishPreviewModal(){
+                var plannerPublishSummary=$('#plannerPublishSummary');
+                var plannerPublishCover=$('#plannerPublishCover');
+                var plannerPublishClose=$('#plannerPublishClose');
+                var plannerPublishCancel=$('#plannerPublishCancel');
+                var plannerPublishBackdrop=$('#plannerPublishBackdrop');
+                var plannerPublishConfirm=$('#plannerPublishConfirm');
+
+                if(plannerPublishSummary && !plannerPublishSummary.dataset.bound){
+                    plannerPublishSummary.dataset.bound='1';
+
+                    plannerPublishSummary.addEventListener('input',function(){
+                        plannerPublishState.summary=plannerPublishSummary.value;
+
+                        var count=$('#plannerPublishSummaryCount');
+                        if(count){
+                            count.textContent=
+                                plannerPublishSummary.value.length+' / 500자';
+                        }
+
+                        var summaryError=$('#plannerPublishSummaryError');
+                        if(summaryError){
+                            summaryError.classList.remove('is-visible');
+                        }
+
+                        refreshPublishCard();
+                    });
+                }
+
+                if(plannerPublishCover && !plannerPublishCover.dataset.bound){
+                    plannerPublishCover.dataset.bound='1';
+
+                    plannerPublishCover.addEventListener('click',function(){
+                        var controls=$('#plannerPublishControls');
+                        var list=$('#plannerPublishPhotoList');
+                        var first=$('.planner-publish-photo-option');
+                        var empty=$('#plannerPublishPhotoEmpty');
+
+                        if(controls){
+                            controls.classList.add('is-emphasis');
+                            controls.scrollIntoView({
+                                behavior:'smooth',
+                                block:'nearest'
+                            });
+
+                            window.setTimeout(function(){
+                                controls.classList.remove('is-emphasis');
+                            },900);
+                        }
+
+                        if(first){
+                            first.focus();
+                        }else if(empty){
+                            empty.classList.remove('hidden');
+                        }
+                    });
+                }
+
+                if(plannerPublishClose && !plannerPublishClose.dataset.bound){
+                    plannerPublishClose.dataset.bound='1';
+                    plannerPublishClose.addEventListener(
+                        'click',
+                        closePublishPreviewModal
+                    );
+                }
+
+                if(plannerPublishCancel && !plannerPublishCancel.dataset.bound){
+                    plannerPublishCancel.dataset.bound='1';
+                    plannerPublishCancel.addEventListener(
+                        'click',
+                        closePublishPreviewModal
+                    );
+                }
+
+                if(plannerPublishBackdrop && !plannerPublishBackdrop.dataset.bound){
+                    plannerPublishBackdrop.dataset.bound='1';
+
+                    plannerPublishBackdrop.addEventListener('click',function(e){
+                        if(e.target===e.currentTarget){
+                            closePublishPreviewModal();
+                        }
+                    });
+                }
+
+                if(plannerPublishConfirm && !plannerPublishConfirm.dataset.bound){
+                    plannerPublishConfirm.dataset.bound='1';
+
+                    plannerPublishConfirm.addEventListener('click',function(){
+                        var summaryInput=$('#plannerPublishSummary');
+
+                        plannerPublishState.summary=
+                            summaryInput ? summaryInput.value : '';
+
+                        var ok=true;
+
+                        if(!plannerPublishState.imageKey){
+                            var photoError=$('#plannerPublishPhotoError');
+                            if(photoError){
+                                photoError.classList.add('is-visible');
+                            }
+                            ok=false;
+                        }
+
+                        if(!plannerPublishState.summary.trim()){
+                            var summaryError=$('#plannerPublishSummaryError');
+                            if(summaryError){
+                                summaryError.classList.add('is-visible');
+                            }
+                            ok=false;
+                        }
+
+                        if(!ok) return;
+
+                        closePublishPreviewModal();
+                        submitPlannerAfterPreview();
+                    });
+                }
+            }
+
+            /*
+             * 미리보기 모달 HTML은 현재 script 뒤쪽에 있으므로
+             * DOM 생성 후 이벤트를 연결한다.
+             */
+            if(document.readyState==='loading'){
+                document.addEventListener(
+                    'DOMContentLoaded',
+                    setupPublishPreviewModal
+                );
+            }else{
+                setupPublishPreviewModal();
+            }
+
+            document.addEventListener('keydown',function(e){
+                var backdrop=$('#plannerPublishBackdrop');
+                if(e.key==='Escape' && backdrop && backdrop.classList.contains('is-open')){
+                    closePublishPreviewModal();
+                }
+            });
+
+            var save=$('#plannerSaveBtn');
+            if(save) save.addEventListener('click',function(){
+                if(!validatePlannerRequiredFields()) return;
+
+                /*
+                 * DOMContentLoaded 시점 차이와 관계없이
+                 * 저장 버튼을 누르는 순간 한 번 더 이벤트 연결을 보장한다.
+                 */
+                setupPublishPreviewModal();
+                openPublishPreviewModal();
             });
             ['#tripTitle','#plannerCountry','#plannerRegion','#plannerTravelerCount'].forEach(function(sel){var el=$(sel);if(el)el.addEventListener('input',markDirty)});
             var travelerCountInput=$('#plannerTravelerCount');
@@ -2720,6 +3483,138 @@ request.setAttribute("activePage", "planner");
     </script>
     <script async
         onerror="showPlannerMapFallback()" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB7ioaQS08aAzCl7gZPk6SyE1w7EeIrYhI&language=ko&loading=async&callback=initPlannerMap"></script>
+
+
+    <div id="plannerPublishBackdrop" class="planner-publish-backdrop" aria-hidden="true">
+        <div class="planner-publish-modal" role="dialog" aria-modal="true" aria-labelledby="plannerPublishTitle">
+
+            <div class="planner-publish-head flex items-center justify-between px-6 py-5 border-b" style="border-color:#ECEEF5">
+                <div>
+                    <h3 id="plannerPublishTitle" class="text-lg font-black text-gray-900">여행 일정 미리보기</h3>
+                    <p class="mt-1 text-xs text-gray-500">여행일정 목록에 표시될 카드입니다. 대표 사진과 일정 소개를 입력해 주세요.</p>
+                </div>
+                <button type="button" id="plannerPublishClose"
+                    class="w-9 h-9 rounded-full hover:bg-gray-100 text-gray-500 text-xl">×</button>
+            </div>
+
+            <div class="planner-publish-body">
+                <div class="planner-publish-grid">
+
+                    <div class="planner-publish-column">
+                        <p class="mb-2 text-xs font-bold text-gray-700">게시물 카드 미리보기</p>
+
+                        <article class="planner-publish-card">
+                            <button type="button" id="plannerPublishCover"
+                                class="planner-publish-cover block w-full text-left">
+
+                                <img id="plannerPublishCoverImg" alt="대표 이미지 미리보기">
+
+                                <span class="planner-publish-cover-empty">
+                                    <span class="text-2xl">＋</span>
+                                    <span>배경 이미지 고르기</span>
+                                </span>
+
+                                <span class="planner-publish-cover-change">대표 이미지 변경하기</span>
+
+                                <span id="plannerPublishCountryBadge"
+                                    class="absolute top-2.5 left-2.5 text-[10px] font-bold px-2 py-0.5 rounded-full text-white"
+                                    style="background:#6369D1"></span>
+
+                                <span class="planner-publish-bookmark" aria-hidden="true">
+                                    <svg width="13" height="13" viewBox="0 0 24 24"
+                                        fill="none" stroke="#9CA3AF" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/>
+                                    </svg>
+                                </span>
+                            </button>
+
+                            <div class="planner-publish-card-body">
+                                <h4 id="plannerPublishCardTitle"
+                                    class="planner-publish-card-title"></h4>
+
+                                <p id="plannerPublishCardSummary"
+                                    class="planner-publish-card-summary">일정 소개를 입력해 주세요.</p>
+
+                                <p id="plannerPublishCardDates"
+                                    class="planner-publish-card-dates"></p>
+
+                                <div class="planner-publish-card-stats" aria-label="미리보기 통계">
+                                    <span>좋아요 0</span>
+                                    <span>댓글 0</span>
+                                    <span>조회 0</span>
+                                </div>
+
+                                <div class="planner-publish-card-footer">
+                                    <span id="plannerPublishCardAuthor"
+                                        class="planner-publish-card-author"><c:out value="${sessionScope.user.nickName}" default="작성자"/></span>
+
+                                    <span id="plannerPublishCardCreated"
+                                        class="planner-publish-card-created"></span>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+
+                    <div id="plannerPublishControls" class="planner-publish-column planner-publish-controls">
+
+                        <div class="mb-5">
+                            <div class="flex items-center justify-between mb-2 gap-3">
+                                <label class="text-xs font-bold text-gray-700">대표 이미지 선택</label>
+                                <span class="text-[10px] text-gray-400">일정에 등록한 사진 중 1장</span>
+                            </div>
+
+                            <div id="plannerPublishPhotoList"
+                                class="planner-publish-photo-list"></div>
+
+                            <p id="plannerPublishPhotoEmpty"
+                                class="hidden py-8 px-3 text-center text-xs text-gray-400 rounded-xl bg-gray-50">
+                                일정 블록에 사진을 먼저 등록해 주세요.
+                            </p>
+
+                            <p id="plannerPublishPhotoError"
+                                class="planner-publish-error">대표 이미지를 1장 선택해 주세요.</p>
+                        </div>
+
+                        <div id="plannerPublishSummarySection" style="display:block; visibility:visible;">
+                            <div class="flex items-center justify-between mb-2">
+                                <label for="plannerPublishSummary"
+                                    class="text-xs font-bold text-gray-700">일정 소개</label>
+
+                                <span id="plannerPublishSummaryCount"
+                                    class="text-[10px] text-gray-400">0자</span>
+                            </div>
+
+                            <textarea id="plannerPublishSummary"
+                                maxlength="500"
+                                class="planner-publish-summary"
+                                placeholder="이 여행 일정의 특징이나 추천 포인트를 작성해 주세요."></textarea>
+
+                            <p id="plannerPublishSummaryError"
+                                class="planner-publish-error">일정 소개를 작성해 주세요.</p>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="planner-publish-footer flex justify-end gap-2 px-6 py-4 border-t"
+                style="border-color:#ECEEF5">
+                <button type="button" id="plannerPublishCancel"
+                    class="h-10 px-5 rounded-xl text-sm font-bold text-gray-600 bg-gray-100 hover:bg-gray-200">
+                    취소
+                </button>
+
+                <button type="button" id="plannerPublishConfirm"
+                    class="h-10 px-6 rounded-xl text-sm font-bold text-white hover:opacity-90"
+                    style="background:#6369D1">
+                    최종 저장
+                </button>
+            </div>
+
+        </div>
+    </div>
 
     <div id="plannerRequiredBackdrop" class="planner-required-backdrop" aria-hidden="true">
         <div class="planner-required-modal" role="dialog" aria-modal="true" aria-labelledby="plannerRequiredTitle">
