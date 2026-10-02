@@ -297,4 +297,21 @@ public class ItineraryDto {
 	public void setBookmarked(boolean bookmarked) {
 	    this.bookmarked = bookmarked;
 	}
+	
+	public String getDurationText() {
+	    if (startDate == null || endDate == null) {
+	        return "기간 미정";
+	    }
+
+	    long nights = java.time.temporal.ChronoUnit.DAYS.between(
+	        startDate.toLocalDate(),
+	        endDate.toLocalDate()
+	    );
+
+	    if (nights < 0) {
+	        return "기간 확인 필요";
+	    }
+
+	    return nights + "박 " + (nights + 1) + "일";
+	}
 }

@@ -10,7 +10,7 @@ public class ItineraryBookmarkDaoImpl implements ItineraryBookmarkDao {
 	@Override
 	public int insertItineraryBookmark(SqlSession sqlSession, ItineraryBookmarkDto bookmark) throws Exception {
 		
-		return sqlSession.selectOne("mapper.itinerary.itineraryBookmark.insertItineraryBookmark",bookmark);
+		return sqlSession.insert("mapper.itinerary.itineraryBookmark.insertItineraryBookmark",bookmark);
 	}
 
 	@Override
@@ -20,7 +20,7 @@ public class ItineraryBookmarkDaoImpl implements ItineraryBookmarkDao {
 
 	@Override
 	public int deleteItineraryBookmark(SqlSession sqlSession, ItineraryBookmarkDto bookmark) throws Exception {
-		return sqlSession.selectOne("mapper.itinerary.itineraryBookmark.deleteItineraryBookmark", bookmark);
+		return sqlSession.delete("mapper.itinerary.itineraryBookmark.deleteItineraryBookmark", bookmark);
 	}
 
 	@Override
