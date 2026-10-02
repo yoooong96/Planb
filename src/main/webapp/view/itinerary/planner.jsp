@@ -754,6 +754,187 @@ request.setAttribute("activePage", "planner");
             margin: 0 auto;
         }
     }
+
+    .planner-place-field {
+        position: relative;
+        overflow: visible;
+    }
+
+    .planner-place-search {
+        width: 100%;
+    }
+
+    .planner-place-results {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: calc(100% + 6px);
+        z-index: 120;
+        display: none;
+        max-height: 240px;
+        overflow-y: auto;
+        border: 1px solid #D1D5DB;
+        border-radius: 12px;
+        background: #fff;
+        box-shadow: 0 12px 28px rgba(15, 23, 42, .14);
+    }
+
+    .planner-place-results.is-open {
+        display: block;
+    }
+
+    .planner-place-result {
+        width: 100%;
+        display: block;
+        padding: 10px 12px;
+        border: 0;
+        border-bottom: 1px solid #F1F5F9;
+        background: #fff;
+        text-align: left;
+        cursor: pointer;
+        color: #374151;
+        font-size: 12px;
+        line-height: 1.45;
+    }
+
+    .planner-place-result:last-child {
+        border-bottom: 0;
+    }
+
+    .planner-place-result:hover,
+    .planner-place-result:focus {
+        outline: none;
+        background: #F5F3FF;
+        color: #4F46E5;
+    }
+
+    .planner-place-loading,
+    .planner-place-empty,
+    .planner-place-error {
+        padding: 11px 12px;
+        color: #9CA3AF;
+        font-size: 11px;
+    }
+
+    .planner-place-error {
+        color: #DC2626;
+    }
+
+
+    .planner-place-loading-text {
+        color: #9CA3AF;
+        font-size: 12px;
+        white-space: nowrap;
+    }
+
+
+    .planner-place-pin-icon,
+    .planner-place-pin-body,
+    .planner-place-pin-dot {
+        transition: fill .15s ease, stroke .15s ease;
+    }
+
+
+    .planner-place-search-wrap {
+        position: relative;
+        flex: 1 1 auto;
+        min-width: 0;
+    }
+
+    .planner-place-search {
+        width: 100%;
+        min-width: 0;
+        border: 0;
+        outline: 0;
+        background: transparent;
+        color: #1F2937;
+        font-size: 14px;
+    }
+
+    .planner-place-results {
+        position: fixed;
+        z-index: 20000;
+        display: none;
+        max-height: 300px;
+        overflow-y: auto;
+        border: 1px solid #D1D5DB;
+        border-radius: 12px;
+        background: #fff;
+        box-shadow: 0 14px 32px rgba(15,23,42,.18);
+    }
+
+    .planner-place-results.is-open {
+        display: block;
+    }
+
+    .planner-place-result {
+        width: 100%;
+        padding: 10px 12px;
+        border: 0;
+        border-bottom: 1px solid #F1F5F9;
+        background: #fff;
+        text-align: left;
+        cursor: pointer;
+    }
+
+    .planner-place-result:last-child {
+        border-bottom: 0;
+    }
+
+    .planner-place-result:hover,
+    .planner-place-result:focus {
+        outline: none;
+        background: #F5F3FF;
+    }
+
+    .planner-place-result-name {
+        display: block;
+        color: #111827;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .planner-place-result-address {
+        display: block;
+        margin-top: 3px;
+        color: #9CA3AF;
+        font-size: 10px;
+        line-height: 1.35;
+    }
+
+    .planner-place-result-message {
+        padding: 11px 12px;
+        color: #9CA3AF;
+        font-size: 11px;
+    }
+
+
+    .planner-place-result-row {
+        display: flex;
+        align-items: flex-start;
+        gap: 9px;
+    }
+
+    .planner-place-result-badge {
+        flex: 0 0 auto;
+        width: 22px;
+        height: 22px;
+        margin-top: 1px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 999px;
+        background: #F59E0B;
+        color: #fff;
+        font-size: 10px;
+        font-weight: 800;
+    }
+
+    .planner-place-result-copy {
+        min-width: 0;
+        flex: 1 1 auto;
+    }
+
 </style>
 </head>
 <body class="site-shell">
@@ -1082,12 +1263,30 @@ request.setAttribute("activePage", "planner");
                                                 <span class="planner-foreign-cost ml-auto text-xs text-indigo-400 font-semibold">1,284 엔</span>
                                             </div>
 
-                                            <div class="planner-field rounded-lg border border-gray-200 flex items-center gap-2 px-3 bg-white">
-                                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                    <path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z" />
-                                                    <circle cx="12" cy="10" r="2.5" />
+                                            <div class="planner-field planner-place-field rounded-lg border border-gray-200 flex items-center gap-2 px-3 bg-white">
+                                                <svg class="planner-place-pin-icon"
+                                                    width="14" height="14" viewBox="0 0 24 24"
+                                                    fill="none" stroke="#9CA3AF" stroke-width="2"
+                                                    stroke-linecap="round" stroke-linejoin="round">
+                                                    <path class="planner-place-pin-body"
+                                                        d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z" />
+                                                    <circle class="planner-place-pin-dot"
+                                                        cx="12" cy="10" r="2.5" />
                                                 </svg>
-                                                <input class="flex-1 min-w-0 outline-none bg-transparent text-sm text-gray-800" value="츠키지" placeholder="구글 지도에서 장소 검색">
+
+                                                <div class="planner-place-search-wrap">
+                                                    <input type="text"
+                                                        class="planner-place-search"
+                                                        value=""
+                                                        placeholder="구글 지도에서 장소 검색"
+                                                        autocomplete="off"
+                                                        data-google-place-id=""
+                                                        data-place-name=""
+                                                        data-place-address=""
+                                                        data-lat=""
+                                                        data-lng="">
+                                                    <div class="planner-place-results" role="listbox"></div>
+                                                </div>
                                             </div>
 
                                             <div class="planner-memo-field rounded-lg border border-gray-200 bg-white">
@@ -1260,7 +1459,8 @@ request.setAttribute("activePage", "planner");
                 transport:{label:'교통',color:'#3B82F6',bg:'#EFF6FF'},
                 activity:{label:'활동',color:'#EC4899',bg:'#FDF2F8'}
             };
-            var map, mapMarkers=[];
+            var map, mapMarkers=[], mapPolylines=[], mapSearchMarkers=[];
+            var plannerPlacesLibraryPromise=null;
             var dirty=false;
 
             function $(sel, root){ return (root||document).querySelector(sel); }
@@ -1361,7 +1561,12 @@ request.setAttribute("activePage", "planner");
                                     name:block.title||'새 일정',
                                     time:shortTime(block.startTime),
                                     endTime:shortTime(block.endTime),
-                                    location:'',
+                                    location:block.placeName||block.placeAddress||'',
+                                    googlePlaceId:block.googlePlaceId||'',
+                                    placeName:block.placeName||'',
+                                    placeAddress:block.placeAddress||'',
+                                    placeLat:block.placeLat,
+                                    placeLng:block.placeLng,
                                     cost:block.cost==null ? 0 : block.cost,
                                     note:block.memo||''
                                 };
@@ -1464,6 +1669,7 @@ request.setAttribute("activePage", "planner");
                     country.value=meta.country;
                     refreshCountryStatus();
                     refreshRegionOptions(true);
+                    centerMapOnPlannerCountry(meta.country);
                 }
 
                 if(region && meta.region){
@@ -2084,13 +2290,38 @@ request.setAttribute("activePage", "planner");
                 card.querySelectorAll('label[for]').forEach(function(el){ el.removeAttribute('for'); });
                 var title=$('.planner-item-title',card), label=$('.planner-block-title-label',card);
                 var start=$('.planner-start-time',card), end=$('.planner-end-time',card), cost=$('.planner-item-cost',card), note=$('.planner-item-note',card);
-                var place=$('input[placeholder="구글 지도에서 장소 검색"]',card);
+                var place=$('.planner-place-search',card);
                 if(title) title.value=prefill.title||'';
                 if(label) label.textContent=prefill.title||'새 일정';
                 if(start) start.value=prefill.startTime||'';
                 if(end) end.value=prefill.endTime||'';
                 if(cost) cost.value=prefill.cost||'';
-                if(place) place.value=prefill.place||'';
+                if(place){
+                    place.value=
+                        prefill.placeName
+                        || prefill.placeAddress
+                        || prefill.place
+                        || '';
+
+                    place.dataset.googlePlaceId=
+                        prefill.googlePlaceId || '';
+
+                    place.dataset.placeName=
+                        prefill.placeName || '';
+
+                    place.dataset.placeAddress=
+                        prefill.placeAddress || prefill.place || '';
+
+                    place.dataset.lat=
+                        prefill.placeLat!=null
+                            ? String(prefill.placeLat)
+                            : (prefill.lat!=null ? String(prefill.lat) : '');
+
+                    place.dataset.lng=
+                        prefill.placeLng!=null
+                            ? String(prefill.placeLng)
+                            : (prefill.lng!=null ? String(prefill.lng) : '');
+                }
                 if(note) note.value=prefill.note||'';
                 var foreign=$('.planner-foreign-cost',card); if(foreign) foreign.textContent='—';
                 var body=$('[data-block-body]',card); if(body) body.classList.remove('is-collapsed');
@@ -2147,17 +2378,17 @@ request.setAttribute("activePage", "planner");
 
                         var startIndex=$$('.planner-day').indexOf(day);
                         if(d.kind==='item'){
-                            addBlockToDay(day,{sourceBlockId:d.item.sourceBlockId||null,title:d.item.name,type:d.item.type,startTime:d.item.time||'',endTime:d.item.endTime||'',cost:d.item.cost||'',place:d.item.location||'',note:d.item.note||''});
+                            addBlockToDay(day,{sourceBlockId:d.item.sourceBlockId||null,title:d.item.name,type:d.item.type,startTime:d.item.time||'',endTime:d.item.endTime||'',cost:d.item.cost||'',place:d.item.location||'',googlePlaceId:d.item.googlePlaceId||'',placeName:d.item.placeName||'',placeAddress:d.item.placeAddress||'',placeLat:d.item.placeLat,placeLng:d.item.placeLng,note:d.item.note||''});
                             toast('일정 블록 1개를 가져왔습니다.');
                         } else if(d.kind==='day'){
-                            (d.day.items||[]).forEach(function(item){addBlockToDay(day,{sourceBlockId:item.sourceBlockId||null,title:item.name,type:item.type,startTime:item.time||'',endTime:item.endTime||'',cost:item.cost||'',place:item.location||'',note:item.note||''});});
+                            (d.day.items||[]).forEach(function(item){addBlockToDay(day,{sourceBlockId:item.sourceBlockId||null,title:item.name,type:item.type,startTime:item.time||'',endTime:item.endTime||'',cost:item.cost||'',place:item.location||'',googlePlaceId:item.googlePlaceId||'',placeName:item.placeName||'',placeAddress:item.placeAddress||'',placeLat:item.placeLat,placeLng:item.placeLng,note:item.note||''});});
                             toast('D'+d.day.dayNum+' 일정을 가져왔습니다.');
                         } else if(d.kind==='plan'){
                             var schedules=d.plan.daySchedules||[];
                             var needed=Math.max(1,schedules.length);
                             while($$('.planner-day').length < startIndex + needed){ $('#plannerAddDay').click(); }
                             var targets=$$('.planner-day');
-                            schedules.forEach(function(ds,di){(ds.items||[]).forEach(function(item){addBlockToDay(targets[startIndex+di],{sourceBlockId:item.sourceBlockId||null,title:item.name,type:item.type,startTime:item.time||'',endTime:item.endTime||'',cost:item.cost||'',place:item.location||'',note:item.note||''});});});
+                            schedules.forEach(function(ds,di){(ds.items||[]).forEach(function(item){addBlockToDay(targets[startIndex+di],{sourceBlockId:item.sourceBlockId||null,title:item.name,type:item.type,startTime:item.time||'',endTime:item.endTime||'',cost:item.cost||'',place:item.location||'',googlePlaceId:item.googlePlaceId||'',placeName:item.placeName||'',placeAddress:item.placeAddress||'',placeLat:item.placeLat,placeLng:item.placeLng,note:item.note||''});});});
                             toast('Day '+(startIndex+1)+'부터 '+needed+'개 Day를 가져왔습니다.');
                         }
                     }catch(err){
@@ -2259,6 +2490,835 @@ request.setAttribute("activePage", "planner");
             if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',setupDeleteModal);
             else setupDeleteModal();
 
+
+            function escapeHtml(value){
+                return String(value == null ? '' : value)
+                    .replace(/&/g,'&amp;')
+                    .replace(/</g,'&lt;')
+                    .replace(/>/g,'&gt;')
+                    .replace(/"/g,'&quot;')
+                    .replace(/'/g,'&#39;');
+            }
+
+            function getPlannerPlacesLibrary(){
+                if(plannerPlacesLibraryPromise){
+                    return plannerPlacesLibraryPromise;
+                }
+
+                if(!window.google
+                        || !google.maps
+                        || typeof google.maps.importLibrary!=='function'){
+
+                    return Promise.reject(
+                        new Error(
+                            'Google Maps JavaScript API를 불러오지 못했습니다.'
+                        )
+                    );
+                }
+
+                plannerPlacesLibraryPromise=
+                    google.maps.importLibrary('places');
+
+                return plannerPlacesLibraryPromise;
+            }
+
+            function plannerSelectedPlacePoint(input){
+                if(!input) return null;
+
+                var latValue=input.dataset.lat;
+                var lngValue=input.dataset.lng;
+
+                /*
+                 * Number('')는 0이 되므로,
+                 * 빈 장소가 (0, 0)의 가짜 핀으로 생성되지 않게
+                 * 숫자 변환 전에 빈 값부터 검사한다.
+                 */
+                if(latValue==null || lngValue==null
+                        || String(latValue).trim()===''
+                        || String(lngValue).trim()===''){
+                    return null;
+                }
+
+                var lat=Number(latValue);
+                var lng=Number(lngValue);
+
+                if(!isFinite(lat) || !isFinite(lng)){
+                    return null;
+                }
+
+                return {
+                    googlePlaceId:
+                        input.dataset.googlePlaceId || '',
+                    name:
+                        input.dataset.placeName
+                        || input.value
+                        || '장소',
+                    address:
+                        input.dataset.placeAddress || '',
+                    lat:lat,
+                    lng:lng
+                };
+            }
+
+            function updatePlannerPlacePinState(card){
+                if(!card) return;
+
+                var hiddenInput=
+                    $('.planner-place-search',card);
+
+                var icon=
+                    $('.planner-place-pin-icon',card);
+
+                if(!hiddenInput || !icon){
+                    return;
+                }
+
+                var selected=
+                    !!plannerSelectedPlacePoint(hiddenInput);
+
+                var body=
+                    $('.planner-place-pin-body',icon);
+
+                var dot=
+                    $('.planner-place-pin-dot',icon);
+
+                icon.setAttribute(
+                    'stroke',
+                    selected ? '#6369D1' : '#9CA3AF'
+                );
+
+                if(body){
+                    body.setAttribute(
+                        'fill',
+                        selected ? '#6369D1' : 'none'
+                    );
+                }
+
+                if(dot){
+                    dot.setAttribute(
+                        'fill',
+                        selected ? '#FFFFFF' : 'none'
+                    );
+
+                    dot.setAttribute(
+                        'stroke',
+                        selected ? '#FFFFFF' : '#9CA3AF'
+                    );
+                }
+            }
+
+            function clearPlannerSelectedPlace(
+                    input,
+                    preserveText){
+
+                if(!input) return;
+
+                var currentText=
+                    preserveText
+                        ? input.value
+                        : '';
+
+                input.dataset.googlePlaceId='';
+                input.dataset.placeName='';
+                input.dataset.placeAddress='';
+                input.dataset.lat='';
+                input.dataset.lng='';
+
+                input.value=currentText;
+
+                var card=
+                    input.closest('.planner-block-card');
+
+                updatePlannerPlacePinState(card);
+            }
+
+            function clearPlannerMapSearchMarkers(){
+                mapSearchMarkers.forEach(function(marker){
+                    marker.setMap(null);
+                });
+
+                mapSearchMarkers=[];
+            }
+
+            function plannerPreviousPlacePoint(card){
+                if(!card) return null;
+
+                var day=
+                    card.closest('.planner-day');
+
+                if(!day) return null;
+
+                var cards=
+                    $$('.planner-block-card',day);
+
+                var index=
+                    cards.indexOf(card);
+
+                for(var i=index-1;i>=0;i--){
+                    var input=
+                        $('.planner-place-search',cards[i]);
+
+                    var point=
+                        plannerSelectedPlacePoint(input);
+
+                    if(point){
+                        return point;
+                    }
+                }
+
+                return null;
+            }
+
+            function plannerSearchBiasPoint(card){
+                var previous=
+                    plannerPreviousPlacePoint(card);
+
+                if(previous){
+                    return {
+                        lat:previous.lat,
+                        lng:previous.lng
+                    };
+                }
+
+                if(map && map.getCenter()){
+                    var center=map.getCenter();
+
+                    return {
+                        lat:typeof center.lat==='function'
+                            ? center.lat()
+                            : center.lat,
+                        lng:typeof center.lng==='function'
+                            ? center.lng()
+                            : center.lng
+                    };
+                }
+
+                return null;
+            }
+
+            function showPlannerPlaceSearchResultsOnMap(
+                    card,
+                    places){
+
+                clearPlannerMapSearchMarkers();
+
+                if(!map || !Array.isArray(places)){
+                    return;
+                }
+
+                var bounds=
+                    new google.maps.LatLngBounds();
+
+                var has=false;
+
+                places.forEach(function(place,index){
+                    if(!place || !place.location){
+                        return;
+                    }
+
+                    var lat=
+                        typeof place.location.lat==='function'
+                            ? place.location.lat()
+                            : place.location.lat;
+
+                    var lng=
+                        typeof place.location.lng==='function'
+                            ? place.location.lng()
+                            : place.location.lng;
+
+                    if(!isFinite(Number(lat))
+                            || !isFinite(Number(lng))){
+                        return;
+                    }
+
+                    var marker=
+                        new google.maps.Marker({
+                            position:{
+                                lat:Number(lat),
+                                lng:Number(lng)
+                            },
+                            map:map,
+                            title:
+                                place.displayName
+                                || place.formattedAddress
+                                || '검색 결과',
+                            label:{
+                                text:String.fromCharCode(65+index),
+                                color:'#FFFFFF',
+                                fontWeight:'bold'
+                            },
+                            icon:{
+                                path:
+                                    google.maps.SymbolPath.CIRCLE,
+                                scale:13,
+                                fillColor:'#F59E0B',
+                                fillOpacity:.95,
+                                strokeColor:'#FFFFFF',
+                                strokeWeight:2
+                            },
+                            zIndex:200+index
+                        });
+
+                    marker.addListener(
+                        'click',
+                        function(){
+
+                            var hiddenInput=
+                                $('.planner-place-search',card);
+
+                            applySelectedGooglePlace(
+                                hiddenInput,
+                                place
+                            );
+                        }
+                    );
+
+                    mapSearchMarkers.push(marker);
+
+                    bounds.extend(
+                        marker.getPosition()
+                    );
+
+                    has=true;
+                });
+
+                /*
+                 * 검색 후보가 여러 개면 후보 전체가 보이도록,
+                 * 하나면 해당 장소 근처로 확대한다.
+                 */
+                if(has){
+                    if(mapSearchMarkers.length===1){
+                        map.setCenter(
+                            mapSearchMarkers[0].getPosition()
+                        );
+                        map.setZoom(15);
+                    }else{
+                        map.fitBounds(bounds);
+                    }
+                }
+            }
+
+            function searchPlannerPlaces(
+                    card,
+                    query,
+                    requestState,
+                    onResults){
+
+                query=String(query || '').trim();
+
+                if(query.length<2){
+                    clearPlannerMapSearchMarkers();
+                    return;
+                }
+
+                var requestId=
+                    ++requestState.id;
+
+                getPlannerPlacesLibrary()
+                .then(function(placesLib){
+                    if(!placesLib
+                            || !placesLib.Place
+                            || typeof placesLib.Place.searchByText!=='function'){
+
+                        return null;
+                    }
+
+                    var biasPoint=
+                        plannerSearchBiasPoint(card);
+
+                    var request={
+                        textQuery:query,
+                        fields:[
+                            'id',
+                            'displayName',
+                            'formattedAddress',
+                            'location'
+                        ],
+                        language:'ko',
+                        maxResultCount:6
+                    };
+
+                    if(biasPoint){
+                        request.locationBias={
+                            center:biasPoint,
+                            radius:5000
+                        };
+                    }
+
+                    return placesLib.Place
+                        .searchByText(request);
+                })
+                .then(function(result){
+                    if(!result
+                            || requestId!==requestState.id){
+                        return;
+                    }
+
+                    var places=result.places || [];
+
+                    showPlannerPlaceSearchResultsOnMap(
+                        card,
+                        places
+                    );
+
+                    if(typeof onResults==='function'){
+                        onResults(places);
+                    }
+                })
+                .catch(function(error){
+                    if(requestId!==requestState.id){
+                        return;
+                    }
+
+                    console.error(
+                        '지도 장소검색 결과 표시 실패:',
+                        error
+                    );
+
+                    clearPlannerMapSearchMarkers();
+                });
+            }
+
+            function applySelectedGooglePlace(
+                    hiddenInput,
+                    place){
+
+                if(!hiddenInput || !place){
+                    return;
+                }
+
+                if(!place.location){
+                    if(typeof toast==='function'){
+                        toast(
+                            '선택한 장소의 위치 정보를 가져오지 못했습니다.'
+                        );
+                    }
+                    return;
+                }
+
+                var lat=
+                    typeof place.location.lat==='function'
+                        ? place.location.lat()
+                        : place.location.lat;
+
+                var lng=
+                    typeof place.location.lng==='function'
+                        ? place.location.lng()
+                        : place.location.lng;
+
+                var placeName=
+                    place.displayName
+                    || place.formattedAddress
+                    || '';
+
+                hiddenInput.value=placeName;
+
+                hiddenInput.dataset.googlePlaceId=
+                    place.id || '';
+
+                hiddenInput.dataset.placeName=
+                    placeName;
+
+                hiddenInput.dataset.placeAddress=
+                    place.formattedAddress || '';
+
+                hiddenInput.dataset.lat=
+                    String(lat);
+
+                hiddenInput.dataset.lng=
+                    String(lng);
+
+                var card=
+                    hiddenInput.closest(
+                        '.planner-block-card'
+                    );
+
+                if(card){
+                    var title=
+                        $('.planner-item-title',card);
+
+                    var label=
+                        $('.planner-block-title-label',card);
+
+                    if(title && !title.value.trim()){
+                        title.value=placeName;
+
+                        if(label){
+                            label.textContent=placeName;
+                        }
+                    }
+                }
+
+                clearPlannerMapSearchMarkers();
+                updatePlannerPlacePinState(card);
+
+                markDirty();
+
+                if(typeof refreshMap==='function'){
+                    refreshMap('all');
+                }
+            }
+
+            function setupPlannerPlaceSearch(card){
+                if(!card) return;
+
+                var input=
+                    $('.planner-place-search',card);
+
+                var results=
+                    $('.planner-place-results',card);
+
+                if(!input
+                        || !results
+                        || input.dataset.placeBound==='1'){
+                    return;
+                }
+
+                input.dataset.placeBound='1';
+
+                /*
+                 * 블록/Day의 overflow에 잘리지 않도록
+                 * 검색결과 패널을 body 직속으로 이동한다.
+                 */
+                document.body.appendChild(results);
+
+                results.dataset.ownerInputId=
+                    input.dataset.placeSearchId
+                    || ('placeSearch_'+Math.random().toString(36).slice(2));
+
+                input.dataset.placeSearchId=
+                    results.dataset.ownerInputId;
+
+                var searchTimer=null;
+                var requestState={
+                    id:0
+                };
+
+                function positionResults(){
+                    if(!input || !results) return;
+
+                    var rect=input.getBoundingClientRect();
+
+                    var viewportHeight=
+                        window.innerHeight
+                        || document.documentElement.clientHeight;
+
+                    var viewportWidth=
+                        window.innerWidth
+                        || document.documentElement.clientWidth;
+
+                    var gap=8;
+                    var margin=12;
+
+                    var desiredWidth=
+                        Math.max(
+                            280,
+                            rect.width+42
+                        );
+
+                    /*
+                     * 화면 오른쪽으로 넘어가지 않게 폭도 제한한다.
+                     */
+                    var left=
+                        Math.max(
+                            margin,
+                            rect.left-34
+                        );
+
+                    if(left+desiredWidth>viewportWidth-margin){
+                        desiredWidth=
+                            Math.max(
+                                240,
+                                viewportWidth-left-margin
+                            );
+                    }
+
+                    var spaceBelow=
+                        viewportHeight
+                        - rect.bottom
+                        - margin;
+
+                    var spaceAbove=
+                        rect.top
+                        - margin;
+
+                    /*
+                     * 최소 180px 정도의 공간이 아래에 없고
+                     * 위쪽 공간이 더 넓다면 위로 펼친다.
+                     */
+                    var openUp=
+                        spaceBelow<180
+                        && spaceAbove>spaceBelow;
+
+                    var availableHeight=
+                        openUp
+                            ? Math.max(
+                                120,
+                                spaceAbove-gap
+                            )
+                            : Math.max(
+                                120,
+                                spaceBelow-gap
+                            );
+
+                    var maxHeight=
+                        Math.min(
+                            300,
+                            availableHeight
+                        );
+
+                    results.style.left=
+                        left+'px';
+
+                    results.style.width=
+                        desiredWidth+'px';
+
+                    results.style.maxHeight=
+                        maxHeight+'px';
+
+                    if(openUp){
+                        /*
+                         * 높이가 실제로 계산된 뒤 입력창 위에 붙인다.
+                         */
+                        results.style.top='auto';
+                        results.style.bottom=
+                            (viewportHeight-rect.top+gap)+'px';
+                    }else{
+                        results.style.bottom='auto';
+                        results.style.top=
+                            (rect.bottom+gap)+'px';
+                    }
+                }
+
+                function closeResults(){
+                    results.classList.remove('is-open');
+                    results.innerHTML='';
+                }
+
+                function renderResults(places){
+                    results.innerHTML='';
+
+                    if(!Array.isArray(places)
+                            || places.length===0){
+
+                        results.innerHTML=
+                            '<div class="planner-place-result-message">'
+                            +'검색 결과가 없습니다.'
+                            +'</div>';
+
+                        positionResults();
+                        results.classList.add('is-open');
+                        return;
+                    }
+
+                    places.forEach(function(place,index){
+                        var button=
+                            document.createElement('button');
+
+                        button.type='button';
+                        button.className='planner-place-result';
+
+                        var name=
+                            place.displayName
+                            || place.formattedAddress
+                            || '장소';
+
+                        var address=
+                            place.formattedAddress || '';
+
+                        var label=
+                            String.fromCharCode(65+index);
+
+                        button.innerHTML=
+                            '<span class="planner-place-result-row">'
+                            +'<span class="planner-place-result-badge">'
+                            +label
+                            +'</span>'
+                            +'<span class="planner-place-result-copy">'
+                            +'<span class="planner-place-result-name">'
+                            +escapeHtml(name)
+                            +'</span>'
+                            +(address
+                                ? '<span class="planner-place-result-address">'
+                                    +escapeHtml(address)
+                                    +'</span>'
+                                : '')
+                            +'</span>'
+                            +'</span>';
+
+                        button.addEventListener(
+                            'mousedown',
+                            function(event){
+                                /*
+                                 * input blur 전에 click이 처리되게 한다.
+                                 */
+                                event.preventDefault();
+                            }
+                        );
+
+                        button.addEventListener(
+                            'click',
+                            function(){
+                                applySelectedGooglePlace(
+                                    input,
+                                    place
+                                );
+
+                                closeResults();
+                            }
+                        );
+
+                        results.appendChild(button);
+                    });
+
+                    positionResults();
+                    results.classList.add('is-open');
+                }
+
+                function runSearch(){
+                    var query=
+                        input.value.trim();
+
+                    if(query.length<2){
+                        closeResults();
+                        clearPlannerMapSearchMarkers();
+                        return;
+                    }
+
+                    results.innerHTML=
+                        '<div class="planner-place-result-message">'
+                        +'장소 검색 중...'
+                        +'</div>';
+
+                    positionResults();
+                    results.classList.add('is-open');
+
+                    searchPlannerPlaces(
+                        card,
+                        query,
+                        requestState,
+                        renderResults
+                    );
+                }
+
+                input.addEventListener(
+                    'input',
+                    function(){
+
+                        var value=
+                            input.value.trim();
+
+                        var selectedName=
+                            String(
+                                input.dataset.placeName || ''
+                            ).trim();
+
+                        /*
+                         * 확정 장소의 이름을 사용자가 수정하는 순간
+                         * 장소 선택 상태만 해제한다.
+                         * 검색어 자체는 그대로 유지한다.
+                         */
+                        if(selectedName
+                                && value!==selectedName){
+
+                            clearPlannerSelectedPlace(
+                                input,
+                                true
+                            );
+
+                            updatePlannerPlacePinState(
+                                card
+                            );
+
+                            /*
+                             * 확정 핀만 다시 그림.
+                             * 이전 블록의 확정 핀은 그대로 유지된다.
+                             */
+                            refreshMap('all');
+                        }
+
+                        if(!value){
+                            clearPlannerSelectedPlace(
+                                input,
+                                false
+                            );
+
+                            closeResults();
+                            clearPlannerMapSearchMarkers();
+
+                            refreshMap('all');
+                            markDirty();
+                            return;
+                        }
+
+                        if(!plannerSelectedPlacePoint(input)){
+                            updatePlannerPlacePinState(
+                                card
+                            );
+                        }
+
+                        if(searchTimer){
+                            window.clearTimeout(
+                                searchTimer
+                            );
+                        }
+
+                        searchTimer=
+                            window.setTimeout(
+                                runSearch,
+                                320
+                            );
+
+                        markDirty();
+                    }
+                );
+
+                input.addEventListener(
+                    'focus',
+                    function(){
+                        if(input.value.trim().length>=2
+                                && !plannerSelectedPlacePoint(input)){
+                            runSearch();
+                        }
+                    }
+                );
+
+                input.addEventListener(
+                    'keydown',
+                    function(event){
+                        if(event.key==='Escape'){
+                            closeResults();
+                            clearPlannerMapSearchMarkers();
+                        }
+                    }
+                );
+
+                /*
+                 * 수정/가져오기 데이터로 이미 장소가 있으면
+                 * 핀 아이콘을 바로 채운 상태로 표시한다.
+                 */
+                updatePlannerPlacePinState(card);
+
+                window.addEventListener(
+                    'resize',
+                    function(){
+                        if(results.classList.contains('is-open')){
+                            positionResults();
+                        }
+                    }
+                );
+
+                window.addEventListener(
+                    'scroll',
+                    function(){
+                        if(results.classList.contains('is-open')){
+                            positionResults();
+                        }
+                    },
+                    true
+                );
+            }
+
             function setupBlock(card){
                 var body=$('[data-block-body]',card), toggle=$('[data-block-toggle]',card), del=$('.planner-block-delete',card), header=$('.planner-block-header',card), title=$('.planner-item-title',card), label=$('.planner-block-title-label',card), badge=$('.planner-block-type-badge',card);
                 if(toggle&&body) toggle.addEventListener('click',function(){var c=body.classList.toggle('is-collapsed');toggle.textContent=c?'⌄':'˄';toggle.title=c?'블록 펼치기':'블록 접기';toggle.setAttribute('aria-expanded',c?'false':'true')});
@@ -2283,6 +3343,8 @@ request.setAttribute("activePage", "planner");
                 });
                 var cost=$('.planner-item-cost',card); if(cost) cost.addEventListener('input',function(){cost.value=cost.value.replace(/[^0-9]/g,'');syncBudget();markDirty();});
                 $$('input,textarea',card).forEach(function(el){ if(el!==cost) el.addEventListener('input',markDirty); });
+
+                setupPlannerPlaceSearch(card);
             }
             $$('.planner-block-card').forEach(setupBlock);
 
@@ -2487,6 +3549,48 @@ request.setAttribute("activePage", "planner");
             function bindMapOptions(){ $$('#plannerMapFilterMenu [data-map-day]').forEach(function(b){ b.onclick=function(){ $('#plannerMapFilterLabel').textContent=b.dataset.mapDay==='all'?'전체':b.dataset.mapDay+'일차'; $('#plannerMapFilterMenu').classList.add('hidden'); refreshMap(b.dataset.mapDay); }; }); }
             var mf=$('#plannerMapFilterBtn'); if(mf) mf.addEventListener('click',function(e){e.stopPropagation();$('#plannerMapFilterMenu').classList.toggle('hidden')}); document.addEventListener('click',function(e){var m=$('#plannerMapFilterMenu');if(m&&!e.target.closest('#plannerMapFilterBtn')&&!e.target.closest('#plannerMapFilterMenu'))m.classList.add('hidden')}); bindMapOptions();
 
+            /*
+             * 국가 선택 시 지도 중심 이동용 좌표.
+             * 별도 Geocoding/Routes API를 호출하지 않는다.
+             */
+            var PLANNER_COUNTRY_CENTERS={"AD":{"lat":42.5063,"lng":1.5218},"AE":{"lat":24.0,"lng":54.0},"AF":{"lat":33.0,"lng":65.0},"AG":{"lat":17.05,"lng":-61.8},"AI":{"lat":18.25,"lng":-63.16666666},"AL":{"lat":41.0,"lng":20.0},"AM":{"lat":40.0,"lng":45.0},"AO":{"lat":-12.5,"lng":18.5},"AQ":{"lat":-82.8628,"lng":135.0},"AR":{"lat":-34.0,"lng":-64.0},"AS":{"lat":-14.33333333,"lng":-170.0},"AT":{"lat":47.33333333,"lng":13.33333333},"AU":{"lat":-27.0,"lng":133.0},"AW":{"lat":12.5,"lng":-69.96666666},"AX":{"lat":60.1785,"lng":19.9156},"AZ":{"lat":40.5,"lng":47.5},"BA":{"lat":44.0,"lng":18.0},"BB":{"lat":13.16666666,"lng":-59.53333333},"BD":{"lat":24.0,"lng":90.0},"BE":{"lat":50.83333333,"lng":4.0},"BF":{"lat":13.0,"lng":-2.0},"BG":{"lat":43.0,"lng":25.0},"BH":{"lat":26.0,"lng":50.55},"BI":{"lat":-3.5,"lng":30.0},"BJ":{"lat":9.5,"lng":2.25},"BL":{"lat":17.9,"lng":-62.8333},"BM":{"lat":32.33333333,"lng":-64.75},"BN":{"lat":4.5353,"lng":114.7277},"BO":{"lat":-17.0,"lng":-65.0},"BQ":{"lat":12.1784,"lng":-68.2385},"BR":{"lat":-10.0,"lng":-55.0},"BS":{"lat":24.25,"lng":-76.0},"BT":{"lat":27.5,"lng":90.5},"BV":{"lat":-54.4232,"lng":3.4132},"BW":{"lat":-22.0,"lng":24.0},"BY":{"lat":53.0,"lng":28.0},"BZ":{"lat":17.25,"lng":-88.75},"CA":{"lat":60.0,"lng":-95.0},"CC":{"lat":-12.5,"lng":96.83333333},"CD":{"lat":-4.0383,"lng":21.7587},"CF":{"lat":7.0,"lng":21.0},"CG":{"lat":-1.0,"lng":15.0},"CH":{"lat":47.0,"lng":8.0},"CI":{"lat":8.0,"lng":-5.0},"CK":{"lat":-21.23333333,"lng":-159.76666666},"CL":{"lat":-30.0,"lng":-71.0},"CM":{"lat":6.0,"lng":12.0},"CN":{"lat":35.0,"lng":105.0},"CO":{"lat":4.0,"lng":-72.0},"CR":{"lat":10.0,"lng":-84.0},"CU":{"lat":21.5,"lng":-80.0},"CV":{"lat":16.0,"lng":-24.0},"CW":{"lat":12.1696,"lng":-68.99},"CX":{"lat":-10.5,"lng":105.66666666},"CY":{"lat":35.0,"lng":33.0},"CZ":{"lat":49.75,"lng":15.5},"DE":{"lat":51.0,"lng":9.0},"DJ":{"lat":11.5,"lng":43.0},"DK":{"lat":56.0,"lng":10.0},"DM":{"lat":15.41666666,"lng":-61.33333333},"DO":{"lat":19.0,"lng":-70.66666666},"DZ":{"lat":28.0,"lng":3.0},"EC":{"lat":-2.0,"lng":-77.5},"EE":{"lat":59.0,"lng":26.0},"EG":{"lat":27.0,"lng":30.0},"EH":{"lat":24.2155,"lng":-12.8858},"ER":{"lat":15.0,"lng":39.0},"ES":{"lat":40.0,"lng":-4.0},"ET":{"lat":8.0,"lng":38.0},"FI":{"lat":64.0,"lng":26.0},"FJ":{"lat":-18.0,"lng":175.0},"FK":{"lat":-51.7963,"lng":-59.5236},"FM":{"lat":6.91666666,"lng":158.25},"FO":{"lat":62.0,"lng":-7.0},"FR":{"lat":46.0,"lng":2.0},"GA":{"lat":-1.0,"lng":11.75},"GB":{"lat":54.0,"lng":-2.0},"GD":{"lat":12.11666666,"lng":-61.66666666},"GE":{"lat":42.0,"lng":43.5},"GF":{"lat":4.0,"lng":-53.0},"GG":{"lat":49.46666666,"lng":-2.58333333},"GH":{"lat":8.0,"lng":-2.0},"GI":{"lat":36.13333333,"lng":-5.35},"GL":{"lat":72.0,"lng":-40.0},"GM":{"lat":13.46666666,"lng":-16.56666666},"GN":{"lat":11.0,"lng":-10.0},"GP":{"lat":16.25,"lng":-61.583333},"GQ":{"lat":2.0,"lng":10.0},"GR":{"lat":39.0,"lng":22.0},"GS":{"lat":-54.5,"lng":-37.0},"GT":{"lat":15.5,"lng":-90.25},"GU":{"lat":13.46666666,"lng":144.78333333},"GW":{"lat":12.0,"lng":-15.0},"GY":{"lat":5.0,"lng":-59.0},"HK":{"lat":22.25,"lng":114.16666666},"HM":{"lat":-53.1,"lng":72.51666666},"HN":{"lat":15.0,"lng":-86.5},"HR":{"lat":45.16666666,"lng":15.5},"HT":{"lat":19.0,"lng":-72.41666666},"HU":{"lat":47.0,"lng":20.0},"ID":{"lat":-5.0,"lng":120.0},"IE":{"lat":53.0,"lng":-8.0},"IL":{"lat":31.5,"lng":34.75},"IM":{"lat":54.25,"lng":-4.5},"IN":{"lat":20.0,"lng":77.0},"IO":{"lat":-6.0,"lng":71.5},"IQ":{"lat":33.0,"lng":44.0},"IR":{"lat":32.0,"lng":53.0},"IS":{"lat":65.0,"lng":-18.0},"IT":{"lat":42.83333333,"lng":12.83333333},"JE":{"lat":49.25,"lng":-2.16666666},"JM":{"lat":18.25,"lng":-77.5},"JO":{"lat":31.0,"lng":36.0},"JP":{"lat":36.0,"lng":138.0},"KE":{"lat":1.0,"lng":38.0},"KG":{"lat":41.0,"lng":75.0},"KH":{"lat":13.0,"lng":105.0},"KI":{"lat":1.41666666,"lng":173.0},"KM":{"lat":-12.16666666,"lng":44.25},"KN":{"lat":17.33333333,"lng":-62.75},"KP":{"lat":40.0,"lng":127.0},"KR":{"lat":37.0,"lng":127.5},"KW":{"lat":29.5,"lng":45.75},"KY":{"lat":19.5,"lng":-80.5},"KZ":{"lat":48.0,"lng":68.0},"LA":{"lat":18.0,"lng":105.0},"LB":{"lat":33.83333333,"lng":35.83333333},"LC":{"lat":13.88333333,"lng":-60.96666666},"LI":{"lat":47.26666666,"lng":9.53333333},"LK":{"lat":7.0,"lng":81.0},"LR":{"lat":6.5,"lng":-9.5},"LS":{"lat":-29.5,"lng":28.5},"LT":{"lat":56.0,"lng":24.0},"LU":{"lat":49.75,"lng":6.16666666},"LV":{"lat":57.0,"lng":25.0},"LY":{"lat":25.0,"lng":17.0},"MA":{"lat":32.0,"lng":-5.0},"MC":{"lat":43.73333333,"lng":7.4},"MD":{"lat":47.0,"lng":29.0},"ME":{"lat":42.7087,"lng":19.3744},"MF":{"lat":18.0708,"lng":-63.0501},"MG":{"lat":-20.0,"lng":47.0},"MH":{"lat":9.0,"lng":168.0},"MK":{"lat":41.6086,"lng":21.7453},"ML":{"lat":17.0,"lng":-4.0},"MM":{"lat":21.9162,"lng":95.956},"MN":{"lat":46.0,"lng":105.0},"MO":{"lat":22.1987,"lng":113.5439},"MP":{"lat":15.2,"lng":145.75},"MQ":{"lat":14.666667,"lng":-61.0},"MR":{"lat":20.0,"lng":-12.0},"MS":{"lat":16.75,"lng":-62.2},"MT":{"lat":35.83333333,"lng":14.58333333},"MU":{"lat":-20.28333333,"lng":57.55},"MV":{"lat":3.25,"lng":73.0},"MW":{"lat":-13.5,"lng":34.0},"MX":{"lat":23.0,"lng":-102.0},"MY":{"lat":2.5,"lng":112.5},"MZ":{"lat":-18.25,"lng":35.0},"NA":{"lat":-22.0,"lng":17.0},"NC":{"lat":-21.5,"lng":165.5},"NE":{"lat":16.0,"lng":8.0},"NF":{"lat":-29.03333333,"lng":167.95},"NG":{"lat":10.0,"lng":8.0},"NI":{"lat":13.0,"lng":-85.0},"NL":{"lat":52.5,"lng":5.75},"NO":{"lat":62.0,"lng":10.0},"NP":{"lat":28.0,"lng":84.0},"NR":{"lat":-0.53333333,"lng":166.91666666},"NU":{"lat":-19.03333333,"lng":-169.86666666},"NZ":{"lat":-41.0,"lng":174.0},"OM":{"lat":21.0,"lng":57.0},"PA":{"lat":9.0,"lng":-80.0},"PE":{"lat":-10.0,"lng":-76.0},"PF":{"lat":-15.0,"lng":-140.0},"PG":{"lat":-6.0,"lng":147.0},"PH":{"lat":13.0,"lng":122.0},"PK":{"lat":30.0,"lng":70.0},"PL":{"lat":52.0,"lng":20.0},"PM":{"lat":46.83333333,"lng":-56.33333333},"PN":{"lat":-24.3768,"lng":-128.3242},"PR":{"lat":18.25,"lng":-66.5},"PS":{"lat":31.9522,"lng":35.2332},"PT":{"lat":39.5,"lng":-8.0},"PW":{"lat":7.5,"lng":134.5},"PY":{"lat":-23.0,"lng":-58.0},"QA":{"lat":25.5,"lng":51.25},"RE":{"lat":-21.15,"lng":55.5},"RO":{"lat":46.0,"lng":25.0},"RS":{"lat":44.1305021,"lng":16.4284181},"RU":{"lat":60.0,"lng":100.0},"RW":{"lat":-2.0,"lng":30.0},"SA":{"lat":25.0,"lng":45.0},"SB":{"lat":-8.0,"lng":159.0},"SC":{"lat":-4.58333333,"lng":55.66666666},"SD":{"lat":15.0,"lng":30.0},"SE":{"lat":62.0,"lng":15.0},"SG":{"lat":1.36666666,"lng":103.8},"SH":{"lat":-15.965,"lng":-5.7089},"SI":{"lat":46.11666666,"lng":14.81666666},"SJ":{"lat":78.0,"lng":20.0},"SK":{"lat":48.66666666,"lng":19.5},"SL":{"lat":8.5,"lng":-11.5},"SM":{"lat":43.76666666,"lng":12.41666666},"SN":{"lat":14.0,"lng":-14.0},"SO":{"lat":10.0,"lng":49.0},"SR":{"lat":4.0,"lng":-56.0},"SS":{"lat":7.0,"lng":30.0},"ST":{"lat":0.1864,"lng":6.6131},"SV":{"lat":13.83333333,"lng":-88.91666666},"SX":{"lat":18.0425,"lng":-63.0548},"SY":{"lat":35.0,"lng":38.0},"TD":{"lat":15.0,"lng":19.0},"TF":{"lat":-49.2804,"lng":69.3486},"TG":{"lat":8.0,"lng":1.16666666},"TH":{"lat":15.0,"lng":100.0},"TJ":{"lat":39.0,"lng":71.0},"TK":{"lat":-9.0,"lng":-172.0},"TL":{"lat":-8.8742,"lng":125.7275},"TM":{"lat":40.0,"lng":60.0},"TN":{"lat":34.0,"lng":9.0},"TO":{"lat":-20.0,"lng":-175.0},"TT":{"lat":11.0,"lng":-61.0},"TV":{"lat":-8.0,"lng":178.0},"TW":{"lat":23.5,"lng":121.0},"TZ":{"lat":-6.0,"lng":35.0},"UA":{"lat":49.0,"lng":32.0},"UG":{"lat":1.0,"lng":32.0},"UM":{"lat":19.2823,"lng":166.647},"US":{"lat":38.0,"lng":-97.0},"UY":{"lat":-33.0,"lng":-56.0},"UZ":{"lat":41.0,"lng":64.0},"VA":{"lat":41.9029,"lng":12.4534},"VC":{"lat":13.25,"lng":-61.2},"VE":{"lat":8.0,"lng":-66.0},"VG":{"lat":18.4207,"lng":-64.64},"VI":{"lat":18.3358,"lng":-64.8963},"VN":{"lat":16.16666666,"lng":107.83333333},"VU":{"lat":-16.0,"lng":167.0},"WF":{"lat":-13.3,"lng":-176.2},"WS":{"lat":-13.58333333,"lng":-172.33333333},"XK":{"lat":42.6026,"lng":20.903},"YE":{"lat":15.0,"lng":48.0},"YT":{"lat":-12.83333333,"lng":45.16666666},"ZA":{"lat":-29.0,"lng":24.0},"ZM":{"lat":-15.0,"lng":30.0},"ZW":{"lat":-20.0,"lng":30.0}};
+
+            function centerMapOnPlannerCountry(countryValue){
+                if(!map || !countryValue) return;
+
+                var matched=findPlannerCountry(countryValue);
+                if(!matched || !matched.code) return;
+
+                var center=PLANNER_COUNTRY_CENTERS[matched.code];
+                if(!center) return;
+
+                map.setCenter(center);
+
+                /*
+                 * 대륙 크기의 국가와 소국가에 대해 너무 과도하게
+                 * 확대/축소되지 않도록 간단히 줌만 구분한다.
+                 */
+                var wideCountries={
+                    US:true, CA:true, RU:true, CN:true,
+                    BR:true, AU:true, IN:true, AR:true,
+                    KZ:true, DZ:true
+                };
+
+                var smallCountries={
+                    SG:true, HK:true, MO:true, MC:true,
+                    VA:true, SM:true, LI:true, LU:true,
+                    MT:true, MV:true
+                };
+
+                if(wideCountries[matched.code]){
+                    map.setZoom(4);
+                }else if(smallCountries[matched.code]){
+                    map.setZoom(8);
+                }else{
+                    map.setZoom(5);
+                }
+            }
+
             var PLANNER_COUNTRIES=[{"code": "GH", "name": "가나"}, {"code": "GA", "name": "가봉"}, {"code": "GY", "name": "가이아나"}, {"code": "GM", "name": "감비아"}, {"code": "GG", "name": "건지"}, {"code": "GP", "name": "과들루프"}, {"code": "GT", "name": "과테말라"}, {"code": "GU", "name": "괌"}, {"code": "GD", "name": "그레나다"}, {"code": "GR", "name": "그리스"}, {"code": "GL", "name": "그린란드"}, {"code": "GN", "name": "기니"}, {"code": "GW", "name": "기니비사우"}, {"code": "NA", "name": "나미비아"}, {"code": "NR", "name": "나우루"}, {"code": "NG", "name": "나이지리아"}, {"code": "AQ", "name": "남극 대륙"}, {"code": "SS", "name": "남수단"}, {"code": "ZA", "name": "남아프리카"}, {"code": "NL", "name": "네덜란드"}, {"code": "BQ", "name": "네덜란드령 카리브"}, {"code": "NP", "name": "네팔"}, {"code": "NO", "name": "노르웨이"}, {"code": "NF", "name": "노퍽섬"}, {"code": "NZ", "name": "뉴질랜드"}, {"code": "NC", "name": "뉴칼레도니아"}, {"code": "NU", "name": "니우에"}, {"code": "NE", "name": "니제르"}, {"code": "NI", "name": "니카라과"}, {"code": "TW", "name": "대만"}, {"code": "KR", "name": "대한민국"}, {"code": "DK", "name": "덴마크"}, {"code": "DM", "name": "도미니카"}, {"code": "DO", "name": "도미니카 공화국"}, {"code": "DE", "name": "독일"}, {"code": "TL", "name": "동티모르"}, {"code": "LA", "name": "라오스"}, {"code": "LR", "name": "라이베리아"}, {"code": "LV", "name": "라트비아"}, {"code": "RU", "name": "러시아"}, {"code": "LB", "name": "레바논"}, {"code": "LS", "name": "레소토"}, {"code": "RE", "name": "레위니옹"}, {"code": "RO", "name": "루마니아"}, {"code": "LU", "name": "룩셈부르크"}, {"code": "RW", "name": "르완다"}, {"code": "LY", "name": "리비아"}, {"code": "LT", "name": "리투아니아"}, {"code": "LI", "name": "리히텐슈타인"}, {"code": "MG", "name": "마다가스카르"}, {"code": "MQ", "name": "마르티니크"}, {"code": "MH", "name": "마셜 제도"}, {"code": "YT", "name": "마요트"}, {"code": "MO", "name": "마카오(중국 특별행정구)"}, {"code": "MW", "name": "말라위"}, {"code": "MY", "name": "말레이시아"}, {"code": "ML", "name": "말리"}, {"code": "IM", "name": "맨섬"}, {"code": "MX", "name": "멕시코"}, {"code": "MC", "name": "모나코"}, {"code": "MA", "name": "모로코"}, {"code": "MU", "name": "모리셔스"}, {"code": "MR", "name": "모리타니"}, {"code": "MZ", "name": "모잠비크"}, {"code": "ME", "name": "몬테네그로"}, {"code": "MS", "name": "몬트세라트"}, {"code": "MD", "name": "몰도바"}, {"code": "MV", "name": "몰디브"}, {"code": "MT", "name": "몰타"}, {"code": "MN", "name": "몽골"}, {"code": "US", "name": "미국"}, {"code": "VI", "name": "미국령 버진아일랜드"}, {"code": "UM", "name": "미국령 해외 제도"}, {"code": "MM", "name": "미얀마"}, {"code": "FM", "name": "미크로네시아"}, {"code": "VU", "name": "바누아투"}, {"code": "BH", "name": "바레인"}, {"code": "BB", "name": "바베이도스"}, {"code": "VA", "name": "바티칸 시국"}, {"code": "BS", "name": "바하마"}, {"code": "BD", "name": "방글라데시"}, {"code": "BM", "name": "버뮤다"}, {"code": "BJ", "name": "베냉"}, {"code": "VE", "name": "베네수엘라"}, {"code": "VN", "name": "베트남"}, {"code": "BE", "name": "벨기에"}, {"code": "BY", "name": "벨라루스"}, {"code": "BZ", "name": "벨리즈"}, {"code": "BA", "name": "보스니아 헤르체고비나"}, {"code": "BW", "name": "보츠와나"}, {"code": "BO", "name": "볼리비아"}, {"code": "BI", "name": "부룬디"}, {"code": "BF", "name": "부르키나파소"}, {"code": "BV", "name": "부베섬"}, {"code": "BT", "name": "부탄"}, {"code": "MP", "name": "북마리아나제도"}, {"code": "MK", "name": "북마케도니아"}, {"code": "KP", "name": "북한"}, {"code": "BG", "name": "불가리아"}, {"code": "BR", "name": "브라질"}, {"code": "BN", "name": "브루나이"}, {"code": "WS", "name": "사모아"}, {"code": "SA", "name": "사우디아라비아"}, {"code": "GS", "name": "사우스조지아 사우스샌드위치 제도"}, {"code": "SM", "name": "산마리노"}, {"code": "ST", "name": "상투메 프린시페"}, {"code": "MF", "name": "생마르탱"}, {"code": "BL", "name": "생바르텔레미"}, {"code": "PM", "name": "생피에르 미클롱"}, {"code": "EH", "name": "서사하라"}, {"code": "SN", "name": "세네갈"}, {"code": "RS", "name": "세르비아"}, {"code": "SC", "name": "세이셸"}, {"code": "LC", "name": "세인트루시아"}, {"code": "VC", "name": "세인트빈센트그레나딘"}, {"code": "KN", "name": "세인트키츠 네비스"}, {"code": "SH", "name": "세인트헬레나"}, {"code": "SO", "name": "소말리아"}, {"code": "SB", "name": "솔로몬 제도"}, {"code": "SD", "name": "수단"}, {"code": "SR", "name": "수리남"}, {"code": "LK", "name": "스리랑카"}, {"code": "SJ", "name": "스발바르제도-얀마웬섬"}, {"code": "SE", "name": "스웨덴"}, {"code": "CH", "name": "스위스"}, {"code": "ES", "name": "스페인"}, {"code": "SK", "name": "슬로바키아"}, {"code": "SI", "name": "슬로베니아"}, {"code": "SY", "name": "시리아"}, {"code": "SL", "name": "시에라리온"}, {"code": "SX", "name": "신트마르턴"}, {"code": "SG", "name": "싱가포르"}, {"code": "AE", "name": "아랍에미리트"}, {"code": "AW", "name": "아루바"}, {"code": "AM", "name": "아르메니아"}, {"code": "AR", "name": "아르헨티나"}, {"code": "AS", "name": "아메리칸 사모아"}, {"code": "IS", "name": "아이슬란드"}, {"code": "HT", "name": "아이티"}, {"code": "IE", "name": "아일랜드"}, {"code": "AZ", "name": "아제르바이잔"}, {"code": "AF", "name": "아프가니스탄"}, {"code": "AD", "name": "안도라"}, {"code": "AL", "name": "알바니아"}, {"code": "DZ", "name": "알제리"}, {"code": "AO", "name": "앙골라"}, {"code": "AG", "name": "앤티가 바부다"}, {"code": "AI", "name": "앵귈라"}, {"code": "ER", "name": "에리트리아"}, {"code": "SZ", "name": "에스와티니"}, {"code": "EE", "name": "에스토니아"}, {"code": "EC", "name": "에콰도르"}, {"code": "ET", "name": "에티오피아"}, {"code": "SV", "name": "엘살바도르"}, {"code": "GB", "name": "영국"}, {"code": "VG", "name": "영국령 버진아일랜드"}, {"code": "IO", "name": "영국령 인도양 지역"}, {"code": "YE", "name": "예멘"}, {"code": "OM", "name": "오만"}, {"code": "AU", "name": "오스트레일리아"}, {"code": "AT", "name": "오스트리아"}, {"code": "HN", "name": "온두라스"}, {"code": "AX", "name": "올란드 제도"}, {"code": "WF", "name": "왈리스-푸투나 제도"}, {"code": "JO", "name": "요르단"}, {"code": "UG", "name": "우간다"}, {"code": "UY", "name": "우루과이"}, {"code": "UZ", "name": "우즈베키스탄"}, {"code": "UA", "name": "우크라이나"}, {"code": "IQ", "name": "이라크"}, {"code": "IR", "name": "이란"}, {"code": "IL", "name": "이스라엘"}, {"code": "EG", "name": "이집트"}, {"code": "IT", "name": "이탈리아"}, {"code": "IN", "name": "인도"}, {"code": "ID", "name": "인도네시아"}, {"code": "JP", "name": "일본"}, {"code": "JM", "name": "자메이카"}, {"code": "ZM", "name": "잠비아"}, {"code": "JE", "name": "저지"}, {"code": "GQ", "name": "적도 기니"}, {"code": "GE", "name": "조지아"}, {"code": "CN", "name": "중국"}, {"code": "CF", "name": "중앙 아프리카 공화국"}, {"code": "DJ", "name": "지부티"}, {"code": "GI", "name": "지브롤터"}, {"code": "ZW", "name": "짐바브웨"}, {"code": "TD", "name": "차드"}, {"code": "CZ", "name": "체코"}, {"code": "CL", "name": "칠레"}, {"code": "CM", "name": "카메룬"}, {"code": "CV", "name": "카보베르데"}, {"code": "KZ", "name": "카자흐스탄"}, {"code": "QA", "name": "카타르"}, {"code": "KH", "name": "캄보디아"}, {"code": "CA", "name": "캐나다"}, {"code": "KE", "name": "케냐"}, {"code": "KY", "name": "케이맨 제도"}, {"code": "KM", "name": "코모로"}, {"code": "CR", "name": "코스타리카"}, {"code": "CC", "name": "코코스 제도"}, {"code": "CI", "name": "코트디부아르"}, {"code": "CO", "name": "콜롬비아"}, {"code": "CG", "name": "콩고-브라자빌"}, {"code": "CD", "name": "콩고-킨샤사"}, {"code": "CU", "name": "쿠바"}, {"code": "KW", "name": "쿠웨이트"}, {"code": "CK", "name": "쿡 제도"}, {"code": "CW", "name": "퀴라소"}, {"code": "HR", "name": "크로아티아"}, {"code": "CX", "name": "크리스마스섬"}, {"code": "KG", "name": "키르기스스탄"}, {"code": "KI", "name": "키리바시"}, {"code": "CY", "name": "키프로스"}, {"code": "TJ", "name": "타지키스탄"}, {"code": "TZ", "name": "탄자니아"}, {"code": "TH", "name": "태국"}, {"code": "TC", "name": "터크스 케이커스 제도"}, {"code": "TG", "name": "토고"}, {"code": "TK", "name": "토켈라우"}, {"code": "TO", "name": "통가"}, {"code": "TM", "name": "투르크메니스탄"}, {"code": "TV", "name": "투발루"}, {"code": "TN", "name": "튀니지"}, {"code": "TR", "name": "튀르키예"}, {"code": "TT", "name": "트리니다드 토바고"}, {"code": "PA", "name": "파나마"}, {"code": "PY", "name": "파라과이"}, {"code": "PK", "name": "파키스탄"}, {"code": "PG", "name": "파푸아뉴기니"}, {"code": "PW", "name": "팔라우"}, {"code": "PS", "name": "팔레스타인 지구"}, {"code": "FO", "name": "페로 제도"}, {"code": "PE", "name": "페루"}, {"code": "PT", "name": "포르투갈"}, {"code": "FK", "name": "포클랜드 제도"}, {"code": "PL", "name": "폴란드"}, {"code": "PR", "name": "푸에르토리코"}, {"code": "FR", "name": "프랑스"}, {"code": "GF", "name": "프랑스령 기아나"}, {"code": "TF", "name": "프랑스령 남방 지역"}, {"code": "PF", "name": "프랑스령 폴리네시아"}, {"code": "FJ", "name": "피지"}, {"code": "FI", "name": "핀란드"}, {"code": "PH", "name": "필리핀"}, {"code": "PN", "name": "핏케언 제도"}, {"code": "HM", "name": "허드 맥도널드 제도"}, {"code": "HU", "name": "헝가리"}, {"code": "HK", "name": "홍콩(중국 특별행정구)"}];
             var PLANNER_REGION_MAP={"대한민국": ["서울", "부산", "인천", "대구", "대전", "광주", "울산", "경기", "강원", "충북", "충남", "전북", "전남", "경북", "경남", "제주"], "일본": ["도쿄", "오사카", "교토", "후쿠오카", "삿포로", "나고야", "오키나와", "나라", "고베", "요코하마"], "중국": ["베이징", "상하이", "광저우", "선전", "칭다오", "청두", "시안", "항저우"], "대만": ["타이베이", "가오슝", "타이중", "타이난", "화롄"], "태국": ["방콕", "치앙마이", "푸껫", "파타야", "끄라비"], "베트남": ["하노이", "호찌민", "다낭", "나트랑", "호이안", "푸꾸옥"], "미국": ["뉴욕", "로스앤젤레스", "샌프란시스코", "라스베이거스", "시애틀", "시카고", "보스턴", "하와이"], "프랑스": ["파리", "니스", "리옹", "마르세유", "보르도"], "이탈리아": ["로마", "밀라노", "피렌체", "베네치아", "나폴리"], "스페인": ["마드리드", "바르셀로나", "세비야", "발렌시아"], "영국": ["런던", "에든버러", "맨체스터", "리버풀"], "독일": ["베를린", "뮌헨", "프랑크푸르트", "함부르크"], "싱가포르": ["싱가포르"], "말레이시아": ["쿠알라룸푸르", "코타키나발루", "페낭", "말라카"], "인도네시아": ["발리", "자카르타", "욕야카르타", "롬복"], "필리핀": ["마닐라", "세부", "보라카이", "보홀"], "호주": ["시드니", "멜버른", "브리즈번", "골드코스트", "퍼스"], "캐나다": ["밴쿠버", "토론토", "몬트리올", "퀘벡"]};
 
@@ -2600,6 +3704,7 @@ request.setAttribute("activePage", "planner");
                         syncCountryLock();
                         updateCountryClear();
                         filterPlans();
+                        centerMapOnPlannerCountry(c.name);
                         markDirty();
                     });
 
@@ -2751,6 +3856,12 @@ request.setAttribute("activePage", "planner");
                     syncCountryLock();
                     updateCountryClear();
                     filterPlans();
+
+                    if(findPlannerCountry(plannerCountryInput.value)){
+                        centerMapOnPlannerCountry(
+                            plannerCountryInput.value
+                        );
+                    }
                 });
             }
             if(plannerCountryClear){
@@ -2936,12 +4047,28 @@ request.setAttribute("activePage", "planner");
                         var end=$('.planner-end-time',card);
                         var cost=$('.planner-item-cost',card);
                         var memo=$('.planner-item-note',card);
+                        var placeInput=$('.planner-place-search',card);
+                        var selectedPlace=plannerSelectedPlacePoint(placeInput);
 
                         blocks.push({
                             sourceBlockId:card.dataset.sourceBlockId
                                 ? Number(card.dataset.sourceBlockId)
                                 : null,
-                            placeId:null,
+                            googlePlaceId:selectedPlace
+                                ? selectedPlace.googlePlaceId
+                                : null,
+                            placeName:selectedPlace
+                                ? selectedPlace.name
+                                : null,
+                            placeAddress:selectedPlace
+                                ? selectedPlace.address
+                                : null,
+                            placeLat:selectedPlace
+                                ? selectedPlace.lat
+                                : null,
+                            placeLng:selectedPlace
+                                ? selectedPlace.lng
+                                : null,
                             blockType:plannerBlockTypeToDb(card.dataset.itemType),
                             blockOrder:blockIndex+1,
                             title:title ? title.value.trim() : '',
@@ -3457,17 +4584,188 @@ request.setAttribute("activePage", "planner");
                     el.dataset.fallback='0';
                     el.innerHTML='';
                     map=new google.maps.Map(el,{center:{lat:37.5665,lng:126.9780},zoom:11,mapTypeControl:false,streetViewControl:false,fullscreenControl:false,styles:[{featureType:'poi',elementType:'labels',stylers:[{visibility:'off'}]},{featureType:'transit',elementType:'labels',stylers:[{visibility:'off'}]}]});
+
+                    $$('.planner-block-card').forEach(function(card){
+                        setupPlannerPlaceSearch(card);
+                    });
+
                     refreshMap('all');
+
+                    var initialCountry=$('#plannerCountry');
+                    if(initialCountry && findPlannerCountry(initialCountry.value)){
+                        centerMapOnPlannerCountry(initialCountry.value);
+                    }
                 }catch(e){ showPlannerMapFallback(); }
             };
-            window.refreshMap=function(day){
-                if(!map||!window.google||!google.maps){ showPlannerMapFallback(); return; }
-                mapMarkers.forEach(function(m){m.setMap(null)});mapMarkers=[];
+            function plannerMapPoints(){
                 var points=[];
-                var bounds=new google.maps.LatLngBounds(),has=false;
-                points.filter(function(p){return day==='all'||p.day===String(day)}).forEach(function(p,i){var m=new google.maps.Marker({position:{lat:p.lat,lng:p.lng},map:map,title:p.name,label:{text:String(i+1),color:'#fff',fontWeight:'bold'},icon:{path:google.maps.SymbolPath.CIRCLE,scale:14,fillColor:p.color,fillOpacity:1,strokeColor:'#fff',strokeWeight:2}}); var iw=new google.maps.InfoWindow({content:'<div style="font-size:13px;font-weight:600;padding:4px">'+p.name+'</div>'});m.addListener('click',function(){iw.open(map,m)});mapMarkers.push(m);bounds.extend(m.getPosition());has=true;});
-                if(has) map.fitBounds(bounds);
+
+                $$('.planner-day').forEach(function(dayEl,dayIndex){
+                    var dayNumber=String(dayIndex+1);
+
+                    $$('.planner-block-card',dayEl).forEach(
+                        function(card,blockIndex){
+
+                            var input=$('.planner-place-search',card);
+                            var place=plannerSelectedPlacePoint(input);
+
+                            if(!place){
+                                return;
+                            }
+
+                            var title=$('.planner-item-title',card);
+                            var cfg=TYPE_CONFIG[card.dataset.itemType]
+                                || TYPE_CONFIG.sightseeing;
+
+                            points.push({
+                                day:dayNumber,
+                                order:blockIndex+1,
+                                sequence:blockIndex+1,
+                                name:title && title.value.trim()
+                                    ? title.value.trim()
+                                    : place.name,
+                                address:place.address,
+                                lat:place.lat,
+                                lng:place.lng,
+                                color:cfg.color
+                            });
+                        }
+                    );
+                });
+
+                return points;
+            }
+
+            window.refreshMap=function(day){
+                if(!map||!window.google||!google.maps){
+                    showPlannerMapFallback();
+                    return;
+                }
+
+                mapMarkers.forEach(function(marker){
+                    marker.setMap(null);
+                });
+                mapMarkers=[];
+
+                mapPolylines.forEach(function(line){
+                    line.setMap(null);
+                });
+                mapPolylines=[];
+
+                var allPoints=plannerMapPoints();
+
+                var visiblePoints=allPoints.filter(function(point){
+                    return day==='all'
+                        || point.day===String(day);
+                });
+
+                var bounds=new google.maps.LatLngBounds();
+                var has=false;
+
+                visiblePoints.forEach(function(point,index){
+                    var marker=new google.maps.Marker({
+                        position:{
+                            lat:point.lat,
+                            lng:point.lng
+                        },
+                        map:map,
+                        title:point.name,
+                        label:{
+                            text:String(point.sequence),
+                            color:'#fff',
+                            fontWeight:'bold'
+                        },
+                        icon:{
+                            path:google.maps.SymbolPath.CIRCLE,
+                            scale:14,
+                            fillColor:point.color,
+                            fillOpacity:1,
+                            strokeColor:'#fff',
+                            strokeWeight:2
+                        }
+                    });
+
+                    var infoHtml=
+                        '<div style="font-size:13px;padding:4px">'
+                        +'<div style="font-weight:700">'
+                        +escapeHtml(point.name)
+                        +'</div>'
+                        +(point.address
+                            ? '<div style="margin-top:3px;color:#6B7280;font-size:11px">'
+                                +escapeHtml(point.address)
+                                +'</div>'
+                            : '')
+                        +'</div>';
+
+                    var infoWindow=
+                        new google.maps.InfoWindow({
+                            content:infoHtml
+                        });
+
+                    marker.addListener('click',function(){
+                        infoWindow.open(map,marker);
+                    });
+
+                    mapMarkers.push(marker);
+                    bounds.extend(marker.getPosition());
+                    has=true;
+                });
+
+                /*
+                 * 실제 Routes API를 호출하지 않고,
+                 * 같은 DAY의 장소들을 블록 순서대로 직선 연결한다.
+                 */
+                var dayGroups={};
+
+                visiblePoints.forEach(function(point){
+                    if(!dayGroups[point.day]){
+                        dayGroups[point.day]=[];
+                    }
+
+                    dayGroups[point.day].push(point);
+                });
+
+                Object.keys(dayGroups).forEach(function(dayKey){
+                    var group=dayGroups[dayKey]
+                        .slice()
+                        .sort(function(a,b){
+                            return a.order-b.order;
+                        });
+
+                    if(group.length<2){
+                        return;
+                    }
+
+                    var line=new google.maps.Polyline({
+                        path:group.map(function(point){
+                            return {
+                                lat:point.lat,
+                                lng:point.lng
+                            };
+                        }),
+                        geodesic:true,
+                        strokeColor:'#6369D1',
+                        strokeOpacity:.78,
+                        strokeWeight:4,
+                        map:map
+                    });
+
+                    mapPolylines.push(line);
+                });
+
+                if(has){
+                    if(visiblePoints.length===1){
+                        map.setCenter({
+                            lat:visiblePoints[0].lat,
+                            lng:visiblePoints[0].lng
+                        });
+                        map.setZoom(15);
+                    }else{
+                        map.fitBounds(bounds);
+                    }
+                }
             };
+
             ['#plannerCountry','#plannerRegion'].forEach(function(sel){
                 var el=$(sel);
                 if(el) el.addEventListener('change',function(){ if($('#plannerGoogleMap') && $('#plannerGoogleMap').dataset.fallback==='1') showPlannerMapFallback(true); });
@@ -3510,11 +4808,37 @@ request.setAttribute("activePage", "planner");
                 }
             });
 
+            document.addEventListener('click',function(event){
+                $$('.planner-place-results.is-open').forEach(function(results){
+                    var ownerId=
+                        results.dataset.ownerInputId;
+
+                    var input=
+                        ownerId
+                            ? document.querySelector(
+                                '.planner-place-search[data-place-search-id="'
+                                +ownerId
+                                +'"]'
+                            )
+                            : null;
+
+                    var clickedInput=
+                        input && input.contains(event.target);
+
+                    var clickedResults=
+                        results.contains(event.target);
+
+                    if(!clickedInput && !clickedResults){
+                        results.classList.remove('is-open');
+                    }
+                });
+            });
+
             window.setTimeout(function(){ if(!map) showPlannerMapFallback(); },1800);
         })();
     </script>
     <script async
-        onerror="showPlannerMapFallback()" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB7ioaQS08aAzCl7gZPk6SyE1w7EeIrYhI&language=ko&loading=async&callback=initPlannerMap"></script>
+        onerror="showPlannerMapFallback()" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB7ioaQS08aAzCl7gZPk6SyE1w7EeIrYhI&language=ko&libraries=places&v=weekly&loading=async&callback=initPlannerMap"></script>
 
 
     <div id="plannerPublishBackdrop" class="planner-publish-backdrop" aria-hidden="true">

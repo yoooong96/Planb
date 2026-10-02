@@ -9,7 +9,12 @@ public class ItineraryBlockDto {
     private Long blockId;                  // 블록 고유번호
     private Long dayId;                    // DAY 고유번호
 
-    private Long placeId;                  // 장소 고유번호 (지도 연결 전에는 null 가능)
+    private String googlePlaceId;          // Google Place ID
+    private String placeName;              // 장소명
+    private String placeAddress;           // 주소
+    private Double placeLat;               // 위도
+    private Double placeLng;               // 경도
+
     private Long sourceBlockId;            // 원본 블록 번호
 
     // MEAL / ATTRACTION / LODGING / TRANSPORT / ACTIVITY
@@ -45,12 +50,44 @@ public class ItineraryBlockDto {
         this.dayId = dayId;
     }
 
-    public Long getPlaceId() {
-        return placeId;
+    public String getGooglePlaceId() {
+        return googlePlaceId;
     }
 
-    public void setPlaceId(Long placeId) {
-        this.placeId = placeId;
+    public void setGooglePlaceId(String googlePlaceId) {
+        this.googlePlaceId = googlePlaceId;
+    }
+
+    public String getPlaceName() {
+        return placeName;
+    }
+
+    public void setPlaceName(String placeName) {
+        this.placeName = placeName;
+    }
+
+    public String getPlaceAddress() {
+        return placeAddress;
+    }
+
+    public void setPlaceAddress(String placeAddress) {
+        this.placeAddress = placeAddress;
+    }
+
+    public Double getPlaceLat() {
+        return placeLat;
+    }
+
+    public void setPlaceLat(Double placeLat) {
+        this.placeLat = placeLat;
+    }
+
+    public Double getPlaceLng() {
+        return placeLng;
+    }
+
+    public void setPlaceLng(Double placeLng) {
+        this.placeLng = placeLng;
     }
 
     public Long getSourceBlockId() {
@@ -129,7 +166,11 @@ public class ItineraryBlockDto {
     public String toString() {
         return "ItineraryBlockDto [blockId=" + blockId
                 + ", dayId=" + dayId
-                + ", placeId=" + placeId
+                + ", googlePlaceId=" + googlePlaceId
+                + ", placeName=" + placeName
+                + ", placeAddress=" + placeAddress
+                + ", placeLat=" + placeLat
+                + ", placeLng=" + placeLng
                 + ", sourceBlockId=" + sourceBlockId
                 + ", blockType=" + blockType
                 + ", blockOrder=" + blockOrder

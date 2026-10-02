@@ -4,6 +4,7 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="mapper.itinerary.itineraryBlock">
+
     <!-- 블록 저장 -->
     <insert id="insertItineraryBlock"
             parameterType="dto.itinerary.ItineraryBlockDto"
@@ -13,7 +14,11 @@
 
         INSERT INTO TB_ITINERARY_BLOCK (
             day_id,
-            place_id,
+            google_place_id,
+            place_name,
+            place_address,
+            place_lat,
+            place_lng,
             source_block_id,
             block_type,
             block_order,
@@ -25,7 +30,11 @@
         )
         VALUES (
             #{dayId},
-            #{placeId},
+            #{googlePlaceId},
+            #{placeName},
+            #{placeAddress},
+            #{placeLat},
+            #{placeLng},
             #{sourceBlockId},
             #{blockType},
             #{blockOrder},
@@ -47,7 +56,11 @@
         SELECT
             block_id,
             day_id,
-            place_id,
+            google_place_id,
+            place_name,
+            place_address,
+            place_lat,
+            place_lng,
             source_block_id,
             block_type,
             block_order,
@@ -69,7 +82,11 @@
 
         UPDATE TB_ITINERARY_BLOCK
         SET
-            place_id = #{placeId},
+            google_place_id = #{googlePlaceId},
+            place_name = #{placeName},
+            place_address = #{placeAddress},
+            place_lat = #{placeLat},
+            place_lng = #{placeLng},
             source_block_id = #{sourceBlockId},
             block_type = #{blockType},
             block_order = #{blockOrder},
