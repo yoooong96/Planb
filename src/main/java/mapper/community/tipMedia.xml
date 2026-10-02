@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.community.tipMedia">
+
+	<insert id="insertTipMedia" parameterType="tipMedia"
+			useGeneratedKeys="true" keyProperty="mediaId">
+
+	</insert>
+
+	<select id="selectTipMedia" parameterType="Long" resultType="tipMedia">
+
+	</select>
+
+	<update id="updateTipMedia" parameterType="tipMedia">
+
+	</update>
+
+	<delete id="deleteTipMedia" parameterType="Long">
+
+	</delete>
+
+</mapper>

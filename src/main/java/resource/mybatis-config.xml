@@ -20,11 +20,17 @@
 		<typeAlias type="dto.advertisement.AdvertisementDto" alias="advertisement"/>
 		<typeAlias type="dto.advertisement.AdvertisementHistoryDto" alias="advertisementHistory"/>
 		
-		<!-- 커뮤니티 -->
-		<typeAlias type="dto.community.PostDto" alias="post"/>
-		<typeAlias type="dto.community.PostCommentDto" alias="postComment"/>
-		<typeAlias type="dto.community.PostLikeDto" alias="postLike"/>
-		<typeAlias type="dto.community.PostMediaDto" alias="postMedia"/>
+		<!-- 커뮤니티 - 꿀팁 -->
+		<typeAlias type="dto.community.TipDto" alias="tip"/>
+		<typeAlias type="dto.community.TipCommentDto" alias="tipComment"/>
+		<typeAlias type="dto.community.TipLikeDto" alias="tipLike"/>
+		<typeAlias type="dto.community.TipMediaDto" alias="tipMedia"/>
+		
+		<!-- 커뮤니티 - 메이트 -->
+		<typeAlias type="dto.community.MateDto" alias="mate"/>
+		<typeAlias type="dto.community.MateCommentDto" alias="mateComment"/>
+		<typeAlias type="dto.community.MateLikeDto" alias="mateLike"/>
+		<typeAlias type="dto.community.MateMediaDto" alias="mateMedia"/>
 		
 		<!-- 콘텐츠 -->
 		<typeAlias type="dto.content.ContentViewLogDto" alias="contentViewLog"/>
@@ -82,11 +88,17 @@
 	    <mapper resource="mapper/advertisement/advertisement.xml"/>
 	    <mapper resource="mapper/advertisement/advertisementHistory.xml"/>
 	
-	    <!-- 커뮤니티 -->
-	    <mapper resource="mapper/community/post.xml"/>
-	    <mapper resource="mapper/community/postComment.xml"/>
-	    <mapper resource="mapper/community/postLike.xml"/>
-	    <mapper resource="mapper/community/postMedia.xml"/>
+	    <!-- 커뮤니티 - 꿀팁 -->
+		<mapper resource="mapper/community/tip.xml"/>
+		<mapper resource="mapper/community/tipComment.xml"/>
+		<mapper resource="mapper/community/tipLike.xml"/>
+		<mapper resource="mapper/community/tipMedia.xml"/>
+		
+		<!-- 커뮤니티 - 메이트 -->
+		<mapper resource="mapper/community/mate.xml"/>
+		<mapper resource="mapper/community/mateComment.xml"/>
+		<mapper resource="mapper/community/mateLike.xml"/>
+		<mapper resource="mapper/community/mateMedia.xml"/>
 	
 	    <!-- 콘텐츠 -->
 	    <mapper resource="mapper/content/contentViewLog.xml"/>
@@ -97,7 +109,7 @@
 		<mapper resource="mapper/itinerary/itineraryBlockImage.xml"/>
 	    <mapper resource="mapper/itinerary/itineraryBookmark.xml"/>
 	    <mapper resource="mapper/itinerary/itineraryComment.xml"/>
-	    <mapper resource="mapper/itinerary/itineraryCart.xml"/>
+	    <!-- <mapper resource="mapper/itinerary/itineraryCart.xml"/> -->
 	    <mapper resource="mapper/itinerary/itineraryDay.xml"/>
 	    <mapper resource="mapper/itinerary/itineraryLike.xml"/>
 	

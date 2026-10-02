@@ -1,21 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-	
+
 <mapper namespace="mapper.itinerary.itineraryBookmark">
-	<insert id="insertItineraryBookmark" parameterType="itineraryBookmark">
-		
-	</insert>
-	
-	<select id="selectItineraryBookmark" resultType="itineraryBookmark" parameterType="String">
-		
+
+    <!-- 북마크 추가 -->
+    <insert id="insertItineraryBookmark" parameterType="itineraryBookmark">
+        INSERT INTO TB_ITINERARY_BOOKMARK (itinerary_id,user_id) VALUES (#{itineraryId},#{userId})
+    </insert>
+
+    <!-- 실제 컬럼 값에 있는지만 판단하여 있으면 1 없으면 0 반환 -->
+    <select id="selectItineraryBookmark" parameterType="itineraryBookmark" resultType="boolean">
+        SELECT EXISTS (
+            SELECT 1
+            FROM TB_ITINERARY_BOOKMARK
+            WHERE itinerary_id = #{itineraryId} AND user_id = #{userId})
+    </select>
+
+    <!-- 로그인 회원의 북마크 해제 -->
+    <delete id="deleteItineraryBookmark" parameterType="itineraryBookmark">
+        DELETE FROM TB_ITINERARY_BOOKMARK WHERE itinerary_id = #{itineraryId} AND user_id = #{userId}
+    </delete>
+    
+    <select id="selectBookmarkTargetForUpdate" parameterType="long" resultType="itinerary">
+    	SELECT
+        	itinerary_id,
+        	user_id,
+        	status,
+        	visibility
+    	FROM TB_ITINERARY
+    	WHERE itinerary_id = #{itineraryId}
+    	FOR UPDATE
 	</select>
-	
-	<update id="updateItineraryBookmark" parameterType="itineraryBookmark">
-	
-	</update>
-	
-	<delete id="deleteItineraryBookmark" parameterType="itineraryBookmark">
-	
-	</delete>
+    
 </mapper>

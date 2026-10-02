@@ -85,4 +85,41 @@ public class UserServiceImpl implements UserService {
 		return true;
 	}
 
+	@Override
+	public Long findPasswordUser(String loginId, String name, String email, String phone) throws Exception {
+		Long userId = userDao.findPasswordUser(loginId, name, email, phone);
+		if(userId == null) {
+			throw new Exception("일치하는 회원 정보가 없습니다.");
+		}
+		
+		return userId;
+		
+	}
+
+	@Override
+	public void resetPassword(long userId, String password) throws Exception {
+		int result = userDao.resetPassword(userId, password);
+		if(result == 0) {
+			throw new Exception("비밀번호 변경에 실패했습니다.");
+		}
+	}
+
+	@Override
+	public boolean isLoginIdAvailable(String loginId) {
+		// TODO Auto-generated method stub
+		return  userDao.countLoginId(loginId) == 0;
+	}
+
+	@Override
+	public boolean isNicknameAvailable(String nickname) {
+		// TODO Auto-generated method stub
+		return userDao.countNickname(nickname) == 0;
+	}
+
+	@Override
+	public boolean isEmailAvailable(String email) {
+		// TODO Auto-generated method stub
+		return userDao.countEmail(email) == 0;
+	}
+
 }

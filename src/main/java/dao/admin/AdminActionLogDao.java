@@ -1,23 +1,12 @@
 package dao.admin;
 
-public class AdminActionLogDao implements AdminActionLogDaoImpl {
+import dto.admin.AdminActionLogDto;
 
-	@Override
-	public void insertAdminActionLog() {
-		// TODO Auto-generated method stub
+public interface AdminActionLogDao {
 
-	}
+	int insertAdminActionLog(AdminActionLogDto adminActionLogDto);
 
-	@Override
-	public void selectAdminActionLog() {
-		// TODO Auto-generated method stub
+	AdminActionLogDto selectAdminActionLog(long actionId);
 
-	}
-
-	@Override
-	public void deleteAdminActionLog() {
-		// TODO Auto-generated method stub
-
-	}
-
+	int deleteAdminActionLog(long actionId);
 }

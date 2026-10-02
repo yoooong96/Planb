@@ -8,4 +8,9 @@ public interface UserDao {
 	void updateUser(UserDto userDto) throws Exception;
 	int withdrawUser(long userId) throws Exception;
 	String selectPasswordByUserId(long userId) throws Exception;
+	Long findPasswordUser(String loginId, String name, String email, String phone) throws Exception;
+	int resetPassword(Long userId, String password) throws Exception;
+	int countLoginId(String loginId);
+	int countNickname(String nickname);
+	int countEmail(String email);
 }

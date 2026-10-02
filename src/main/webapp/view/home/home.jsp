@@ -94,12 +94,10 @@ request.setAttribute("activePage", "home");
 		<section id="popularPlans" class="mt-16">
 			<div class="text-center mb-8 px-4">
 				<p class="home-popular-eyebrow text-xs font-bold tracking-widest uppercase mb-2">Popular Travel Plans</p>
-				<h2 class="text-2xl md:text-3xl font-extrabold text-gray-900 mb-2">지금
-					가장 인기 있는 여행일정</h2>
-				<p class="text-sm text-gray-400">전 세계 여행자들이 사랑하는 특별한 일정을 만나보세요.</p>
+				<h2 class="text-2xl md:text-3xl font-extrabold text-gray-900 mb-2 home-popular-heading">지금 가장 인기 있는 여행일정</h2>
+				<p class="home-popular-description text-sm text-gray-400">전 세계 여행자들이 사랑하는 특별한 일정을 만나보세요.</p>
 			</div>
-			<div class="home-popular-carousel flex gap-2 px-8" data-home-carousel
-				data-loop-width="2120">
+			<div class="home-popular-carousel flex items-stretch gap-6 px-12" data-home-carousel data-loop-width="2120">
 				<a
 					href="${pageContext.request.contextPath}/view/travel/scheduleDetail.jsp?id=9"
 					class="jsp-home-schedule-card home-popular-card shrink-0 bg-white rounded-2xl overflow-hidden cursor-pointer border">
@@ -1151,9 +1149,46 @@ request.setAttribute("activePage", "home");
 				</a>
 			</div>
 		</section>
+		
+		<!-- ========================================
+		     HOME - 3번 구역
+		     여행일정 만들기 CTA
+		======================================== -->
+		<section id="homeArea3" class="home-create-plan">
+		
+		    <div class="home-create-plan-content">
+		
+		        <!-- 상단 영문 문구 -->
+		        <span class="home-create-plan-eyebrow">
+		            CREATE YOUR JOURNEY
+		        </span>
+		
+		        <!-- 메인 문구 -->
+		        <h2 class="home-create-plan-title">
+		            마음에 드는 여행을 발견하셨나요?
+		            <br>
+		            이제 나만의 여행을 만들어보세요.
+		        </h2>
+		
+		        <!-- 설명 문구 -->
+		        <p class="home-create-plan-description">
+		            가고 싶은 장소와 일정을 자유롭게 담아
+		            <br>
+		            나만의 특별한 여행 계획을 완성해보세요.
+		        </p>
+		
+		        <!-- 일정 만들기 버튼 -->
+		        <a href="${pageContext.request.contextPath}/view/itinerary/planner.jsp"
+		           class="home-create-plan-button">
+		            일정 만들기
+		            <span aria-hidden="true">→</span>
+		        </a>
+		
+		    </div>
+		
+		</section>
 
-
-		<section id="homeArea3" class="mt-20 mb-20 px-4 md:px-8 max-w-6xl mx-auto">
+		<section id="homeArea4" class="mt-20 mb-20 px-4 md:px-8 max-w-6xl mx-auto">
 			<div class="grid grid-cols-1 md:grid-cols-2 gap-10">
 				<div>
 					<div class="flex items-end justify-between mb-6">

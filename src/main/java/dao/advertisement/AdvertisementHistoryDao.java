@@ -1,29 +1,12 @@
 package dao.advertisement;
 
-public class AdvertisementHistoryDao implements AdvertisementHistoryDaoImpl {
+import dto.advertisement.AdvertisementHistoryDto;
 
-	@Override
-	public void insertAdvertisementHistory() {
-		// TODO Auto-generated method stub
+public interface AdvertisementHistoryDao {
 
-	}
+	int insertAdvertisementHistory(AdvertisementHistoryDto advertisementHistoryDto);
 
-	@Override
-	public void selectAdvertisementHistory() {
-		// TODO Auto-generated method stub
+	AdvertisementHistoryDto selectAdvertisementHistory(long historyId);
 
-	}
-
-	@Override
-	public void updateAdvertisementHistory() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void deleteAdvertisementHistory() {
-		// TODO Auto-generated method stub
-
-	}
-
+	int deleteAdvertisementHistory(long historyId);
 }
