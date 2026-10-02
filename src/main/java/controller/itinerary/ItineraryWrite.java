@@ -125,7 +125,6 @@ public class ItineraryWrite extends HttpServlet {
                             )
             );
 
-            validatePublishFields(itineraryDto);
 
             Long itineraryId =
                     itineraryService.writeItinerary(
@@ -225,29 +224,6 @@ public class ItineraryWrite extends HttpServlet {
     }
 
 
-    private void validatePublishFields(
-            ItineraryDto itineraryDto) {
-
-        if (itineraryDto.getSummary() == null
-                || itineraryDto.getSummary()
-                        .trim().isEmpty()) {
-
-            throw new IllegalArgumentException(
-                    "일정 소개를 작성해 주세요."
-            );
-        }
-
-        if (itineraryDto.getThumbnailImg() == null
-                || itineraryDto.getThumbnailImg()
-                        .trim().isEmpty()) {
-
-            throw new IllegalArgumentException(
-                    "대표 이미지를 선택해 주세요."
-            );
-        }
-    }
-
-
     private Gson createGson() {
 
         GsonBuilder builder =
@@ -308,4 +284,5 @@ public class ItineraryWrite extends HttpServlet {
 
         return builder.create();
     }
+
 }

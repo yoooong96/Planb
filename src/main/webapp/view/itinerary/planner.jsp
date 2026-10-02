@@ -933,6 +933,8 @@ request.setAttribute("activePage", "planner");
                     </div>
 
                     <button id="plannerVisibility"
+                        type="button"
+                        data-visibility="PUBLIC"
                         class="h-10 w-[200px] flex items-center justify-center gap-2 text-xs font-semibold rounded-full border bg-white transition-all"
                         style="border-color: #8B91FF; color: #555CD6">
                         <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0"></span>
@@ -1638,13 +1640,54 @@ request.setAttribute("activePage", "planner");
             syncDates();
 
             var visibility=$('#plannerVisibility');
-            if(visibility) visibility.addEventListener('click',function(){
-                var pub=visibility.dataset.visibility!=='PRIVATE';
-                visibility.dataset.visibility=pub?'PRIVATE':'PUBLIC';
-                visibility.style.borderColor=pub?'#CBD5E1':'#8B91FF'; visibility.style.color=pub?'#6B7280':'#555CD6';
-                visibility.innerHTML=pub?'<span class="w-1.5 h-1.5 rounded-full bg-gray-400 shrink-0"></span>비공개<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>':'<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0"></span>공개 중<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>';
-                markDirty();
-            });
+
+            function setPlannerVisibility(value,dirty){
+                if(!visibility) return;
+
+                var normalized=
+                    value==='PRIVATE'
+                        ? 'PRIVATE'
+                        : 'PUBLIC';
+
+                visibility.dataset.visibility=
+                    normalized;
+
+                var isPublic=
+                    normalized==='PUBLIC';
+
+                visibility.style.borderColor=
+                    isPublic
+                        ? '#8B91FF'
+                        : '#CBD5E1';
+
+                visibility.style.color=
+                    isPublic
+                        ? '#555CD6'
+                        : '#6B7280';
+
+                visibility.innerHTML=
+                    isPublic
+                    ? '<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0"></span>공개 중<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>'
+                    : '<span class="w-1.5 h-1.5 rounded-full bg-gray-400 shrink-0"></span>비공개<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>';
+
+                if(dirty!==false){
+                    markDirty();
+                }
+            }
+
+            if(visibility){
+                visibility.addEventListener(
+                    'click',
+                    function(){
+                        setPlannerVisibility(
+                            visibility.dataset.visibility==='PUBLIC'
+                                ? 'PRIVATE'
+                                : 'PUBLIC',
+                            true
+                        );
+                    }
+                );
+            }
 
             // 새 일정 작성 화면은 Day 1만 비어 있는 상태로 시작한다.
             $$('.planner-day').forEach(function(day){
@@ -2771,7 +2814,12 @@ request.setAttribute("activePage", "planner");
                     if(startDate&&d.startDate!=null)startDate.value=d.startDate;
                     if(endDate&&d.endDate!=null)endDate.value=d.endDate;
                     syncDates();
-                    if(visibility&&d.visibility==='PRIVATE'&&visibility.dataset.visibility!=='PRIVATE')visibility.click();
+                    if(visibility && d.visibility){
+                        setPlannerVisibility(
+                            d.visibility,
+                            false
+                        );
+                    }
                     dirty=false;
                 }catch(e){ sessionStorage.removeItem(DRAFT_KEY); }
             }
@@ -2933,7 +2981,7 @@ request.setAttribute("activePage", "planner");
                     endDate:endDate && endDate.value ? endDate.value : null,
                     visibility:visibility && visibility.dataset.visibility
                         ? visibility.dataset.visibility
-                        : 'PRIVATE',
+                        : 'PUBLIC',
                     thumbnailImg:plannerPublishState.thumbnailUrl || null,
                     days:days
                 };
