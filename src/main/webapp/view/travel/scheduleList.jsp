@@ -256,7 +256,10 @@ request.setAttribute("activePage", "travel");
 			</div>
 		</aside>
 		<main class="flex-1 px-6 py-8 min-w-0">
-			<div class="mb-6 relative max-w-2xl">
+			<form id="scheduleSearchForm"
+      			action="${pageContext.request.contextPath}/schedules"
+      			method="get"
+      			class="mb-6 relative max-w-2xl">
 				<div id="scheduleSearchBar"
 					class="flex items-center gap-2.5 bg-white border-2 rounded-xl px-4 py-2.5 shadow-sm transition-all cursor-text"
 					style="border-color: #D1D2F9">
@@ -264,7 +267,15 @@ request.setAttribute("activePage", "travel");
 						stroke="currentColor" viewBox="0 0 24 24">
 						<path stroke-linecap="round" stroke-linejoin="round"
 							stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-					<input
+					<input type="text" id="scheduleKeyword" name="keyword" value="<c:out value='${keyword}'/>"
+   						class="flex-1 text-[13px] outline-none text-gray-800 placeholder-gray-400 bg-transparent"
+    					placeholder="제목, 지역, 닉네임, 인원, 예산 검색">
+    				<button type="submit"
+        				class="px-6 py-2 text-[12px] font-bold text-white rounded-xl"
+        				style="background: #6369D1">
+    					검색하기
+					</button>
+					<!-- <input
 						class="flex-1 text-[13px] outline-none text-gray-800 placeholder-gray-400 bg-transparent"
 						placeholder="어디로 여행을 떠나고 싶으신가요? (예: 제주도, 도쿄, 파리...)">
 					<button type="button" id="scheduleFilterToggle"
@@ -275,7 +286,7 @@ request.setAttribute("activePage", "travel");
 							<path stroke-linecap="round" stroke-linejoin="round"
 								stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
 						상세조건
-					</button>
+					</button> -->
 				</div>
 				<div id="scheduleFilterPanel"
 					class="hidden absolute left-0 right-0 top-full mt-1.5 bg-white border rounded-2xl shadow-xl z-30 overflow-hidden"
@@ -347,7 +358,9 @@ request.setAttribute("activePage", "travel");
 							style="background: #6369D1">검색하기</button>
 					</div>
 				</div>
-			</div>
+			</form>
+			
+			
 			<div class="flex items-center justify-between mb-5">
 				<p class="text-[12px] font-medium text-gray-500">
 					총 <span class="font-bold" style="color: #6369D1">16</span>개의 여행 일정

@@ -36,6 +36,18 @@
 
 		WHERE i.status = 'ACTIVE'
 		AND i.visibility = 'PUBLIC'
+		<if test="keyword != null and keyword != ''">
+    	AND (
+        	LOCATE(#{keyword}, i.title) > 0
+        	OR LOCATE(#{keyword}, i.summary) > 0
+        	OR LOCATE(#{keyword}, i.country) > 0
+        	OR LOCATE(#{keyword}, i.city) > 0
+        	OR LOCATE(#{keyword}, i.continent) > 0
+        	OR LOCATE(#{keyword}, CAST(i.traveler_count AS CHAR)) > 0
+        	OR LOCATE(#{keyword}, CAST(i.total_budget AS CHAR)) > 0
+        	OR LOCATE(#{keyword}, u.nickname) > 0
+    	)
+		</if>
 
 		ORDER BY
 		i.created_at DESC,
