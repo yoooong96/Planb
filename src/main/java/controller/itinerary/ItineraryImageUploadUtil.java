@@ -192,6 +192,86 @@ public final class ItineraryImageUploadUtil {
     }
 
 
+    public static String resolveThumbnailImageUrl(
+            ItineraryDto itineraryDto,
+            String imageKey) {
+
+        if (itineraryDto == null
+                || imageKey == null
+                || imageKey.trim().isEmpty()) {
+            return null;
+        }
+
+        String[] parts = imageKey.split(":");
+
+        if (parts.length != 3) {
+            throw new IllegalArgumentException(
+                    "대표 이미지 선택 정보가 올바르지 않습니다."
+            );
+        }
+
+        int dayIndex;
+        int blockIndex;
+        int imageOrder;
+
+        try {
+            dayIndex = Integer.parseInt(parts[0]);
+            blockIndex = Integer.parseInt(parts[1]);
+            imageOrder = Integer.parseInt(parts[2]);
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException(
+                    "대표 이미지 선택 정보가 올바르지 않습니다."
+            );
+        }
+
+        if (itineraryDto.getDays() == null
+                || dayIndex < 0
+                || dayIndex >= itineraryDto.getDays().size()) {
+            throw new IllegalArgumentException(
+                    "대표 이미지를 찾을 수 없습니다."
+            );
+        }
+
+        ItineraryDayDto day =
+                itineraryDto.getDays().get(dayIndex);
+
+        if (day == null
+                || day.getBlocks() == null
+                || blockIndex < 0
+                || blockIndex >= day.getBlocks().size()) {
+            throw new IllegalArgumentException(
+                    "대표 이미지를 찾을 수 없습니다."
+            );
+        }
+
+        ItineraryBlockDto block =
+                day.getBlocks().get(blockIndex);
+
+        if (block == null
+                || block.getImages() == null) {
+            throw new IllegalArgumentException(
+                    "대표 이미지를 찾을 수 없습니다."
+            );
+        }
+
+        for (ItineraryBlockImageDto image
+                : block.getImages()) {
+
+            if (image != null
+                    && image.getImageOrder() != null
+                    && image.getImageOrder() == imageOrder
+                    && hasText(image.getImageUrl())) {
+
+                return image.getImageUrl();
+            }
+        }
+
+        throw new IllegalArgumentException(
+                "대표 이미지로 선택한 사진을 찾을 수 없습니다."
+        );
+    }
+
+
     public static void deleteCreatedFiles(
             List<File> files) {
 

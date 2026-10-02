@@ -112,6 +112,20 @@ public class ItineraryWrite extends HttpServlet {
                                     itineraryDto
                             );
 
+            String thumbnailImageKey =
+                    request.getParameter(
+                            "thumbnailImageKey"
+                    );
+
+            itineraryDto.setThumbnailImg(
+                    ItineraryImageUploadUtil
+                            .resolveThumbnailImageUrl(
+                                    itineraryDto,
+                                    thumbnailImageKey
+                            )
+            );
+
+
             Long itineraryId =
                     itineraryService.writeItinerary(
                             itineraryDto
@@ -270,4 +284,5 @@ public class ItineraryWrite extends HttpServlet {
 
         return builder.create();
     }
+
 }

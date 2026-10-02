@@ -384,14 +384,13 @@ public class ItineraryServiceImpl implements ItineraryService {
      * 모든 Block.cost의 합
      *
      * thumbnailImg:
-     * 처음 발견되는 imageOrder=1 이미지
+     * 저장 전 미리보기 모달에서 사용자가 고른 값을 유지한다.
      */
     private void prepareCalculatedFields(
             ItineraryDto itineraryDto
     ) {
 
         BigDecimal totalBudget = BigDecimal.ZERO;
-        String thumbnailImg = null;
 
         List<ItineraryDayDto> days =
                 itineraryDto.getDays();
@@ -415,34 +414,11 @@ public class ItineraryServiceImpl implements ItineraryService {
                                         block.getCost()
                                 );
                     }
-
-                    List<ItineraryBlockImageDto> images =
-                            block.getImages();
-
-                    if (images == null
-                            || thumbnailImg != null) {
-                        continue;
-                    }
-
-                    for (ItineraryBlockImageDto image : images) {
-
-                        if (image.getImageOrder() != null
-                                && image.getImageOrder() == 1
-                                && image.getImageUrl() != null
-                                && !image.getImageUrl().trim().isEmpty()) {
-
-                            thumbnailImg =
-                                    image.getImageUrl();
-
-                            break;
-                        }
-                    }
                 }
             }
         }
 
         itineraryDto.setTotalBudget(totalBudget);
-        itineraryDto.setThumbnailImg(thumbnailImg);
 
         if (itineraryDto.getTravelerCount() == null
                 || itineraryDto.getTravelerCount() < 1) {

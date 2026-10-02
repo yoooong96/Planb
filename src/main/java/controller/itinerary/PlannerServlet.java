@@ -133,6 +133,11 @@ public class PlannerServlet extends HttpServlet {
                         "editItinerary",
                         editItinerary
                 );
+
+                request.setAttribute(
+                        "editItineraryJson",
+                        gson.toJson(editItinerary)
+                );
             }
 
             request.getRequestDispatcher(

@@ -140,6 +140,20 @@ public class ItineraryModify extends HttpServlet {
                                     itineraryDto
                             );
 
+            String thumbnailImageKey =
+                    request.getParameter(
+                            "thumbnailImageKey"
+                    );
+
+            itineraryDto.setThumbnailImg(
+                    ItineraryImageUploadUtil
+                            .resolveThumbnailImageUrl(
+                                    itineraryDto,
+                                    thumbnailImageKey
+                            )
+            );
+
+
             itineraryService.modifyItinerary(
                     itineraryDto
             );
@@ -305,4 +319,5 @@ public class ItineraryModify extends HttpServlet {
 
         return builder.create();
     }
+
 }
