@@ -30,7 +30,8 @@ request.setAttribute("activePage", "travel");
 							d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
 						<polyline points="14 2 14 8 20 8" /></svg>내가 작성한 글</span><span
 				class="text-xs rounded-full px-2 py-0.5 font-semibold"
-				style="background: var(--brand-light); color: var(--brand)">3</span></a>
+				style="background: var(--brand-light); color: var(--brand)">3</span>
+			</a>
 			<div class="border-t border-gray-100 mb-3"></div>
 			<button type="button"
 				class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl transition-all mb-1"
@@ -41,13 +42,14 @@ request.setAttribute("activePage", "travel");
 						<circle cx="12" cy="12" r="10" />
 						<line x1="2" y1="12" x2="22" y2="12" />
 						<path
-							d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" /></svg>전체보기</span><span
+							d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" /></svg>전체보기</span>
+					<span
 					class="text-xs rounded-full px-2 py-0.5 font-semibold"
 					style="background: rgba(255, 255, 255, .25); color: #fff">16</span>
 			</button>
 			<div
-				class="text-xs font-bold text-gray-400 uppercase tracking-widest px-3 mb-1 mt-1">여행
-				지역</div>
+				class="text-xs font-bold text-gray-400 uppercase tracking-widest px-3 mb-1 mt-1">여행 지역
+			</div>
 			<div class="border-t border-gray-100 mb-3"></div>
 			<div
 				class="text-xs font-bold text-gray-400 uppercase tracking-widest px-3 mb-1">대륙별
