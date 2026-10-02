@@ -11,6 +11,14 @@
 	<select id="selectTip" parameterType="Long" resultType="tip">
 
 	</select>
+	
+	<select id="selectTipList" resultType="tip">
+		SELECT * FROM TB_TIP HWERE status = 'ACTIVE' ORDER BY created_at DESC
+	</select>
+	
+	<select id="searchTipByHashtag" parameterType="String" resultType="tip">
+		SELECT * FROM TB_TIP WHERE status = 'ACTIVE' AND hashtag LIKE CONCAT('%', #{keyword}, '%') ORDER BY created_at DESC
+	</select>
 
 	<update id="updateTip" parameterType="tip">
 

@@ -274,26 +274,36 @@ request.setAttribute("activePage", "tips");
 			<main class="flex-1 px-6 py-8 min-w-0">
 
 				<!-- 여행꿀팁 검색 -->
-				<div class="mb-6 relative w-full max-w-2xl">
+				<form action="${pageContext.request.contextPath}/community/tiplist"
+					method="get"
+					class="mb-6 relative w-full max-w-2xl">
+				
 					<div id="scheduleSearchBar"
-				    	class="flex items-center gap-2.5 bg-white border-2 rounded-xl px-4 py-2.5 shadow-sm transition-all cursor-text"
-				        style="border-color: #D1D2F9">
+						class="flex items-center gap-2.5 bg-white border-2 rounded-xl px-4 py-2.5 shadow-sm transition-all cursor-text"
+						style="border-color: #D1D2F9">
+				
 						<svg class="w-4 h-4 shrink-0"
-				        	style="color: #94a3b8"
-				            fill="none"
-				            stroke="currentColor"
-				            viewBox="0 0 24 24">
-			                <path
-			                    stroke-linecap="round"
-			                    stroke-linejoin="round"
-			                    stroke-width="2"
-			                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-				     	</svg>
+							style="color: #94a3b8"
+							fill="none"
+							stroke="currentColor"
+							viewBox="0 0 24 24">
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								stroke-width="2"
+								d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+						</svg>
+				
 						<input
-				               class="flex-1 min-w-0 text-[13px] outline-none text-gray-800 placeholder-gray-400 bg-transparent"
-				               placeholder="어떤 여행 정보가 궁금하신가요?">
-				    </div>
-				</div>
+							type="text"
+							name="keyword"
+							value="${keyword}"
+							class="flex-1 min-w-0 text-[13px] outline-none text-gray-800 placeholder-gray-400 bg-transparent"
+							placeholder="어떤 여행 정보가 궁금하신가요?">
+				
+					</div>
+				
+				</form>
 				<div class="flex items-center justify-between mb-5 gap-4 flex-wrap">
 					<!-- 왼쪽 : 게시글 수 -->
 					<p class="text-[12px] font-medium text-gray-500">

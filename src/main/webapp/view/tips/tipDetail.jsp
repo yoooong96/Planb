@@ -8,11 +8,11 @@ request.setAttribute("activePage", "tips");
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>여행꿀팁 상세 · Tripily</title><jsp:include
+<title>Planb</title><jsp:include
 	page="/common/headStyles.jsp" /></head>
 <body class="site-shell"><jsp:include page="/common/header.jsp" />
-	<div class="pt-16 min-h-screen" style="background-color: #f5f5fb">
-		<div class="max-w-5xl mx-auto px-4 py-8">
+	<div class="min-h-screen" style="background-color: #f5f5fb">
+    	<div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 			<a href="${pageContext.request.contextPath}/view/tips/tipList.jsp"
 				class="flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-gray-200 text-sm font-semibold text-gray-600 hover:border-gray-400 hover:text-gray-800 transition-colors shadow-sm mb-6"><svg
 					width="14" height="14" viewBox="0 0 24 24" fill="none"
