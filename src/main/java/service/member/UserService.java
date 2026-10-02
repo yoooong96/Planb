@@ -16,4 +16,6 @@ public interface UserService {
 	boolean isEmailAvailable(String email);
 	UserDto findSocialUser(String provider, String providerUserId) throws Exception;
 	void signupGoogle(UserDto user) throws Exception;
+	void updateUser(UserDto user) throws Exception;
+	UserDto selectUser(String loginId) throws Exception;
 }

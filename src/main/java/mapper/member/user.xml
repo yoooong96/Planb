@@ -4,295 +4,314 @@
 <mapper namespace="mapper.member.user">
 
 	<!-- 회원가입 시 유저데이터에 insert -->
-	<insert id="insertUser"
-        parameterType="user"
-        useGeneratedKeys="true"
-        keyProperty="userId"
-        keyColumn="user_id">
+	<insert id="insertUser" parameterType="user"
+		useGeneratedKeys="true" keyProperty="userId" keyColumn="user_id">
 
-	    INSERT INTO TB_USER
-	    (
-	        login_id,
-	        password,
-	        name,
-	        nickname,
-	        email,
-	        phone,
-	        birth_date,
-	        profile_img,
-	        region,
-	        postcode,
-	        address,
-	        address_detail,
-	        bio
-	    )
-	    VALUES
-	    (
-	        #{loginId},
-	        #{password},
-	        #{name},
-	        #{nickname},
-	        #{email},
-	        #{phone},
-	        #{birthDate},
-	        #{profileImg},
-	        #{region},
-	        #{postcode},
-	        #{address},
-	        #{addressDetail},
-	        #{bio}
-	    )
-	
+		INSERT INTO TB_USER
+		(
+		login_id,
+		password,
+		name,
+		nickname,
+		email,
+		phone,
+		birth_date,
+		profile_img,
+		region,
+		postcode,
+		address,
+		address_detail,
+		bio
+		)
+		VALUES
+		(
+		#{loginId},
+		#{password},
+		#{name},
+		#{nickname},
+		#{email},
+		#{phone},
+		#{birthDate},
+		#{profileImg},
+		#{region},
+		#{postcode},
+		#{address},
+		#{addressDetail},
+		#{bio}
+		)
+
 	</insert>
 
-	<select id="selectUser"
-        parameterType="String"
-        resultType="user">
+	<select id="selectUser" parameterType="String" resultType="user">
 
-	    SELECT
-	        user_id AS userId,
-	        login_id AS loginId,
-	        password,
-	        name,
-	        nickname AS nickname,
-	        email,
-	        phone,
-	        birth_date AS birthDate,
-	        profile_img AS profileImg,
-	        region,
-	        postcode,
-	        address,
-	        address_detail AS addressDetail,
-	        bio,
-	        provider,
-	        role,
-	        status,
-	        last_login_at AS lastLoginAt,
-	        created_at AS createdAt,
-	        updated_at AS updatedAt,
-	        profile_visibility AS profileVisibility,
-	        show_liked_itinerary AS showLikedItinerary,
-	        show_bookmarked_itinerary AS showBookmarkedItinerary,
-	        notify_like AS notifyLike,
-	        notify_comment AS notifyComment
-	
-	    FROM TB_USER
-	
-	    WHERE login_id = #{loginId}
-	      AND status = 'ACTIVE'
-	
+		SELECT
+		user_id AS userId,
+		login_id AS loginId,
+		password,
+		name,
+		nickname AS nickname,
+		email,
+		phone,
+		birth_date AS birthDate,
+		profile_img AS profileImg,
+		region,
+		postcode,
+		address,
+		address_detail AS addressDetail,
+		bio,
+		provider,
+		role,
+		status,
+		last_login_at AS lastLoginAt,
+		created_at AS createdAt,
+		updated_at AS updatedAt,
+		profile_visibility AS profileVisibility,
+		show_liked_itinerary AS showLikedItinerary,
+		show_bookmarked_itinerary AS showBookmarkedItinerary,
+		notify_like AS notifyLike,
+		notify_comment AS notifyComment
+
+		FROM TB_USER
+
+		WHERE login_id = #{loginId}
+		AND status = 'ACTIVE'
+
 	</select>
-	
+
 	<!-- 비밀번호 찾기 관련 함수 -->
-	<select id="findPasswordUser" parameterType="map" resultType="Long">
+	<select id="findPasswordUser" parameterType="map"
+		resultType="Long">
 		SELECT user_id FROM TB_USER
 		WHERE login_id = #{loginId}
-			AND name = #{name}
-			AND email = #{email}
-			AND phone = #{phone}
-			AND status = 'ACTIVE'
+		AND name = #{name}
+		AND email = #{email}
+		AND phone = #{phone}
+		AND status = 'ACTIVE'
 	</select>
-	
+
 	<!-- 비밀번호 변경 -->
 	<update id="resetPassword" parameterType="map">
 		UPDATE TB_USER
 		SET
-			password = #{password},
-			updated_at = NOW()
-			
+		password = #{password},
+		updated_at = NOW()
+
 		WHERE user_id = #{userId}
 		AND status = 'ACTIVE'
 	</update>
-	
+
 	<!-- user id를 가져와서 입력된 password와 똑같은지 체크하기 위한 함수(현재 회원 탈퇴 시 이용됨) -->
-	<select id="selectPasswordByUserId"
-			parameterType="long"
-			resultType="String">
-			
-			SELECT password
-			FROM TB_USER
-			WHERE user_id = #{value}
-				AND status='ACTIVE' 
-	
+	<select id="selectPasswordByUserId" parameterType="long"
+		resultType="String">
+
+		SELECT password
+		FROM TB_USER
+		WHERE user_id = #{value}
+		AND status='ACTIVE'
+
 	</select>
-	
+
 	<!-- 회원 탈퇴 시 데이터 변경하는 함수(아이디, 닉네임, 이메일 비활성화->탈퇴회원 전용 value로 변경함) -->
-	<update id="withdrawUser"
-			parameterType="long">
-	
+	<update id="withdrawUser" parameterType="long">
+
 		UPDATE TB_USER
 
-    SET
-        status = 'WITHDRAWN',
+		SET
+		status = 'WITHDRAWN',
 
-        login_id =
-            CONCAT(
-                'withdrawn_',
-                user_id,
-                '_',
-                DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
-            ),
+		login_id =
+		CONCAT(
+		'withdrawn_',
+		user_id,
+		'_',
+		DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
+		),
 
-        nickname =
-            CONCAT(
-                '탈퇴회원_',
-                user_id,
-                '_',
-                DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
-            ),
+		nickname =
+		CONCAT(
+		'탈퇴회원_',
+		user_id,
+		'_',
+		DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
+		),
 
-        email =
-            CONCAT(
-                'withdrawn_',
-                user_id,
-                '_',
-                DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'),
-                '@deleted.local'
-            ),
+		email =
+		CONCAT(
+		'withdrawn_',
+		user_id,
+		'_',
+		DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'),
+		'@deleted.local'
+		),
 
-        updated_at = NOW()
+		updated_at = NOW()
 
-	    WHERE user_id = #{value}
-	      AND status = 'ACTIVE'	
-			
+		WHERE user_id = #{value}
+		AND status = 'ACTIVE'
+
 	</update>
-	
-	<!-- 아이디 중복 확인 -->
-	<select id="countLoginId"
-        parameterType="String"
-        resultType="int">
 
-	    SELECT COUNT(*)
-	    FROM TB_USER
-	    WHERE login_id = #{value}
-	
+	<!-- 아이디 중복 확인 -->
+	<select id="countLoginId" parameterType="String"
+		resultType="int">
+
+		SELECT COUNT(*)
+		FROM TB_USER
+		WHERE login_id = #{value}
+
 	</select>
-	
+
 	<!-- 닉네임 중복 확인 -->
-	<select id="countNickname"
-	        parameterType="String"
-	        resultType="int">
-	
-	    SELECT COUNT(*)
-	    FROM TB_USER
-	    WHERE nickname = #{value}
-	
+	<select id="countNickname" parameterType="String"
+		resultType="int">
+
+		SELECT COUNT(*)
+		FROM TB_USER
+		WHERE nickname = #{value}
+
 	</select>
-	
+
 	<!-- 이메일 중복 확인 -->
-	<select id="countEmail"
-	        parameterType="String"
-	        resultType="int">
-	
-	    SELECT COUNT(*)
-	    FROM TB_USER
-	    WHERE email = #{value}
-	
+	<select id="countEmail" parameterType="String" resultType="int">
+
+		SELECT COUNT(*)
+		FROM TB_USER
+		WHERE email = #{value}
+
 	</select>
-	
-	<select
-	    id="findSocialUser"
-	    parameterType="map"
-	    resultType="user">
-	
-	    SELECT
-	
-	        user_id
-	            AS userId,
-	
-	        login_id
-	            AS loginId,
-	
-	        password,
-	
-	        name,
-	
-	        nickname
-	            AS nickName,
-	
-	        email,
-	
-	        phone,
-	
-	        birth_date
-	            AS birthDate,
-	
-	        profile_img
-	            AS profileImg,
-	
-	        region,
-	
-	        postcode,
-	
-	        address,
-	
-	        address_detail
-	            AS addressDetail,
-	
-	        bio,
-	
-	        provider,
-	
-	        provider_user_id
-	            AS providerUserId,
-	
-	        role,
-	
-	        status
-	
-	    FROM TB_USER
-	
-	    WHERE provider =
-	        #{provider}
-	
-	      AND provider_user_id =
-	        #{providerUserId}
-	
-	      AND status =
-	        'ACTIVE'
-	
+
+	<select id="findSocialUser" parameterType="map"
+		resultType="user">
+
+		SELECT
+
+		user_id
+		AS userId,
+
+		login_id
+		AS loginId,
+
+		password,
+
+		name,
+
+		nickname
+		AS nickName,
+
+		email,
+
+		phone,
+
+		birth_date
+		AS birthDate,
+
+		profile_img
+		AS profileImg,
+
+		region,
+
+		postcode,
+
+		address,
+
+		address_detail
+		AS addressDetail,
+
+		bio,
+
+		provider,
+
+		provider_user_id
+		AS providerUserId,
+
+		role,
+
+		status
+
+		FROM TB_USER
+
+		WHERE provider =
+		#{provider}
+
+		AND provider_user_id =
+		#{providerUserId}
+
+		AND status =
+		'ACTIVE'
+
 	</select>
-	
-	<insert
-	    id="insertGoogleUser"
-	    parameterType="user">
-	
-	    INSERT INTO TB_USER
-	    (
-	        login_id,
-	        password,
-	        name,
-	        nickname,
-	        email,
-	        phone,
-	        profile_img,
-	        postcode,
-	        address,
-	        address_detail,
-	        provider,
-	        provider_user_id,
-	        role,
-	        status
-	    )
-	
-	    VALUES
-	    (
-	        #{loginId},
-	        NULL,
-	        #{name},
-	        #{nickName},
-	        #{email},
-	        #{phone},
-	        #{profileImg},
-	        #{postcode},
-	        #{address},
-	        #{addressDetail},
-	        'GOOGLE',
-	        #{providerUserId},
-	        'USER',
-	        'ACTIVE'
-	    )
-	
+
+	<insert id="insertGoogleUser" parameterType="user">
+
+		INSERT INTO TB_USER
+		(
+		login_id,
+		password,
+		name,
+		nickname,
+		email,
+		phone,
+		profile_img,
+		postcode,
+		address,
+		address_detail,
+		provider,
+		provider_user_id,
+		role,
+		status
+		)
+
+		VALUES
+		(
+		#{loginId},
+		NULL,
+		#{name},
+		#{nickName},
+		#{email},
+		#{phone},
+		#{profileImg},
+		#{postcode},
+		#{address},
+		#{addressDetail},
+		'GOOGLE',
+		#{providerUserId},
+		'USER',
+		'ACTIVE'
+		)
+
 	</insert>
-	
+
+	<update id="updateUser" parameterType="dto.member.UserDto">
+
+		UPDATE TB_USER
+
+		SET
+		name = #{name},
+
+		nickname = #{nickName},
+
+		phone = #{phone},
+
+		birth_date = #{birthDate},
+
+		region = #{region},
+
+		postcode = #{postcode},
+
+		address = #{address},
+
+		address_detail = #{addressDetail},
+
+		bio = #{bio},
+
+		profile_img = #{profileImg},
+
+		updated_at = CURRENT_TIMESTAMP
+
+		WHERE user_id = #{userId}
+
+		AND status = 'ACTIVE'
+
+	</update>
+
 </mapper>

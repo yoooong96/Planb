@@ -133,4 +133,15 @@ public class UserServiceImpl implements UserService {
 		
 	}
 
+	@Override
+	public void updateUser(UserDto user) throws Exception {
+		userDao.updateUser(user);
+		
+	}
+
+	@Override
+	public UserDto selectUser(String loginId) throws Exception {
+		return userDao.selectUser(loginId);
+	}
+
 }
