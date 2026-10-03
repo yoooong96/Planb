@@ -1,6 +1,8 @@
 package dto.community;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 
 public class TipDto {
 	private Long tipId;				// 꿀팁 게시글 번호
@@ -45,6 +47,36 @@ public class TipDto {
 		this.nickname = nickname;
 		this.likeCount = likeCount;
 		this.commentCount = commentCount;
+	}
+	
+	public String getTimeAgo() {
+		if (createdAt == null) {
+			return "";
+		}
+		LocalDateTime now = LocalDateTime.now();
+		long seconds = ChronoUnit.SECONDS.between(createdAt, now);
+		if (seconds < 60) return "방금 전";
+		
+		long minutes = ChronoUnit.MINUTES.between(createdAt, now);
+		if (minutes < 60) return minutes + "분 전";
+		
+		long hours = ChronoUnit.HOURS.between(createdAt, now);
+		if (hours < 24) return hours + "시간 전";
+		
+		long days = ChronoUnit.DAYS.between(createdAt, now);
+		if (days < 7) return days + "일 전";
+
+		return createdAt.format(DateTimeFormatter.ofPattern("yyyy.MM.dd")
+		);
+	}
+	
+	public String[] getHashtagList() {
+
+		if (hashtag == null || hashtag.trim().isEmpty()) {
+			return new String[0];
+		}
+
+		return hashtag.trim().split("\\s+");
 	}
 	
 	public Long getTipId() {

@@ -72,8 +72,16 @@
 	
 		WHERE t.status = 'ACTIVE' AND t.visibility = 'PUBLIC'
 	
-		<if test="country != null and country != ''">
-			AND t.hashtag LIKE CONCAT('%', #{country}, '%')
+		<if test="countryKeywords != null and countryKeywords.size() > 0">
+			AND (
+				<foreach collection="countryKeywords"
+					item="countryKeyword"
+					separator=" OR ">
+					
+					t.hashtag LIKE CONCAT('%#', #{countryKeyword}, '%')
+					
+				</foreach>
+			)
 		</if>
 	
 		<if test="keyword != null and keyword != ''">
@@ -93,6 +101,24 @@
 				ORDER BY t.created_at DESC
 			</otherwise>
 		</choose>
+		LIMIT #{pageSize}
+		OFFSET #{offset}
+	</select>
+	
+	<select id="countTipListByFilter" resultType="int">
+		SELECT COUNT(*) FROM TB_TIP t WHERE t.status = 'ACTIVE' AND t.visibility = 'PUBLIC'
+	
+		<if test="countryKeywords != null and countryKeywords.size() > 0">
+			AND (
+				<foreach collection="countryKeywords" item="countryKeyword" separator=" OR ">
+					t.hashtag LIKE CONCAT('%#', #{countryKeyword}, '%')
+				</foreach>
+			)
+		</if>
+	
+		<if test="keyword != null and keyword != ''">
+			AND t.hashtag LIKE CONCAT('%', #{keyword}, '%')
+		</if>
 	</select>
 
 </mapper>

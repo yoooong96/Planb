@@ -64,15 +64,34 @@ public class TipDaoImpl implements TipDao {
 	}
 
 	@Override
-	public List<TipDto> selectTipListByFilter(String country, String keyword, String sort) {
+	public List<TipDto> selectTipListByFilter(List<String> countryKeywords, String keyword, String sort, int pageSize, int offset) {
 		Map<String, Object> param = new HashMap<>();
-		param.put("country", country);
+		param.put("countryKeywords", countryKeywords);
 		param.put("keyword", keyword);
 		param.put("sort", sort);
+		
+		// 무한 스크롤 페이지 처리
+		param.put("pageSize", pageSize);
+		param.put("offset", offset);
 		
 		try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
 			return sqlSession.selectList("mapper.community.tip.selectTipListByFilter", param);
 		} catch(Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+	
+	@Override
+	public int countTipListByFilter(List<String> countryKeywords, String keyword) {
+		Map<String, Object> param = new HashMap<>();
+
+		param.put("countryKeywords", countryKeywords);
+		param.put("keyword", keyword);
+
+		try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+			return sqlSession.selectOne("mapper.community.tip.countTipListByFilter", param);
+		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;
 		}

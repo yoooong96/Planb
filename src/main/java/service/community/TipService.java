@@ -14,5 +14,7 @@ public interface TipService {
 	// 해시태그 검색
 	List<TipDto> searchTipByHashtag(String keyword);
 	
-	List<TipDto> selectTipListByFilter(String country, String keyword, String sort);
+	List<TipDto> selectTipListByFilter(String country, String keyword, String sort, int page, int pageSize);
+	
+	int countTipListByFilter(String country, String keyword);
 }

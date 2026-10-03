@@ -24,5 +24,7 @@ public interface TipDao {
 	// 해시태그 검색
 	List<TipDto> searchTipByHashtag(String keyword);
 	
-	List<TipDto> selectTipListByFilter(String country, String keyword, String sort);
+	List<TipDto> selectTipListByFilter(List<String> countryKeywords, String keyword, String sort, int pageSize, int offset);
+	
+	int countTipListByFilter(List<String> countryKeywords, String keyword);
 }

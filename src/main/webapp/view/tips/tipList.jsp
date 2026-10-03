@@ -14,6 +14,7 @@ request.setAttribute("activePage", "tips");
 	<script>
 		window.selectedCountry = "${country}";
 	</script>
+	<link rel="stylesheet" href="${pageContext.request.contextPath}/view/assets/css/tips/tipList.css">
 	<script defer src="${pageContext.request.contextPath}/view/assets/js/tips/tipList.js"></script>
 </head>
 <body class="site-shell">
@@ -44,27 +45,22 @@ request.setAttribute("activePage", "tips");
 				
 				<div class="border-t border-gray-100 mb-3"></div>
 				
-				<button type="button" class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl transition-all mb-1"
-				    style="background: var(--brand); color: #fff">
-				    <span class="flex items-center gap-2 text-sm font-semibold">
-				        <svg width="16" height="16"
-				            viewBox="0 0 24 24"
-				            fill="none"
-				            stroke="#fff"
-				            stroke-width="2">
-				            <circle cx="12" cy="12" r="10" />
-				            <line x1="2" y1="12" x2="22" y2="12" />
-				            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
-				        </svg>
-				        전체보기
-				    </span>
-				
-				    <span
-				        class="text-xs rounded-full px-2 py-0.5 font-semibold"
-				        style="background: rgba(255, 255, 255, .25); color: #fff">
-				        8
-				    </span>
-				</button>
+				<a href="${pageContext.request.contextPath}/tips"
+					class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl transition-all mb-1"
+					style="background: var(--brand); color: #fff;">
+					<span class="flex items-center gap-2 text-sm font-semibold">
+						<svg width="16" height="16"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="#fff"
+							stroke-width="2">
+							<circle cx="12" cy="12" r="10" />
+							<line x1="2" y1="12" x2="22" y2="12" />
+							<path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+						</svg>
+						전체보기
+					</span>
+				</a>
 				<div
 					class="text-xs font-bold text-gray-400 uppercase tracking-widest px-3 mb-1 mt-1">여행 지역
 				</div>
@@ -86,47 +82,47 @@ request.setAttribute("activePage", "tips");
 						</svg>
 					</button>
 					<div class="continent-panel hidden pl-8 pr-2 py-1 space-y-1" data-continent-panel="asia">
-						<a href="${pageContext.request.contextPath}/tips?country=대한민국&keyword=${keyword}&sort=${sort}"
+						<a href="${pageContext.request.contextPath}/tips?country=대한민국&sort=${sort}"
 							class="block w-full text-left px-3 py-2 rounded-lg text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600">
 							🇰🇷 대한민국
 						</a>
-						<a href="${pageContext.request.contextPath}/tips?country=일본&keyword=${keyword}&sort=${sort}"
+						<a href="${pageContext.request.contextPath}/tips?country=일본&sort=${sort}"
 							class="block w-full text-left px-3 py-2 rounded-lg text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600">
 							🇯🇵 일본
 						</a>
-						<a href="${pageContext.request.contextPath}/tips?country=중국&keyword=${keyword}&sort=${sort}"
+						<a href="${pageContext.request.contextPath}/tips?country=중국&sort=${sort}"
 							class="block w-full text-left px-3 py-2 rounded-lg text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600">
 							🇨🇳 중국
 						</a>
-						<a href="${pageContext.request.contextPath}/tips?country=대만&keyword=${keyword}&sort=${sort}"
+						<a href="${pageContext.request.contextPath}/tips?country=대만&sort=${sort}"
 							class="block w-full text-left px-3 py-2 rounded-lg text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600">
 							🇹🇼 대만
 						</a>
-						<a href="${pageContext.request.contextPath}/tips?country=홍콩&keyword=${keyword}&sort=${sort}"
+						<a href="${pageContext.request.contextPath}/tips?country=홍콩&sort=${sort}"
 							class="block w-full text-left px-3 py-2 rounded-lg text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600">
 							🇭🇰 홍콩
 						</a>
-						<a href="${pageContext.request.contextPath}/tips?country=태국&keyword=${keyword}&sort=${sort}"
+						<a href="${pageContext.request.contextPath}/tips?country=태국&sort=${sort}"
 							class="block w-full text-left px-3 py-2 rounded-lg text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600">
 							🇹🇭 태국
 						</a>
-						<a href="${pageContext.request.contextPath}/tips?country=베트남&keyword=${keyword}&sort=${sort}"
+						<a href="${pageContext.request.contextPath}/tips?country=베트남&sort=${sort}"
 							class="block w-full text-left px-3 py-2 rounded-lg text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600">
 							🇻🇳 베트남
 						</a>
-						<a href="${pageContext.request.contextPath}/tips?country=필리핀&keyword=${keyword}&sort=${sort}"
+						<a href="${pageContext.request.contextPath}/tips?country=필리핀&sort=${sort}"
 							class="block w-full text-left px-3 py-2 rounded-lg text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600">
 							🇵🇭 필리핀
 						</a>
-						<a href="${pageContext.request.contextPath}/tips?country=싱가포르&keyword=${keyword}&sort=${sort}"
+						<a href="${pageContext.request.contextPath}/tips?country=싱가포르&sort=${sort}"
 							class="block w-full text-left px-3 py-2 rounded-lg text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600">
 							🇸🇬 싱가포르
 						</a>
-						<a href="${pageContext.request.contextPath}/tips?country=말레이시아&keyword=${keyword}&sort=${sort}"
+						<a href="${pageContext.request.contextPath}/tips?country=말레이시아&sort=${sort}"
 							class="block w-full text-left px-3 py-2 rounded-lg text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600">
 							🇲🇾 말레이시아
 						</a>
-						<a href="${pageContext.request.contextPath}/tips?country=인도네시아&keyword=${keyword}&sort=${sort}"
+						<a href="${pageContext.request.contextPath}/tips?country=인도네시아&sort=${sort}"
 							class="block w-full text-left px-3 py-2 rounded-lg text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600">
 							🇮🇩 인도네시아
 						</a>
@@ -199,31 +195,31 @@ request.setAttribute("activePage", "tips");
 						</svg>
 					</button>
 					<div class="continent-panel hidden pl-8 pr-2 py-1 space-y-1"data-continent-panel="europe">
-						<a href="${pageContext.request.contextPath}/tips?country=독일&keyword=${keyword}&sort=${sort}"
+						<a href="${pageContext.request.contextPath}/tips?country=독일&sort=${sort}"
 							class="block w-full text-left px-3 py-2 rounded-lg text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600">
 							🇩🇪 독일
 						</a>
-						<a href="${pageContext.request.contextPath}/tips?country=포르투갈&keyword=${keyword}&sort=${sort}"
+						<a href="${pageContext.request.contextPath}/tips?country=포르투갈&sort=${sort}"
 							class="block w-full text-left px-3 py-2 rounded-lg text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600">
 							🇵🇹 포르투갈
 						</a>
-						<a href="${pageContext.request.contextPath}/tips?country=프랑스&keyword=${keyword}&sort=${sort}"
+						<a href="${pageContext.request.contextPath}/tips?country=프랑스&sort=${sort}"
 							class="block w-full text-left px-3 py-2 rounded-lg text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600">
 							🇫🇷 프랑스
 						</a>
-						<a href="${pageContext.request.contextPath}/tips?country=그리스&keyword=${keyword}&sort=${sort}"
+						<a href="${pageContext.request.contextPath}/tips?country=그리스&sort=${sort}"
 							class="block w-full text-left px-3 py-2 rounded-lg text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600">
 							🇬🇷 그리스
 						</a>
-						<a href="${pageContext.request.contextPath}/tips?country=스페인&keyword=${keyword}&sort=${sort}"
+						<a href="${pageContext.request.contextPath}/tips?country=스페인&sort=${sort}"
 							class="block w-full text-left px-3 py-2 rounded-lg text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600">
 							🇪🇸 스페인
 						</a>
-						<a href="${pageContext.request.contextPath}/tips?country=영국&keyword=${keyword}&sort=${sort}"
+						<a href="${pageContext.request.contextPath}/tips?country=영국&sort=${sort}"
 							class="block w-full text-left px-3 py-2 rounded-lg text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600">
 							🇬🇧 영국
 						</a>
-						<a href="${pageContext.request.contextPath}/tips?country=이탈리아&keyword=${keyword}&sort=${sort}"
+						<a href="${pageContext.request.contextPath}/tips?country=이탈리아&sort=${sort}"
 							class="block w-full text-left px-3 py-2 rounded-lg text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600">
 							🇮🇹 이탈리아
 						</a>
@@ -245,15 +241,15 @@ request.setAttribute("activePage", "tips");
 						</svg>
 					</button>
 					<div class="continent-panel hidden pl-8 pr-2 py-1 space-y-1" data-continent-panel="north-america">
-						<a href="${pageContext.request.contextPath}/tips?country=멕시코&keyword=${keyword}&sort=${sort}"
+						<a href="${pageContext.request.contextPath}/tips?country=멕시코&sort=${sort}"
 							class="block w-full text-left px-3 py-2 rounded-lg text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600">
 							🇲🇽 멕시코
 						</a>
-						<a href="${pageContext.request.contextPath}/tips?country=미국&keyword=${keyword}&sort=${sort}"
+						<a href="${pageContext.request.contextPath}/tips?country=미국&sort=${sort}"
 							class="block w-full text-left px-3 py-2 rounded-lg text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600">
 							🇺🇸 미국
 						</a>
-						<a href="${pageContext.request.contextPath}/tips?country=캐나다&keyword=${keyword}&sort=${sort}"
+						<a href="${pageContext.request.contextPath}/tips?country=캐나다&sort=${sort}"
 							class="block w-full text-left px-3 py-2 rounded-lg text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600">
 							🇨🇦 캐나다
 						</a>
@@ -275,19 +271,19 @@ request.setAttribute("activePage", "tips");
 						</svg>
 					</button>
 					<div class="continent-panel hidden pl-8 pr-2 py-1 space-y-1" data-continent-panel="south-america">
-						<a href="${pageContext.request.contextPath}/tips?country=브라질&keyword=${keyword}&sort=${sort}"
+						<a href="${pageContext.request.contextPath}/tips?country=브라질&sort=${sort}"
 							class="block w-full text-left px-3 py-2 rounded-lg text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600">
 							🇧🇷 브라질
 						</a>
-						<a href="${pageContext.request.contextPath}/tips?country=아르헨티나&keyword=${keyword}&sort=${sort}"
+						<a href="${pageContext.request.contextPath}/tips?country=아르헨티나&sort=${sort}"
 							class="block w-full text-left px-3 py-2 rounded-lg text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600">
 							🇦🇷 아르헨티나
 						</a>
-						<a href="${pageContext.request.contextPath}/tips?country=칠레&keyword=${keyword}&sort=${sort}"
+						<a href="${pageContext.request.contextPath}/tips?country=칠레&sort=${sort}"
 							class="block w-full text-left px-3 py-2 rounded-lg text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600">
 							🇨🇱 칠레
 						</a>
-						<a href="${pageContext.request.contextPath}/tips?country=페루&keyword=${keyword}&sort=${sort}"
+						<a href="${pageContext.request.contextPath}/tips?country=페루&sort=${sort}"
 							class="block w-full text-left px-3 py-2 rounded-lg text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600">
 							🇵🇪 페루
 						</a>
@@ -309,19 +305,19 @@ request.setAttribute("activePage", "tips");
 						</svg>
 					</button> 
 					<div class="continent-panel hidden pl-8 pr-2 py-1 space-y-1" data-continent-panel="africa">
-						<a href="${pageContext.request.contextPath}/tips?country=남아프리카&keyword=${keyword}&sort=${sort}"
+						<a href="${pageContext.request.contextPath}/tips?country=남아프리카&sort=${sort}"
 							class="block w-full text-left px-3 py-2 rounded-lg text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600">
 							🇿🇦 남아프리카
 						</a>
-						<a href="${pageContext.request.contextPath}/tips?country=모르코&keyword=${keyword}&sort=${sort}"
+						<a href="${pageContext.request.contextPath}/tips?country=모르코&sort=${sort}"
 							class="block w-full text-left px-3 py-2 rounded-lg text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600">
 							🇲🇦 모로코
 						</a>
-						<a href="${pageContext.request.contextPath}/tips?country=이집트&keyword=${keyword}&sort=${sort}"
+						<a href="${pageContext.request.contextPath}/tips?country=이집트&sort=${sort}"
 							class="block w-full text-left px-3 py-2 rounded-lg text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600">
 							🇪🇬 이집트
 						</a>
-						<a href="${pageContext.request.contextPath}/tips?country=케냐&keyword=${keyword}&sort=${sort}"
+						<a href="${pageContext.request.contextPath}/tips?country=케냐&sort=${sort}"
 							class="block w-full text-left px-3 py-2 rounded-lg text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600">
 							🇰🇪 케냐
 						</a>
@@ -343,15 +339,15 @@ request.setAttribute("activePage", "tips");
 						</svg>
 					</button>
 					<div class="continent-panel hidden pl-8 pr-2 py-1 space-y-1" data-continent-panel="oceania">
-						<a href="${pageContext.request.contextPath}/tips?country=뉴질랜드&keyword=${keyword}&sort=${sort}"
+						<a href="${pageContext.request.contextPath}/tips?country=뉴질랜드&sort=${sort}"
 							class="block w-full text-left px-3 py-2 rounded-lg text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600">
 							🇳🇿 뉴질랜드
 						</a>
-						<a href="${pageContext.request.contextPath}/tips?country=피지&keyword=${keyword}&sort=${sort}"
+						<a href="${pageContext.request.contextPath}/tips?country=피지&sort=${sort}"
 							class="block w-full text-left px-3 py-2 rounded-lg text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600">
 							🇫🇯 피지
 						</a>
-						<a href="${pageContext.request.contextPath}/tips?country=호주&keyword=${keyword}&sort=${sort}"
+						<a href="${pageContext.request.contextPath}/tips?country=호주&sort=${sort}"
 							class="block w-full text-left px-3 py-2 rounded-lg text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600">
 							🇦🇺 호주
 						</a>
@@ -373,15 +369,15 @@ request.setAttribute("activePage", "tips");
 						</svg>
 					</button>
 					<div class="continent-panel hidden pl-8 pr-2 py-1 space-y-1" data-continent-panel="middle-east">
-						<a href="${pageContext.request.contextPath}/tips?country=아랍에미리트&keyword=${keyword}&sort=${sort}"
+						<a href="${pageContext.request.contextPath}/tips?country=아랍에미리트&sort=${sort}"
 							class="block w-full text-left px-3 py-2 rounded-lg text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600">
 							🇦🇪 UAE
 						</a>
-						<a href="${pageContext.request.contextPath}/tips?country=이스라엘&keyword=${keyword}&sort=${sort}"
+						<a href="${pageContext.request.contextPath}/tips?country=이스라엘&sort=${sort}"
 							class="block w-full text-left px-3 py-2 rounded-lg text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600">
 							🇮🇱 이스라엘
 						</a>
-						<a href="${pageContext.request.contextPath}/tips?country=터키&keyword=${keyword}&sort=${sort}"
+						<a href="${pageContext.request.contextPath}/tips?country=터키&sort=${sort}"
 							class="block w-full text-left px-3 py-2 rounded-lg text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600">
 							🇹🇷 터키
 						</a>
@@ -418,28 +414,28 @@ request.setAttribute("activePage", "tips");
 				<div class="flex items-center justify-between mb-5 gap-4 flex-wrap">
 					<!-- 왼쪽 : 게시글 수 -->
 					<p class="text-[12px] font-medium text-gray-500">
-				        총 <span class="font-bold" style="color: #6369D1">${tipList.size()}</span>개의 여행 꿀팁
+				        총 <span class="font-bold" style="color: #6369D1">${totalCount}</span>개의 여행 꿀팁
 				    </p>
 				    <!-- 오른쪽 : 정렬 + 글쓰기 -->
 				    <div class="flex items-center gap-4 flex-wrap">	
 						<!-- 정렬 -->
 					    <div class="flex gap-4">
 				            <!-- 최신순 -->
-							<a href="${pageContext.request.contextPath}/tips?country=${country}&keyword=${keyword}&sort=latest"
+							<a href="${pageContext.request.contextPath}/tips?country=${country}&sort=latest"
 								class="text-sm pb-0.5 transition-colors"
 								style="${sort == 'latest' ? 'color:#6369D1; font-weight:600; border-bottom:2px solid #6369D1' : 'color:#9ca3af'}">
 								최신순
 							</a>
 						
 							<!-- 조회순 -->
-							<a href="${pageContext.request.contextPath}/tips?country=${country}&keyword=${keyword}&sort=views"
+							<a href="${pageContext.request.contextPath}/tips?country=${country}&sort=views"
 								class="text-sm pb-0.5 transition-colors"
 								style="${sort == 'views' ? 'color:#6369D1; font-weight:600; border-bottom:2px solid #6369D1' : 'color:#9ca3af'}">
 								조회순
 							</a>
 						
 							<!-- 좋아요순 -->
-							<a href="${pageContext.request.contextPath}/tips?country=${country}&keyword=${keyword}&sort=likes"
+							<a href="${pageContext.request.contextPath}/tips?country=${country}&sort=likes"
 								class="text-sm pb-0.5 transition-colors"
 								style="${sort == 'likes' ? 'color:#6369D1; font-weight:600; border-bottom:2px solid #6369D1' : 'color:#9ca3af'}">
 								좋아요순
@@ -488,6 +484,17 @@ request.setAttribute("activePage", "tips");
 								<p class="text-[11px] text-gray-500 leading-relaxed line-clamp-2 flex-1">
 									<c:out value="${tip.content}" />
 								</p>
+								<c:if test="${not empty tip.hashtag}">
+									<div class="flex flex-wrap gap-1.5 mt-2 mb-3">
+										<c:forEach var="tag" items="${tip.hashtagList}">
+											<span
+												class="inline-flex items-center rounded-full px-2.5 py-1 text-[11px] font-semibold"
+												style="background: #FFD447; color: #6369D1; border: 1px solid #E0E1FF;">
+												${tag}
+											</span>
+										</c:forEach>
+									</div>
+								</c:if>
 								<div class="pt-2 mt-auto border-t border-gray-50">
 									<div class="flex items-center gap-1.5 mb-1.5">
 										<div class="w-5 h-5 rounded-full flex items-center justify-center text-white text-[9px] font-bold shrink-0"
@@ -506,7 +513,7 @@ request.setAttribute("activePage", "tips");
 										</span>
 										<span class="text-[10px] text-gray-300">·</span>
 										<span class="text-[10px] text-gray-400">
-											${tip.createdAt}
+											${tip.timeAgo}
 										</span>
 									</div>
 									<div class="flex items-center gap-3 text-[10px] text-gray-400">
@@ -522,7 +529,44 @@ request.setAttribute("activePage", "tips");
 						</a>
 					</c:forEach>
 				</div>
+				<!-- 무한 스크롤 로딩 영역 -->
+				<c:if test="${totalCount > 0}">
+					<div id="tipInfiniteScroll" class="flex flex-col items-center justify-center py-8"
+						data-current-count="${tipList.size()}"
+						data-total-count="${totalCount}"
+						data-current-page="${page}"
+						data-page-size="${pageSize}">
 				
+						<!-- 다음 페이지 로딩 중에 표시 -->
+						<div id="tipLoading" class="hidden flex-col items-center gap-2">
+							<div class="tip-loading-spinner"></div>
+							<p class="text-[12px] font-medium text-gray-500">
+								여행 꿀팁을 불러오는 중...
+							</p>
+							<p class="text-[11px] text-gray-400">
+								<span id="tipCurrentCount">${tipList.size()}</span>
+								/
+								총 <span id="tipTotalCount">${totalCount}</span>개
+							</p>
+						</div>
+						<!-- 마지막 페이지 -->
+						<div id="tipLoadComplete"
+							class="${tipList.size() >= totalCount ? 'flex' : 'hidden'} flex-col items-center gap-1">
+							<p class="text-[12px] font-semibold" style="color: #6369D1;">
+								모든 여행 꿀팁을 확인했습니다 ✓
+							</p>
+							<p class="text-[11px] text-gray-400">
+								<span id="tipCompleteCount">${tipList.size()}</span>
+								/
+								총 ${totalCount}개
+							</p>
+						</div>
+						<!-- 스크롤 감지 지점 -->
+						<div id="tipScrollSentinel" class="${tipList.size() < totalCount ? 'block' : 'hidden'}"
+							style="width: 100%; height: 1px;">
+						</div>
+					</div>
+				</c:if>
 				<c:if test="${empty tipList}">
 					<div class="py-20 text-center">
 						<p class="text-sm font-medium text-gray-500">
@@ -533,11 +577,14 @@ request.setAttribute("activePage", "tips");
 						</p>
 					</div>
 				</c:if>
-				<div class="mt-10 flex flex-col items-center gap-3">
-					<p class="text-xs text-gray-400 py-4">모든 꿀팁을 확인했습니다 ✓</p>
-				</div>
 			</main>
 	</div>
 	<jsp:include page="/common/footer.jsp" />
+	<!-- 최상단 이동 버튼 -->
+	<button type="button"  id="tipScrollTopBtn" class="tip-scroll-top-btn" aria-label="페이지 최상단으로 이동">
+		<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+			<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M12 19V5M5 12l7-7 7 7" />
+		</svg>
+	</button>
 </body>
 </html>
