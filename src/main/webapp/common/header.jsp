@@ -87,7 +87,7 @@ if (user != null
         ========================== -->
 
         <a class="site-brand"
-           href="<%=ctx%>/view/home/home.jsp"
+           href="<%=ctx%>/home"
            aria-label="Planb 홈">
 
             <span class="tripily-mark"
@@ -160,7 +160,7 @@ if (user != null
             <!-- 여행 꿀팁 -->
             <a
                 class="<%=homeHeader ? "site-nav-pill" : "site-nav-link"%> <%="tips".equals(activePage) ? "active" : ""%>"
-                href="<%=ctx%>/view/tips/tipList.jsp">
+                href="<%=ctx%>/tips">
 
                 여행꿀팁
 

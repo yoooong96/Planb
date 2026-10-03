@@ -16,13 +16,18 @@ public class TipDto {
 	private LocalDateTime createdAt;// 작성 일시
 	private LocalDateTime updatedAt;// 수정 일시
 	private String hashtag;			// 해시태그
+	private String nickname;		// 작성자 닉네임
+	private int likeCount;			// 좋아요 수
+	private int commentCount;
+	
 	public TipDto() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
+	
 	public TipDto(Long tipId, Long userId, String title, String content, String thumbnailImg, String visibility,
 			int viewCount, String status, Long deletedByUserId, LocalDateTime deletedAt, LocalDateTime createdAt,
-			LocalDateTime updatedAt, String hashtag) {
+			LocalDateTime updatedAt, String hashtag, String nickname, int likeCount, int commentCount) {
 		super();
 		this.tipId = tipId;
 		this.userId = userId;
@@ -37,7 +42,11 @@ public class TipDto {
 		this.createdAt = createdAt;
 		this.updatedAt = updatedAt;
 		this.hashtag = hashtag;
+		this.nickname = nickname;
+		this.likeCount = likeCount;
+		this.commentCount = commentCount;
 	}
+	
 	public Long getTipId() {
 		return tipId;
 	}
@@ -116,13 +125,34 @@ public class TipDto {
 	public void setHashtag(String hashtag) {
 		this.hashtag = hashtag;
 	}
+
+	public String getNickname() {
+		return nickname;
+	}
+
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
+	}
+	public int getLikeCount() {
+		return likeCount;
+	}
+	public void setLikeCount(int likeCount) {
+		this.likeCount = likeCount;
+	}
+	public int getCommentCount() {
+		return commentCount;
+	}
+	public void setCommentCount(int commentCount) {
+		this.commentCount = commentCount;
+	}
+
 	@Override
 	public String toString() {
 		return "TipDto [tipId=" + tipId + ", userId=" + userId + ", title=" + title + ", content=" + content
 				+ ", thumbnailImg=" + thumbnailImg + ", visibility=" + visibility + ", viewCount=" + viewCount
 				+ ", status=" + status + ", deletedByUserId=" + deletedByUserId + ", deletedAt=" + deletedAt
-				+ ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + ", hashtag=" + hashtag + "]";
+				+ ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + ", hashtag=" + hashtag + ", nickname="
+				+ nickname + ", likeCount=" + likeCount + ", commentCount=" + commentCount + "]";
 	}
-	
 	
 }

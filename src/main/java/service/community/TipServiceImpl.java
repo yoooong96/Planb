@@ -13,6 +13,11 @@ public class TipServiceImpl implements TipService {
 	public TipServiceImpl() {
 		tipDao = new TipDaoImpl();
 	}
+	
+	@Override
+	public int insertTip(TipDto tipDto) {
+		return tipDao.insertTip(tipDto);
+	}
 
 	@Override
 	public List<TipDto> getTipList() {
@@ -23,4 +28,10 @@ public class TipServiceImpl implements TipService {
 	public List<TipDto> searchTipByHashtag(String keyword) {
 		return tipDao.searchTipByHashtag(keyword);
 	}
+	
+	@Override
+	public List<TipDto> selectTipListByFilter(String country, String keyword, String sort) {
+		return tipDao.selectTipListByFilter(country, keyword, sort);
+	}
+	
 }

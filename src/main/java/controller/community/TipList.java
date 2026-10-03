@@ -13,55 +13,43 @@ import dto.community.TipDto;
 import service.community.TipService;
 import service.community.TipServiceImpl;
 
-@WebServlet("/community/tiplist")
+@WebServlet("/tips")
 public class TipList extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 
+	private TipService tipService;
+
 	public TipList() {
 		super();
+		tipService = new TipServiceImpl();
 	}
 
 	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-
-		// 검색어 받기
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String country = request.getParameter("country");
 		String keyword = request.getParameter("keyword");
+		String sort = request.getParameter("sort");
 
-		// Service 생성
-		TipService service = new TipServiceImpl();
-
-		// 조회된 여행꿀팁 목록
-		List<TipDto> tipList;
-
-		// 검색어가 없으면 전체 조회
-		if (keyword == null || keyword.trim().isEmpty()) {
-
-			tipList = service.getTipList();
-
-		} else {
-
-			// 앞뒤 공백 제거
-			keyword = keyword.trim();
-
-			// 해시태그 검색
-			tipList = service.searchTipByHashtag(keyword);
+		if (sort == null || sort.trim().isEmpty()) {
+			sort = "latest";
 		}
+		try {
+			List<TipDto> tipList = tipService.selectTipListByFilter(country, keyword, sort);
 
-		// JSP로 데이터 전달
-		request.setAttribute("tipList", tipList);
-		request.setAttribute("keyword", keyword);
+			request.setAttribute("tipList", tipList);
+			request.setAttribute("country", country);
+			request.setAttribute("keyword", keyword);
+			request.setAttribute("sort", sort);
 
-		// 여행꿀팁 목록 페이지로 이동
-		request.getRequestDispatcher("/view/tips/tipList.jsp")
-			   .forward(request, response);
+			request.getRequestDispatcher("/view/tips/tipList.jsp" ).forward(request, response);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new ServletException(e);
+		}
 	}
-
 	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doGet(request, response);
 	}
 }

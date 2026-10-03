@@ -1,6 +1,8 @@
 package dao.community;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 
@@ -11,8 +13,14 @@ public class TipDaoImpl implements TipDao {
 
 	@Override
 	public int insertTip(TipDto tipDto) {
-		// TODO Auto-generated method stub
-		return 0;
+		try(SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+			int result = sqlSession.insert("mapper.community.tip.insertTip", tipDto);
+			sqlSession.commit();
+			return result;
+		} catch(Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
 	}
 
 	@Override
@@ -50,6 +58,21 @@ public class TipDaoImpl implements TipDao {
 		try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
 			return sqlSession.selectList("mapper.community.tip.searchTipByHashtag", keyword);
 		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+
+	@Override
+	public List<TipDto> selectTipListByFilter(String country, String keyword, String sort) {
+		Map<String, Object> param = new HashMap<>();
+		param.put("country", country);
+		param.put("keyword", keyword);
+		param.put("sort", sort);
+		
+		try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+			return sqlSession.selectList("mapper.community.tip.selectTipListByFilter", param);
+		} catch(Exception e) {
 			e.printStackTrace();
 			throw e;
 		}

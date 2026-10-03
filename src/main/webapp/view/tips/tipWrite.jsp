@@ -33,8 +33,8 @@ request.setAttribute("activePage", "tips");
 			</div>
 		</div>
 		<div class="max-w-3xl mx-auto px-4 py-10">
-			<form class="bg-white rounded-2xl shadow-md overflow-hidden"
-				style="border: 1.5px solid #D1D2F9">
+			<form action="${pageContext.request.contextPath}/tipWrite" method="post" enctype="multipart/form-data"
+				  class="bg-white rounded-2xl shadow-md overflow-hidden" style="border: 1.5px solid #D1D2F9">
 				<div class="flex items-center justify-between px-8 py-5"
 					style="background: linear-gradient(135deg, #6369D1 0%, #8b91e3 100%)">
 					<div>
@@ -42,7 +42,7 @@ request.setAttribute("activePage", "tips");
 						<p class="text-sm mt-0.5" style="color: #D1D2F9">여러분의 소중한 경험이
 							누군가에게 특별한 여행이 됩니다.</p>
 					</div>
-					<a href="${pageContext.request.contextPath}/view/tips/tipList.jsp"
+					<a href="${pageContext.request.contextPath}/tips"
 						class="flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-semibold text-white"
 						style="background: rgba(255, 255, 255, .15); border: 1px solid rgba(255, 255, 255, .3)">‹
 						목록으로</a>
@@ -54,80 +54,35 @@ request.setAttribute("activePage", "tips");
 							class="w-5 h-5 rounded-full flex items-center justify-center text-white text-xs font-bold bg-[#6369D1]">1</span>제목
 							<span class="text-red-500 text-xs">*</span></label>
 						<div class="relative">
-							<input maxlength="100" data-char-input
+							<input type="text" name="title" maxlength="100" data-char-input
 								class="jsp-focus w-full rounded-xl px-4 py-3 text-sm text-gray-800 outline-none"
-								style="border: 1.5px solid #D1D2F9" placeholder="제목을 입력해주세요."><span
-								class="absolute right-4 top-1/2 -translate-y-1/2 text-xs text-gray-300"><span
-								data-char-count>0</span>/100</span>
+								style="border: 1.5px solid #D1D2F9" placeholder="제목을 입력해주세요." equired>
+							<span class="absolute right-4 top-1/2 -translate-y-1/2 text-xs text-gray-300">
+								<span data-char-count>0</span>/100
+							</span>
 						</div>
+					</div>
+					<!-- 해시태그 -->
+					<div>
+						<label class="flex items-center gap-1.5 text-sm font-bold mb-2" style="color: #6369D1">
+							<span class="w-5 h-5 rounded-full flex items-center justify-center text-white text-xs font-bold bg-[#6369D1]">2</span>
+								해시태그
+							<span class="text-xs font-normal text-gray-400">(선택)</span>
+						</label>
+						<input type="text" name="hashtag" class="jsp-focus w-full rounded-xl px-4 py-3 text-sm text-gray-800 outline-none"
+							style="border: 1.5px solid #D1D2F9" placeholder="#일본 #도쿄 #교통 #맛집">
+						<p class="mt-2 text-xs text-gray-400">
+							여행 국가나 관련 키워드를 해시태그로 입력해주세요. 예: #일본 #도쿄 #교통
+						</p>
 					</div>
 					<div>
 						<label class="flex items-center gap-1.5 text-sm font-bold mb-3"
 							style="color: #6369D1"><span
-							class="w-5 h-5 rounded-full flex items-center justify-center text-white text-xs font-bold bg-[#6369D1]">2</span>카테고리
-							<span class="text-red-500 text-xs">*</span></label>
-						<div class="flex flex-wrap gap-2" data-chip-group>
-							<button type="button"
-								class="px-4 py-2 rounded-full text-sm font-semibold border-2 border-[#D1D2F9] text-gray-500">교통</button>
-							<button type="button"
-								class="px-4 py-2 rounded-full text-sm font-semibold border-2 border-[#D1D2F9] text-gray-500">숙박</button>
-							<button type="button"
-								class="px-4 py-2 rounded-full text-sm font-semibold border-2 border-[#D1D2F9] text-gray-500">음식</button>
-							<button type="button"
-								class="px-4 py-2 rounded-full text-sm font-semibold border-2 border-[#D1D2F9] text-gray-500">문화</button>
-							<button type="button"
-								class="px-4 py-2 rounded-full text-sm font-semibold border-2 border-[#D1D2F9] text-gray-500">기타</button>
-						</div>
-					</div>
-					<div>
-						<label class="flex items-center gap-1.5 text-sm font-bold mb-3"
-							style="color: #6369D1"><span
-							class="w-5 h-5 rounded-full flex items-center justify-center text-white text-xs font-bold bg-[#6369D1]">3</span>여행
-							국가 <span class="text-red-500 text-xs">*</span></label>
-						<div class="flex gap-1.5 mb-3 overflow-x-auto pb-0.5"
-							data-chip-group>
-							<button type="button"
-								class="px-3 py-1.5 rounded-full text-[11px] font-bold border-2 bg-[#6369D1] text-white border-[#6369D1]">🌏
-								아시아</button>
-							<button type="button"
-								class="px-3 py-1.5 rounded-full text-[11px] font-bold border-2 border-[#D1D2F9] text-gray-500">🗺️
-								유럽</button>
-							<button type="button"
-								class="px-3 py-1.5 rounded-full text-[11px] font-bold border-2 border-[#D1D2F9] text-gray-500">🌎
-								북아메리카</button>
-							<button type="button"
-								class="px-3 py-1.5 rounded-full text-[11px] font-bold border-2 border-[#D1D2F9] text-gray-500">🌿
-								남아메리카</button>
-							<button type="button"
-								class="px-3 py-1.5 rounded-full text-[11px] font-bold border-2 border-[#D1D2F9] text-gray-500">🌍
-								아프리카</button>
-						</div>
-						<div class="p-4 rounded-xl flex flex-wrap gap-2"
-							style="background: #fafaff; border: 1px solid #D1D2F9"
-							data-chip-group>
-							<button type="button"
-								class="px-3 py-1.5 rounded-full text-xs border bg-white border-[#D1D2F9] text-gray-500">대한민국</button>
-							<button type="button"
-								class="px-3 py-1.5 rounded-full text-xs border bg-white border-[#D1D2F9] text-gray-500">일본</button>
-							<button type="button"
-								class="px-3 py-1.5 rounded-full text-xs border bg-white border-[#D1D2F9] text-gray-500">태국</button>
-							<button type="button"
-								class="px-3 py-1.5 rounded-full text-xs border bg-white border-[#D1D2F9] text-gray-500">베트남</button>
-							<button type="button"
-								class="px-3 py-1.5 rounded-full text-xs border bg-white border-[#D1D2F9] text-gray-500">대만</button>
-							<button type="button"
-								class="px-3 py-1.5 rounded-full text-xs border bg-white border-[#D1D2F9] text-gray-500">싱가포르</button>
-						</div>
-					</div>
-					<div>
-						<label class="flex items-center gap-1.5 text-sm font-bold mb-3"
-							style="color: #6369D1"><span
-							class="w-5 h-5 rounded-full flex items-center justify-center text-white text-xs font-bold bg-[#6369D1]">4</span>내용
+							class="w-5 h-5 rounded-full flex items-center justify-center text-white text-xs font-bold bg-[#6369D1]">3</span>내용
 							<span class="text-red-500 text-xs">*</span></label>
 						<div class="rounded-xl overflow-hidden"
 							style="border: 1.5px solid #D1D2F9">
-							<div
-								class="flex flex-wrap gap-1 px-3 py-2 border-b border-[#D1D2F9] bg-[#FAFAFF]">
+							<div class="flex flex-wrap gap-1 px-3 py-2 border-b border-[#D1D2F9] bg-[#FAFAFF]">
 								<button type="button" class="px-2 py-1 text-xs font-bold">↩</button>
 								<button type="button" class="px-2 py-1 text-xs font-bold">↪</button>
 								<button type="button" class="px-2 py-1 text-xs">본문 ▾</button>
@@ -136,46 +91,79 @@ request.setAttribute("activePage", "tips");
 								<button type="button" class="px-2 py-1 text-xs underline">U</button>
 								<button type="button" class="px-2 py-1 text-xs">🖼</button>
 							</div>
-							<textarea
-								class="w-full min-h-[220px] p-4 outline-none resize-y text-sm text-gray-700"
-								placeholder="여행에서 직접 경험한 소중한 팁을 자세히 적어주세요."></textarea>
+							<textarea name="content" class="w-full min-h-[220px] p-4 outline-none resize-y text-sm text-gray-700"
+								placeholder="여행에서 직접 경험한 소중한 팁을 자세히 적어주세요." required>
+							</textarea>
 						</div>
 					</div>
 					<div>
 						<div class="flex items-center justify-between mb-2">
-							<label class="flex items-center gap-2 text-sm font-bold"
-								style="color: #6369D1">📎 사진 첨부</label><span
-								class="text-xs text-gray-400">최대 5장</span>
+							<label class="flex items-center gap-2 text-sm font-bold" style="color: #6369D1">📎 사진 첨부</label>
+							<span class="text-xs text-gray-400">최대 5장</span>
 						</div>
-						<label
-							class="rounded-xl py-12 flex flex-col items-center justify-center gap-3 cursor-pointer"
-							style="border: 2px dashed #D1D2F9; background: #fafaff"><input
-							type="file" multiple accept="image/*" class="hidden">
-						<div
-								class="w-14 h-14 rounded-2xl flex items-center justify-center bg-[#D1D2F9]">
-								<svg width="28" height="28" viewBox="0 0 24 24" fill="none"
-									stroke="#6369D1" stroke-width="1.8">
+						<label class="rounded-xl py-12 flex flex-col items-center justify-center gap-3 cursor-pointer"
+							style="border: 2px dashed #D1D2F9; background: #fafaff">
+							<input type="file" id="tipImages" name="images" multiple accept="image/*" class="hidden">
+							<div class="w-14 h-14 rounded-2xl flex items-center justify-center bg-[#D1D2F9]">
+								<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#6369D1" stroke-width="1.8">
 									<rect x="3" y="3" width="18" height="18" rx="2" />
 									<circle cx="8.5" cy="8.5" r="1.5" />
-									<polyline points="21 15 16 10 5 21" /></svg>
+									<polyline points="21 15 16 10 5 21" />
+								</svg>
 							</div>
 							<div class="text-center">
-								<p class="text-sm font-semibold text-[#6369D1]">사진을 드래그하거나
-									클릭하여 업로드하세요.</p>
-								<p class="text-xs text-gray-400 mt-0.5">JPG, PNG, GIF 파일 (최대
-									10MB)</p>
-							</div></label>
+								<p class="text-sm font-semibold text-[#6369D1]">사진을 드래그하거나 클릭하여 업로드하세요. </p>
+								<p class="text-xs text-gray-400 mt-0.5">JPG, PNG, GIF 파일 (최대 10MB) </p>
+							</div>
+						</label>
+						<!-- 선택한 이미지 미리보기 -->
+						<div id="tipImagePreview" class="grid gap-3 mt-4"
+							style="grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));">
+						</div>
 					</div>
 					<div class="flex justify-end gap-3 pt-2">
-						<a href="${pageContext.request.contextPath}/view/tips/tipList.jsp"
-							class="px-8 py-3 rounded-full text-sm font-semibold"
-							style="border: 2px solid #D1D2F9; color: #6369D1">취소</a>
+						<a href="${pageContext.request.contextPath}/tips" class="px-8 py-3 rounded-full text-sm font-semibold"
+							style="border: 2px solid #D1D2F9; color: #6369D1">취소
+						</a>
 						<button
 							class="px-8 py-3 rounded-full text-white text-sm font-bold shadow-md"
-							style="background: linear-gradient(135deg, #6369D1 0%, #8b91e3 100%)">등록하기</button>
+							style="background: linear-gradient(135deg, #6369D1 0%, #8b91e3 100%)">등록하기
+						</button>
 					</div>
 				</div>
 			</form>
 		</div>
-	</div><jsp:include page="/common/footer.jsp" /></body>
+	</div>
+	<jsp:include page="/common/footer.jsp" />
+	<script>
+		const tipImages = document.getElementById("tipImages");
+		const tipImagePreview = document.getElementById("tipImagePreview");
+		tipImages.addEventListener("change", function () {
+			tipImagePreview.innerHTML = "";
+			const files = Array.from(this.files);
+			if (files.length > 5) {
+				alert("사진은 최대 5장까지 첨부할 수 있습니다.");
+				this.value = "";
+				return;
+			}
+			files.forEach(function(file) {
+				if (!file.type.startsWith("image/")) {
+					return;
+				}
+				const reader = new FileReader();
+				reader.onload = function(e) {
+					const preview = document.createElement("div");
+					preview.className = "relative overflow-hidden rounded-xl border bg-gray-50";
+					preview.style.borderColor = "#D1D2F9";
+					preview.style.aspectRatio = "4 / 3";
+					preview.innerHTML = `
+						<img src="\${e.target.result}"alt="첨부 이미지 미리보기"class="w-full h-full object-cover">
+					`;
+					tipImagePreview.appendChild(preview);
+				};
+				reader.readAsDataURL(file);
+			});
+		});
+	</script>
+</body>
 </html>

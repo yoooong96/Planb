@@ -5,7 +5,30 @@
 <mapper namespace="mapper.community.tip">
 
 	<insert id="insertTip" parameterType="tip" useGeneratedKeys="true" keyProperty="tipId">
-
+		INSERT INTO TB_TIP (
+	        user_id,
+	        title,
+	        content,
+	        hashtag,
+	        thumbnail_img,
+	        visibility,
+	        view_count,
+	        status,
+	        created_at,
+	        updated_at
+    	)
+	    VALUES (
+	        #{userId},
+	        #{title},
+	        #{content},
+	        #{hashtag},
+	        #{thumbnailImg},
+	        'PUBLIC',
+	        0,
+	        'ACTIVE',
+	        NOW(),
+	        NOW()
+    	)
 	</insert>
 
 	<select id="selectTip" parameterType="Long" resultType="tip">
@@ -13,7 +36,7 @@
 	</select>
 	
 	<select id="selectTipList" resultType="tip">
-		SELECT * FROM TB_TIP HWERE status = 'ACTIVE' ORDER BY created_at DESC
+		SELECT * FROM TB_TIP WHERE status = 'ACTIVE' ORDER BY created_at DESC
 	</select>
 	
 	<select id="searchTipByHashtag" parameterType="String" resultType="tip">
@@ -27,5 +50,49 @@
 	<delete id="deleteTip" parameterType="Long">
 
 	</delete>
+	
+	<select id="selectTipListByFilter" parameterType="map" resultType="tip">
+		SELECT t.*, u.nickname AS nickname,
+			(
+				SELECT COUNT(*)
+				FROM TB_TIP_LIKE tl
+				WHERE tl.tip_id = t.tip_id
+			) AS like_count,
+			
+			(
+				SELECT COUNT(*)
+				FROM TB_TIP_COMMENT tc
+				WHERE tc.tip_id = t.tip_id
+				  AND tc.status = 'ACTIVE'
+			) AS comment_count
+
+		FROM TB_TIP t
+	
+		LEFT JOIN TB_USER u ON t.user_id = u.user_id
+	
+		WHERE t.status = 'ACTIVE' AND t.visibility = 'PUBLIC'
+	
+		<if test="country != null and country != ''">
+			AND t.hashtag LIKE CONCAT('%', #{country}, '%')
+		</if>
+	
+		<if test="keyword != null and keyword != ''">
+			AND t.hashtag LIKE CONCAT('%', #{keyword}, '%')
+		</if>
+	
+		<choose>
+			<when test="sort == 'views'">
+				ORDER BY t.view_count DESC, t.created_at DESC
+			</when>
+			
+			<when test="sort == 'likes'">
+				ORDER BY like_count DESC, t.created_at DESC
+			</when>
+	
+			<otherwise>
+				ORDER BY t.created_at DESC
+			</otherwise>
+		</choose>
+	</select>
 
 </mapper>
