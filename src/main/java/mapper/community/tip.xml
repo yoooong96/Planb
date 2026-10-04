@@ -120,5 +120,27 @@
 			AND t.hashtag LIKE CONCAT('%', #{keyword}, '%')
 		</if>
 	</select>
+	
+	<select id="selectMyTipList" parameterType="long" resultType="dto.community.TipDto">
+		SELECT
+			t.tip_id AS tipId,
+			t.user_id AS userId,
+			t.title,
+			t.content,
+			t.thumbnail_img AS thumbnailImg,
+			t.visibility,
+			t.view_count AS viewCount,
+			t.status,
+			t.created_at AS createdAt,
+			t.updated_at AS updatedAt,
+			t.hashtag,
+			(
+				SELECT COUNT(*) FROM TB_TIP_LIKE tl WHERE tl.tip_id = t.tip_id
+			) AS likeCount,
+			(
+				SELECT COUNT(*) FROM TB_TIP_COMMENT tc WHERE tc.tip_id = t.tip_id AND tc.status = 'ACTIVE'
+			) AS commentCount
+		FROM TB_TIP t WHERE t.user_id = #{userId} AND t.status = 'ACTIVE' ORDER BY t.created_at DESC
+	</select>
 
 </mapper>

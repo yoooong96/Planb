@@ -1848,9 +1848,301 @@ button { color: inherit; }
 .site-footer-inner { width:min(1180px,100%); margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:20px; font-size:11px; }
 .site-footer strong { color:#3f3f46; }
 .site-footer-links { display:flex; gap:18px; }
-@media (max-width:1180px){ .site-header-inner{width:calc(100% - 28px);gap:14px}.site-nav-link{padding:0 9px;font-size:12px}.site-header-search-bar{min-width:170px}.site-point-pill{display:none} }
-@media (max-width:900px){ .site-header-inner{grid-template-columns:auto 1fr auto}.site-nav{justify-content:flex-start;overflow-x:auto;scrollbar-width:none}.site-nav::-webkit-scrollbar{display:none}.site-nav-link.active::after{display:none}.site-brand-copy small,.site-profile-label{display:none}.site-profile-btn{padding-right:4px}.site-header-search-bar{display:none}.site-header-inner.site-header-inner--home{grid-template-columns:auto 1fr auto}.site-header-inner--home .site-nav--pill{justify-self:center} }
-@media (max-width:680px){ :root{--tripily-header-h:62px}.site-header-inner{width:calc(100% - 20px);gap:8px}.tripily-mark{width:31px;height:31px}.site-brand-copy strong{font-size:16px}.site-nav{gap:0}.site-nav-link,.site-nav-pill{min-height:32px;height:32px;padding:0 8px;font-size:11px}.site-actions{gap:2px}.site-footer-inner{flex-direction:column;align-items:flex-start}.site-auth-btn{padding:0 10px;font-size:11px}.site-notification-popover{width:min(330px,calc(100vw - 24px));right:-72px}.site-notification-popover::before{right:84px} }
+/* =========================================================
+   HEADER RESPONSIVE
+==================
+/* 햄버거 버튼 - 기본적으로 숨김 */
+.site-mobile-menu-btn {
+    display: none;
+}
+.site-mobile-menu-btn:hover {
+	background: var(--tripily-soft);
+	color: var(--brand);
+}
+/* ========================================
+   1180px 이하
+   검색창과 메뉴 간격만 축소
+======================================== */
+@media (max-width: 1180px) {
+	.site-header-inner {
+		width: calc(100% - 28px);
+		gap: 10px;
+	}
+	.site-nav-link {
+		padding: 0 8px;
+		font-size: 12px;
+	}
+	.site-header-search-bar {
+		min-width: 130px;
+	}
+	.site-point-pill {
+		display: none;
+	}
+}
+/* ========================================
+   900px 이하
+   데스크톱 메뉴 → 햄버거 메뉴
+======================================== */
+@media (max-width: 900px) {
+	.site-header {
+		position: relative;
+	}
+	.site-header-inner,
+	.site-header-inner.site-header-inner--home {
+		position: relative;
+
+		width: calc(100% - 28px);
+		height: var(--tripily-header-h);
+
+		/*
+		 * 로고 | 남는 공간 | 액션영역
+		 */
+		display: grid;
+		grid-template-columns: auto 1fr auto;
+		align-items: center;
+
+		gap: 10px;
+	}
+	/* =========================
+	   로고
+	========================= */
+	.site-brand {
+		grid-column: 1;
+		justify-self: start;
+	}
+	.site-brand-copy small {
+		display: none;
+	}
+	/* =========================
+	   햄버거
+	========================= */
+	.site-mobile-menu-btn {
+		display: flex;
+
+		position: absolute;
+
+		/*
+		 * 오른쪽 액션 영역보다 왼쪽
+		 */
+		right: 230px;
+		top: 50%;
+
+		transform: translateY(-50%);
+
+		width: 40px;
+		height: 40px;
+
+		align-items: center;
+		justify-content: center;
+
+		border: 0;
+		border-radius: 10px;
+
+		background: #f4f4ff;
+		color: #6369d1;
+
+		cursor: pointer;
+
+		z-index: 102;
+	}
+	/* =========================
+	   검색창
+	========================= */
+
+	.site-header-search-bar {
+		display: none;
+	}
+	/* =========================
+	   오른쪽 액션
+	========================= */
+	.site-actions {
+		grid-column: 3;
+
+		justify-self: end;
+
+		display: flex;
+		align-items: center;
+
+		gap: 4px;
+	}
+	/* =========================
+	   모바일 메뉴
+	========================= */
+	.site-nav,
+	.site-nav.site-nav--pill {
+		display: none;
+
+		position: absolute;
+
+		top: calc(100% + 1px);
+		left: 0;
+		right: 0;
+
+		width: 100%;
+
+		padding: 10px;
+
+		flex-direction: column;
+		align-items: stretch;
+		gap: 4px;
+
+		background: rgba(255, 255, 255, 0.98);
+
+		border: 1px solid #e8e8f4;
+		border-radius: 0 0 16px 16px;
+
+		box-shadow: 0 14px 30px rgba(36, 37, 72, 0.12);
+
+		z-index: 1000;
+	}
+	/* JS에서 open이 붙었을 때 */
+	.site-nav.open,
+	.site-nav.site-nav--pill.open {
+		display: flex;
+	}
+	/* 메뉴 각각 */
+	.site-nav-link,
+	.site-nav-pill {
+		width: 100%;
+		height: 44px;
+		min-height: 44px;
+
+		display: flex;
+		align-items: center;
+		justify-content: flex-start;
+
+		padding: 0 16px;
+
+		border: 0;
+		border-radius: 10px;
+
+		background: transparent;
+		box-shadow: none;
+
+		font-size: 13px;
+		font-weight: 700;
+
+		color: #343746;
+	}
+
+
+	.site-nav-link:hover,
+	.site-nav-pill:hover {
+		background: #f5f5ff;
+		color: #6369d1;
+	}
+
+
+	.site-nav-link.active,
+	.site-nav-pill.active {
+		background: #eeeeff;
+		color: #6369d1;
+	}
+
+
+	.site-nav-link.active::after {
+		display: none;
+	}
+
+
+	/* 프로필 텍스트는 숨김 */
+	.site-profile-label {
+		display: none;
+	}
+}
+
+
+/* ========================================
+   680px 이하
+======================================== */
+
+@media (max-width: 680px) {
+
+	:root {
+		--tripily-header-h: 62px;
+	}
+
+	.site-header-inner,
+	.site-header-inner.site-header-inner--home {
+		width: calc(100% - 20px);
+
+		grid-template-columns: auto 1fr auto;
+		gap: 6px;
+	}
+
+	.tripily-mark {
+		width: 31px;
+		height: 31px;
+	}
+
+	.site-brand-copy strong {
+		font-size: 16px;
+	}
+
+	.site-actions {
+		gap: 1px;
+	}
+
+	.site-icon-btn {
+		width: 34px;
+		height: 34px;
+	}
+
+	.site-auth-btn {
+		padding: 0 9px;
+		font-size: 11px;
+	}
+
+	.site-mobile-menu-btn {
+		width: 36px;
+		height: 36px;
+	}
+
+	.site-nav {
+		left: 10px;
+		right: 10px;
+	}
+
+	.site-notification-popover {
+		width: min(330px, calc(100vw - 24px));
+		right: -72px;
+	}
+
+	.site-notification-popover::before {
+		right: 84px;
+	}
+
+	.site-footer-inner {
+		flex-direction: column;
+		align-items: flex-start;
+	}
+}
+
+
+/* ========================================
+   아주 작은 화면
+======================================== */
+
+@media (max-width: 480px) {
+
+	.site-brand-copy small {
+		display: none;
+	}
+
+	.site-header-inner {
+		width: calc(100% - 16px);
+	}
+
+	.site-mobile-menu-btn {
+		width: 34px;
+		height: 34px;
+	}
+
+	.site-icon-btn {
+		width: 32px;
+		height: 32px;
+	}
+}
 
 /* =========================================================
    HOME — 통합본(9) Home.tsx pixel-matched structure

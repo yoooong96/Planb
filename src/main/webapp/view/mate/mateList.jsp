@@ -9,16 +9,14 @@ request.setAttribute("activePage", "mate");
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Planb</title>
+	<link rel="stylesheet" href="${pageContext.request.contextPath}/view/assets/css/mate/mateList.css">
 	<jsp:include page="/common/headStyles.jsp" />
 </head>
 <body class="site-shell">
 	<jsp:include page="/common/header.jsp" />
 	<div class="min-h-screen bg-white">
-		
 		<div class="flex" style="min-height: calc(100vh - 68px)">
-			<aside
-		    class="shrink-0 w-48 hidden md:flex flex-col gap-1 bg-white py-5 px-2 border-r overflow-y-auto"
-		    style="border-color: #ebebf5">
+			<aside class="mate-list-sidebar shrink-0 w-48 flex-col gap-1 bg-white py-5 px-2 border-r overflow-y-auto" style="border-color: #ebebf5">
 			<div class="text-xs font-bold text-gray-400 uppercase tracking-widest px-3 mb-1">여행 메이트</div>
 				<a href="${pageContext.request.contextPath}/view/mate/mateList.jsp?mine=1"
 					class="flex items-center justify-between px-3 py-2.5 rounded-lg transition-colors group">

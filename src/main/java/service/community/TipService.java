@@ -17,4 +17,6 @@ public interface TipService {
 	List<TipDto> selectTipListByFilter(String country, String keyword, String sort, int page, int pageSize);
 	
 	int countTipListByFilter(String country, String keyword);
+	
+	List<TipDto> selectMyTipList(long userId);
 }

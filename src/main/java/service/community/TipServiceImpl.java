@@ -89,4 +89,9 @@ public class TipServiceImpl implements TipService {
 		return tipDao.countTipListByFilter(countryKeywords, keyword);
 	}
 	
+	@Override
+	public List<TipDto> selectMyTipList(long userId) {
+		return tipDao.selectMyTipList(userId);
+	}
+	
 }

@@ -96,4 +96,16 @@ public class TipDaoImpl implements TipDao {
 			throw e;
 		}
 	}
+	
+	@Override
+	public List<TipDto> selectMyTipList(long userId) {
+		Map<String, Object> param = new HashMap<>();
+		param.put("userId", userId);
+		try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+			return sqlSession.selectList("mapper.community.tip.selectMyTipList", param);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
 }

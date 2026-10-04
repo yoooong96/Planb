@@ -371,5 +371,101 @@
 
 })();
 
+// ================================
+// 반응형 헤더 모바일 메뉴
+// ================================
 
+const mobileMenuToggle =
+	document.querySelector("[data-mobile-menu-toggle]");
+
+const mobileNav =
+	document.querySelector("[data-mobile-nav]");
+
+if (mobileMenuToggle && mobileNav) {
+
+	// 햄버거 버튼 클릭
+	mobileMenuToggle.addEventListener("click", function (event) {
+
+		event.stopPropagation();
+
+		const isOpen =
+			mobileNav.classList.toggle("open");
+
+		mobileMenuToggle.setAttribute(
+			"aria-expanded",
+			isOpen
+		);
+
+		mobileMenuToggle.setAttribute(
+			"aria-label",
+			isOpen ? "메뉴 닫기" : "메뉴 열기"
+		);
+	});
+
+
+	// 메뉴 안의 링크를 누르면 닫기
+	mobileNav.querySelectorAll("a").forEach(function (link) {
+
+		link.addEventListener("click", function () {
+
+			closeMobileMenu();
+
+		});
+	});
+
+
+	// 메뉴 바깥을 클릭하면 닫기
+	document.addEventListener("click", function (event) {
+
+		if (
+			mobileNav.classList.contains("open")
+			&& !mobileNav.contains(event.target)
+			&& !mobileMenuToggle.contains(event.target)
+		) {
+			closeMobileMenu();
+		}
+
+	});
+
+
+	// ESC 키로 닫기
+	document.addEventListener("keydown", function (event) {
+
+		if (
+			event.key === "Escape"
+			&& mobileNav.classList.contains("open")
+		) {
+			closeMobileMenu();
+
+			mobileMenuToggle.focus();
+		}
+
+	});
+
+
+	// 다시 데스크톱 크기가 되면 모바일 메뉴 상태 초기화
+	window.addEventListener("resize", function () {
+
+		if (window.innerWidth > 900) {
+			closeMobileMenu();
+		}
+
+	});
+
+
+	function closeMobileMenu() {
+
+		mobileNav.classList.remove("open");
+
+		mobileMenuToggle.setAttribute(
+			"aria-expanded",
+			"false"
+		);
+
+		mobileMenuToggle.setAttribute(
+			"aria-label",
+			"메뉴 열기"
+		);
+	}
+}
 

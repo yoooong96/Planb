@@ -1,0 +1,435 @@
+/* ========================================
+   내가 작성한 여행꿀팁
+======================================== */
+
+.tip-my-banner {
+	width: 100%;
+	margin: 0;
+	background: linear-gradient(
+		120deg,
+		#6268d8 0%,
+		#747be2 55%,
+		#9298eb 100%
+	);
+}
+
+.tip-my-banner-inner {
+	width: min(100% - 40px, 1120px);
+	min-height: 150px;
+	margin: 0 auto;
+
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 32px;
+}
+
+.tip-my-breadcrumb {
+	margin: 0 0 12px;
+
+	font-size: 13px;
+	font-weight: 500;
+
+	color: rgba(255, 255, 255, 0.72);
+}
+
+.tip-my-breadcrumb span {
+	margin: 0 7px;
+}
+
+.tip-my-banner h1 {
+	margin: 0;
+
+	font-size: clamp(25px, 2.3vw, 32px);
+	font-weight: 800;
+
+	color: #ffffff;
+}
+
+.tip-my-description {
+	margin: 9px 0 0;
+
+	font-size: 13px;
+
+	color: rgba(255, 255, 255, 0.76);
+}
+
+.tip-my-description strong {
+	color: #ffffff;
+}
+
+
+/* 배너 버튼 */
+
+.tip-my-banner-actions {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	flex-shrink: 0;
+}
+
+.tip-my-banner-actions a {
+	min-height: 44px;
+	padding: 0 20px;
+
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+
+	border-radius: 999px;
+
+	font-size: 13px;
+	font-weight: 700;
+
+	text-decoration: none;
+
+	transition:
+		transform 0.2s ease,
+		box-shadow 0.2s ease;
+}
+
+.tip-my-banner-actions svg {
+	width: 17px;
+	height: 17px;
+}
+
+
+/* 여행꿀팁 목록 */
+
+.tip-list-btn {
+	background: #ffffff;
+	color: #555cc9;
+
+	border: 2px solid rgba(255, 255, 255, 0.8);
+
+	box-shadow: 0 5px 16px rgba(47, 53, 130, 0.2);
+}
+
+.tip-list-btn:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 8px 22px rgba(47, 53, 130, 0.28);
+}
+
+
+/* 새 글 쓰기 */
+
+.tip-write-btn {
+	background: #ffd447;
+	color: #252525;
+
+	border: 2px solid #ffd447;
+
+	box-shadow: 0 5px 16px rgba(55, 50, 30, 0.18);
+}
+
+.tip-write-btn:hover {
+	transform: translateY(-2px);
+}
+
+/* ========================================
+   목록
+======================================== */
+.tip-my-main {
+	min-height: 520px;
+	padding:
+		clamp(30px, 4vw, 48px)
+		clamp(18px, 4vw, 40px)
+		clamp(60px, 7vw, 90px);
+
+	background: #f7f7ff;
+}
+.tip-my-list {
+	width: min(100%, 1060px);
+	margin: 0 auto;
+
+	display: flex;
+	flex-direction: column;
+	gap: 18px;
+}
+/* ========================================
+   카드
+======================================== */
+.tip-my-card {
+	position: relative;
+
+	width: 100%;
+	min-height: 150px;
+
+	padding: 24px 26px;
+
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 24px;
+
+	box-sizing: border-box;
+
+	background: #ffffff;
+
+	border: 1px solid #d9dafb;
+	border-left: 5px solid #6369d1;
+
+	border-radius: 18px;
+
+	box-shadow: 0 3px 10px rgba(31, 41, 55, 0.05);
+
+	transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.tip-my-card:hover {
+	transform: translateY(-2px);
+
+	box-shadow:
+		0 8px 22px rgba(99, 105, 209, 0.11);
+}
+
+.tip-my-card-content {
+	min-width: 0;
+	flex: 1;
+}
+/* 해시태그 */
+.tip-my-tags {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px;
+
+	margin-bottom: 13px;
+}
+
+.tip-my-tags span {
+	display: inline-flex;
+	align-items: center;
+
+	padding: 5px 10px;
+
+	border-radius: 999px;
+
+	background: #FFD447;
+	color: #6369d1;
+
+	font-size: 11px;
+	font-weight: 700;
+}
+
+
+/* 제목 */
+
+.tip-my-title {
+	margin: 0;
+
+	font-size: clamp(15px, 1.3vw, 18px);
+	font-weight: 800;
+
+	color: #171b2c;
+
+	overflow-wrap: anywhere;
+}
+
+
+/* 메타 */
+
+.tip-my-meta {
+	margin-top: 13px;
+
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 12px;
+
+	font-size: 12px;
+	color: #98a1b2;
+}
+
+.tip-my-meta-item {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+}
+
+.tip-my-meta svg {
+	width: 14px;
+	height: 14px;
+}
+
+
+/* ========================================
+   수정 / 삭제
+======================================== */
+
+.tip-my-card-actions {
+	flex-shrink: 0;
+
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.tip-edit-btn,
+.tip-delete-btn {
+	min-height: 40px;
+
+	padding: 0 15px;
+
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 6px;
+
+	box-sizing: border-box;
+
+	border-radius: 999px;
+
+	font-size: 12px;
+	font-weight: 700;
+
+	cursor: pointer;
+
+	transition:
+		background 0.2s ease,
+		transform 0.2s ease;
+
+	text-decoration: none;
+}
+
+.tip-edit-btn {
+	border: 1px solid #7379df;
+
+	background: #eef0ff;
+	color: #6369d1;
+}
+
+.tip-edit-btn:hover {
+	background: #e1e4ff;
+	transform: translateY(-1px);
+}
+
+.tip-delete-btn {
+	border: 1px solid #f2a7ad;
+
+	background: #fff5f5;
+	color: #dc5964;
+}
+
+.tip-delete-btn:hover {
+	background: #ffe8ea;
+	transform: translateY(-1px);
+}
+
+.tip-edit-btn svg,
+.tip-delete-btn svg {
+	width: 14px;
+	height: 14px;
+}
+
+
+/* ========================================
+   게시글 없음
+======================================== */
+
+.tip-my-empty {
+	padding: 80px 20px;
+
+	text-align: center;
+
+	background: #ffffff;
+	border: 1px solid #e1e2f5;
+	border-radius: 18px;
+}
+
+.tip-my-empty-icon {
+	margin-bottom: 14px;
+	font-size: 32px;
+}
+
+.tip-my-empty h2 {
+	margin: 0;
+
+	font-size: 18px;
+	color: #202438;
+}
+
+.tip-my-empty p {
+	margin: 8px 0 20px;
+
+	font-size: 13px;
+	color: #8b94a5;
+}
+
+.tip-my-empty a {
+	display: inline-flex;
+
+	padding: 11px 18px;
+
+	border-radius: 999px;
+
+	background: #6369d1;
+	color: #ffffff;
+
+	font-size: 12px;
+	font-weight: 700;
+
+	text-decoration: none;
+}
+
+
+/* ========================================
+   반응형
+======================================== */
+
+@media (max-width: 768px) {
+
+	.tip-my-banner-inner {
+		width: min(100% - 32px, 1120px);
+
+		padding: 28px 0;
+
+		flex-direction: column;
+		align-items: flex-start;
+
+		gap: 20px;
+	}
+
+	.tip-my-banner-actions {
+		width: 100%;
+	}
+
+	.tip-my-banner-actions a {
+		flex: 1;
+		padding: 0 12px;
+	}
+
+	.tip-my-card {
+		padding: 21px 18px;
+
+		flex-direction: column;
+		align-items: stretch;
+
+		gap: 20px;
+	}
+
+	.tip-my-card-actions {
+		width: 100%;
+	}
+
+	.tip-edit-btn,
+	.tip-delete-btn {
+		flex: 1;
+	}
+}
+
+
+@media (max-width: 480px) {
+
+	.tip-my-banner-actions {
+		flex-direction: column;
+	}
+
+	.tip-my-banner-actions a {
+		width: 100%;
+	}
+
+	.tip-my-meta {
+		gap: 8px;
+	}
+}

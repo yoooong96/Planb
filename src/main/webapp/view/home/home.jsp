@@ -20,27 +20,13 @@ request.setAttribute("activePage", "home");
      HOME - 섹션 네비게이션
 ========================================= -->
 <div class="home-scroll-indicator">
+    <button type="button" id="homeScrollDot1" class="home-scroll-dot active" aria-label="첫 번째 구역으로 이동"></button>
 
-    <button type="button"
-            id="homeScrollDot1"
-            class="home-scroll-dot active"
-            aria-label="첫 번째 구역으로 이동"></button>
+    <button type="button" id="homeScrollDot2" class="home-scroll-dot" aria-label="두 번째 구역으로 이동"></button>
 
-    <button type="button"
-            id="homeScrollDot2"
-            class="home-scroll-dot"
-            aria-label="두 번째 구역으로 이동"></button>
+    <button type="button" id="homeScrollDot3" class="home-scroll-dot" aria-label="세 번째 구역으로 이동"></button>
 
-    <button type="button"
-            id="homeScrollDot3"
-            class="home-scroll-dot"
-            aria-label="세 번째 구역으로 이동"></button>
-
-    <button type="button"
-            id="homeScrollDot4"
-            class="home-scroll-dot"
-            aria-label="네 번째 구역으로 이동"></button>
-
+    <button type="button" id="homeScrollDot4" class="home-scroll-dot" aria-label="네 번째 구역으로 이동"></button>
 </div>
 <body class="site-shell">
 	<jsp:include page="/common/header.jsp" />
@@ -67,29 +53,28 @@ request.setAttribute("activePage", "home");
 				    action="${pageContext.request.contextPath}/view/search/searchResult.jsp"
 				    method="get"
 				    class="home-hero-search w-full max-w-2xl rounded-full flex items-center px-5 py-3.5 gap-3 border border-white/30">
-					<svg class="shrink-0 text-white/70" width="18" height="18"
-						viewBox="0 0 24 24" fill="none" stroke="currentColor"
-						stroke-width="2.2">
+					<svg class="shrink-0 text-white/70" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
 						<circle cx="11" cy="11" r="8" />
-						<path d="m21 21-4.35-4.35" /></svg>
+						<path d="m21 21-4.35-4.35" />
+					</svg>
 					<input type="text" name="q" placeholder="여행지, 일정, 꿀팁 등 무엇이든 검색해보세요"
 						class="flex-1 text-sm text-white placeholder-white/60 outline-none bg-transparent">
 					<button type="submit"
 					    class="home-hero-search-btn shrink-0 w-9 h-9 rounded-full flex items-center justify-center text-white transition-all jsp-brand-hover"
 					    aria-label="검색">
-						<svg width="15" height="15" viewBox="0 0 24 24" fill="none"
-							stroke="white" stroke-width="2.5">
+						<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5">
 							<circle cx="11" cy="11" r="8" />
-							<path d="m21 21-4.35-4.35" /></svg>
+							<path d="m21 21-4.35-4.35" />
+						</svg>
 					</button>
 				</form>
 			</div>
 			<button type="button"
 				class="jsp-home-scroll absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 text-white/50 z-10 hover:text-white/80 transition-colors cursor-pointer bg-transparent border-none p-2"
 				data-scroll-popular aria-label="아래로 스크롤">
-				<svg width="20" height="20" viewBox="0 0 24 24" fill="none"
-					stroke="currentColor" stroke-width="2">
-					<path d="M12 5v14M5 12l7 7 7-7" /></svg>
+				<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+					<path d="M12 5v14M5 12l7 7 7-7" />
+				</svg>
 			</button>
 		</section>
 
@@ -100,14 +85,12 @@ request.setAttribute("activePage", "home");
 				<p class="home-popular-description text-sm text-gray-400">전 세계 여행자들이 사랑하는 특별한 일정을 만나보세요.</p>
 			</div>
 			<div class="home-popular-carousel flex items-stretch gap-6 px-12" data-home-carousel data-loop-width="2120">
-				<a
-					href="${pageContext.request.contextPath}/view/travel/scheduleDetail.jsp?id=9"
-					class="jsp-home-schedule-card home-popular-card shrink-0 bg-white rounded-2xl overflow-hidden cursor-pointer border">
-					<div class="home-popular-card-image relative overflow-hidden">
-						<img
-							src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=600&amp;h=400&amp;fit=crop"
-							alt="파리 5박 6일 예술 &amp; 낭만"
-							class="w-full h-full object-cover transition-transform duration-300">
+				<a href="${pageContext.request.contextPath}/view/travel/scheduleDetail.jsp?id=9"
+				   class="jsp-home-schedule-card home-popular-card shrink-0 bg-white rounded-2xl overflow-hidden cursor-pointer border">
+				   <div class="home-popular-card-image relative overflow-hidden">
+				    <img src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=600&amp;h=400&amp;fit=crop"
+						 alt="파리 5박 6일 예술 &amp; 낭만"
+						 class="w-full h-full object-cover transition-transform duration-300">
 						<div
 							class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
 						<span
@@ -115,43 +98,45 @@ request.setAttribute("activePage", "home");
 						<button
 							class="absolute top-2 right-2 w-6 h-6 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-sm transition-transform hover:scale-110"
 							type="button" data-bookmark aria-label="북마크">
-							<svg width="11" height="11" viewBox="0 0 24 24" fill="none"
-								stroke="#9ca3af" stroke-width="2">
-								<path stroke-linecap="round" stroke-linejoin="round"
-									d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" /></svg>
+							<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2">
+								<path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+							</svg>
 						</button>
 						<span
-							class="absolute bottom-2 left-2 text-white text-[10px] font-bold bg-black/50 rounded-full px-2 py-0.5">5박
-							6일</span>
+							class="absolute bottom-2 left-2 text-white text-[10px] font-bold bg-black/50 rounded-full px-2 py-0.5">5박 6일
+						</span>
 					</div>
 					<div class="p-3">
-						<h3
-							class="home-popular-title font-bold text-[13px] leading-snug mb-0.5 line-clamp-2 transition-colors">파리 5박 6일 예술 &amp; 낭만</h3>
+						<h3 class="home-popular-title font-bold text-[13px] leading-snug mb-0.5 line-clamp-2 transition-colors">파리 5박 6일 예술 &amp; 낭만</h3>
 						<p
 							class="text-gray-500 text-[11px] line-clamp-1 mb-2 leading-relaxed">에펠탑,
-							루브르, 몽마르트! 낭만의 도시 파리를 온전히 즐기는 일정.</p>
+							루브르, 몽마르트! 낭만의 도시 파리를 온전히 즐기는 일정.
+						</p>
 						<div
 							class="flex items-center gap-2.5 text-[10px] text-gray-400 mb-2.5">
-							<span class="flex items-center gap-0.5"><svg width="10"
+							<span class="flex items-center gap-0.5">
+								<svg width="10"
 									height="10" viewBox="0 0 24 24" fill="none" stroke="#9ca3af"
 									stroke-width="2">
-									<path stroke-linecap="round" stroke-linejoin="round"
-										d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" /></svg><span
-								class="font-medium">1,234</span></span> <span
-								class="flex items-center gap-0.5"><svg width="10"
+									<path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+								</svg>
+								<span class="font-medium">1,234</span>
+							</span> 
+							<span class="flex items-center gap-0.5">
+								<svg width="10"
 									height="10" fill="none" stroke="currentColor"
 									viewBox="0 0 24 24">
-									<path stroke-linecap="round" stroke-linejoin="round"
-										stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-									<path stroke-linecap="round" stroke-linejoin="round"
-										stroke-width="2"
-										d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>5,670</span>
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+										d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+								</svg>5,670
+							</span>
 						</div>
 						<div class="home-popular-author flex items-center justify-between border-t pt-2">
 							<div class="flex items-center gap-1.5">
 								<img src="https://i.pravatar.cc/40?img=17" alt="파리지앵"
-									class="w-4 h-4 rounded-full object-cover"><span
-									class="text-[10px] text-gray-500 font-medium">파리지앵</span>
+									class="w-4 h-4 rounded-full object-cover">
+								<span class="text-[10px] text-gray-500 font-medium">파리지앵</span>
 							</div>
 							<span class="text-[9px] text-gray-400">2026.07.10</span>
 						</div>
@@ -164,28 +149,21 @@ request.setAttribute("activePage", "home");
 							src="https://images.unsplash.com/photo-1589452271712-64b8a66c7b71?w=600&amp;h=400&amp;fit=crop"
 							alt="오사카 2박 3일 먹방 여행"
 							class="w-full h-full object-cover transition-transform duration-300">
-						<div
-							class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
-						<span
-							class="home-popular-location absolute top-2 left-2 text-[10px] font-bold px-2 py-0.5 rounded-full text-white">오사카</span>
-						<button
-							class="absolute top-2 right-2 w-6 h-6 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-sm transition-transform hover:scale-110"
+						<div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
+						<span class="home-popular-location absolute top-2 left-2 text-[10px] font-bold px-2 py-0.5 rounded-full text-white">오사카</span>
+						<button class="absolute top-2 right-2 w-6 h-6 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-sm transition-transform hover:scale-110"
 							type="button" data-bookmark aria-label="북마크">
 							<svg width="11" height="11" viewBox="0 0 24 24" fill="none"
 								stroke="#9ca3af" stroke-width="2">
 								<path stroke-linecap="round" stroke-linejoin="round"
-									d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" /></svg>
+									d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+							</svg>
 						</button>
-						<span
-							class="absolute bottom-2 left-2 text-white text-[10px] font-bold bg-black/50 rounded-full px-2 py-0.5">2박
-							3일</span>
+						<span class="absolute bottom-2 left-2 text-white text-[10px] font-bold bg-black/50 rounded-full px-2 py-0.5">2박 3일</span>
 					</div>
 					<div class="p-3">
-						<h3
-							class="home-popular-title font-bold text-[13px] leading-snug mb-0.5 line-clamp-2 transition-colors">오사카 2박 3일 먹방 여행</h3>
-						<p
-							class="text-gray-500 text-[11px] line-clamp-1 mb-2 leading-relaxed">도톤보리,
-							구로몬시장, 오사카 성! 먹고 먹고 또 먹는 오사카.</p>
+						<h3 class="home-popular-title font-bold text-[13px] leading-snug mb-0.5 line-clamp-2 transition-colors">오사카 2박 3일 먹방 여행</h3>
+						<p class="text-gray-500 text-[11px] line-clamp-1 mb-2 leading-relaxed">도톤보리, 구로몬시장, 오사카 성! 먹고 먹고 또 먹는 오사카.</p>
 						<div
 							class="flex items-center gap-2.5 text-[10px] text-gray-400 mb-2.5">
 							<span class="flex items-center gap-0.5"><svg width="10"
@@ -1801,7 +1779,6 @@ request.setAttribute("activePage", "home");
 					</div>
 				</div>
 			</div>
-			
 		</section>
 	</main>
 	<jsp:include page="/common/footer.jsp" />

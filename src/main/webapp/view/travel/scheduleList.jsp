@@ -11,12 +11,11 @@ request.setAttribute("activePage", "travel");
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/view/assets/css/travel/scheduleList.css">
 <title>여행일정 | Tripily</title><jsp:include page="/common/headStyles.jsp" /></head>
 <body class="site-shell"><jsp:include page="/common/header.jsp" />
 	<div class="flex" style="min-height: calc(100vh - 68px)">
-		<aside
-			class="shrink-0 w-48 hidden md:flex flex-col gap-1 bg-white py-5 px-2 border-r overflow-y-auto"
-			style="border-color: #ebebf5">
+		<aside class="travel-list-sidebar shrink-0 w-48 flex-col gap-1 bg-white py-5 px-2 border-r overflow-y-auto" style="border-color: #ebebf5">
 			<div
 				class="text-xs font-bold text-gray-400 uppercase tracking-widest px-3 mb-1">여행
 				일정</div>
@@ -32,19 +31,26 @@ request.setAttribute("activePage", "travel");
 				class="text-xs rounded-full px-2 py-0.5 font-semibold"
 				style="background: var(- -brand-light); color: var(- -brand)">3</span></a>
 			<div class="border-t border-gray-100 mb-3"></div>
-			<button type="button"
-				class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl transition-all mb-1"
-				style="background: var(- -brand); color: #fff">
-				<span class="flex items-center gap-2 text-sm font-semibold"><svg
-						width="16" height="16" viewBox="0 0 24 24" fill="none"
-						stroke="#fff" stroke-width="2">
-						<circle cx="12" cy="12" r="10" />
-						<line x1="2" y1="12" x2="22" y2="12" />
-						<path
-							d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" /></svg>전체보기</span><span
-					class="text-xs rounded-full px-2 py-0.5 font-semibold"
-					style="background: rgba(255, 255, 255, .25); color: #fff">16</span>
-			</button>
+			<a href="${pageContext.request.contextPath}/travel"
+			    class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl transition-all mb-1"
+			    style="background: #6369D1; color: #fff">
+			    <span class="flex items-center gap-2 text-sm font-semibold">
+			        <svg width="16" height="16"
+			            viewBox="0 0 24 24"
+			            fill="none"
+			            stroke="#fff"
+			            stroke-width="2">
+			
+			            <circle cx="12" cy="12" r="10" />
+			            <line x1="2" y1="12" x2="22" y2="12" />
+			            <path d="M12 2a15.3 15.3 0 0 1 4 10
+			                     15.3 15.3 0 0 1-4 10
+			                     15.3 15.3 0 0 1-4-10
+			                     15.3 15.3 0 0 1 4-10z" />
+			        </svg>
+			        전체보기
+			    </span>
+			</a>
 			<div
 				class="text-xs font-bold text-gray-400 uppercase tracking-widest px-3 mb-1 mt-1">여행
 				지역</div>

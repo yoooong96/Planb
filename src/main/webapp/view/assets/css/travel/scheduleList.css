@@ -1,0 +1,17 @@
+@charset "UTF-8";
+
+/* ========================================
+   여행일정 사이드바 반응형
+======================================== */
+.travel-list-sidebar {
+    display: flex;
+    flex: 0 0 12rem;
+    width: 12rem;
+}
+
+/* 작은 화면에서는 사이드바 숨김 */
+@media (max-width: 900px) {
+    .travel-list-sidebar {
+        display: none;
+    }
+}

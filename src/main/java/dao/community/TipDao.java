@@ -27,4 +27,6 @@ public interface TipDao {
 	List<TipDto> selectTipListByFilter(List<String> countryKeywords, String keyword, String sort, int pageSize, int offset);
 	
 	int countTipListByFilter(List<String> countryKeywords, String keyword);
+	
+	List<TipDto> selectMyTipList(long userId);
 }

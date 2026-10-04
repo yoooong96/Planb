@@ -20,13 +20,10 @@ request.setAttribute("activePage", "tips");
 <body class="site-shell">
 	<jsp:include page="/common/header.jsp" />
 	<div class="tips-page-layout">
-		
 		<div class="flex" style="min-height: calc(100vh - 68px)">
-		<aside
-			class="shrink-0 w-48 hidden md:flex flex-col gap-1 bg-white py-5 px-2 border-r overflow-y-auto"
-			style="border-color: #ebebf5">
+		<aside class="tip-list-sidebar shrink-0 w-48 flex-col gap-1 bg-white py-5 px-2 border-r overflow-y-auto" style="border-color: #ebebf5">
 				<div class="text-xs font-bold text-gray-400 uppercase tracking-widest px-3 mb-1">여행 꿀팁</div>
-				<a href="${pageContext.request.contextPath}/view/tips/tipList.jsp?mine=1"
+				<a href="${pageContext.request.contextPath}/tipWriteList"
 					class="flex items-center justify-between px-3 py-2.5 rounded-lg transition-colors group">
 					<span class="flex items-center gap-2 text-sm font-semibold text-gray-700">
 						<svg width="16" height="16" viewBox="0 0 24 24" fill="none"
@@ -35,11 +32,6 @@ request.setAttribute("activePage", "tips");
 							<polyline points="14 2 14 8 20 8" />
 						</svg>
 						내가 작성한 글
-					</span>
-					<span
-						class="text-xs rounded-full px-2 py-0.5 font-semibold"
-						style="background: var(--brand-light); color: var(--brand)">
-						3
 					</span>
 				</a>
 				
