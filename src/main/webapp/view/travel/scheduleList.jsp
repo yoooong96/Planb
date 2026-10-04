@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%
@@ -9,31 +8,34 @@ request.setAttribute("activePage", "travel");
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<link rel="stylesheet" href="${pageContext.request.contextPath}/view/assets/css/travel/scheduleList.css">
-<title>여행일정 | Tripily</title><jsp:include page="/common/headStyles.jsp" /></head>
-<body class="site-shell"><jsp:include page="/common/header.jsp" />
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<link rel="stylesheet" href="${pageContext.request.contextPath}/view/assets/css/travel/scheduleList.css">
+	<title>여행일정 | Tripily</title>
+	<jsp:include page="/common/headStyles.jsp" />
+</head>
+<body class="site-shell">
+	<jsp:include page="/common/header.jsp" />
 	<div class="flex" style="min-height: calc(100vh - 68px)">
 		<aside class="travel-list-sidebar shrink-0 w-48 flex-col gap-1 bg-white py-5 px-2 border-r overflow-y-auto" style="border-color: #ebebf5">
-			<div
-				class="text-xs font-bold text-gray-400 uppercase tracking-widest px-3 mb-1">여행
-				일정</div>
-			<a
-				href="${pageContext.request.contextPath}/view/profile/myProfile.jsp"
-				class="flex items-center justify-between px-3 py-2.5 rounded-lg transition-colors group"><span
-				class="flex items-center gap-2 text-sm font-semibold text-gray-700"><svg
-						width="16" height="16" viewBox="0 0 24 24" fill="none"
-						stroke="currentColor" stroke-width="2">
-						<path
-							d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-						<polyline points="14 2 14 8 20 8" /></svg>내가 작성한 글</span><span
-				class="text-xs rounded-full px-2 py-0.5 font-semibold"
-				style="background: var(- -brand-light); color: var(- -brand)">3</span></a>
-			<div class="border-t border-gray-100 mb-3"></div>
+			<div class="text-xs font-bold text-gray-400 uppercase tracking-widest px-3 mb-1">여행 일정</div>
+			<a href="${pageContext.request.contextPath}/view/profile/myProfile.jsp"
+			class="flex items-center justify-between px-3 py-2.5 rounded-lg transition-colors group">
+				<span class="flex items-center gap-2 text-sm font-semibold text-gray-700">
+					<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+						<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+						<polyline points="14 2 14 8 20 8" />
+					</svg>내가 작성한 글
+				</span>
+				<span class="text-xs rounded-full px-2 py-0.5 font-semibold" style="background: var(- -brand-light); color: var(- -brand)">
+					3
+				</span>
+			</a>
+			<div class="border-t border-gray-100 mb-3">
+			</div>
 			<a href="${pageContext.request.contextPath}/travel"
-			    class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl transition-all mb-1"
-			    style="background: #6369D1; color: #fff">
+			class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl transition-all mb-1"
+			style="background: #6369D1; color: #fff">
 			    <span class="flex items-center gap-2 text-sm font-semibold">
 			        <svg width="16" height="16"
 			            viewBox="0 0 24 24"
@@ -51,30 +53,32 @@ request.setAttribute("activePage", "travel");
 			        전체보기
 			    </span>
 			</a>
-			<div
-				class="text-xs font-bold text-gray-400 uppercase tracking-widest px-3 mb-1 mt-1">여행
-				지역</div>
+			<div class="text-xs font-bold text-gray-400 uppercase tracking-widest px-3 mb-1 mt-1">
+				여행 지역
+			</div>
 			<div class="border-t border-gray-100 mb-3"></div>
-			<div
-				class="text-xs font-bold text-gray-400 uppercase tracking-widest px-3 mb-1">대륙별
-				보기</div>
+			<div class="text-xs font-bold text-gray-400 uppercase tracking-widest px-3 mb-1">
+				대륙별 보기
+			</div>
 			<div>
 				<button type="button"
 					class="continent-toggle w-full flex items-center justify-between px-3 py-2.5 rounded-xl transition-all"
 					data-continent-toggle>
-					<span class="flex items-center gap-2.5 text-sm font-semibold"><svg
-							viewBox="0 0 48 48" width="24" height="24" aria-hidden="true">
-								<path
+					<span class="flex items-center gap-2.5 text-sm font-semibold">
+						<svg viewBox="0 0 48 48" width="24" height="24" aria-hidden="true">
+							<path
 								d="M10 8L18 5L27 6L36 9L40 15L37 21L40 27L34 32L29 38L22 40L17 35L11 34L7 27L6 19Z"
-								fill="#6369D1" opacity=".88" /></svg>아시아</span>
-					<svg
-						class="continent-chevron w-3.5 h-3.5 shrink-0 transition-transform"
+								fill="#6369D1" opacity=".88" />
+						</svg>
+						아시아
+					</span>
+					<svg class="continent-chevron w-3.5 h-3.5 shrink-0 transition-transform"
 						viewBox="0 0 24 24" fill="none" stroke="#9ca3af"
 						stroke-width="2.5">
-							<path d="m6 9 6 6 6-6" /></svg>
+						<path d="m6 9 6 6 6-6" />
+					</svg>
 				</button>
-				<div
-					class="continent-panel ml-2 mb-1 flex-col gap-0.5 border-l-2 pl-3 pt-1"
+				<div class="continent-panel ml-2 mb-1 flex-col gap-0.5 border-l-2 pl-3 pt-1"
 					style="border-color: var(- -brand-light)">
 					<button
 						class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">대한민국</button>
@@ -96,16 +100,19 @@ request.setAttribute("activePage", "travel");
 				<button type="button"
 					class="continent-toggle w-full flex items-center justify-between px-3 py-2.5 rounded-xl transition-all"
 					data-continent-toggle>
-					<span class="flex items-center gap-2.5 text-sm font-semibold"><svg
-							viewBox="0 0 48 48" width="24" height="24" aria-hidden="true">
-								<path
+					<span class="flex items-center gap-2.5 text-sm font-semibold">
+						<svg viewBox="0 0 48 48" width="24" height="24" aria-hidden="true">
+							<path
 								d="M10 8L18 5L27 6L36 9L40 15L37 21L40 27L34 32L29 38L22 40L17 35L11 34L7 27L6 19Z"
-								fill="#8B5CF6" opacity=".88" /></svg>유럽</span>
-					<svg
-						class="continent-chevron w-3.5 h-3.5 shrink-0 transition-transform"
+								fill="#8B5CF6" opacity=".88" />
+						</svg>
+						유럽
+					</span>
+					<svg class="continent-chevron w-3.5 h-3.5 shrink-0 transition-transform"
 						viewBox="0 0 24 24" fill="none" stroke="#9ca3af"
 						stroke-width="2.5">
-							<path d="m6 9 6 6 6-6" /></svg>
+						<path d="m6 9 6 6 6-6" />
+					</svg>
 				</button>
 				<div
 					class="continent-panel ml-2 mb-1 flex-col gap-0.5 border-l-2 pl-3 pt-1"
@@ -266,6 +273,10 @@ request.setAttribute("activePage", "travel");
       			action="${pageContext.request.contextPath}/schedules"
       			method="get"
       			class="mb-6 relative max-w-2xl">
+      			<input type="hidden"
+       				id="scheduleCountry"
+       				name="country"
+       				value="<c:out value='${country}'/>">
 				<div id="scheduleSearchBar"
 					class="flex items-center gap-2.5 bg-white border-2 rounded-xl px-4 py-2.5 shadow-sm transition-all cursor-text"
 					style="border-color: #D1D2F9">
@@ -541,7 +552,7 @@ request.setAttribute("activePage", "travel");
 				</c:forEach>
 
 
-				<!-- 아래는 예시데이터 코드들 -->
+				<%-- <!-- 아래는 예시데이터 코드들 -->
 				<a
 					href="${pageContext.request.contextPath}/view/travel/scheduleDetail.jsp?id=9"
 					class="jsp-schedule-card bg-white rounded-2xl overflow-hidden cursor-pointer transition-all duration-200 border group"
@@ -1487,7 +1498,7 @@ request.setAttribute("activePage", "travel");
 								class="text-[10px] text-gray-400">2026.07.28</span>
 						</div>
 					</div>
-				</a>
+				</a> --%>
 			</div>
 		</main>
 	</div>

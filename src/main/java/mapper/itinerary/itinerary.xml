@@ -36,6 +36,9 @@
 
 		WHERE i.status = 'ACTIVE'
 		AND i.visibility = 'PUBLIC'
+		<if test="country != null and country != ''">
+    	AND i.country = #{country}
+		</if>
 		<if test="keyword != null and keyword != ''">
     	AND (
         	LOCATE(#{keyword}, i.title) > 0

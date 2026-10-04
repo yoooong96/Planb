@@ -56,17 +56,26 @@ public class ScheduleList extends HttpServlet {
 	        }
 
 	        keyword = keyword.trim();
+	        
+	        String country = request.getParameter("country");
+
+	        if (country == null) {
+	            country = "";
+	        }
+
+	        country = country.trim();
 			
 			ItineraryService service = new ItineraryServiceImpl();
 			
 			// 목록 조회
-            List<ItineraryDto> scheduleList = service.getScheduleList(loginUserId, keyword);
+            List<ItineraryDto> scheduleList = service.getScheduleList(loginUserId, keyword, country);
 
             // JSP에 전달
             request.setAttribute("scheduleList",scheduleList);
 
             // 조회 후에도 검색창에 입력한 검색어 유지
             request.setAttribute("keyword", keyword);
+            request.setAttribute("country", country);
             
 			// 화면 출력
 			request.getRequestDispatcher("/view/travel/scheduleList.jsp").forward(request, response);
