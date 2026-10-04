@@ -4,31 +4,29 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="mapper.itinerary.itinerary">
 	<!-- 26.10.01 김상민 -->
-	<select id="selectScheduleList" parameterType="map"
-		resultType="itinerary">
-
+	<select id="selectScheduleList" parameterType="map" resultType="itinerary">
 		SELECT
-			i.*,
-			u.nickname,
-			(
-				SELECT COUNT(*)
-				FROM TB_ITINERARY_LIKE l
-				WHERE l.itinerary_id = i.itinerary_id
-			) AS like_count,
-			(
-				SELECT COUNT(*)
-				FROM TB_ITINERARY_COMMENT c
-				WHERE c.itinerary_id = i.itinerary_id
-				AND c.status = 'ACTIVE'
-			) AS comment_count,
-	
-			EXISTS (
-				SELECT 1
-				FROM TB_ITINERARY_BOOKMARK b
-				WHERE b.itinerary_id = i.itinerary_id
-				AND b.user_id = #{loginUserId, jdbcType=BIGINT}
-			) AS bookmarked
-	
+		i.*,
+		u.nickname,
+		(
+		SELECT COUNT(*)
+		FROM TB_ITINERARY_LIKE l
+		WHERE l.itinerary_id = i.itinerary_id
+		) AS like_count,
+		(
+		SELECT COUNT(*)
+		FROM TB_ITINERARY_COMMENT c
+		WHERE c.itinerary_id = i.itinerary_id
+		AND c.status = 'ACTIVE'
+		) AS comment_count,
+
+		EXISTS (
+		SELECT 1
+		FROM TB_ITINERARY_BOOKMARK b
+		WHERE b.itinerary_id = i.itinerary_id
+		AND b.user_id = #{loginUserId, jdbcType=BIGINT}
+		) AS bookmarked
+
 		FROM TB_ITINERARY i
 
 		JOIN TB_USER u
@@ -37,141 +35,197 @@
 		WHERE i.status = 'ACTIVE'
 		AND i.visibility = 'PUBLIC'
 		<if test="country != null and country != ''">
-    	AND i.country = #{country}
+			AND i.country = #{country}
 		</if>
 		<if test="keyword != null and keyword != ''">
-    	AND (
-        	LOCATE(#{keyword}, i.title) > 0
-        	OR LOCATE(#{keyword}, i.summary) > 0
-        	OR LOCATE(#{keyword}, i.country) > 0
-        	OR LOCATE(#{keyword}, i.city) > 0
-        	OR LOCATE(#{keyword}, i.continent) > 0
-        	OR LOCATE(#{keyword}, CAST(i.traveler_count AS CHAR)) > 0
-        	OR LOCATE(#{keyword}, CAST(i.total_budget AS CHAR)) > 0
-        	OR LOCATE(#{keyword}, u.nickname) > 0
-    	)
+			AND (
+			LOCATE(#{keyword}, i.title) > 0
+			OR LOCATE(#{keyword}, i.summary) > 0
+			OR LOCATE(#{keyword}, i.country) > 0
+			OR LOCATE(#{keyword}, i.city) > 0
+			OR LOCATE(#{keyword}, i.continent) > 0
+			OR LOCATE(#{keyword}, CAST(i.traveler_count AS CHAR)) > 0
+			OR LOCATE(#{keyword}, CAST(i.total_budget AS CHAR)) > 0
+			OR LOCATE(#{keyword}, u.nickname) > 0
+			)
+		</if>
+		<!-- 여행 기간: 같은 그룹 안에서는 OR -->
+		<if test="durations != null and durations.size() > 0">
+			AND (
+			<foreach collection="durations" item="duration"
+				separator=" OR ">
+				<choose>
+					<when test='duration == "6"'>
+						DATEDIFF(i.end_date, i.start_date) >= 5
+					</when>
+					<otherwise>
+						DATEDIFF(i.end_date, i.start_date)
+						= (CAST(#{duration} AS SIGNED) - 1)
+					</otherwise>
+				</choose>
+			</foreach>
+			)
+		</if>
+
+		<!-- 여행 경비 -->
+		<if test="budgets != null and budgets.size() > 0">
+			AND (
+			<foreach collection="budgets" item="budget" separator=" OR ">
+				<choose>
+					<when test='budget == "1"'>
+						i.total_budget &lt;= 1000000
+					</when>
+
+					<when test='budget == "6"'>
+						i.total_budget > 5000000
+					</when>
+
+					<otherwise>
+						(
+						i.total_budget >
+						(CAST(#{budget} AS SIGNED) - 1) * 1000000
+						AND i.total_budget &lt;=
+						CAST(#{budget} AS SIGNED) * 1000000
+						)
+					</otherwise>
+				</choose>
+			</foreach>
+			)
+		</if>
+
+		<!-- 여행 인원 -->
+		<if test="travelers != null and travelers.size() > 0">
+			AND (
+			<foreach collection="travelers" item="traveler"
+				separator=" OR ">
+				<choose>
+					<when test='traveler == "6"'>
+						i.traveler_count >= 6
+					</when>
+					<otherwise>
+						i.traveler_count = #{traveler}
+					</otherwise>
+				</choose>
+			</foreach>
+			)
 		</if>
 
 		ORDER BY
 		i.created_at DESC,
-		i.itinerary_id DESC  <!--생성시간이 같을 때의 정렬  -->
+		i.itinerary_id DESC  <!--생성시간이 같을 때의 정렬 -->
 
 		LIMIT #{limit}
 		OFFSET #{offset}
+	</select>
+
+	<!-- 신규 일정 저장 -->
+	<insert id="insertItinerary"
+		parameterType="dto.itinerary.ItineraryDto" useGeneratedKeys="true"
+		keyProperty="itineraryId" keyColumn="itinerary_id">
+
+		INSERT INTO TB_ITINERARY (
+		user_id,
+		title,
+		summary,
+		continent,
+		country,
+		city,
+		traveler_count,
+		start_date,
+		end_date,
+		total_budget,
+		visibility,
+		thumbnail_img,
+		source_itinerary_id
+		)
+		VALUES (
+		#{userId},
+		#{title},
+		#{summary},
+		#{continent},
+		#{country},
+		#{city},
+		#{travelerCount},
+		#{startDate},
+		#{endDate},
+		#{totalBudget},
+		#{visibility},
+		#{thumbnailImg},
+		#{sourceItineraryId}
+		)
+
+	</insert>
+
+
+	<!-- 일정 기본정보 조회 -->
+	<select id="selectItinerary" parameterType="long"
+		resultType="itinerary">
+
+		SELECT
+		itinerary_id,
+		user_id,
+		title,
+		summary,
+		continent,
+		country,
+		city,
+		traveler_count,
+		start_date,
+		end_date,
+		total_budget,
+		visibility,
+		thumbnail_img,
+		view_count,
+		source_itinerary_id,
+		status,
+		deleted_by_user_id,
+		deleted_at,
+		created_at,
+		updated_at
+		FROM TB_ITINERARY
+		WHERE itinerary_id = #{itineraryId}
+		AND status = 'ACTIVE'
 
 	</select>
 
-    <!-- 신규 일정 저장 -->
-    <insert id="insertItinerary"
-            parameterType="dto.itinerary.ItineraryDto"
-            useGeneratedKeys="true"
-            keyProperty="itineraryId"
-            keyColumn="itinerary_id">
 
-        INSERT INTO TB_ITINERARY (
-            user_id,
-            title,
-            summary,
-            continent,
-            country,
-            city,
-            traveler_count,
-            start_date,
-            end_date,
-            total_budget,
-            visibility,
-            thumbnail_img,
-            source_itinerary_id
-        )
-        VALUES (
-            #{userId},
-            #{title},
-            #{summary},
-            #{continent},
-            #{country},
-            #{city},
-            #{travelerCount},
-            #{startDate},
-            #{endDate},
-            #{totalBudget},
-            #{visibility},
-            #{thumbnailImg},
-            #{sourceItineraryId}
-        )
+	<!-- 일정 기본정보 수정 -->
+	<update id="updateItinerary"
+		parameterType="dto.itinerary.ItineraryDto">
 
-    </insert>
+		UPDATE TB_ITINERARY
+		SET
+		title = #{title},
+		summary = #{summary},
+		continent = #{continent},
+		country = #{country},
+		city = #{city},
+		traveler_count = #{travelerCount},
+		start_date = #{startDate},
+		end_date = #{endDate},
+		total_budget = #{totalBudget},
+		visibility = #{visibility},
+		thumbnail_img = #{thumbnailImg},
+		source_itinerary_id = #{sourceItineraryId}
+		WHERE itinerary_id = #{itineraryId}
+		AND user_id = #{userId}
+		AND status = 'ACTIVE'
+
+	</update>
 
 
-    <!-- 일정 기본정보 조회 -->
-    <select id="selectItinerary"
-            parameterType="long"
-            resultType="itinerary">
+	<!-- 일정 소프트 삭제 -->
+	<update id="deleteItinerary">
 
-        SELECT
-            itinerary_id,
-            user_id,
-            title,
-            summary,
-            continent,
-            country,
-            city,
-            traveler_count,
-            start_date,
-            end_date,
-            total_budget,
-            visibility,
-            thumbnail_img,
-            view_count,
-            source_itinerary_id,
-            status,
-            deleted_by_user_id,
-            deleted_at,
-            created_at,
-            updated_at
-        FROM TB_ITINERARY
-        WHERE itinerary_id = #{itineraryId}
-          AND status = 'ACTIVE'
+		UPDATE TB_ITINERARY
+		SET
+		status = 'DELETED',
+		deleted_by_user_id = #{userId},
+		deleted_at = NOW()
+		WHERE itinerary_id = #{itineraryId}
+		AND user_id = #{userId}
+		AND status = 'ACTIVE'
 
-    </select>
-
-
-    <!-- 일정 기본정보 수정 -->
-    <update id="updateItinerary"
-            parameterType="dto.itinerary.ItineraryDto">
-
-        UPDATE TB_ITINERARY
-        SET
-            title = #{title},
-            summary = #{summary},
-            continent = #{continent},
-            country = #{country},
-            city = #{city},
-            traveler_count = #{travelerCount},
-            start_date = #{startDate},
-            end_date = #{endDate},
-            total_budget = #{totalBudget},
-            visibility = #{visibility},
-            thumbnail_img = #{thumbnailImg},
-            source_itinerary_id = #{sourceItineraryId}
-        WHERE itinerary_id = #{itineraryId}
-          AND user_id = #{userId}
-          AND status = 'ACTIVE'
-
-    </update>
-
-
-    <!-- 일정 소프트 삭제 -->
-    <update id="deleteItinerary">
-
-        UPDATE TB_ITINERARY
-        SET
-            status = 'DELETED',
-            deleted_by_user_id = #{userId},
-            deleted_at = NOW()
-        WHERE itinerary_id = #{itineraryId}
-          AND user_id = #{userId}
-          AND status = 'ACTIVE'
-
-    </update>
+	</update>
 
 </mapper>

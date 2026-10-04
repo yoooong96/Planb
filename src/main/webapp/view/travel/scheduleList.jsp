@@ -27,13 +27,15 @@ request.setAttribute("activePage", "travel");
 						<polyline points="14 2 14 8 20 8" />
 					</svg>내가 작성한 글
 				</span>
-				<span class="text-xs rounded-full px-2 py-0.5 font-semibold" style="background: var(- -brand-light); color: var(- -brand)">
+				<span class="text-xs rounded-full px-2 py-0.5 font-semibold" style="background: var(--brand-light); color: var(--brand)">
 					3
 				</span>
 			</a>
 			<div class="border-t border-gray-100 mb-3">
 			</div>
-			<a href="${pageContext.request.contextPath}/travel"
+			
+			<!-- 전체보기 버튼 -->
+			<a href="${pageContext.request.contextPath}/schedules"
 			class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl transition-all mb-1"
 			style="background: #6369D1; color: #fff">
 			    <span class="flex items-center gap-2 text-sm font-semibold">
@@ -53,221 +55,176 @@ request.setAttribute("activePage", "travel");
 			        전체보기
 			    </span>
 			</a>
+			
 			<div class="text-xs font-bold text-gray-400 uppercase tracking-widest px-3 mb-1 mt-1">
 				여행 지역
 			</div>
+			
 			<div class="border-t border-gray-100 mb-3"></div>
+			
 			<div class="text-xs font-bold text-gray-400 uppercase tracking-widest px-3 mb-1">
-				대륙별 보기
+				국가별 보기
 			</div>
+			
 			<div>
-				<button type="button"
-					class="continent-toggle w-full flex items-center justify-between px-3 py-2.5 rounded-xl transition-all"
-					data-continent-toggle>
+				<!-- 아시아 버튼 -->
+				<button type="button" class="continent-toggle w-full flex items-center justify-between px-3 py-2.5 rounded-xl transition-all" data-continent-toggle>
 					<span class="flex items-center gap-2.5 text-sm font-semibold">
 						<svg viewBox="0 0 48 48" width="24" height="24" aria-hidden="true">
-							<path
-								d="M10 8L18 5L27 6L36 9L40 15L37 21L40 27L34 32L29 38L22 40L17 35L11 34L7 27L6 19Z"
-								fill="#6369D1" opacity=".88" />
+							<path d="M10 8L18 5L27 6L36 9L40 15L37 21L40 27L34 32L29 38L22 40L17 35L11 34L7 27L6 19Z" fill="#6369D1" opacity=".88" />
 						</svg>
 						아시아
 					</span>
-					<svg class="continent-chevron w-3.5 h-3.5 shrink-0 transition-transform"
-						viewBox="0 0 24 24" fill="none" stroke="#9ca3af"
-						stroke-width="2.5">
+					<svg class="continent-chevron w-3.5 h-3.5 shrink-0 transition-transform" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2.5">
 						<path d="m6 9 6 6 6-6" />
 					</svg>
 				</button>
+				<!-- 아시아 국가별 버튼 -->
 				<div class="continent-panel ml-2 mb-1 flex-col gap-0.5 border-l-2 pl-3 pt-1"
-					style="border-color: var(- -brand-light)">
-					<button
-						class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">대한민국</button>
-					<button
-						class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">일본</button>
-					<button
-						class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">태국</button>
-					<button
-						class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">베트남</button>
-					<button
-						class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">중국</button>
-					<button
-						class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">대만</button>
-					<button
-						class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">싱가포르</button>
+					style="border-color: var(--brand-light)">
+					<button type="button" data-schedule-country="대한민국" class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">대한민국</button>
+					<button type="button" data-schedule-country="일본" class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">일본</button>
+					<button type="button" data-schedule-country="태국" class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">태국</button>
+					<button type="button" data-schedule-country="베트남" class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">베트남</button>
+					<button type="button" data-schedule-country="중국" class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">중국</button>
+					<button type="button" data-schedule-country="대만" class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">대만</button>
+					<button type="button" data-schedule-country="싱가포르" class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">싱가포르</button>
 				</div>
 			</div>
+			
 			<div>
-				<button type="button"
-					class="continent-toggle w-full flex items-center justify-between px-3 py-2.5 rounded-xl transition-all"
-					data-continent-toggle>
+				<!-- 유럽 버튼 -->
+				<button type="button" class="continent-toggle w-full flex items-center justify-between px-3 py-2.5 rounded-xl transition-all" data-continent-toggle>
 					<span class="flex items-center gap-2.5 text-sm font-semibold">
 						<svg viewBox="0 0 48 48" width="24" height="24" aria-hidden="true">
-							<path
-								d="M10 8L18 5L27 6L36 9L40 15L37 21L40 27L34 32L29 38L22 40L17 35L11 34L7 27L6 19Z"
-								fill="#8B5CF6" opacity=".88" />
+							<path d="M10 8L18 5L27 6L36 9L40 15L37 21L40 27L34 32L29 38L22 40L17 35L11 34L7 27L6 19Z" fill="#8B5CF6" opacity=".88" />
 						</svg>
 						유럽
 					</span>
-					<svg class="continent-chevron w-3.5 h-3.5 shrink-0 transition-transform"
-						viewBox="0 0 24 24" fill="none" stroke="#9ca3af"
-						stroke-width="2.5">
+					<svg class="continent-chevron w-3.5 h-3.5 shrink-0 transition-transform" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2.5">
 						<path d="m6 9 6 6 6-6" />
 					</svg>
 				</button>
-				<div
-					class="continent-panel ml-2 mb-1 flex-col gap-0.5 border-l-2 pl-3 pt-1"
-					style="border-color: var(- -brand-light)">
-					<button
-						class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">프랑스</button>
-					<button
-						class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">영국</button>
-					<button
-						class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">이탈리아</button>
-					<button
-						class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">스페인</button>
-					<button
-						class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">독일</button>
-					<button
-						class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">포르투갈</button>
-					<button
-						class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">그리스</button>
+				<!-- 유럽 국가별 버튼 -->
+				<div class="continent-panel ml-2 mb-1 flex-col gap-0.5 border-l-2 pl-3 pt-1" style="border-color: var(--brand-light)">
+					<button type="button" data-schedule-country="프랑스" class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">프랑스</button>
+					<button type="button" data-schedule-country="영국" class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">영국</button>
+					<button type="button" data-schedule-country="이탈리아" class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">이탈리아</button>
+					<button type="button" data-schedule-country="스페인" class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">스페인</button>
+					<button type="button" data-schedule-country="독일" class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">독일</button>
+					<button type="button" data-schedule-country="포르투갈" class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">포르투갈</button>
+					<button type="button" data-schedule-country="그리스" class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">그리스</button>
 				</div>
 			</div>
+			
 			<div>
-				<button type="button"
-					class="continent-toggle w-full flex items-center justify-between px-3 py-2.5 rounded-xl transition-all"
-					data-continent-toggle>
-					<span class="flex items-center gap-2.5 text-sm font-semibold"><svg
-							viewBox="0 0 48 48" width="24" height="24" aria-hidden="true">
-								<path
-								d="M10 8L18 5L27 6L36 9L40 15L37 21L40 27L34 32L29 38L22 40L17 35L11 34L7 27L6 19Z"
-								fill="#10B981" opacity=".88" /></svg>북아메리카</span>
-					<svg
-						class="continent-chevron w-3.5 h-3.5 shrink-0 transition-transform"
-						viewBox="0 0 24 24" fill="none" stroke="#9ca3af"
-						stroke-width="2.5">
-							<path d="m6 9 6 6 6-6" /></svg>
+				<!-- 북아메리카 버튼 -->
+				<button type="button" class="continent-toggle w-full flex items-center justify-between px-3 py-2.5 rounded-xl transition-all" data-continent-toggle>
+					<span class="flex items-center gap-2.5 text-sm font-semibold">
+						<svg viewBox="0 0 48 48" width="24" height="24" aria-hidden="true">
+							<path d="M10 8L18 5L27 6L36 9L40 15L37 21L40 27L34 32L29 38L22 40L17 35L11 34L7 27L6 19Z" fill="#10B981" opacity=".88" />
+						</svg>
+						북아메리카
+					</span>
+					<svg class="continent-chevron w-3.5 h-3.5 shrink-0 transition-transform" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2.5">
+						<path d="m6 9 6 6 6-6" />
+					</svg>
 				</button>
-				<div
-					class="continent-panel ml-2 mb-1 flex-col gap-0.5 border-l-2 pl-3 pt-1"
-					style="border-color: var(- -brand-light)">
-					<button
-						class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">미국</button>
-					<button
-						class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">캐나다</button>
-					<button
-						class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">멕시코</button>
+				<!-- 북아메리카 국가별 버튼 -->
+				<div class="continent-panel ml-2 mb-1 flex-col gap-0.5 border-l-2 pl-3 pt-1" style="border-color: var(--brand-light)">
+					<button type="button" data-schedule-country="미국" class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">미국</button>
+					<button type="button" data-schedule-country="캐나다" class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">캐나다</button>
+					<button type="button" data-schedule-country="멕시코" class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">멕시코</button>
 				</div>
 			</div>
+			
 			<div>
-				<button type="button"
-					class="continent-toggle w-full flex items-center justify-between px-3 py-2.5 rounded-xl transition-all"
-					data-continent-toggle>
-					<span class="flex items-center gap-2.5 text-sm font-semibold"><svg
-							viewBox="0 0 48 48" width="24" height="24" aria-hidden="true">
-								<path
-								d="M10 8L18 5L27 6L36 9L40 15L37 21L40 27L34 32L29 38L22 40L17 35L11 34L7 27L6 19Z"
-								fill="#F59E0B" opacity=".88" /></svg>남아메리카</span>
-					<svg
-						class="continent-chevron w-3.5 h-3.5 shrink-0 transition-transform"
-						viewBox="0 0 24 24" fill="none" stroke="#9ca3af"
-						stroke-width="2.5">
-							<path d="m6 9 6 6 6-6" /></svg>
+				<!-- 남아메리카 버튼 -->
+				<button type="button" class="continent-toggle w-full flex items-center justify-between px-3 py-2.5 rounded-xl transition-all" data-continent-toggle>
+					<span class="flex items-center gap-2.5 text-sm font-semibold">
+						<svg viewBox="0 0 48 48" width="24" height="24" aria-hidden="true">
+							<path d="M10 8L18 5L27 6L36 9L40 15L37 21L40 27L34 32L29 38L22 40L17 35L11 34L7 27L6 19Z" fill="#F59E0B" opacity=".88" />
+						</svg>
+						남아메리카
+					</span>
+					<svg class="continent-chevron w-3.5 h-3.5 shrink-0 transition-transform" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2.5">
+						<path d="m6 9 6 6 6-6" />
+					</svg>
 				</button>
-				<div
-					class="continent-panel ml-2 mb-1 flex-col gap-0.5 border-l-2 pl-3 pt-1"
-					style="border-color: var(- -brand-light)">
-					<button
-						class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">브라질</button>
-					<button
-						class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">페루</button>
-					<button
-						class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">아르헨티나</button>
-					<button
-						class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">칠레</button>
+				<!-- 남아메리카 국가별 버튼 -->
+				<div class="continent-panel ml-2 mb-1 flex-col gap-0.5 border-l-2 pl-3 pt-1" style="border-color: var(--brand-light)">
+					<button type="button" data-schedule-country="브라질" class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">브라질</button>
+					<button type="button" data-schedule-country="페루" class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">페루</button>
+					<button type="button" data-schedule-country="아르헨티나" class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">아르헨티나</button>
+					<button type="button" data-schedule-country="칠레" class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">칠레</button>
 				</div>
 			</div>
+			
 			<div>
-				<button type="button"
-					class="continent-toggle w-full flex items-center justify-between px-3 py-2.5 rounded-xl transition-all"
-					data-continent-toggle>
-					<span class="flex items-center gap-2.5 text-sm font-semibold"><svg
-							viewBox="0 0 48 48" width="24" height="24" aria-hidden="true">
-								<path
-								d="M10 8L18 5L27 6L36 9L40 15L37 21L40 27L34 32L29 38L22 40L17 35L11 34L7 27L6 19Z"
-								fill="#EF4444" opacity=".88" /></svg>아프리카</span>
-					<svg
-						class="continent-chevron w-3.5 h-3.5 shrink-0 transition-transform"
-						viewBox="0 0 24 24" fill="none" stroke="#9ca3af"
-						stroke-width="2.5">
-							<path d="m6 9 6 6 6-6" /></svg>
+				<!-- 아프리카 버튼 -->
+				<button type="button" class="continent-toggle w-full flex items-center justify-between px-3 py-2.5 rounded-xl transition-all" data-continent-toggle>
+					<span class="flex items-center gap-2.5 text-sm font-semibold">
+						<svg viewBox="0 0 48 48" width="24" height="24" aria-hidden="true">
+							<path d="M10 8L18 5L27 6L36 9L40 15L37 21L40 27L34 32L29 38L22 40L17 35L11 34L7 27L6 19Z" fill="#EF4444" opacity=".88" />
+						</svg>
+						아프리카
+					</span>
+					<svg class="continent-chevron w-3.5 h-3.5 shrink-0 transition-transform" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2.5">
+						<path d="m6 9 6 6 6-6" />
+					</svg>
 				</button>
-				<div
-					class="continent-panel ml-2 mb-1 flex-col gap-0.5 border-l-2 pl-3 pt-1"
-					style="border-color: var(- -brand-light)">
-					<button
-						class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">이집트</button>
-					<button
-						class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">모로코</button>
-					<button
-						class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">남아프리카</button>
-					<button
-						class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">케냐</button>
+				<!-- 아프리카 국가별 버튼 -->
+				<div class="continent-panel ml-2 mb-1 flex-col gap-0.5 border-l-2 pl-3 pt-1" style="border-color: var(--brand-light)">
+					<button type="button" data-schedule-country="이집트" class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">이집트</button>
+					<button type="button" data-schedule-country="모로코" class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">모로코</button>
+					<button type="button" data-schedule-country="남아프리카" class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">남아프리카</button>
+					<button type="button" data-schedule-country="케냐" class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">케냐</button>
 				</div>
 			</div>
+			
 			<div>
-				<button type="button"
-					class="continent-toggle w-full flex items-center justify-between px-3 py-2.5 rounded-xl transition-all"
-					data-continent-toggle>
-					<span class="flex items-center gap-2.5 text-sm font-semibold"><svg
-							viewBox="0 0 48 48" width="24" height="24" aria-hidden="true">
-								<path
-								d="M10 8L18 5L27 6L36 9L40 15L37 21L40 27L34 32L29 38L22 40L17 35L11 34L7 27L6 19Z"
-								fill="#06B6D4" opacity=".88" /></svg>오세아니아</span>
-					<svg
-						class="continent-chevron w-3.5 h-3.5 shrink-0 transition-transform"
-						viewBox="0 0 24 24" fill="none" stroke="#9ca3af"
-						stroke-width="2.5">
-							<path d="m6 9 6 6 6-6" /></svg>
+				<!-- 오세아니아 버튼 -->
+				<button type="button" class="continent-toggle w-full flex items-center justify-between px-3 py-2.5 rounded-xl transition-all" data-continent-toggle>
+					<span class="flex items-center gap-2.5 text-sm font-semibold">
+						<svg viewBox="0 0 48 48" width="24" height="24" aria-hidden="true">
+							<path d="M10 8L18 5L27 6L36 9L40 15L37 21L40 27L34 32L29 38L22 40L17 35L11 34L7 27L6 19Z" fill="#06B6D4" opacity=".88" />
+						</svg>
+						오세아니아
+					</span>
+					<svg class="continent-chevron w-3.5 h-3.5 shrink-0 transition-transform" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2.5">
+						<path d="m6 9 6 6 6-6" />
+					</svg>
 				</button>
-				<div
-					class="continent-panel ml-2 mb-1 flex-col gap-0.5 border-l-2 pl-3 pt-1"
-					style="border-color: var(- -brand-light)">
-					<button
-						class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">호주</button>
-					<button
-						class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">뉴질랜드</button>
-					<button
-						class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">피지</button>
+				<!-- 오세아니아 국가별 버튼 -->
+				<div class="continent-panel ml-2 mb-1 flex-col gap-0.5 border-l-2 pl-3 pt-1" style="border-color: var(--brand-light)">
+					<button type="button" data-schedule-country="호주" class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">호주</button>
+					<button type="button" data-schedule-country="뉴질랜드" class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">뉴질랜드</button>
+					<button type="button" data-schedule-country="피지" class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">피지</button>
 				</div>
 			</div>
+			
 			<div>
-				<button type="button"
-					class="continent-toggle w-full flex items-center justify-between px-3 py-2.5 rounded-xl transition-all"
-					data-continent-toggle>
-					<span class="flex items-center gap-2.5 text-sm font-semibold"><svg
-							viewBox="0 0 48 48" width="24" height="24" aria-hidden="true">
-								<path
-								d="M10 8L18 5L27 6L36 9L40 15L37 21L40 27L34 32L29 38L22 40L17 35L11 34L7 27L6 19Z"
-								fill="#D97706" opacity=".88" /></svg>중동</span>
-					<svg
-						class="continent-chevron w-3.5 h-3.5 shrink-0 transition-transform"
-						viewBox="0 0 24 24" fill="none" stroke="#9ca3af"
-						stroke-width="2.5">
-							<path d="m6 9 6 6 6-6" /></svg>
+				<!-- 중동 버튼 -->
+				<button type="button" class="continent-toggle w-full flex items-center justify-between px-3 py-2.5 rounded-xl transition-all" data-continent-toggle>
+					<span class="flex items-center gap-2.5 text-sm font-semibold">
+						<svg viewBox="0 0 48 48" width="24" height="24" aria-hidden="true">
+							<path d="M10 8L18 5L27 6L36 9L40 15L37 21L40 27L34 32L29 38L22 40L17 35L11 34L7 27L6 19Z" fill="#D97706" opacity=".88" />
+						</svg>
+						중동
+					</span>
+					<svg class="continent-chevron w-3.5 h-3.5 shrink-0 transition-transform" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2.5">
+						<path d="m6 9 6 6 6-6" />
+					</svg>
 				</button>
-				<div
-					class="continent-panel ml-2 mb-1 flex-col gap-0.5 border-l-2 pl-3 pt-1"
-					style="border-color: var(- -brand-light)">
-					<button
-						class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">UAE</button>
-					<button
-						class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">터키</button>
-					<button
-						class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">이스라엘</button>
+				<!-- 중동 국가별 버튼 -->
+				<div class="continent-panel ml-2 mb-1 flex-col gap-0.5 border-l-2 pl-3 pt-1" style="border-color: var(--brand-light)">
+					<button type="button" data-schedule-country="UAE" class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">UAE</button>
+					<button type="button" data-schedule-country="터키" class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">터키</button>
+					<button type="button" data-schedule-country="이스라엘" class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">이스라엘</button>
 				</div>
 			</div>
 		</aside>
+		
 		<main class="flex-1 px-6 py-8 min-w-0">
 			<form id="scheduleSearchForm"
       			action="${pageContext.request.contextPath}/schedules"
@@ -286,7 +243,7 @@ request.setAttribute("activePage", "travel");
 							stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
 					<input type="text" id="scheduleKeyword" name="keyword" value="<c:out value='${keyword}'/>"
    						class="flex-1 text-[13px] outline-none text-gray-800 placeholder-gray-400 bg-transparent"
-    					placeholder="제목, 지역, 닉네임, 인원, 예산 검색">
+    					placeholder="제목, 닉네임, 인원, 예산 검색">
 					<!-- <input
 						class="flex-1 text-[13px] outline-none text-gray-800 placeholder-gray-400 bg-transparent"
 						placeholder="어디로 여행을 떠나고 싶으신가요? (예: 제주도, 도쿄, 파리...)"> -->
@@ -309,65 +266,114 @@ request.setAttribute("activePage", "travel");
 					<div class="p-5 grid grid-cols-3 gap-6 border-b"
 						style="border-color: #D1D2F9">
 						<div>
-							<p
-								class="text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-3">여행
-								기간</p>
+							<p class="text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-3">여행 기간</p>
 							<div class="flex flex-col gap-2">
-								<label class="flex items-center gap-2.5 cursor-pointer"><input
-									type="checkbox"><span class="text-[12px]">당일치기</span></label><label
-									class="flex items-center gap-2.5 cursor-pointer"><input
-									type="checkbox"><span class="text-[12px]">1박 2일</span></label><label
-									class="flex items-center gap-2.5 cursor-pointer"><input
-									type="checkbox"><span class="text-[12px]">2박 3일</span></label><label
-									class="flex items-center gap-2.5 cursor-pointer"><input
-									type="checkbox"><span class="text-[12px]">3박 4일</span></label><label
-									class="flex items-center gap-2.5 cursor-pointer"><input
-									type="checkbox"><span class="text-[12px]">4박 이상</span></label>
+    							<label class="flex items-center gap-2.5 cursor-pointer">
+        							<input type="checkbox" name="durations" value="1">
+        							<span class="text-[12px]">당일치기</span>
+    							</label>		
+
+    							<label class="flex items-center gap-2.5 cursor-pointer">
+        							<input type="checkbox" name="durations" value="2">
+        							<span class="text-[12px]">1박 2일</span>
+    							</label>
+				
+    							<label class="flex items-center gap-2.5 cursor-pointer">
+        							<input type="checkbox" name="durations" value="3">
+        							<span class="text-[12px]">2박 3일</span>
+    							</label>
+
+    							<label class="flex items-center gap-2.5 cursor-pointer">
+        							<input type="checkbox" name="durations" value="4">
+        							<span class="text-[12px]">3박 4일</span>
+    							</label>
+
+    							<label class="flex items-center gap-2.5 cursor-pointer">
+        							<input type="checkbox" name="durations" value="5">
+        							<span class="text-[12px]">4박 5일</span>
+    							</label>
+    							
+    							<label class="flex items-center gap-2.5 cursor-pointer">
+        							<input type="checkbox" name="durations" value="6">
+        							<span class="text-[12px]">5박 이상</span>
+    							</label>
 							</div>
 						</div>
 						<div>
-							<p
-								class="text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-3">여행
-								경비</p>
+							<p class="text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-3">여행 경비</p>
 							<div class="flex flex-col gap-2">
-								<label class="flex items-center gap-2.5 cursor-pointer"><input
-									type="checkbox"><span class="text-[12px]">100만원
-										이하</span></label><label class="flex items-center gap-2.5 cursor-pointer"><input
-									type="checkbox"><span class="text-[12px]">200만원
-										이하</span></label><label class="flex items-center gap-2.5 cursor-pointer"><input
-									type="checkbox"><span class="text-[12px]">300만원
-										이하</span></label><label class="flex items-center gap-2.5 cursor-pointer"><input
-									type="checkbox"><span class="text-[12px]">400만원
-										이하</span></label><label class="flex items-center gap-2.5 cursor-pointer"><input
-									type="checkbox"><span class="text-[12px]">500만원
-										이하</span></label><label class="flex items-center gap-2.5 cursor-pointer"><input
-									type="checkbox"><span class="text-[12px]">500만원~</span></label>
+								<label class="flex items-center gap-2.5 cursor-pointer">
+									<input type="checkbox" name="budgets" value="1">
+									<span class="text-[12px]">100만원 이하</span>
+								</label>
+								
+								<label class="flex items-center gap-2.5 cursor-pointer">
+									<input type="checkbox" name="budgets" value="2">
+									<span class="text-[12px]">100만원 초과~200만원 이하</span>
+    							</label>
+    							
+    							<label class="flex items-center gap-2.5 cursor-pointer">
+	        						<input type="checkbox" name="budgets" value="3">
+        							<span class="text-[12px]">200만원 초과~300만원 이하</span>
+    							</label>
+    							
+    							<label class="flex items-center gap-2.5 cursor-pointer">
+	        						<input type="checkbox" name="budgets" value="4">
+        							<span class="text-[12px]">300만원 초과~400만원 이하</span>
+    							</label>
+    							
+    							<label class="flex items-center gap-2.5 cursor-pointer">
+	        						<input type="checkbox" name="budgets" value="5">
+        							<span class="text-[12px]">400만원 초과~500만원 이하</span>
+    							</label>
+    							
+    							<label class="flex items-center gap-2.5 cursor-pointer">
+	        						<input type="checkbox" name="budgets" value="6">
+        							<span class="text-[12px]">500만원 초과</span>
+    							</label>
 							</div>
 						</div>
 						<div>
-							<p
-								class="text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-3">여행
-								인원</p>
+							<p class="text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-3">여행 인원</p>
 							<div class="flex flex-col gap-2">
-								<label class="flex items-center gap-2.5 cursor-pointer"><input
-									type="checkbox"><span class="text-[12px]">전체</span></label><label
-									class="flex items-center gap-2.5 cursor-pointer"><input
-									type="checkbox"><span class="text-[12px]">1인</span></label><label
-									class="flex items-center gap-2.5 cursor-pointer"><input
-									type="checkbox"><span class="text-[12px]">2인</span></label><label
-									class="flex items-center gap-2.5 cursor-pointer"><input
-									type="checkbox"><span class="text-[12px]">3인</span></label><label
-									class="flex items-center gap-2.5 cursor-pointer"><input
-									type="checkbox"><span class="text-[12px]">4인</span></label><label
-									class="flex items-center gap-2.5 cursor-pointer"><input
-									type="checkbox"><span class="text-[12px]">5인~</span></label>
+    							<label class="flex items-center gap-2.5 cursor-pointer">
+        							<input type="checkbox" name="travelers" value="1">
+        							<span class="text-[12px]">1인</span>
+    							</label>
+
+    							<label class="flex items-center gap-2.5 cursor-pointer">
+        							<input type="checkbox" name="travelers" value="2">
+        							<span class="text-[12px]">2인</span>
+    							</label>
+		
+    							<label class="flex items-center gap-2.5 cursor-pointer">
+        							<input type="checkbox" name="travelers" value="3">
+        							<span class="text-[12px]">3인</span>
+    							</label>
+
+    							<label class="flex items-center gap-2.5 cursor-pointer">
+        							<input type="checkbox" name="travelers" value="4">
+        							<span class="text-[12px]">4인</span>
+    							</label>
+	
+							    <label class="flex items-center gap-2.5 cursor-pointer">
+        							<input type="checkbox" name="travelers" value="5">
+        							<span class="text-[12px]">5인</span>
+    							</label>
+			
+    							<label class="flex items-center gap-2.5 cursor-pointer">
+        							<input type="checkbox" name="travelers" value="6">
+        							<span class="text-[12px]">6인 이상</span>
+    							</label>
+		
 							</div>
 						</div>
 					</div>
 					<div
 						class="px-5 py-3.5 flex items-center justify-between bg-gray-50">
-						<button type="button"
-							class="text-[12px] text-gray-400 hover:text-gray-600 font-medium flex items-center gap-1.5">초기화</button>
+						<button type="button" id="scheduleFilterReset" class="text-[12px] text-gray-400 hover:text-gray-600 font-medium flex items-center gap-1.5">
+    						초기화
+						</button>
 						<button type="submit"
 							class="px-6 py-2 text-[12px] font-bold text-white rounded-xl"
 							style="background: #6369D1">검색하기</button>
@@ -1504,11 +1510,9 @@ request.setAttribute("activePage", "travel");
 	</div>
 	<script
 		src="${pageContext.request.contextPath}/view/assets/js/auth/tripily.js">
-		
 	</script>
 	<script
-		src="${pageContext.request.contextPath}/view/assets/js/travel/scheduleList.js?v=2">
-		
+		src="${pageContext.request.contextPath}/view/assets/js/travel/scheduleList.js?v=6">
 	</script>
 </body>
 </html>

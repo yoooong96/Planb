@@ -1,173 +1,252 @@
-(function () {
-	
-	  /* 상세 조건 패널 열기·닫기 */
-    const filterToggle =
-        document.getElementById("scheduleFilterToggle");
+(function() {
 
-    const filterPanel =
-        document.getElementById("scheduleFilterPanel");
+	/* 상세 조건 패널 열기·닫기 */
+	const filterToggle = document.getElementById("scheduleFilterToggle");
+	const filterPanel = document.getElementById("scheduleFilterPanel");
 
-    if (filterToggle && filterPanel) {
+	if (filterToggle && filterPanel) {
 
-        function setFilterPanelOpen(open) {
-            filterPanel.classList.toggle("hidden", !open);
+		function setFilterPanelOpen(open) {
+			filterPanel.classList.toggle("hidden", !open);
 
-            filterToggle.setAttribute(
-                "aria-expanded",
-                String(open)
-            );
+			filterToggle.setAttribute("aria-expanded", String(open));
 
-            const arrow = filterToggle.querySelector("svg");
+			const arrow = filterToggle.querySelector("svg");
 
-            if (arrow) {
-                arrow.style.transform =
-                    open ? "rotate(180deg)" : "";
-            }
-        }
+			if (arrow) {
+				arrow.style.transform = open ? "rotate(180deg)" : "";
+			}
+		}
 
-        filterToggle.addEventListener("click", function () {
-            const isOpen =
-                filterToggle.getAttribute("aria-expanded") === "true";
+		filterToggle.addEventListener("click", function() {
+			const isOpen = filterToggle.getAttribute("aria-expanded") === "true";
 
-            setFilterPanelOpen(!isOpen);
-        });
+			setFilterPanelOpen(!isOpen);
+		});
 
-        // 검색 영역 밖을 클릭하면 닫기
-        document.addEventListener("click", function (event) {
-            const searchForm =
-                document.getElementById("scheduleSearchForm");
+		// 검색창을 클릭하거나 키보드로 선택하면 상세 조건 펼치기
+		const keywordInput = document.getElementById("scheduleKeyword");
 
-            if (searchForm && !searchForm.contains(event.target)) {
-                setFilterPanelOpen(false);
-            }
-        });
+		if (keywordInput) {
+			keywordInput.addEventListener("click", function() {
+				setFilterPanelOpen(true);
+			});
 
-        // Escape 키로 닫기
-        document.addEventListener("keydown", function (event) {
-            if (event.key === "Escape") {
-                setFilterPanelOpen(false);
-            }
-        });
-    }
-    
-    
+			keywordInput.addEventListener("focus", function() {
+				setFilterPanelOpen(true);
+			});
+		}
+
+		// 검색 영역 밖을 클릭하면 닫기
+		document.addEventListener("click", function(event) {
+			const searchForm = document.getElementById("scheduleSearchForm");
+
+			if (searchForm && !searchForm.contains(event.target)) {
+				setFilterPanelOpen(false);
+			}
+		});
+
+		// Escape 키로 닫기
+		document.addEventListener("keydown", function(event) {
+			if (event.key === "Escape") {
+				setFilterPanelOpen(false);
+			}
+		});
+	}
+
+	/* 국가 선택 조회 */
+	const searchForm = document.getElementById("scheduleSearchForm");
+
+	// 조회 후 URL의 검색 조건으로 체크 상태 복원
+	if (searchForm) {
+		const query = new URLSearchParams(window.location.search);
+		["durations", "budgets", "travelers"].forEach(function(name) {
+			const selectedValues = query.getAll(name);
+				
+			searchForm.querySelectorAll(`input[name="${name}"]`).forEach(function(checkbox) {
+				checkbox.checked = selectedValues.includes(checkbox.value);
+			});
+		});
+	}
+
+	// 상세 조건 체크박스만 초기화
+	const filterReset = document.getElementById("scheduleFilterReset");
+
+	if (searchForm && filterReset) {
+		filterReset.addEventListener("click", function() {
+			searchForm.querySelectorAll(
+				'input[name="durations"], ' +
+				'input[name="budgets"], ' +
+				'input[name="travelers"]'
+			).forEach(function(checkbox) {
+				checkbox.checked = false;
+			});
+		});
+	}
+
+	const countryInput = document.getElementById("scheduleCountry");
+
+	if (searchForm && countryInput) {
+
+		const countryButtons = document.querySelectorAll("[data-schedule-country]");
+
+		countryButtons.forEach(function(button) {
+
+			const selected = button.dataset.scheduleCountry === countryInput.value;
+
+			button.setAttribute("aria-pressed", String(selected));
+
+			// 국가 버튼의 선택 표시
+			if (button.dataset.scheduleCountry !== "" && selected) {
+				button.style.color = "#6369D1";
+				button.style.backgroundColor = "#F0F0FF";
+				button.style.fontWeight = "600";
+			}
+
+			button.addEventListener("click", function() {
+				countryInput.value = button.dataset.scheduleCountry;
+
+				searchForm.requestSubmit();
+			});
+		});
+	}
+
+	/* 대륙별 국가 목록 펼치기·접기 */
+	document.querySelectorAll("[data-continent-toggle]").forEach(function(button) {
+
+		const group = button.parentElement;
+
+		const panel = group.querySelector(".continent-panel");
+
+		const arrow = button.querySelector(".continent-chevron");
+
+		if (!panel) {
+			return;
+		}
+
+		function setContinentOpen(open) {
+			panel.style.display = open ? "flex" : "none";
+
+			button.setAttribute("aria-expanded", String(open));
+
+			if (arrow) {
+				arrow.style.transform = open ? "rotate(180deg)" : "";
+			}
+		}
+
+		// 선택한 국가가 속한 대륙은 조회 후에도 펼침
+		const containsSelectedCountry =
+			countryInput &&
+			countryInput.value !== "" &&
+			Array.from(panel.querySelectorAll("[data-schedule-country]")).some(function(countryButton) {
+				return countryButton.dataset.scheduleCountry === countryInput.value;
+			});
+
+		setContinentOpen(Boolean(containsSelectedCountry));
+
+		button.addEventListener("click", function() {
+			const isOpen = button.getAttribute("aria-expanded") === "true";
+
+			setContinentOpen(!isOpen);
+		});
+	});
+
 	// 클릭 이벤트
-    document.addEventListener("click", function (event) {
+	document.addEventListener("click", function(event) {
 
-        const button =
-            event.target.closest("[data-schedule-bookmark]");
+		const button = event.target.closest("[data-schedule-bookmark]");
 
-        if (!button) {
-            return;
-        }
+		if (!button) {
+			return;
+		}
 
-        event.preventDefault();
-        event.stopPropagation();
+		event.preventDefault();
+		event.stopPropagation();
 
-        if (button.dataset.loggedIn !== "true") {
-            window.tripilyToast("로그인 후 이용할 수 있습니다.");
-            return;
-        }
+		if (button.dataset.loggedIn !== "true") {
+			window.tripilyToast("로그인 후 이용할 수 있습니다.");
+			return;
+		}
 
-        if (button.dataset.loading === "true") {
-            return;
-        }
+		if (button.dataset.loading === "true") {
+			return;
+		}
 
-        toggleBookmark(button);
-    });
+		toggleBookmark(button);
+	});
 
-    async function toggleBookmark(button) {
+	async function toggleBookmark(button) {
 
-        const itineraryId = button.dataset.itineraryId;
-        const url = button.dataset.bookmarkUrl;
+		const itineraryId = button.dataset.itineraryId;
+		const url = button.dataset.bookmarkUrl;
 
-        if (!itineraryId || !url) {
-            window.tripilyToast(
-                "북마크 요청 정보를 확인해주세요."
-            );
-            return;
-        }
+		if (!itineraryId || !url) {
+			window.tripilyToast("북마크 요청 정보를 확인해주세요.");
+			return;
+		}
 
-        button.dataset.loading = "true";
-        button.disabled = true;
-        button.setAttribute("aria-busy", "true");
+		button.dataset.loading = "true";
+		button.disabled = true;
+		button.setAttribute("aria-busy", "true");
 
-        try {
-            const params = new URLSearchParams();
+		try {
+			const params = new URLSearchParams();
 
-            params.set("itineraryId", itineraryId);
+			params.set("itineraryId", itineraryId);
 
-            const response = await fetch(url, {
-                method: "POST",
-                credentials: "same-origin",
-                headers: {
-                    "Content-Type":
-                        "application/x-www-form-urlencoded;charset=UTF-8",
-                    "Accept": "application/json"
-                },
-                body: params.toString()
-            });
+			const response = await fetch(url, {
+				method: "POST",
+				credentials: "same-origin",
+				headers: {
+					"Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
+					"Accept": "application/json"
+				},
+				body: params.toString()
+			});
 
-            const result = await response.json();
+			const result = await response.json();
 
-            if (!response.ok || result.success !== true) {
-                throw new Error(
-                    result.message || "북마크 처리에 실패했습니다."
-                );
-            }
+			if (!response.ok || result.success !== true) {
+				throw new Error(result.message || "북마크 처리에 실패했습니다.");
+			}
 
-            if (typeof result.bookmarked !== "boolean") {
-                throw new Error("서버 응답을 확인해주세요.");
-            }
+			if (typeof result.bookmarked !== "boolean") {
+				throw new Error("서버 응답을 확인해주세요.");
+			}
 
-            updateBookmarkButton(button, result.bookmarked);
+			updateBookmarkButton(button, result.bookmarked);
 
-            window.tripilyToast(
-                result.bookmarked
-                    ? "일정을 북마크했어요."
-                    : "북마크를 해제했어요."
-            );
+			window.tripilyToast(
+				result.bookmarked ? "일정을 북마크했어요." : "북마크를 해제했어요."
+			);
 
-        } catch (error) {
-            console.error(error);
+		} catch (error) {
+			console.error(error);
 
-            window.tripilyToast(
-                error.message || "북마크 처리 중 오류가 발생했습니다."
-            );
+			window.tripilyToast(
+				error.message || "북마크 처리 중 오류가 발생했습니다."
+			);
 
-        } finally {
-            delete button.dataset.loading;
+		} finally {
+			delete button.dataset.loading;
 
-            button.disabled = false;
-            button.removeAttribute("aria-busy");
-        }
-    }
+			button.disabled = false;
+			button.removeAttribute("aria-busy");
+		}
+	}
 
-    function updateBookmarkButton(button, bookmarked) {
+	function updateBookmarkButton(button, bookmarked) {
 
-        button.setAttribute(
-            "aria-pressed",
-            String(bookmarked)
-        );
+		button.setAttribute("aria-pressed", String(bookmarked));
 
-        button.setAttribute(
-            "aria-label",
-            bookmarked ? "북마크 해제" : "북마크 추가"
-        );
+		button.setAttribute("aria-label", bookmarked ? "북마크 해제" : "북마크 추가");
 
-        const icon = button.querySelector("svg");
+		const icon = button.querySelector("svg");
 
-        if (icon) {
-            icon.setAttribute(
-                "fill",
-                bookmarked ? "#6369D1" : "none"
-            );
-
-            icon.setAttribute(
-                "stroke",
-                bookmarked ? "#6369D1" : "#9ca3af"
-            );
-        }
-    }
+		if (icon) {
+			icon.setAttribute("fill", bookmarked ? "#6369D1" : "none");
+			icon.setAttribute("stroke", bookmarked ? "#6369D1" : "#9ca3af");
+		}
+	}
 
 })();

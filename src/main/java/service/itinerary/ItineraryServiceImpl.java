@@ -52,15 +52,46 @@ public class ItineraryServiceImpl implements ItineraryService {
 
     @Override
     public List<ItineraryDto> getScheduleList(Long loginUserId, String keyword, String country) throws Exception {
+        return getScheduleList(loginUserId, keyword, country, null, null, null);
+    }
+
+    @Override
+    public List<ItineraryDto> getScheduleList(Long loginUserId, String keyword, String country, String[] durations, String[] budgets, String[] travelers) throws Exception {
         Map<String, Object> params = new HashMap<>();
 
         params.put("loginUserId", loginUserId);
         params.put("keyword", keyword == null ? "" : keyword.trim());
         params.put("country", country == null ? "" : country.trim());
+
+        params.put("durations", validateFilterValues(durations));
+        params.put("budgets", validateFilterValues(budgets));
+        params.put("travelers", validateFilterValues(travelers));
+
         params.put("limit", 12);
         params.put("offset", 0);
 
         return itineraryDao.selectScheduleList(params);
+    }
+
+    // 체크박스 값은 1~6만 허용
+    private List<String> validateFilterValues(String[] values) {
+        List<String> result = new java.util.ArrayList<>();
+
+        if (values == null) {
+            return result;
+        }
+
+        for (String value : values) {
+            if (value == null || !value.matches("[1-6]")) {
+                throw new IllegalArgumentException("올바르지 않은 검색 조건입니다.");
+            }
+
+            if (!result.contains(value)) {
+                result.add(value);
+            }
+        }
+
+        return result;
     }
     
     /*
