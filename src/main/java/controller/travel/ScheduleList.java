@@ -18,7 +18,7 @@ import service.itinerary.ItineraryServiceImpl;
 /**
  * Servlet implementation class ScheduleList
  */
-@WebServlet("/schedules")
+@WebServlet({ "/schedules", "/schedules/load" })
 public class ScheduleList extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -37,6 +37,26 @@ public class ScheduleList extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		try {
+			boolean loadRequest = "/schedules/load".equals(request.getServletPath());
+
+			int offset = 0;
+
+			if (loadRequest) {
+				String offsetParam = request.getParameter("offset");
+
+				if (offsetParam == null) {
+					throw new IllegalArgumentException("조회 위치가 필요합니다.");
+				}
+
+				offset = Integer.parseInt(offsetParam);
+
+				if (offset < 0) {
+					throw new IllegalArgumentException("올바르지 않은 조회 위치입니다.");
+				}
+			}
+
+			response.setContentType("text/html; charset=UTF-8");
+
 			// 기존 세션만 가져오기
 			HttpSession session = request.getSession(false);
 			UserDto loginUser = null;
@@ -70,23 +90,33 @@ public class ScheduleList extends HttpServlet {
 			String[] durations = request.getParameterValues("durations");
 			String[] budgets = request.getParameterValues("budgets");
 			String[] travelers = request.getParameterValues("travelers");
-			
+
 			String sort = request.getParameter("sort");
 
 			if (!"views".equals(sort) && !"likes".equals(sort)) {
-			    sort = "latest";
+				sort = "latest";
 			}
 
 			ItineraryService service = new ItineraryServiceImpl();
 
-			// 목록 조회
-			List<ItineraryDto> scheduleList = service.getScheduleList(loginUserId, keyword, country, durations, budgets, travelers, sort);
-			
-			long totalCount = service.countScheduleList(keyword, country, durations, budgets, travelers);
-			request.setAttribute("totalCount", totalCount);
+			List<ItineraryDto> scheduleList = service.getScheduleList(loginUserId, keyword, country, durations, budgets,
+					travelers, sort, offset);
 
-			// JSP에 전달
 			request.setAttribute("scheduleList", scheduleList);
+
+			// 추가 조회는 카드 HTML만 반환
+			if (loadRequest) {
+				response.setHeader("Cache-Control", "no-store");
+
+				request.getRequestDispatcher("/view/travel/scheduleCards.jsp").forward(request, response);
+
+				return;
+			}
+
+			// 첫 화면에서만 전체 개수 조회
+			long totalCount = service.countScheduleList(keyword, country, durations, budgets, travelers);
+
+			request.setAttribute("totalCount", totalCount);
 
 			// 조회 후에도 검색창에 입력한 검색어 유지
 			request.setAttribute("keyword", keyword);

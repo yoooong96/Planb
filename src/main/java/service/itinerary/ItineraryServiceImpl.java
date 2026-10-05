@@ -62,7 +62,16 @@ public class ItineraryServiceImpl implements ItineraryService {
 
     @Override
     public List<ItineraryDto> getScheduleList(Long loginUserId, String keyword, String country, String[] durations, String[] budgets, String[] travelers, String sort) throws Exception {
-        // 허용하지 않은 정렬값은 최신순으로 처리
+    	return getScheduleList(loginUserId, keyword, country, durations, budgets, travelers, sort, 0);
+    }
+    
+    // 무한 스크롤
+    @Override
+    public List<ItineraryDto> getScheduleList(Long loginUserId, String keyword, String country, String[] durations, String[] budgets, String[] travelers, String sort, int offset) throws Exception {
+        if (offset < 0) {
+            throw new IllegalArgumentException("올바르지 않은 조회 위치입니다.");
+        }
+
         if (!"views".equals(sort) && !"likes".equals(sort)) {
             sort = "latest";
         }
@@ -79,7 +88,7 @@ public class ItineraryServiceImpl implements ItineraryService {
 
         params.put("sort", sort);
         params.put("limit", 12);
-        params.put("offset", 0);
+        params.put("offset", offset);
 
         return itineraryDao.selectScheduleList(params);
     }

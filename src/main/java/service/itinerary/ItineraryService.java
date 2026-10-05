@@ -16,6 +16,8 @@ public interface ItineraryService {
     List<ItineraryDto> getScheduleList(Long loginUserId, String keyword, String country, String[] durations, String[] budgets, String[] travelers, String sort) throws Exception;
     
     long countScheduleList(String keyword, String country, String[] durations, String[] budgets, String[] travelers) throws Exception;
+    
+    List<ItineraryDto> getScheduleList(Long loginUserId, String keyword, String country, String[] durations, String[] budgets, String[] travelers, String sort, int offset) throws Exception;
 	
     Long writeItinerary(ItineraryDto itineraryDto) throws Exception;
 

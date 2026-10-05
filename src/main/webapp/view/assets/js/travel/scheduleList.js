@@ -169,7 +169,7 @@
 			button.style.borderBottom = selected ? "2px solid #6369D1" : "2px solid transparent";
 
 			button.addEventListener("click", function() {
-				sortInput.value =button.dataset.scheduleSort;
+				sortInput.value = button.dataset.scheduleSort;
 				searchForm.requestSubmit();
 			});
 		});
@@ -272,5 +272,127 @@
 			icon.setAttribute("stroke", bookmarked ? "#6369D1" : "#9ca3af");
 		}
 	}
+
+	/* 무한 스크롤 */
+	const cardGrid = document.getElementById("scheduleCardGrid");
+	const scrollArea = document.getElementById("scheduleInfiniteScroll");
+	const sentinel = document.getElementById("scheduleScrollSentinel");
+
+	if (cardGrid && scrollArea && sentinel) {
+		const loading = document.getElementById("scheduleLoading");
+		const retryButton = document.getElementById("scheduleLoadRetry");
+		const complete = document.getElementById("scheduleLoadComplete");
+
+		let offset = Number(scrollArea.dataset.loadedCount);
+		const totalCount = Number(scrollArea.dataset.totalCount);
+
+		let isLoading = false;
+		let finished = offset >= totalCount;
+
+		// 현재 화면에 적용된 조건을 사용
+		const appliedQuery = new URLSearchParams(window.location.search);
+
+		const observer = new IntersectionObserver(function(entries) {
+			if (entries.some(function(entry) {
+				return entry.isIntersecting;
+			})) {
+				loadMore();
+			}
+		}, {
+			threshold: 0
+		});
+
+		function finishLoading() {
+			finished = true;
+			observer.disconnect();
+			sentinel.classList.add("hidden");
+
+			if (totalCount > 0) {
+				complete.classList.remove("hidden");
+			}
+		}
+
+		async function loadMore() {
+			if (isLoading || finished) {
+				return;
+			}
+
+			isLoading = true;
+			loading.classList.remove("hidden");
+			retryButton.classList.add("hidden");
+
+			// 요청 중 중복 감지 방지
+			observer.unobserve(sentinel);
+
+			let succeeded = false;
+
+			try {
+				const params = new URLSearchParams(appliedQuery);
+				
+				params.set("offset", String(offset));
+				
+				const response = await fetch(
+					scrollArea.dataset.loadUrl + "?" + params.toString(),
+					{
+						credentials: "same-origin",
+						headers: {
+							"Accept": "text/html"
+						}
+					}
+				);
+
+				if (!response.ok) {
+					throw new Error("일정 추가 조회에 실패했습니다.");
+				}
+
+				const html = await response.text();
+				const template = document.createElement("template");
+
+				template.innerHTML = html.trim();
+
+				const cards = Array.from(template.content.children);
+
+				if (cards.some(function(card) {
+					return !card.matches("article.jsp-schedule-card");
+				})) {
+					throw new Error("추가 조회 응답을 확인해주세요.");
+				}
+
+				cards.forEach(function(card) {
+					cardGrid.appendChild(card);
+				});
+
+				offset += cards.length;
+				scrollArea.dataset.loadedCount = String(offset);
+
+				succeeded = true;
+
+				if (cards.length < 12 || offset >= totalCount) {
+					finishLoading();
+				}
+
+			} catch (error) {
+				console.error(error);
+				retryButton.classList.remove("hidden");
+
+			} finally {
+				isLoading = false;
+				loading.classList.add("hidden");
+
+				if (succeeded && !finished) {
+					observer.observe(sentinel);
+				}
+			}
+		}
+
+		retryButton.addEventListener("click", loadMore);
+
+		if (finished) {
+			finishLoading();
+		} else {
+			observer.observe(sentinel);
+		}
+	}
+
 
 })();
