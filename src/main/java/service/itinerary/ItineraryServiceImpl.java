@@ -57,6 +57,16 @@ public class ItineraryServiceImpl implements ItineraryService {
 
     @Override
     public List<ItineraryDto> getScheduleList(Long loginUserId, String keyword, String country, String[] durations, String[] budgets, String[] travelers) throws Exception {
+        return getScheduleList(loginUserId, keyword, country, durations, budgets, travelers, "latest");
+    }
+
+    @Override
+    public List<ItineraryDto> getScheduleList(Long loginUserId, String keyword, String country, String[] durations, String[] budgets, String[] travelers, String sort) throws Exception {
+        // 허용하지 않은 정렬값은 최신순으로 처리
+        if (!"views".equals(sort) && !"likes".equals(sort)) {
+            sort = "latest";
+        }
+
         Map<String, Object> params = new HashMap<>();
 
         params.put("loginUserId", loginUserId);
@@ -67,6 +77,7 @@ public class ItineraryServiceImpl implements ItineraryService {
         params.put("budgets", validateFilterValues(budgets));
         params.put("travelers", validateFilterValues(travelers));
 
+        params.put("sort", sort);
         params.put("limit", 12);
         params.put("offset", 0);
 
@@ -93,6 +104,22 @@ public class ItineraryServiceImpl implements ItineraryService {
 
         return result;
     }
+    
+    @Override
+    public long countScheduleList(String keyword, String country, String[] durations, String[] budgets, String[] travelers) throws Exception {
+        Map<String, Object> params = new HashMap<>();
+
+        params.put("keyword", keyword == null ? "" : keyword.trim());
+        params.put("country", country == null ? "" : country.trim());
+
+        params.put("durations", validateFilterValues(durations));
+        params.put("budgets", validateFilterValues(budgets));
+        params.put("travelers", validateFilterValues(travelers));
+
+        return itineraryDao.countScheduleList(params);
+    }
+    
+    
     
     /*
      * 신규 일정 저장

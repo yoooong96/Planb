@@ -62,7 +62,7 @@
 		const query = new URLSearchParams(window.location.search);
 		["durations", "budgets", "travelers"].forEach(function(name) {
 			const selectedValues = query.getAll(name);
-				
+
 			searchForm.querySelectorAll(`input[name="${name}"]`).forEach(function(checkbox) {
 				checkbox.checked = selectedValues.includes(checkbox.value);
 			});
@@ -150,6 +150,30 @@
 			setContinentOpen(!isOpen);
 		});
 	});
+
+	/* 조회 조건을 유지하면서 정렬 변경 */
+	const sortInput = document.getElementById("scheduleSort");
+
+	if (searchForm && sortInput) {
+		if (!["latest", "views", "likes"].includes(sortInput.value)) {
+			sortInput.value = "latest";
+		}
+
+		document.querySelectorAll("[data-schedule-sort]").forEach(function(button) {
+			const selected = button.dataset.scheduleSort === sortInput.value;
+
+			button.setAttribute("aria-pressed", String(selected));
+
+			button.style.color = selected ? "#6369D1" : "#9ca3af";
+			button.style.fontWeight = selected ? "600" : "400";
+			button.style.borderBottom = selected ? "2px solid #6369D1" : "2px solid transparent";
+
+			button.addEventListener("click", function() {
+				sortInput.value =button.dataset.scheduleSort;
+				searchForm.requestSubmit();
+			});
+		});
+	}
 
 	// 클릭 이벤트
 	document.addEventListener("click", function(event) {

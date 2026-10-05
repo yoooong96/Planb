@@ -234,6 +234,10 @@ request.setAttribute("activePage", "travel");
        				id="scheduleCountry"
        				name="country"
        				value="<c:out value='${country}'/>">
+       			<input type="hidden"
+       				id="scheduleSort"
+       				name="sort"
+       				value="<c:out value='${sort}'/>">
 				<div id="scheduleSearchBar"
 					class="flex items-center gap-2.5 bg-white border-2 rounded-xl px-4 py-2.5 shadow-sm transition-all cursor-text"
 					style="border-color: #D1D2F9">
@@ -244,9 +248,6 @@ request.setAttribute("activePage", "travel");
 					<input type="text" id="scheduleKeyword" name="keyword" value="<c:out value='${keyword}'/>"
    						class="flex-1 text-[13px] outline-none text-gray-800 placeholder-gray-400 bg-transparent"
     					placeholder="제목, 닉네임, 인원, 예산 검색">
-					<!-- <input
-						class="flex-1 text-[13px] outline-none text-gray-800 placeholder-gray-400 bg-transparent"
-						placeholder="어디로 여행을 떠나고 싶으신가요? (예: 제주도, 도쿄, 파리...)"> -->
 					<button type="button"
         					id="scheduleFilterToggle"
         					aria-expanded="false"
@@ -299,40 +300,7 @@ request.setAttribute("activePage", "travel");
     							</label>
 							</div>
 						</div>
-						<div>
-							<p class="text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-3">여행 경비</p>
-							<div class="flex flex-col gap-2">
-								<label class="flex items-center gap-2.5 cursor-pointer">
-									<input type="checkbox" name="budgets" value="1">
-									<span class="text-[12px]">100만원 이하</span>
-								</label>
-								
-								<label class="flex items-center gap-2.5 cursor-pointer">
-									<input type="checkbox" name="budgets" value="2">
-									<span class="text-[12px]">100만원 초과~200만원 이하</span>
-    							</label>
-    							
-    							<label class="flex items-center gap-2.5 cursor-pointer">
-	        						<input type="checkbox" name="budgets" value="3">
-        							<span class="text-[12px]">200만원 초과~300만원 이하</span>
-    							</label>
-    							
-    							<label class="flex items-center gap-2.5 cursor-pointer">
-	        						<input type="checkbox" name="budgets" value="4">
-        							<span class="text-[12px]">300만원 초과~400만원 이하</span>
-    							</label>
-    							
-    							<label class="flex items-center gap-2.5 cursor-pointer">
-	        						<input type="checkbox" name="budgets" value="5">
-        							<span class="text-[12px]">400만원 초과~500만원 이하</span>
-    							</label>
-    							
-    							<label class="flex items-center gap-2.5 cursor-pointer">
-	        						<input type="checkbox" name="budgets" value="6">
-        							<span class="text-[12px]">500만원 초과</span>
-    							</label>
-							</div>
-						</div>
+						
 						<div>
 							<p class="text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-3">여행 인원</p>
 							<div class="flex flex-col gap-2">
@@ -368,6 +336,40 @@ request.setAttribute("activePage", "travel");
 		
 							</div>
 						</div>
+						<div>
+							<p class="text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-3">여행 경비</p>
+							<div class="flex flex-col gap-2">
+								<label class="flex items-center gap-2.5 cursor-pointer">
+									<input type="checkbox" name="budgets" value="1">
+									<span class="text-[12px]">100만원 이하</span>
+								</label>
+								
+								<label class="flex items-center gap-2.5 cursor-pointer">
+									<input type="checkbox" name="budgets" value="2">
+									<span class="text-[12px]">100만원 초과~200만원 이하</span>
+    							</label>
+    							
+    							<label class="flex items-center gap-2.5 cursor-pointer">
+	        						<input type="checkbox" name="budgets" value="3">
+        							<span class="text-[12px]">200만원 초과~300만원 이하</span>
+    							</label>
+    							
+    							<label class="flex items-center gap-2.5 cursor-pointer">
+	        						<input type="checkbox" name="budgets" value="4">
+        							<span class="text-[12px]">300만원 초과~400만원 이하</span>
+    							</label>
+    							
+    							<label class="flex items-center gap-2.5 cursor-pointer">
+	        						<input type="checkbox" name="budgets" value="5">
+        							<span class="text-[12px]">400만원 초과~500만원 이하</span>
+    							</label>
+    							
+    							<label class="flex items-center gap-2.5 cursor-pointer">
+	        						<input type="checkbox" name="budgets" value="6">
+        							<span class="text-[12px]">500만원 초과</span>
+    							</label>
+							</div>
+						</div>
 					</div>
 					<div
 						class="px-5 py-3.5 flex items-center justify-between bg-gray-50">
@@ -384,16 +386,27 @@ request.setAttribute("activePage", "travel");
 			
 			<div class="flex items-center justify-between mb-5">
 				<p class="text-[12px] font-medium text-gray-500">
-					총 <span class="font-bold" style="color: #6369D1">16</span>개의 여행 일정
+    				총
+    				<span class="font-bold" style="color: #6369D1">
+        				<fmt:formatNumber value="${totalCount}" pattern="#,##0" />
+    				</span>
+    				개의 여행 일정
 				</p>
+				
 				<div class="flex gap-4">
-					<button class="text-sm pb-0.5 transition-colors"
-						style="color: #6369D1; font-weight: 600; border-bottom: 2px solid #6369D1">인기순</button>
-					<button class="text-sm pb-0.5 transition-colors"
-						style="color: #9ca3af">최신순</button>
-					<button class="text-sm pb-0.5 transition-colors"
-						style="color: #9ca3af">좋아요순</button>
+					<button type="button" data-schedule-sort="latest" class="text-sm pb-0.5 transition-colors">
+						최신순
+    				</button>
+
+    				<button type="button" data-schedule-sort="views" class="text-sm pb-0.5 transition-colors">
+        				인기순
+    				</button>
+				
+    				<button type="button" data-schedule-sort="likes" class="text-sm pb-0.5 transition-colors">
+        				좋아요순
+    				</button>
 				</div>
+				
 			</div>
 			<div class="grid gap-5"
 				style="grid-template-columns: repeat(4, minmax(0, 1fr))">
@@ -1512,7 +1525,7 @@ request.setAttribute("activePage", "travel");
 		src="${pageContext.request.contextPath}/view/assets/js/auth/tripily.js">
 	</script>
 	<script
-		src="${pageContext.request.contextPath}/view/assets/js/travel/scheduleList.js?v=6">
+		src="${pageContext.request.contextPath}/view/assets/js/travel/scheduleList.js?v=7">
 	</script>
 </body>
 </html>

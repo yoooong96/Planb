@@ -70,12 +70,20 @@ public class ScheduleList extends HttpServlet {
 			String[] durations = request.getParameterValues("durations");
 			String[] budgets = request.getParameterValues("budgets");
 			String[] travelers = request.getParameterValues("travelers");
+			
+			String sort = request.getParameter("sort");
+
+			if (!"views".equals(sort) && !"likes".equals(sort)) {
+			    sort = "latest";
+			}
 
 			ItineraryService service = new ItineraryServiceImpl();
 
 			// 목록 조회
-			List<ItineraryDto> scheduleList = service.getScheduleList(loginUserId, keyword, country, durations, budgets,
-					travelers);
+			List<ItineraryDto> scheduleList = service.getScheduleList(loginUserId, keyword, country, durations, budgets, travelers, sort);
+			
+			long totalCount = service.countScheduleList(keyword, country, durations, budgets, travelers);
+			request.setAttribute("totalCount", totalCount);
 
 			// JSP에 전달
 			request.setAttribute("scheduleList", scheduleList);
@@ -83,6 +91,7 @@ public class ScheduleList extends HttpServlet {
 			// 조회 후에도 검색창에 입력한 검색어 유지
 			request.setAttribute("keyword", keyword);
 			request.setAttribute("country", country);
+			request.setAttribute("sort", sort);
 
 			// 화면 출력
 			request.getRequestDispatcher("/view/travel/scheduleList.jsp").forward(request, response);

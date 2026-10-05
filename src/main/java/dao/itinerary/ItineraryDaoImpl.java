@@ -17,6 +17,14 @@ public class ItineraryDaoImpl implements ItineraryDao {
 			return sqlSession.selectList("mapper.itinerary.itinerary.selectScheduleList",params);
 		}
 	}
+	
+	@Override
+	public long countScheduleList(Map<String, Object> params) throws Exception {
+	    try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+	        return sqlSession.selectOne("mapper.itinerary.itinerary.countScheduleList",params);
+	    }
+	}
+	
 
     private static final String NAMESPACE = "mapper.itinerary.itinerary.";
 

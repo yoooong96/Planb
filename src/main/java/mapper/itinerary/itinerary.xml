@@ -4,27 +4,33 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="mapper.itinerary.itinerary">
 	<!-- 26.10.01 김상민 -->
-	<select id="selectScheduleList" parameterType="map" resultType="itinerary">
+	<select id="selectScheduleList" parameterType="map"
+		resultType="itinerary">
 		SELECT
 		i.*,
 		u.nickname,
 		(
 		SELECT COUNT(*)
 		FROM TB_ITINERARY_LIKE l
-		WHERE l.itinerary_id = i.itinerary_id
+		WHERE
+		l.itinerary_id = i.itinerary_id
 		) AS like_count,
 		(
 		SELECT COUNT(*)
-		FROM TB_ITINERARY_COMMENT c
+		FROM
+		TB_ITINERARY_COMMENT c
 		WHERE c.itinerary_id = i.itinerary_id
-		AND c.status = 'ACTIVE'
+		AND
+		c.status = 'ACTIVE'
 		) AS comment_count,
 
 		EXISTS (
 		SELECT 1
-		FROM TB_ITINERARY_BOOKMARK b
+		FROM
+		TB_ITINERARY_BOOKMARK b
 		WHERE b.itinerary_id = i.itinerary_id
-		AND b.user_id = #{loginUserId, jdbcType=BIGINT}
+		AND
+		b.user_id = #{loginUserId, jdbcType=BIGINT}
 		) AS bookmarked
 
 		FROM TB_ITINERARY i
@@ -32,7 +38,28 @@
 		JOIN TB_USER u
 		ON u.user_id = i.user_id
 
-		WHERE i.status = 'ACTIVE'
+		<include refid="scheduleListConditions" />
+			
+		ORDER BY
+		<choose>
+			<when test='sort == "views"'>
+				COALESCE(i.view_count, 0) DESC,
+			</when>
+
+			<when test='sort == "likes"'>
+				like_count DESC,
+			</when>
+		</choose>
+		i.created_at DESC,
+		i.itinerary_id DESC <!-- 생성 시간이 같을 때의 정렬 -->
+
+		LIMIT #{limit}
+		OFFSET #{offset}
+	</select>
+	
+	<!-- WHERE 조건 -->
+	<sql id="scheduleListConditions">
+    WHERE i.status = 'ACTIVE'
 		AND i.visibility = 'PUBLIC'
 		<if test="country != null and country != ''">
 			AND i.country = #{country}
@@ -40,13 +67,17 @@
 		<if test="keyword != null and keyword != ''">
 			AND (
 			LOCATE(#{keyword}, i.title) > 0
-			OR LOCATE(#{keyword}, i.summary) > 0
+			OR LOCATE(#{keyword},
+			i.summary) > 0
 			OR LOCATE(#{keyword}, i.country) > 0
-			OR LOCATE(#{keyword}, i.city) > 0
+			OR
+			LOCATE(#{keyword}, i.city) > 0
 			OR LOCATE(#{keyword}, i.continent) > 0
 			OR LOCATE(#{keyword}, CAST(i.traveler_count AS CHAR)) > 0
-			OR LOCATE(#{keyword}, CAST(i.total_budget AS CHAR)) > 0
-			OR LOCATE(#{keyword}, u.nickname) > 0
+			OR
+			LOCATE(#{keyword}, CAST(i.total_budget AS CHAR)) > 0
+			OR
+			LOCATE(#{keyword}, u.nickname) > 0
 			)
 		</if>
 		<!-- 여행 기간: 같은 그룹 안에서는 OR -->
@@ -60,7 +91,8 @@
 					</when>
 					<otherwise>
 						DATEDIFF(i.end_date, i.start_date)
-						= (CAST(#{duration} AS SIGNED) - 1)
+						= (CAST(#{duration} AS
+						SIGNED) - 1)
 					</otherwise>
 				</choose>
 			</foreach>
@@ -83,7 +115,8 @@
 					<otherwise>
 						(
 						i.total_budget >
-						(CAST(#{budget} AS SIGNED) - 1) * 1000000
+						(CAST(#{budget} AS SIGNED) - 1) *
+						1000000
 						AND i.total_budget &lt;=
 						CAST(#{budget} AS SIGNED) * 1000000
 						)
@@ -109,13 +142,15 @@
 			</foreach>
 			)
 		</if>
-
-		ORDER BY
-		i.created_at DESC,
-		i.itinerary_id DESC  <!--생성시간이 같을 때의 정렬 -->
-
-		LIMIT #{limit}
-		OFFSET #{offset}
+    
+	</sql>
+	
+	<!-- 조회된 총 일정 카드 수 -->
+	<select id="countScheduleList" parameterType="map" resultType="long">
+    	SELECT COUNT(*)
+    	FROM TB_ITINERARY i
+    	JOIN TB_USER u ON u.user_id = i.user_id
+    	<include refid="scheduleListConditions" />
 	</select>
 
 	<!-- 신규 일정 저장 -->
@@ -196,19 +231,24 @@
 		UPDATE TB_ITINERARY
 		SET
 		title = #{title},
-		summary = #{summary},
+		summary =
+		#{summary},
 		continent = #{continent},
 		country = #{country},
-		city = #{city},
+		city =
+		#{city},
 		traveler_count = #{travelerCount},
 		start_date = #{startDate},
 		end_date = #{endDate},
 		total_budget = #{totalBudget},
-		visibility = #{visibility},
+		visibility =
+		#{visibility},
 		thumbnail_img = #{thumbnailImg},
-		source_itinerary_id = #{sourceItineraryId}
+		source_itinerary_id =
+		#{sourceItineraryId}
 		WHERE itinerary_id = #{itineraryId}
-		AND user_id = #{userId}
+		AND user_id =
+		#{userId}
 		AND status = 'ACTIVE'
 
 	</update>
@@ -222,7 +262,8 @@
 		status = 'DELETED',
 		deleted_by_user_id = #{userId},
 		deleted_at = NOW()
-		WHERE itinerary_id = #{itineraryId}
+		WHERE itinerary_id =
+		#{itineraryId}
 		AND user_id = #{userId}
 		AND status = 'ACTIVE'
 
