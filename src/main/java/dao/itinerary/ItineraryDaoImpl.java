@@ -10,58 +10,57 @@ import config.MybatisSqlSessionFactory;
 import dto.itinerary.ItineraryDto;
 
 public class ItineraryDaoImpl implements ItineraryDao {
-	//26.10.01 추가.
+	// 26.10.01 추가.
 	@Override
 	public List<ItineraryDto> selectScheduleList(Map<String, Object> params) throws Exception {
-		try(SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()){
-			return sqlSession.selectList("mapper.itinerary.itinerary.selectScheduleList",params);
+		try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+			return sqlSession.selectList("mapper.itinerary.itinerary.selectScheduleList", params);
 		}
 	}
-	
+
 	@Override
 	public long countScheduleList(Map<String, Object> params) throws Exception {
-	    try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
-	        return sqlSession.selectOne("mapper.itinerary.itinerary.countScheduleList",params);
-	    }
+		try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+			return sqlSession.selectOne("mapper.itinerary.itinerary.countScheduleList", params);
+		}
 	}
-	
 
-    private static final String NAMESPACE = "mapper.itinerary.itinerary.";
+	@Override
+	public ItineraryDto selectScheduleDetailInfo(SqlSession sqlSession, Long itineraryId) throws Exception {
+		return sqlSession.selectOne("mapper.itinerary.itinerary.selectScheduleDetailInfo", itineraryId);
+	}
 
-    @Override
-    public int insertItinerary(SqlSession sqlSession, ItineraryDto itineraryDto) throws Exception {
-        return sqlSession.insert(
-                NAMESPACE + "insertItinerary",
-                itineraryDto
-        );
-    }
+	@Override
+	public int increaseScheduleViewCount(SqlSession sqlSession, Map<String, Object> params) throws Exception {
+		return sqlSession.update("mapper.itinerary.itinerary.increaseScheduleViewCount", params);
+	}
 
-    @Override
-    public ItineraryDto selectItinerary(SqlSession sqlSession, Long itineraryId) throws Exception {
-        return sqlSession.selectOne(
-                NAMESPACE + "selectItinerary",
-                itineraryId
-        );
-    }
+	///////////////////////////////////////////////////////////////////////
 
-    @Override
-    public int updateItinerary(SqlSession sqlSession, ItineraryDto itineraryDto) throws Exception {
-        return sqlSession.update(
-                NAMESPACE + "updateItinerary",
-                itineraryDto
-        );
-    }
+	private static final String NAMESPACE = "mapper.itinerary.itinerary.";
 
-    @Override
-    public int deleteItinerary(SqlSession sqlSession, Long itineraryId, Long userId) throws Exception {
+	@Override
+	public int insertItinerary(SqlSession sqlSession, ItineraryDto itineraryDto) throws Exception {
+		return sqlSession.insert(NAMESPACE + "insertItinerary", itineraryDto);
+	}
 
-        Map<String, Object> param = new HashMap<>();
-        param.put("itineraryId", itineraryId);
-        param.put("userId", userId);
+	@Override
+	public ItineraryDto selectItinerary(SqlSession sqlSession, Long itineraryId) throws Exception {
+		return sqlSession.selectOne(NAMESPACE + "selectItinerary", itineraryId);
+	}
 
-        return sqlSession.update(
-                NAMESPACE + "deleteItinerary",
-                param
-        );
-    }
+	@Override
+	public int updateItinerary(SqlSession sqlSession, ItineraryDto itineraryDto) throws Exception {
+		return sqlSession.update(NAMESPACE + "updateItinerary", itineraryDto);
+	}
+
+	@Override
+	public int deleteItinerary(SqlSession sqlSession, Long itineraryId, Long userId) throws Exception {
+
+		Map<String, Object> param = new HashMap<>();
+		param.put("itineraryId", itineraryId);
+		param.put("userId", userId);
+
+		return sqlSession.update(NAMESPACE + "deleteItinerary", param);
+	}
 }

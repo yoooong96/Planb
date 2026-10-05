@@ -1,21 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-	
+
 <mapper namespace="mapper.itinerary.itineraryComment">
-	<insert id="insertItineraryComment" parameterType="itineraryComment">
-		
-	</insert>
-	
-	<select id="selectItineraryComment" resultType="itineraryComment" parameterType="String">
-	
+	<select id="countItineraryComments" parameterType="java.lang.Long" resultType="int">
+		SELECT COUNT(*)
+		FROM TB_ITINERARY_COMMENT
+		WHERE itinerary_id = #{itineraryId}
+		AND status = 'ACTIVE'
 	</select>
-	
-	<update id="updateItineraryComment" parameterType="itineraryComment">
-	
-	</update>
-	
-	<delete id="deleteItineraryComment" parameterType="itineraryComment">
-	
-	</delete>
 </mapper>

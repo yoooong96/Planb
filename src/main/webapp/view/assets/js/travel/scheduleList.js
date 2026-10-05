@@ -187,8 +187,9 @@
 		event.preventDefault();
 		event.stopPropagation();
 
+		/* 비로그인시 로그인 페이지로 처리.*/
 		if (button.dataset.loggedIn !== "true") {
-			window.tripilyToast("로그인 후 이용할 수 있습니다.");
+			window.location.href = button.dataset.loginUrl;
 			return;
 		}
 
@@ -328,9 +329,9 @@
 
 			try {
 				const params = new URLSearchParams(appliedQuery);
-				
+
 				params.set("offset", String(offset));
-				
+
 				const response = await fetch(
 					scrollArea.dataset.loadUrl + "?" + params.toString(),
 					{

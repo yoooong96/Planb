@@ -1,10 +1,16 @@
 package dao.itinerary;
 
+import org.apache.ibatis.session.SqlSession;
+
 import dto.itinerary.ItineraryLikeDto;
 
 public interface ItineraryLikeDao {
-	void insertItineraryLike(ItineraryLikeDto itineraryLikeDto) throws Exception;
-	void selectItineraryLike(ItineraryLikeDto itineraryLikeDto) throws Exception;
-	void updateItineraryLike(ItineraryLikeDto itineraryLikeDto) throws Exception;
-	void deleteItineraryLike(ItineraryLikeDto itineraryLikeDto) throws Exception;
+
+	int countItineraryLikes(SqlSession sqlSession, Long itineraryId) throws Exception;
+
+	boolean selectItineraryLike(SqlSession sqlSession, ItineraryLikeDto like) throws Exception;
+
+	int insertItineraryLike(SqlSession sqlSession, ItineraryLikeDto like) throws Exception;
+
+	int deleteItineraryLike(SqlSession sqlSession, ItineraryLikeDto like) throws Exception;
 }

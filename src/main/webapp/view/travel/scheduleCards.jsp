@@ -11,8 +11,7 @@
 <body>
 	<!-- 실제 DB 데이터로 표시하는 여행 일정 카드 -->
 	<c:forEach var="schedule" items="${scheduleList}">
-
-		<c:url var="scheduleDetailUrl" value="/view/travel/scheduleDetail.jsp">
+		<c:url var="scheduleDetailUrl" value="/schedules/detail">
 			<c:param name="id" value="${schedule.itineraryId}" />
 		</c:url>
 
@@ -60,6 +59,7 @@
 				<c:if
 					test="${empty sessionScope.user or schedule.userId ne sessionScope.user.userId}">
 					<button type="button" data-schedule-bookmark
+						data-login-url="${pageContext.request.contextPath}/auth/login"
 						data-bookmark-url="${pageContext.request.contextPath}/itinerary/bookmark"
 						data-itinerary-id="${schedule.itineraryId}"
 						data-logged-in="${not empty sessionScope.user}"
@@ -104,30 +104,34 @@
 				<!-- 좋아요·댓글·조회수 -->
 				<div
 					class="flex items-center gap-2.5 text-[11px] text-gray-400 mb-3">
-
 					<span
 						class="schedule-card-stat inline-flex items-center gap-1 whitespace-nowrap"
-						title="좋아요"> <svg width="12" height="12"
-							viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2"
-							aria-hidden="true">
+						title="좋아요"> 
+						<svg width="12" height="12"
+							viewBox="0 0 24 24" fill="${schedule.liked ? '#ef4444' : 'none'}"
+							stroke="${schedule.liked ? '#ef4444' : '#9ca3af'}"
+							stroke-width="2" aria-hidden="true">
 
-                        <path stroke-linecap="round"
-								stroke-linejoin="round"
+    					<path stroke-linecap="round" stroke-linejoin="round"
 								d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78Z" />
-                    </svg> <fmt:formatNumber value="${schedule.likeCount}"
-							pattern="#,##0" />
-					</span> <span
+						</svg> 
+						<fmt:formatNumber value="${schedule.likeCount}" pattern="#,##0" />
+					</span> 
+					<span
 						class="schedule-card-stat inline-flex items-center gap-1 whitespace-nowrap"
-						title="댓글"> <svg width="12" height="12" viewBox="0 0 24 24"
+						title="댓글"> 
+						<svg width="12" height="12" viewBox="0 0 24 24"
 							fill="none" stroke="#9ca3af" stroke-width="2" aria-hidden="true">
 
                         <path stroke-linecap="round"
 								stroke-linejoin="round" d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" />
-                    </svg> <fmt:formatNumber value="${schedule.commentCount}"
-							pattern="#,##0" />
-					</span> <span
+                    	</svg> 
+                    	<fmt:formatNumber value="${schedule.commentCount}" pattern="#,##0" />
+					</span> 
+					<span
 						class="schedule-card-stat inline-flex items-center gap-1 whitespace-nowrap"
-						title="조회"> <svg width="12" height="12" viewBox="0 0 24 24"
+						title="조회"> 
+						<svg width="12" height="12" viewBox="0 0 24 24"
 							fill="none" stroke="#9ca3af" stroke-width="2" aria-hidden="true">
 
                         <path stroke-linecap="round"
@@ -135,7 +139,8 @@
 								d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" />
 
                         <circle cx="12" cy="12" r="3" />
-                    </svg> <fmt:formatNumber
+                    	</svg> 
+                    	<fmt:formatNumber
 							value="${empty schedule.viewCount ? 0 : schedule.viewCount}"
 							pattern="#,##0" />
 					</span>

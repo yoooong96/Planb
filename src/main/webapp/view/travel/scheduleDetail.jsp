@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%
 request.setAttribute("activePage", "travel");
 %>
@@ -8,8 +10,9 @@ request.setAttribute("activePage", "travel");
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>제주도 2박 3일 힐링 여행 | Tripily</title><jsp:include
-	page="/common/headStyles.jsp" /></head>
+<title><c:out value="${itinerary.title}" /> | Planb</title>
+<jsp:include page="/common/headStyles.jsp" />
+</head>
 <body class="site-shell"><jsp:include page="/common/header.jsp" />
 	<main class="relative"
 		style="height: calc(100vh - 68px); background: #f9f9fc; overflow: hidden">
@@ -47,8 +50,7 @@ request.setAttribute("activePage", "travel");
 				<div
 					class="sticky top-0 z-20 bg-white/90 backdrop-blur-sm border-b px-5 py-3 flex items-center gap-3"
 					style="border-color: #D1D2F9">
-					<a
-						href="${pageContext.request.contextPath}/schedules"
+					<a href="${pageContext.request.contextPath}/schedules"
 						class="flex items-center gap-1.5 text-[12.5px] font-semibold text-gray-500 hover:text-gray-900 transition-colors"><svg
 							class="w-4 h-4" fill="none" stroke="currentColor"
 							viewBox="0 0 24 24">
@@ -57,11 +59,12 @@ request.setAttribute("activePage", "travel");
 						class="text-gray-300">|</span>
 					<nav
 						class="flex items-center gap-1 text-[11.5px] text-gray-400 min-w-0">
-						<a
-							href="${pageContext.request.contextPath}/view/travel/scheduleList.jsp"
+						<a href="${pageContext.request.contextPath}/schedules"
 							class="hover:text-gray-600 shrink-0">여행일정</a><span
-							class="shrink-0">›</span><span
-							class="text-gray-700 font-medium truncate">제주도 2박 3일 힐링 여행</span>
+							class="shrink-0">›</span> <span
+							class="text-gray-700 font-medium truncate"> <c:out
+								value="${itinerary.title}" />
+						</span>
 					</nav>
 					<div class="ml-auto flex items-center gap-1.5 shrink-0">
 						<button
@@ -85,16 +88,48 @@ request.setAttribute("activePage", "travel");
 				</div>
 				<div class="relative w-full overflow-hidden"
 					style="aspect-ratio: 16/7; flex-shrink: 0">
-					<img
+					<c:choose>
+						<c:when test="${not empty itinerary.thumbnailImg}">
+
+							<c:choose>
+								<c:when test="${itinerary.thumbnailImg.startsWith('/')}">
+									<c:url var="detailThumbnailUrl"
+										value="${itinerary.thumbnailImg}" />
+								</c:when>
+
+								<c:otherwise>
+									<c:url var="detailThumbnailUrl"
+										value="/${itinerary.thumbnailImg}" />
+								</c:otherwise>
+							</c:choose>
+
+							<img src="<c:out value='${detailThumbnailUrl}'/>"
+								alt="<c:out value='${itinerary.title}'/>"
+								class="w-full h-full object-cover">
+
+						</c:when>
+
+						<c:otherwise>
+							<div class="w-full h-full flex items-center justify-center"
+								style="background: #F0F0FF; color: #6369D1">여행 일정</div>
+						</c:otherwise>
+					</c:choose>
+					<!-- <img
 						src="https://images.unsplash.com/photo-1628411848698-e3b3249a272a?w=600&h=400&fit=crop"
-						alt="제주도 2박 3일 힐링 여행" class="w-full h-full object-cover">
+						alt="제주도 2박 3일 힐링 여행" class="w-full h-full object-cover"> -->
 					<div
 						class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
 					<span
 						class="absolute top-4 left-4 text-[11px] font-bold px-2.5 py-1 rounded-full text-white"
-						style="background: #6369D1">🌏 제주도</span><span
-						class="absolute bottom-4 left-4 text-white text-xs font-bold bg-black/50 rounded-full px-2.5 py-1">2박
-						3일</span>
+						style="background: #6369D1"> 🌏 <c:out
+							value="${itinerary.country}" /> <c:if
+							test="${not empty itinerary.city}">
+			        		· <c:out value="${itinerary.city}" />
+						</c:if>
+					</span> <span
+						class="absolute bottom-4 left-4 text-white text-xs font-bold bg-black/50 rounded-full px-2.5 py-1">
+						<c:out value="${itinerary.durationText}" />
+					</span>
 					<div class="absolute right-4 bottom-4 z-10">
 						<button type="button"
 							class="group flex items-center gap-2 rounded-2xl border border-white/70 bg-black/45 p-1.5 pr-2 backdrop-blur-md shadow-lg transition-all hover:bg-black/60">
@@ -126,45 +161,106 @@ request.setAttribute("activePage", "travel");
 					</div>
 				</div>
 				<div class="px-5 pt-4 pb-3 border-b" style="border-color: #D1D2F9">
-					<h1 class="font-black text-[18px] leading-tight text-gray-900 mb-2">제주도
-						2박 3일 힐링 여행</h1>
-					<p class="text-[13px] text-gray-500 leading-relaxed mb-3">바다,
-						맛집, 자연까지! 처음 가는 분들도 따라가기 쉬운 코스.</p>
+					<!-- 제목 -->
+					<h1 class="font-black text-[18px] leading-tight text-gray-900 mb-2">
+						<c:out value="${itinerary.title}" />
+					</h1>
+					<!-- 내용 -->
+					<p class="text-[13px] text-gray-500 leading-relaxed mb-3">
+						<c:out value="${itinerary.summary}" />
+					</p>
 					<div class="flex items-center gap-4 mb-3">
 						<div class="flex items-center gap-3 text-[12px] text-gray-500">
-							<button class="flex items-center gap-1 transition-colors"
-								style="color: #94a3b8">
-								<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor"
-									viewBox="0 0 24 24">
-									<path stroke-linecap="round" stroke-linejoin="round"
+
+							<!-- 좋아요 버튼 -->
+							<button type="button" id="scheduleLikeButton"
+								class="flex items-center gap-1 transition-colors"
+								data-login-url="${pageContext.request.contextPath}/auth/login"
+								data-like-url="${pageContext.request.contextPath}/itinerary/like"
+								data-itinerary-id="${itinerary.itineraryId}"
+								data-logged-in="${not empty sessionScope.user}"
+								aria-pressed="${itinerary.liked}"
+								aria-label="${itinerary.liked ? '좋아요 취소' : '좋아요'}"
+								style="color: ${itinerary.liked ? '#ef4444' : '#94a3b8'}">
+
+								<svg class="w-3.5 h-3.5"
+									fill="${itinerary.liked ? 'currentColor' : 'none'}"
+									stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+
+        							<path stroke-linecap="round" stroke-linejoin="round"
 										stroke-width="2"
-										d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
-								<span class="font-semibold">328</span>
+										d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+    							</svg>
+
+								<span id="scheduleLikeCount" class="font-semibold"> <fmt:formatNumber
+										value="${itinerary.likeCount}" pattern="#,##0" />
+								</span>
 							</button>
-							<span class="flex items-center gap-1"><svg
+							<span class="flex items-center gap-1"> <svg
 									class="w-3.5 h-3.5" fill="none" stroke="currentColor"
 									viewBox="0 0 24 24">
 									<path stroke-linecap="round" stroke-linejoin="round"
 										stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
 									<path stroke-linecap="round" stroke-linejoin="round"
 										stroke-width="2"
-										d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>1,234</span>
+										d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+								</svg> <fmt:formatNumber
+									value="${empty itinerary.viewCount ? 0 : itinerary.viewCount}"
+									pattern="#,##0" />
+							</span>
 						</div>
 					</div>
 					<div class="flex flex-wrap gap-2 mb-3">
+
+						<!-- 여행 기간 -->
 						<span
 							class="flex items-center gap-1 text-[12px] px-3 py-1.5 rounded-full border font-medium"
-							style="border-color: #D1D2F9; background: #f5f5ff; color: #4a4a6a"><span>🗓️</span>2박
-							3일</span> <span
+							style="border-color: #D1D2F9; background: #f5f5ff; color: #4a4a6a">
+							<span>🗓️</span> <c:out value="${itinerary.durationText}" />
+						</span>
+
+						<!-- 여행 날짜 -->
+						<span
 							class="flex items-center gap-1 text-[12px] px-3 py-1.5 rounded-full border font-medium"
-							style="border-color: #D1D2F9; background: #f5f5ff; color: #4a4a6a"><span>📍</span>2026.10.03
-							~ 2026.10.05</span> <span
+							style="border-color: #D1D2F9; background: #f5f5ff; color: #4a4a6a">
+							<span>📍</span> <c:choose>
+								<c:when
+									test="${not empty itinerary.startDate and not empty itinerary.endDate}">
+									<fmt:formatDate value="${itinerary.startDate}"
+										pattern="yyyy.MM.dd" />                
+									~
+                					<fmt:formatDate value="${itinerary.endDate}"
+										pattern="yyyy.MM.dd" />
+								</c:when>
+								<c:otherwise>날짜 미정</c:otherwise>
+							</c:choose>
+						</span>
+
+						<!-- 여행 인원 -->
+						<span
 							class="flex items-center gap-1 text-[12px] px-3 py-1.5 rounded-full border font-medium"
-							style="border-color: #D1D2F9; background: #f5f5ff; color: #4a4a6a"><span>👥</span>2명
-							(커플)</span> <span
+							style="border-color: #D1D2F9; background: #f5f5ff; color: #4a4a6a">
+							<span>👥</span> <c:choose>
+								<c:when test="${not empty itinerary.travelerCount}">
+									<c:out value="${itinerary.travelerCount}" />명
+            					</c:when>
+								<c:otherwise>인원 미정</c:otherwise>
+							</c:choose>
+						</span>
+
+						<!-- 총 예산 -->
+						<span
 							class="flex items-center gap-1 text-[12px] px-3 py-1.5 rounded-full border font-medium"
-							style="border-color: #D1D2F9; background: #f5f5ff; color: #4a4a6a"><span>💰</span>약
-							50만원</span>
+							style="border-color: #D1D2F9; background: #f5f5ff; color: #4a4a6a">
+							<span>💰</span> <c:choose>
+								<c:when test="${not empty itinerary.totalBudget}">
+									<fmt:formatNumber value="${itinerary.totalBudget}"
+										pattern="#,##0" />원
+            					</c:when>
+								<c:otherwise>예산 미정</c:otherwise>
+							</c:choose>
+						</span>
+
 					</div>
 					<div class="flex gap-2">
 						<button type="button" data-toast="전체 일정을 장바구니에 담았어요!"
@@ -197,7 +293,7 @@ request.setAttribute("activePage", "travel");
 						src="https://i.pravatar.cc/40?img=12" alt="여행좋아"
 						class="w-9 h-9 rounded-full object-cover border-2 shrink-0"
 						style="border-color: #D1D2F9">
-					<div class="min-w-0">
+						<div class="min-w-0">
 							<p class="text-[13px] font-bold text-gray-900 hover:underline">여행좋아</p>
 							<p class="text-[11px] text-gray-400">2026.08.20 게시</p>
 						</div></a>
@@ -921,6 +1017,9 @@ request.setAttribute("activePage", "travel");
 		})();
 	</script>
 	<script
-		src="${pageContext.request.contextPath}/view/assets/js/tripily.js"></script>
+		src="${pageContext.request.contextPath}/view/assets/js/auth/tripily.js"></script>
+
+	<script
+		src="${pageContext.request.contextPath}/view/assets/js/travel/scheduleDetail.js?v=1"></script>
 </body>
 </html>

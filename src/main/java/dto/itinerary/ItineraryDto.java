@@ -35,6 +35,8 @@ public class ItineraryDto {
     // 일정 -> DAY 계층
     private List<ItineraryDayDto> days;
     
+    private boolean liked;		// 화면에 띄울 좋아요. 화면 전달값이라 DB에 추가필요없음.
+    
 	public ItineraryDto() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -234,6 +236,14 @@ public class ItineraryDto {
         this.days = days;
     }
 	
+    public boolean isLiked() {
+        return liked;
+    }
+
+    public void setLiked(boolean liked) {
+        this.liked = liked;
+    }
+    
 	@Override
     public String toString() {
         return "ItineraryDto [itineraryId=" + itineraryId

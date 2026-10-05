@@ -4,42 +4,44 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="mapper.itinerary.itinerary">
 	<!-- 26.10.01 김상민 -->
-	<select id="selectScheduleList" parameterType="map"
-		resultType="itinerary">
+	<select id="selectScheduleList" parameterType="map" resultType="itinerary">
 		SELECT
 		i.*,
 		u.nickname,
 		(
-		SELECT COUNT(*)
-		FROM TB_ITINERARY_LIKE l
-		WHERE
-		l.itinerary_id = i.itinerary_id
+			SELECT COUNT(*)
+			FROM TB_ITINERARY_LIKE l
+			WHERE l.itinerary_id = i.itinerary_id
 		) AS like_count,
 		(
-		SELECT COUNT(*)
-		FROM
-		TB_ITINERARY_COMMENT c
-		WHERE c.itinerary_id = i.itinerary_id
-		AND
-		c.status = 'ACTIVE'
+			SELECT COUNT(*)
+			FROM TB_ITINERARY_COMMENT c
+			WHERE c.itinerary_id = i.itinerary_id
+			AND c.status = 'ACTIVE'
 		) AS comment_count,
+		
+		EXISTS (
+			SELECT 1
+			FROM TB_ITINERARY_LIKE my_like
+			WHERE my_like.itinerary_id = i.itinerary_id
+			AND my_like.user_id = #{loginUserId}
+		) AS liked,
 
 		EXISTS (
-		SELECT 1
-		FROM
-		TB_ITINERARY_BOOKMARK b
-		WHERE b.itinerary_id = i.itinerary_id
-		AND
-		b.user_id = #{loginUserId, jdbcType=BIGINT}
+			SELECT 1
+			FROM TB_ITINERARY_BOOKMARK b
+			WHERE b.itinerary_id = i.itinerary_id
+			AND b.user_id = #{loginUserId, jdbcType=BIGINT}
 		) AS bookmarked
 
-		FROM TB_ITINERARY i
+		FROM
+		TB_ITINERARY i
 
 		JOIN TB_USER u
 		ON u.user_id = i.user_id
 
 		<include refid="scheduleListConditions" />
-			
+
 		ORDER BY
 		<choose>
 			<when test='sort == "views"'>
@@ -56,10 +58,10 @@
 		LIMIT #{limit}
 		OFFSET #{offset}
 	</select>
-	
+
 	<!-- WHERE 조건 -->
 	<sql id="scheduleListConditions">
-    WHERE i.status = 'ACTIVE'
+		WHERE i.status = 'ACTIVE'
 		AND i.visibility = 'PUBLIC'
 		<if test="country != null and country != ''">
 			AND i.country = #{country}
@@ -142,16 +144,49 @@
 			</foreach>
 			)
 		</if>
-    
+
 	</sql>
-	
+
 	<!-- 조회된 총 일정 카드 수 -->
-	<select id="countScheduleList" parameterType="map" resultType="long">
-    	SELECT COUNT(*)
-    	FROM TB_ITINERARY i
-    	JOIN TB_USER u ON u.user_id = i.user_id
-    	<include refid="scheduleListConditions" />
+	<select id="countScheduleList" parameterType="map"
+		resultType="long">
+		SELECT COUNT(*)
+		FROM TB_ITINERARY i
+		JOIN TB_USER u ON u.user_id =
+		i.user_id
+		<include refid="scheduleListConditions" />
 	</select>
+
+	<!-- 일정 상세 조회 -->
+	<select id="selectScheduleDetailInfo"
+		parameterType="java.lang.Long" resultType="itinerary">
+
+		SELECT
+		u.nickname,
+		i.view_count
+		FROM TB_ITINERARY i
+		JOIN TB_USER u
+		ON u.user_id = i.user_id
+		WHERE i.itinerary_id = #{itineraryId}
+		AND i.status = 'ACTIVE'
+
+	</select>
+
+	<update id="increaseScheduleViewCount" parameterType="map">
+		UPDATE
+		TB_ITINERARY
+		SET view_count = COALESCE(view_count, 0) + 1
+		WHERE
+		itinerary_id = #{itineraryId}
+		AND status = 'ACTIVE'
+		AND (
+		visibility =
+		'PUBLIC'
+		OR user_id = #{loginUserId}
+		)
+	</update>
+
+	<!-- //////////////////////////////////////////////////////////////////////////////// -->
 
 	<!-- 신규 일정 저장 -->
 	<insert id="insertItinerary"
@@ -190,7 +225,6 @@
 		)
 
 	</insert>
-
 
 	<!-- 일정 기본정보 조회 -->
 	<select id="selectItinerary" parameterType="long"

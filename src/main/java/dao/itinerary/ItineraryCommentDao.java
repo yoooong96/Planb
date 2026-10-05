@@ -1,10 +1,7 @@
 package dao.itinerary;
 
-import dto.itinerary.ItineraryCommentDto;
+import org.apache.ibatis.session.SqlSession;
 
 public interface ItineraryCommentDao {
-	void insertItineraryComment(ItineraryCommentDto itineraryCommentDto) throws Exception;
-	void selectItineraryComment(ItineraryCommentDto itineraryCommentDto) throws Exception;
-	void updateItineraryComment(ItineraryCommentDto itineraryCommentDto) throws Exception;
-	void deleteItineraryComment(ItineraryCommentDto itineraryCommentDto) throws Exception;
+	int countItineraryComments(SqlSession sqlSession, Long itineraryId) throws Exception;
 }
