@@ -1,6 +1,10 @@
 package controller.itinerary;
 
 import java.io.File;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -17,9 +21,6 @@ import dto.itinerary.ItineraryDayDto;
 import dto.itinerary.ItineraryDto;
 
 public final class ItineraryImageUploadUtil {
-
-    private static final String ITINERARY_UPLOAD_DIR =
-            "/uploads/itinerary";
 
     private ItineraryImageUploadUtil() {
     }
@@ -50,30 +51,9 @@ public final class ItineraryImageUploadUtil {
             return createdFiles;
         }
 
-        ServletContext context =
-                request.getServletContext();
-
-        String realUploadPath =
-                context.getRealPath(
-                        ITINERARY_UPLOAD_DIR
-                );
-
-        if (realUploadPath == null) {
-            throw new IllegalStateException(
-                    "일정 이미지 업로드 경로를 확인할 수 없습니다."
-            );
-        }
-
-        File uploadDir =
-                new File(realUploadPath);
-
-        if (!uploadDir.exists()
-                && !uploadDir.mkdirs()) {
-
-            throw new IllegalStateException(
-                    "일정 이미지 업로드 폴더를 생성할 수 없습니다."
-            );
-        }
+        Path uploadDir =
+                ItineraryImageStorage
+                    .ensureRootDirectory();
 
         List<ItineraryDayDto> days =
                 itineraryDto.getDays();
@@ -161,28 +141,41 @@ public final class ItineraryImageUploadUtil {
                             UUID.randomUUID().toString()
                             + extension;
 
-                    File targetFile =
-                            new File(
-                                    uploadDir,
+                    Path targetPath =
+                            uploadDir.resolve(
                                     fileName
                             );
 
-                    part.write(
-                            targetFile.getAbsolutePath()
-                    );
+                    /*
+                     * Part.write()는 Servlet Container의 임시 업로드
+                     * 위치 영향을 받을 수 있으므로 공유폴더에는
+                     * InputStream -> Files.copy()로 직접 저장한다.
+                     */
+                    try (InputStream input =
+                            part.getInputStream()) {
+
+                        Files.copy(
+                                input,
+                                targetPath,
+                                StandardCopyOption.REPLACE_EXISTING
+                        );
+                    }
+
+                    File targetFile =
+                            targetPath.toFile();
 
                     createdFiles.add(targetFile);
 
                     /*
-                     * DB에는 웹 애플리케이션 기준 경로를 저장.
+                     * DB에는 공유폴더 UNC 경로가 아니라
+                     * 웹에서 접근할 상대 URL만 저장한다.
                      *
                      * 예:
                      * /uploads/itinerary/uuid.jpg
                      */
                     image.setImageUrl(
-                            ITINERARY_UPLOAD_DIR
-                            + "/"
-                            + fileName
+                            ItineraryImageStorage
+                                .toWebUrl(fileName)
                     );
                 }
             }
@@ -320,28 +313,23 @@ public final class ItineraryImageUploadUtil {
             /*
              * 우리 일정 업로드 폴더 안의 파일만 삭제한다.
              */
-            if (imageUrl == null
-                    || !imageUrl.startsWith(
-                            ITINERARY_UPLOAD_DIR + "/"
-                    )) {
+            Path imagePath;
+
+            try {
+                imagePath =
+                        ItineraryImageStorage
+                            .resolveWebUrl(imageUrl);
+            } catch (IllegalArgumentException e) {
                 continue;
             }
 
-            String realPath =
-                    context.getRealPath(imageUrl);
-
-            if (realPath == null) {
+            if (imagePath == null) {
                 continue;
             }
 
-            File file =
-                    new File(realPath);
-
-            if (file.exists()) {
-                try {
-                    file.delete();
-                } catch (Exception ignore) {
-                }
+            try {
+                Files.deleteIfExists(imagePath);
+            } catch (Exception ignore) {
             }
         }
     }

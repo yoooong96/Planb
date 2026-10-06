@@ -95,7 +95,7 @@ if (user != null
             </a>
             <!-- 일정 만들기 -->
             <a class="<%=homeHeader ? "site-nav-pill" : "site-nav-link"%> <%="planner".equals(activePage) ? "active" : ""%>"
-               href="<%=ctx%>/planner">
+               href="<%=ctx%>/writeplan">
 				일정 만들기
             </a>
             <!-- 여행 꿀팁 -->

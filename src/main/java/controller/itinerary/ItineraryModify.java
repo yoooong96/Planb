@@ -191,8 +191,13 @@ public class ItineraryModify extends HttpServlet {
                     e.getMessage()
             );
 
+            request.setAttribute(
+                    "editItineraryJson",
+                    request.getParameter("itineraryJson")
+            );
+
             request.getRequestDispatcher(
-                    "/view/itinerary/planner.jsp"
+                    "/view/itinerary/planeditor.jsp"
             ).forward(request, response);
 
         } catch (Exception e) {
