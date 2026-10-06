@@ -203,3 +203,62 @@
 	});
 
 })();
+
+(function() {
+
+	const tabs =
+		document.querySelectorAll("[data-detail-tab]");
+
+	const schedulePanel =
+		document.getElementById("detailSchedulePanel");
+
+	const commentPanel =
+		document.getElementById("detailCommentPanel");
+
+	if (!tabs.length || !schedulePanel || !commentPanel) {
+		return;
+	}
+
+	function selectTab(selected) {
+
+		schedulePanel.classList.toggle(
+			"hidden",
+			selected !== "schedule"
+		);
+
+		commentPanel.classList.toggle(
+			"hidden",
+			selected !== "comments"
+		);
+
+		tabs.forEach(function(tab) {
+
+			const active =
+				tab.dataset.detailTab === selected;
+
+			tab.setAttribute(
+				"aria-selected",
+				String(active)
+			);
+
+			tab.style.color =
+				active ? "#6369D1" : "#94a3b8";
+
+			const line =
+				tab.querySelector("[data-detail-tab-line]");
+
+			if (line) {
+				line.classList.toggle("hidden", !active);
+			}
+		});
+	}
+
+	tabs.forEach(function(tab) {
+		tab.addEventListener("click", function() {
+			selectTab(tab.dataset.detailTab);
+		});
+	});
+
+	selectTab("schedule");
+
+})();

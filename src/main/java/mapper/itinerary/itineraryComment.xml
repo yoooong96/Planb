@@ -5,9 +5,7 @@
 
 <mapper namespace="mapper.itinerary.itineraryComment">
 
-	<resultMap id="itineraryCommentMap"
-		type="dto.itinerary.ItineraryCommentDto">
-
+	<resultMap id="itineraryCommentMap" type="dto.itinerary.ItineraryCommentDto">
 		<id property="commentId" column="comment_id" />
 		<result property="itineraryId" column="itinerary_id" />
 		<result property="userId" column="user_id" />
@@ -16,22 +14,23 @@
 		<result property="createdAt" column="created_at" />
 		<result property="updatedAt" column="updated_at" />
 		<result property="nickname" column="nickname" />
+		<result property="profileImg" column="profile_img" />
 	</resultMap>
 
 	<!-- 삭제되지 않은 댓글 수 -->
-	<select id="countItineraryComments"
-		parameterType="java.lang.Long" resultType="int">
+	<select id="countItineraryComments" parameterType="java.lang.Long" resultType="int">
 
 		SELECT COUNT(*)
-		FROM tb_itinerary_comment
+		FROM
+		tb_itinerary_comment
 		WHERE itinerary_id = #{itineraryId}
-		AND status = 'ACTIVE'
+		AND status =
+		'ACTIVE'
 
 	</select>
 
 	<!-- 댓글 목록: 먼저 작성된 댓글부터 -->
-	<select id="selectItineraryComments"
-		parameterType="java.lang.Long" resultMap="itineraryCommentMap">
+	<select id="selectItineraryComments" parameterType="java.lang.Long" resultMap="itineraryCommentMap">
 
 		SELECT
 		c.comment_id,
@@ -41,7 +40,8 @@
 		c.status,
 		c.created_at,
 		c.updated_at,
-		u.nickname
+		u.nickname,
+		u.profile_img
 		FROM tb_itinerary_comment c
 		JOIN tb_user u
 		ON u.user_id = c.user_id
@@ -56,7 +56,8 @@
 		parameterType="dto.itinerary.ItineraryCommentDto"
 		useGeneratedKeys="true" keyProperty="commentId" keyColumn="comment_id">
 
-		INSERT INTO tb_itinerary_comment (
+		INSERT INTO
+		tb_itinerary_comment (
 		itinerary_id,
 		user_id,
 		content
@@ -75,9 +76,11 @@
 
 		UPDATE tb_itinerary_comment
 		SET status = 'DELETED'
-		WHERE comment_id = #{commentId}
+		WHERE
+		comment_id = #{commentId}
 		AND itinerary_id = #{itineraryId}
-		AND user_id = #{userId}
+		AND user_id
+		= #{userId}
 		AND status = 'ACTIVE'
 
 	</update>

@@ -33,7 +33,8 @@ public class ScheduleDetail extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		try {
 			String id = request.getParameter("id");
 
@@ -68,6 +69,8 @@ public class ScheduleDetail extends HttpServlet {
 			}
 
 			request.setAttribute("itinerary", itinerary);
+
+			request.setAttribute("comments", service.getItineraryComments(itineraryId, loginUserId));
 
 			request.getRequestDispatcher("/view/travel/scheduleDetail.jsp").forward(request, response);
 

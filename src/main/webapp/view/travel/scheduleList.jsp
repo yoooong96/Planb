@@ -11,7 +11,7 @@ request.setAttribute("activePage", "travel");
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width,initial-scale=1">
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/view/assets/css/travel/scheduleList.css">
-	<title>여행일정 | Tripily</title>
+	<title>여행일정 | Planb</title>
 	<jsp:include page="/common/headStyles.jsp" />
 </head>
 <body class="site-shell">
@@ -1392,6 +1392,7 @@ request.setAttribute("activePage", "travel");
     			</button>
 
     			<p id="scheduleLoadComplete" class="hidden text-sm text-gray-500">
+    				<br>
         			모든 여행 일정을 확인했습니다.
     			</p>
 

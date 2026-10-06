@@ -346,19 +346,141 @@ request.setAttribute("activePage", "travel");
 				</div>
 				<div class="flex border-b sticky z-10"
 					style="border-color: #D1D2F9; top: 57px; background: white">
-					<button
+
+					<button type="button" data-detail-tab="schedule"
+						aria-selected="true" aria-controls="detailSchedulePanel"
 						class="flex-1 py-3 text-[12.5px] font-semibold relative transition-colors whitespace-nowrap"
 						style="color: #6369D1">
-						일정표
-						<div
+
+						일정표 <span data-detail-tab-line
 							class="absolute bottom-0 left-0 right-0 h-[2.5px] rounded-t-full"
-							style="background: #6369D1"></div>
+							style="background: #6369D1"></span>
 					</button>
-					<button
+
+					<button type="button" data-detail-tab="comments"
+						aria-selected="false" aria-controls="detailCommentPanel"
 						class="flex-1 py-3 text-[12.5px] font-semibold relative transition-colors whitespace-nowrap"
-						style="color: #94a3b8">댓글 (3)</button>
+						style="color: #94a3b8">
+
+						댓글 (<span id="scheduleCommentCount"><c:out
+								value="${itinerary.commentCount}" /></span>) <span
+							data-detail-tab-line
+							class="hidden absolute bottom-0 left-0 right-0 h-[2.5px] rounded-t-full"
+							style="background: #6369D1"></span>
+					</button>
 				</div>
-				<div class="p-4 space-y-3">
+				<section id="detailCommentPanel" class="hidden p-4"
+					data-itinerary-id="${itinerary.itineraryId}"
+					data-logged-in="${not empty sessionScope.user}"
+					data-login-user-id="${empty sessionScope.user ? '' : sessionScope.user.userId}"
+					data-login-url="${pageContext.request.contextPath}/auth/login"
+					data-context-path="${pageContext.request.contextPath}"
+					data-write-url="${pageContext.request.contextPath}/itinerary/comment/write"
+					data-delete-url="${pageContext.request.contextPath}/itinerary/comment/delete">
+
+					<!-- 댓글 입력 -->
+					<div class="rounded-2xl border p-4 mb-5"
+						style="border-color: #D1D2F9; background: #fafafa">
+
+						<textarea id="scheduleCommentContent" aria-label="댓글 내용"
+							placeholder="여행 일정에 대한 댓글을 남겨보세요..."
+							class="w-full bg-transparent text-[13px] outline-none resize-none"
+							style="min-height: 110px"></textarea>
+
+						<div class="flex items-center justify-between mt-3">
+							<span class="text-[11px] text-gray-400"> <span
+								id="scheduleCommentLength">0</span> / 1,000
+							</span>
+
+							<button type="button" id="scheduleCommentSubmit"
+								class="px-5 py-2 rounded-xl text-[13px] font-bold text-white transition-opacity"
+								style="background: #6369D1">등록</button>
+						</div>
+					</div>
+
+					<!-- 댓글 목록 -->
+					<div id="scheduleCommentList" class="space-y-5">
+
+						<c:if test="${empty comments}">
+							<p class="py-5 text-center text-[12px] text-gray-400">아직 댓글이
+								없습니다.</p>
+						</c:if>
+
+						<c:forEach var="comment" items="${comments}">
+
+							<article class="flex items-start gap-3">
+
+								<!-- 작성자 사진 -->
+								<div
+									class="w-10 h-10 rounded-full overflow-hidden shrink-0 flex items-center justify-center"
+									style="background: #F0F0FF; color: #6369D1">
+
+									<c:choose>
+										<c:when test="${not empty comment.profileImg}">
+
+											<c:choose>
+												<c:when
+													test="${comment.profileImg.startsWith('https://')
+                                    or comment.profileImg.startsWith('http://')}">
+													<c:set var="commentProfileUrl"
+														value="${comment.profileImg}" />
+												</c:when>
+
+												<c:when test="${comment.profileImg.startsWith('/')}">
+													<c:url var="commentProfileUrl"
+														value="${comment.profileImg}" />
+												</c:when>
+
+												<c:otherwise>
+													<c:url var="commentProfileUrl"
+														value="/${comment.profileImg}" />
+												</c:otherwise>
+											</c:choose>
+
+											<img src="<c:out value='${commentProfileUrl}'/>"
+												alt="작성자 프로필" class="w-full h-full object-cover">
+										</c:when>
+
+										<c:otherwise>
+											<svg width="22" height="22" viewBox="0 0 24 24" fill="none"
+												stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                <circle cx="12" cy="8" r="4" />
+                                <path d="M4 21v-2a8 8 0 0 1 16 0v2" />
+                            </svg>
+										</c:otherwise>
+									</c:choose>
+								</div>
+
+								<div class="flex-1 min-w-0">
+
+									<div class="flex items-center gap-2 flex-wrap">
+										<span class="font-bold text-[13px] text-gray-900"> <c:out
+												value="${comment.nickname}" />
+										</span> <span class="text-[11px] text-gray-400"> <fmt:formatDate
+												value="${comment.createdAt}" pattern="yyyy.MM.dd HH:mm" />
+										</span>
+
+										<c:if
+											test="${not empty sessionScope.user
+                            and comment.userId eq sessionScope.user.userId}">
+											<button type="button" data-comment-delete
+												data-comment-id="${comment.commentId}"
+												class="ml-auto text-[11px] text-gray-400 hover:text-red-500">
+												삭제</button>
+										</c:if>
+									</div>
+
+									<p class="mt-1 text-[13px] text-gray-600"
+										style="white-space: pre-wrap; overflow-wrap: anywhere;">
+										<c:out value="${comment.content}" />
+									</p>
+								</div>
+							</article>
+
+						</c:forEach>
+					</div>
+				</section>
+				<div id="detailSchedulePanel" class="p-4 space-y-3">
 					<div class="rounded-2xl border overflow-hidden"
 						style="border-color: #D1D2F9">
 						<div
@@ -1029,6 +1151,6 @@ request.setAttribute("activePage", "travel");
 		src="${pageContext.request.contextPath}/view/assets/js/auth/tripily.js"></script>
 
 	<script
-		src="${pageContext.request.contextPath}/view/assets/js/travel/scheduleDetail.js?v=2"></script>
+		src="${pageContext.request.contextPath}/view/assets/js/travel/scheduleDetail.js?v=3"></script>
 </body>
 </html>

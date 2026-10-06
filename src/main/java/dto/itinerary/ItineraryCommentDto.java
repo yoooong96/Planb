@@ -11,6 +11,7 @@ public class ItineraryCommentDto {
 	private Timestamp createdAt;// 작성 일시
 	private Timestamp updatedAt;// 수정 일시
 	private String nickname; 	// 작성자 최신닉네임(db에는 필요없음)
+	private String profileImg;	// 작성자 프로필이미지
 	public ItineraryCommentDto() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -71,9 +72,14 @@ public class ItineraryCommentDto {
 	public String getNickname() {
 	    return nickname;
 	}
-
 	public void setNickname(String nickname) {
 	    this.nickname = nickname;
+	}
+	public String getProfileImg() {
+	    return profileImg;
+	}
+	public void setProfileImg(String profileImg) {
+	    this.profileImg = profileImg;
 	}
 	@Override
 	public String toString() {
