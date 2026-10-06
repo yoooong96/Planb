@@ -1,7 +1,6 @@
 package controller.itinerary;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -11,12 +10,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
 import dto.member.UserDto;
 import service.itinerary.ItineraryService;
 import service.itinerary.ItineraryServiceImpl;
+import util.JsonResponse;
 
 /**
  * Servlet implementation class ItineraryComment
@@ -37,18 +34,16 @@ public class ItineraryComment extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
-		response.setContentType("application/json;charset=UTF-8");
 
 		HttpSession session = request.getSession(false);
 
 		UserDto loginUser = session == null ? null : (UserDto) session.getAttribute("user");
 
-		// UserDto의 userId는 기본형 long
 		if (loginUser == null || loginUser.getUserId() <= 0) {
-			writeFailure(response, HttpServletResponse.SC_UNAUTHORIZED, "로그인 후 이용할 수 있습니다.");
+
+			JsonResponse.writeFailure(response, HttpServletResponse.SC_UNAUTHORIZED, "로그인 후 이용할 수 있습니다.");
 			return;
 		}
 
@@ -73,24 +68,27 @@ public class ItineraryComment extends HttpServlet {
 				result = service.deleteItineraryComment(itineraryId, commentId, loginUser.getUserId());
 
 			} else {
-				writeFailure(response, HttpServletResponse.SC_NOT_FOUND, "올바르지 않은 요청입니다.");
+				JsonResponse.writeFailure(response, HttpServletResponse.SC_NOT_FOUND, "올바르지 않은 요청입니다.");
 				return;
 			}
 
 			result.put("success", true);
 
-			writeJson(response, result);
+			JsonResponse.writeJson(response, result);
 
 		} catch (SecurityException e) {
-			writeFailure(response, HttpServletResponse.SC_FORBIDDEN, e.getMessage());
+
+			JsonResponse.writeFailure(response, HttpServletResponse.SC_FORBIDDEN, e.getMessage());
 
 		} catch (IllegalArgumentException e) {
-			writeFailure(response, HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+
+			JsonResponse.writeFailure(response, HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 
 		} catch (Exception e) {
+
 			getServletContext().log("댓글 처리 중 오류 발생", e);
 
-			writeFailure(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "댓글 처리 중 오류가 발생했습니다.");
+			JsonResponse.writeFailure(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "댓글 처리 중 오류가 발생했습니다.");
 		}
 	}
 
@@ -113,23 +111,4 @@ public class ItineraryComment extends HttpServlet {
 			throw new IllegalArgumentException("올바른 " + label + " 번호가 아닙니다.");
 		}
 	}
-
-	private void writeFailure(HttpServletResponse response, int status, String message) throws IOException {
-
-		response.setStatus(status);
-
-		Map<String, Object> result = new HashMap<>();
-		result.put("success", false);
-		result.put("message", message);
-
-		writeJson(response, result);
-	}
-
-	private void writeJson(HttpServletResponse response, Map<String, Object> result) throws IOException {
-
-		Gson gson = new GsonBuilder().setDateFormat("yyyy.MM.dd HH:mm").create();
-
-		response.getWriter().write(gson.toJson(result));
-	}
-
 }
