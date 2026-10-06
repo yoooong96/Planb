@@ -53,6 +53,8 @@
 		<typeAlias type="dto.member.UserConsentDto" alias="userConsent"/>
 		<typeAlias type="dto.member.UserDto" alias="user"/>
 		
+
+		
 		<!-- 알림 -->
 		<typeAlias type="dto.notification.NotificationDto" alias="notification"/>
 		
@@ -123,6 +125,9 @@
 	    <mapper resource="mapper/member/userConsent.xml"/>
 	    <mapper resource="mapper/member/user.xml"/>
 	
+		<!-- 피드 -->
+		<mapper resource="mapper/profile/profileFeed.xml"/>
+		
 	    <!-- 알림 -->
 	    <mapper resource="mapper/notification/notification.xml"/>
 	

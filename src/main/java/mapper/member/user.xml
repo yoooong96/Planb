@@ -290,7 +290,7 @@
 
 	</insert>
 
-	<update id="updateUser" parameterType="dto.member.UserDto">
+	<update id="updateUser" parameterType="user">
 
 		UPDATE TB_USER
 
