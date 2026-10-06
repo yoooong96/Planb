@@ -21,6 +21,7 @@ public class UserDto {
 	private Timestamp updatedAt;		// 수정 일자
 	private String profileVisibility;	// 프로필 공개범위
 	private Boolean showLikedItinerary;	// 좋아요 일정 공개
+	private Boolean showBookmarkedItinerary;
 	private Boolean notifyLike;			// 좋아요 알림
 	private Boolean notifyComment;		// 댓글 알림
 	private Boolean notifyPost;			// 게시글 알림
@@ -40,7 +41,7 @@ public class UserDto {
 			String phone, Date birthDate, String profileImg, String bio, String role, String status,
 			Timestamp lastLoginAt, Timestamp createdAt, Timestamp updatedAt, String profileVisibility,
 			Boolean showLikedItinerary, Boolean notifyLike, Boolean notifyComment, Boolean notifyPost, String region,
-			String postcode, String address, String addressDetail) {
+			String postcode, String address, String addressDetail, Boolean showBookmarkedItinerary) {
 		super();
 		this.userId = userId;
 		this.loginId = loginId;
@@ -67,6 +68,14 @@ public class UserDto {
 		this.address = address;
 		this.addressDetail = addressDetail;
 	}
+	public Boolean getShowBookmarkedItinerary() {
+		return showBookmarkedItinerary;
+	}
+
+	public void setShowBookmarkedItinerary(Boolean showBookmarkedItinerary) {
+		this.showBookmarkedItinerary = showBookmarkedItinerary;
+	}
+
 	public long getUserId() {
 		return userId;
 	}

@@ -187,4 +187,9 @@ public class UserServiceImpl implements UserService {
 		}
 	}
 
+	@Override
+	public UserDto getUserById(long userId) throws Exception {
+		return userDao.selectUserById(userId);
+	}
+
 }

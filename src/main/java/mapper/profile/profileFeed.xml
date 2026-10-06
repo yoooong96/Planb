@@ -156,5 +156,143 @@
 	
 	</select>
 	
+	<select
+    id="selectPublicItineraries"
+    parameterType="long"
+    resultType="dto.profile.ProfileFeedDto">
+
+	    SELECT
+	
+	        i.itinerary_id AS itineraryId,
+	        i.title AS title,
+	        i.country AS country,
+	        i.city AS city,
+	        i.thumbnail_img AS thumbnailImg,
+	        i.visibility AS visibility,
+	
+	        (
+	            SELECT COUNT(*)
+	            FROM TB_ITINERARY_LIKE l
+	            WHERE l.itinerary_id = i.itinerary_id
+	        ) AS likeCount,
+	
+	        (
+	            SELECT COUNT(*)
+	            FROM TB_ITINERARY_BOOKMARK b
+	            WHERE b.itinerary_id = i.itinerary_id
+	        ) AS bookmarkCount,
+	
+	        (
+	            SELECT COUNT(*)
+	            FROM TB_ITINERARY_COMMENT c
+	            WHERE c.itinerary_id = i.itinerary_id
+	              AND c.status = 'ACTIVE'
+	        ) AS commentCount
+	
+	    FROM TB_ITINERARY i
+	
+	    WHERE i.user_id = #{value}
+	
+	      AND i.status = 'ACTIVE'
+	
+	      AND i.visibility = 'PUBLIC'
+	
+	    ORDER BY i.created_at DESC
+	
+	</select>
+	
+	<select
+	    id="selectPublicLikedItineraries"
+	    parameterType="long"
+	    resultType="dto.profile.ProfileFeedDto">
+	
+	    SELECT
+	        i.itinerary_id AS itineraryId,
+	        i.title,
+	        i.country,
+	        i.city,
+	        i.thumbnail_img AS thumbnailImg,
+	        i.visibility,
+	
+	        (
+	            SELECT COUNT(*)
+	            FROM TB_ITINERARY_LIKE x
+	            WHERE x.itinerary_id = i.itinerary_id
+	        ) AS likeCount,
+	
+	        (
+	            SELECT COUNT(*)
+	            FROM TB_ITINERARY_BOOKMARK b
+	            WHERE b.itinerary_id = i.itinerary_id
+	        ) AS bookmarkCount,
+	
+	        (
+	            SELECT COUNT(*)
+	            FROM TB_ITINERARY_COMMENT c
+	            WHERE c.itinerary_id = i.itinerary_id
+	              AND c.status = 'ACTIVE'
+	        ) AS commentCount
+	
+	    FROM TB_ITINERARY_LIKE l
+	
+	    INNER JOIN TB_ITINERARY i
+	        ON i.itinerary_id = l.itinerary_id
+	
+	    WHERE l.user_id = #{value}
+	
+	      AND i.status = 'ACTIVE'
+	
+	      AND i.visibility = 'PUBLIC'
+	
+	    ORDER BY l.created_at DESC
+	
+	</select>
+	
+	<select
+	    id="selectPublicBookmarkedItineraries"
+	    parameterType="long"
+	    resultType="dto.profile.ProfileFeedDto">
+	
+	    SELECT
+	        i.itinerary_id AS itineraryId,
+	        i.title,
+	        i.country,
+	        i.city,
+	        i.thumbnail_img AS thumbnailImg,
+	        i.visibility,
+	
+	        (
+	            SELECT COUNT(*)
+	            FROM TB_ITINERARY_LIKE l
+	            WHERE l.itinerary_id = i.itinerary_id
+	        ) AS likeCount,
+	
+	        (
+	            SELECT COUNT(*)
+	            FROM TB_ITINERARY_BOOKMARK x
+	            WHERE x.itinerary_id = i.itinerary_id
+	        ) AS bookmarkCount,
+	
+	        (
+	            SELECT COUNT(*)
+	            FROM TB_ITINERARY_COMMENT c
+	            WHERE c.itinerary_id = i.itinerary_id
+	              AND c.status = 'ACTIVE'
+	        ) AS commentCount
+	
+	    FROM TB_ITINERARY_BOOKMARK b
+	
+	    INNER JOIN TB_ITINERARY i
+	        ON i.itinerary_id = b.itinerary_id
+	
+	    WHERE b.user_id = #{value}
+	
+	      AND i.status = 'ACTIVE'
+	
+	      AND i.visibility = 'PUBLIC'
+	
+	    ORDER BY b.created_at DESC
+	
+	</select>
 	
 </mapper>

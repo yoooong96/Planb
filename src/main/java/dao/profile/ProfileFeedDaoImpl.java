@@ -54,4 +54,57 @@ public class ProfileFeedDaoImpl implements ProfileFeedDao {
 		}
 	}
 
+	@Override
+	public List<ProfileFeedDto> selectPublicItineraries(long userId) throws Exception {
+		try (SqlSession sqlSession =
+	            MybatisSqlSessionFactory
+	                .getSqlSessionFactory()
+	                .openSession()) {
+
+	        return sqlSession.selectList(
+	                "mapper.profile.profileFeed.selectPublicItineraries",
+	                userId
+	        );
+
+	    } catch (Exception e) {
+
+	        e.printStackTrace();
+
+	        throw e;
+	    }
+	}
+	
+	@Override
+	public List<ProfileFeedDto> selectPublicLikedItineraries(
+	        long userId) throws Exception {
+
+	    try (SqlSession sqlSession =
+	            MybatisSqlSessionFactory
+	                .getSqlSessionFactory()
+	                .openSession()) {
+
+	        return sqlSession.selectList(
+	            "mapper.profile.profileFeed.selectPublicLikedItineraries",
+	            userId
+	        );
+	    }
+	}
+
+
+	@Override
+	public List<ProfileFeedDto> selectPublicBookmarkedItineraries(
+	        long userId) throws Exception {
+
+	    try (SqlSession sqlSession =
+	            MybatisSqlSessionFactory
+	                .getSqlSessionFactory()
+	                .openSession()) {
+
+	        return sqlSession.selectList(
+	            "mapper.profile.profileFeed.selectPublicBookmarkedItineraries",
+	            userId
+	        );
+	    }
+	}
+
 }

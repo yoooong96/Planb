@@ -322,5 +322,26 @@
 		AND status = 'ACTIVE'
 
 	</update>
+	
+	<select id="selectUserById" parameterType="long"
+	resultType="dto.member.UserDto">
+
+		SELECT
+		user_id AS userId,
+		login_id AS loginId,
+		name,
+		nickname AS nickName,
+		profile_img AS profileImg,
+		bio,
+		profile_visibility AS profileVisibility,
+		show_liked_itinerary AS showLikedItinerary,
+		show_bookmarked_itinerary AS showBookmarkedItinerary
+	
+		FROM TB_USER
+	
+		WHERE user_id = #{value}
+		AND status = 'ACTIVE'
+	
+	</select>
 
 </mapper>

@@ -1,174 +1,1616 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8" import="dto.member.UserDto"
+	import="dto.profile.ProfileFeedDto" import="java.util.List"
+	import="java.util.ArrayList"%>
+
 <%
 request.setAttribute("activePage", "profile");
+
+String ctx = request.getContextPath();
+
+
+/* =========================================================
+   1. 조회 대상 사용자
+========================================================= */
+
+UserDto targetUser =
+        (UserDto) request.getAttribute("targetUser");
+
+
+/*
+ * Servlet을 거치지 않고
+ * JSP로 직접 접근한 경우
+ */
+if (targetUser == null) {
+
+    response.sendRedirect(
+            ctx + "/schedules"
+    );
+
+    return;
+}
+
+
+long targetUserId =
+        targetUser.getUserId();
+
+
+
+/* =========================================================
+   2. 회원 정보
+========================================================= */
+
+String loginId =
+        targetUser.getLoginId() == null
+        ? ""
+        : targetUser.getLoginId();
+
+
+String nickname =
+        targetUser.getNickName() == null
+        ? ""
+        : targetUser.getNickName();
+
+
+String name =
+        targetUser.getName() == null
+        ? ""
+        : targetUser.getName();
+
+
+String bio =
+        targetUser.getBio() == null
+        ? ""
+        : targetUser.getBio();
+
+
+String region =
+        targetUser.getRegion() == null
+        ? ""
+        : targetUser.getRegion();
+
+
+String profileImg =
+        targetUser.getProfileImg() == null
+        ? ""
+        : targetUser.getProfileImg();
+
+
+
+/* 화면 표시 이름 */
+
+String displayName =
+        nickname.isEmpty()
+        ? loginId
+        : nickname;
+
+
+
+/* =========================================================
+   3. 프로필 이미지 경로
+========================================================= */
+
+String profilePath =
+        (String) application.getAttribute(
+                "profilePath"
+        );
+
+
+if (profilePath == null
+        || profilePath.trim().isEmpty()) {
+
+    profilePath = "/profiles";
+}
+
+
+
+/* =========================================================
+   4. 상대방이 작성한 공개 일정
+========================================================= */
+
+List<ProfileFeedDto> itineraries =
+        (List<ProfileFeedDto>)
+        request.getAttribute(
+                "itineraries"
+        );
+
+
+if (itineraries == null) {
+
+    itineraries =
+            new ArrayList<ProfileFeedDto>();
+}
+
+
+
+/* =========================================================
+   5. 상대방이 북마크한 공개 일정
+========================================================= */
+
+List<ProfileFeedDto> bookmarkedItineraries =
+        (List<ProfileFeedDto>)
+        request.getAttribute(
+                "bookmarkedItineraries"
+        );
+
+
+if (bookmarkedItineraries == null) {
+
+    bookmarkedItineraries =
+            new ArrayList<ProfileFeedDto>();
+}
+
+
+
+/* =========================================================
+   6. 상대방이 좋아요한 공개 일정
+========================================================= */
+
+List<ProfileFeedDto> likedItineraries =
+        (List<ProfileFeedDto>)
+        request.getAttribute(
+                "likedItineraries"
+        );
+
+
+if (likedItineraries == null) {
+
+    likedItineraries =
+            new ArrayList<ProfileFeedDto>();
+}
+
+
+
+/* =========================================================
+   7. 공개 설정
+========================================================= */
+
+Boolean showLikedAttr =
+        (Boolean)
+        request.getAttribute(
+                "showLikedItinerary"
+        );
+
+
+Boolean showBookmarkedAttr =
+        (Boolean)
+        request.getAttribute(
+                "showBookmarkedItinerary"
+        );
+
+
+boolean showLikedItinerary =
+        Boolean.TRUE.equals(
+                showLikedAttr
+        );
+
+
+boolean showBookmarkedItinerary =
+        Boolean.TRUE.equals(
+                showBookmarkedAttr
+        );
+
+
+
+/* =========================================================
+   8. 프로필 상단 통계
+========================================================= */
+
+Integer postCount =
+        (Integer)
+        request.getAttribute(
+                "postCount"
+        );
+
+
+Integer likeCount =
+        (Integer)
+        request.getAttribute(
+                "likeCount"
+        );
+
+
+Integer bookmarkCount =
+        (Integer)
+        request.getAttribute(
+                "bookmarkCount"
+        );
+
+
+if (postCount == null) {
+
+    postCount =
+            itineraries.size();
+}
+
+
+if (likeCount == null) {
+
+    likeCount = 0;
+}
+
+
+if (bookmarkCount == null) {
+
+    bookmarkCount = 0;
+}
 %>
+
+
 <!DOCTYPE html>
+
 <html lang="ko">
+
 <head>
+
 <meta charset="UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>사용자 프로필 · Tripily</title><jsp:include
-	page="/common/headStyles.jsp" /><link rel="stylesheet"
-	href="${pageContext.request.contextPath}/view/assets/css/auth/profile.css">
+
+<title><%=displayName%> · Planb</title>
+
+
+<!-- 공통 CSS -->
+
+<jsp:include page="/common/headStyles.jsp" />
+
+
+<!-- 프로필 CSS -->
+
+<link rel="stylesheet" href="<%=ctx%>/view/assets/css/auth/userProfile.css">
+
+
 </head>
-<body class="site-shell"><jsp:include page="/common/header.jsp" />
-	<div class="app-root app-root--inner">
-		<div class="app-body">
-			<div class="page profile-page">
-				<a class="back-link" href="javascript:history.back()"><svg
-						width="16" height="16" viewBox="0 0 24 24" fill="none"
-						stroke="currentColor" stroke-width="1.7" stroke-linecap="round"
-						stroke-linejoin="round" aria-hidden="true">
-						<path d="m15 18-6-6 6-6" /></svg> 뒤로 가기</a>
-				<section class="profile-hero">
-					<div class="profile-hero-inner">
-						<div class="profile-avatar-wrap">
-							<div class="avatar avatar-xl">
-								<img src="https://i.pravatar.cc/200?img=12" alt="여행좋아 프로필">
-							</div>
-						</div>
-						<div class="profile-copy">
-							<div class="profile-topline">
-								<div>
-									<div class="profile-username-row">
-										<h1>yeojong_trip</h1>
-									</div>
-									<p class="profile-name">여행좋아</p>
-								</div>
-								<div class="profile-actions profile-actions--report">
-									<button type="button" class="profile-report-btn"
-										data-modal-open="reportModal">
-										<svg width="14" height="14" viewBox="0 0 24 24" fill="none"
-											stroke="currentColor" stroke-width="1.7"
-											stroke-linecap="round" stroke-linejoin="round"
-											aria-hidden="true">
-											<path d="M5 21V4" />
-											<path d="M5 4h10.5l-1.5 3 1.5 3H5" /></svg>
-										<span>신고</span>
-									</button>
-								</div>
-							</div>
-							<div class="profile-stats">
-								<button type="button">
-									<strong>1</strong><span>게시물</span>
-								</button>
-								<button type="button">
-									<strong>328</strong><span>받은 좋아요</span>
-								</button>
-								<button type="button">
-									<strong>98</strong><span>받은 북마크</span>
-								</button>
-							</div>
-							<div class="profile-bio-block">
-								<p>여행좋아</p>
-								<p style="font-weight: 400">제주도 전문 여행자. 자연과 맛집을 사랑합니다 🍊</p>
-								<span class="profile-location">Jeju, Korea</span>
-							</div>
-						</div>
+
+
+<body class="site-shell">
+
+
+	<!-- =========================================================
+     공통 Header
+========================================================= -->
+
+	<jsp:include page="/common/header.jsp" />
+
+
+
+	<!-- =========================================================
+     프로필 페이지
+========================================================= -->
+
+	<div class="page profile-page">
+
+
+		<!-- ==========================================
+         뒤로 가기
+    =========================================== -->
+
+		<button type="button" class="back-link" id="profileBackButton">
+
+			<svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+				stroke="currentColor" stroke-width="1.7" stroke-linecap="round"
+				stroke-linejoin="round" aria-hidden="true">
+
+            <path d="m15 18-6-6 6-6" />
+
+        </svg>
+
+			뒤로 가기
+
+		</button>
+
+
+
+		<!-- ==========================================
+         프로필 상단
+    =========================================== -->
+
+		<section class="profile-hero">
+
+
+			<div class="profile-hero-inner">
+
+
+				<!-- =========================
+                 프로필 이미지
+            ========================== -->
+
+				<div class="profile-avatar-wrap">
+
+
+					<div class="avatar avatar-xl">
+
+
+						<%
+                    if (!profileImg.isEmpty()) {
+                    %>
+
+
+						<img src="<%=ctx%><%=profilePath%>/<%=profileImg%>"
+							alt="<%=displayName%> 프로필 이미지"
+							onerror="
+                            this.style.display='none';
+                            this.nextElementSibling.style.display='flex';
+                        ">
+
+
+						<!-- 이미지 로딩 실패 시 -->
+
+						<span class="profile-default-avatar" style="display: none;">
+
+							<svg width="48" height="48" viewBox="0 0 24 24" fill="none"
+								stroke="currentColor" stroke-width="1.5">
+
+                            <circle cx="12" cy="8" r="4" />
+
+                            <path d="M4 21c0-4.3 3.6-7 8-7s8 2.7 8 7" />
+
+                        </svg>
+
+						</span>
+
+
+						<%
+                    } else {
+                    %>
+
+
+						<!-- 프로필 이미지가 없는 경우 -->
+
+						<span class="profile-default-avatar"> <svg width="48"
+								height="48" viewBox="0 0 24 24" fill="none"
+								stroke="currentColor" stroke-width="1.5">
+
+                            <circle cx="12" cy="8" r="4" />
+
+                            <path d="M4 21c0-4.3 3.6-7 8-7s8 2.7 8 7" />
+
+                        </svg>
+
+						</span>
+
+
+						<%
+                    }
+                    %>
+
+
 					</div>
-				</section>
-				<div class="profile-tabs">
-					<button class="active">
-						<svg width="17" height="17" viewBox="0 0 24 24" fill="none"
-							stroke="currentColor" stroke-width="1.7" stroke-linecap="round"
-							stroke-linejoin="round" aria-hidden="true">
-							<rect x="3" y="3" width="7" height="7" />
-							<rect x="14" y="3" width="7" height="7" />
-							<rect x="3" y="14" width="7" height="7" />
-							<rect x="14" y="14" width="7" height="7" /></svg>
-						<span>게시물</span>
-					</button>
+
+
 				</div>
-				<main class="profile-content">
-					<div class="feed-grid">
-						<div class="feed-admin-shell">
-							<a class="feed-item"
-								href="${pageContext.request.contextPath}/view/travel/scheduleDetail.jsp?id=1"
-								aria-label="제주도 2박 3일 힐링 여행 보기"><img
-								src="https://images.unsplash.com/photo-1628411848698-e3b3249a272a?w=600&h=400&fit=crop"
-								alt="제주도 2박 3일 힐링 여행" loading="lazy"><span
-								class="feed-hover"><span class="feed-hover-copy"><strong>제주도
-											2박 3일 힐링 여행</strong><small>제주도</small></span><span class="feed-hover-stats"><span><svg
-												width="17" height="17" viewBox="0 0 24 24"
-												fill="currentColor" stroke="none" aria-hidden="true">
-												<path
-													d="M12 21s-7-4.35-9.5-9C1 8 2.5 4.5 6 4c2-.3 3.7.7 6 3 2.3-2.3 4-3.3 6-3 3.5.5 5 4 3.5 8-2.5 4.65-9.5 9-9.5 9Z" /></svg>
-											328</span><span><svg width="16" height="16"
-												viewBox="0 0 24 24" fill="currentColor" stroke="none"
-												aria-hidden="true">
-												<path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1Z" /></svg>
-											98</span><span><svg width="17" height="17"
-												viewBox="0 0 24 24" fill="none" stroke="currentColor"
-												stroke-width="1.7" stroke-linecap="round"
-												stroke-linejoin="round" aria-hidden="true">
-												<path
-													d="M21 11.5a8.38 8.38 0 0 1-8.9 8.4A8.38 8.38 0 0 1 3 12.4 8.5 8.5 0 0 1 12.1 4a8.38 8.38 0 0 1 8.9 7.5Z" /></svg>
-											0</span></span></span></a>
+
+
+
+				<!-- =========================
+                 회원 정보
+            ========================== -->
+
+				<div class="profile-copy">
+
+
+					<div class="profile-topline">
+
+
+						<div>
+
+
+							<!-- 닉네임 -->
+
+							<div class="profile-username-row">
+
+								<h1>
+									<%=displayName%>
+								</h1>
+
+							</div>
+
+
+							<!-- 실명 -->
+
+							<%
+                        if (!name.isEmpty()) {
+                        %>
+
+							<p class="profile-name">
+								<%=name%>
+							</p>
+
+							<%
+                        }
+                        %>
+
+
+							<!-- 로그인 아이디 -->
+
+							<%
+                        if (!loginId.isEmpty()) {
+                        %>
+
+							<p class="profile-login-id">
+								@<%=loginId%>
+							</p>
+
+							<%
+                        }
+                        %>
+
+
 						</div>
+
+
+
+						<!-- =========================
+                         신고 버튼
+                    ========================== -->
+
+						<div class="profile-actions profile-actions--report">
+
+
+							<button type="button" class="profile-report-btn"
+								id="openReportModal">
+
+
+								<svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+									stroke="currentColor" stroke-width="1.7" stroke-linecap="round"
+									stroke-linejoin="round" aria-hidden="true">
+
+                                <path d="M5 21V4" />
+
+                                <path d="M5 4h10.5l-1.5 3 1.5 3H5" />
+
+                            </svg>
+
+
+								<span> 신고 </span>
+
+
+							</button>
+
+
+						</div>
+
+
 					</div>
-				</main>
+
+
+
+					<!-- =========================
+                     통계
+                ========================== -->
+
+					<div class="profile-stats">
+
+
+						<button type="button">
+
+							<strong> <%=postCount%>
+							</strong> <span> 게시물 </span>
+
+						</button>
+
+
+
+						<button type="button">
+
+							<strong> <%=likeCount%>
+							</strong> <span> 받은 좋아요 </span>
+
+						</button>
+
+
+
+						<button type="button">
+
+							<strong> <%=bookmarkCount%>
+							</strong> <span> 받은 북마크 </span>
+
+						</button>
+
+
+					</div>
+
+
+
+					<!-- =========================
+                     자기소개 / 지역
+                ========================== -->
+
+					<div class="profile-bio-block">
+
+
+						<%
+                    if (!bio.isEmpty()) {
+                    %>
+
+						<p style="font-weight: 400;">
+							<%=bio%>
+						</p>
+
+						<%
+                    } else {
+                    %>
+
+						<p class="profile-empty-bio" style="font-weight: 400;">등록된
+							소개글이 없습니다.</p>
+
+						<%
+                    }
+                    %>
+
+
+
+						<%
+                    if (!region.isEmpty()) {
+                    %>
+
+						<span class="profile-location"> <%=region%>
+						</span>
+
+						<%
+                    }
+                    %>
+
+
+					</div>
+
+
+				</div>
+
+
 			</div>
+
+
+		</section>
+
+
+
+		<!-- ==========================================
+         프로필 탭
+    =========================================== -->
+
+		<div class="profile-tabs">
+
+
+			<!-- 게시물 -->
+
+			<button type="button" class="active" data-profile-tab="posts">
+
+				▦ <span> 게시물 </span>
+
+			</button>
+
+
+
+			<!-- 북마크 공개 설정 ON -->
+
+			<%
+        if (showBookmarkedItinerary) {
+        %>
+
+			<button type="button" data-profile-tab="saved">
+
+				🔖 <span> 북마크한 게시글 </span>
+
+			</button>
+
+			<%
+        }
+        %>
+
+
+
+			<!-- 좋아요 공개 설정 ON -->
+
+			<%
+        if (showLikedItinerary) {
+        %>
+
+			<button type="button" data-profile-tab="liked">
+
+				♡ <span> 좋아요한 게시글 </span>
+
+			</button>
+
+			<%
+        }
+        %>
+
+
 		</div>
-	</div>
-	<div class="jsp-modal" id="reportModal">
-		<div class="report-modal" role="dialog" aria-modal="true"
-			aria-labelledby="profile-report-title">
-			<form onsubmit="return tripilyDemoSubmit(event,'신고가 접수되었습니다.')">
-				<div class="report-modal-header">
-					<div>
-						<h3 id="profile-report-title">신고하기</h3>
-						<p>여행좋아님의 프로필에서 문제가 되는 항목을 선택해 주세요.</p>
+
+
+
+		<!-- ==========================================
+         프로필 컨텐츠
+    =========================================== -->
+
+		<main class="profile-content">
+
+
+
+			<!-- ======================================
+             게시물
+        ======================================= -->
+
+			<div data-profile-panel="posts">
+
+
+				<div class="feed-grid">
+
+
+					<%
+                if (!itineraries.isEmpty()) {
+
+
+                    for (ProfileFeedDto item : itineraries) {
+
+
+                        String country =
+                                item.getCountry() == null
+                                ? ""
+                                : item.getCountry();
+
+
+                        String city =
+                                item.getCity() == null
+                                ? ""
+                                : item.getCity();
+
+
+                        String locationText = "";
+
+
+                        if (!country.isEmpty()
+                                && !city.isEmpty()) {
+
+                            locationText =
+                                    country
+                                    + " · "
+                                    + city;
+
+                        } else if (!country.isEmpty()) {
+
+                            locationText =
+                                    country;
+
+                        } else if (!city.isEmpty()) {
+
+                            locationText =
+                                    city;
+                        }
+
+
+                        String thumbnail =
+                                item.getThumbnailImg() == null
+                                ? ""
+                                : item.getThumbnailImg();
+                %>
+
+
+					<div class="feed-admin-shell">
+
+
+						<a class="feed-item"
+							href="<%=ctx%>/schedules/detail?id=<%=item.getItineraryId()%>">
+
+
+							<%
+                        if (!thumbnail.isEmpty()) {
+                        %> <img src="<%=ctx%><%=thumbnail%>"
+							alt="<%=item.getTitle()%>" loading="lazy"> <%
+                        } else {
+                        %> <span class="feed-fallback"></span> <%
+                        }
+                        %> <span class="feed-hover"> <span
+								class="feed-hover-copy"> <strong> <%=item.getTitle()%>
+								</strong> <%
+                                if (!locationText.isEmpty()) {
+                                %> <small> <%=locationText%>
+								</small> <%
+                                }
+                                %>
+
+
+							</span> <span class="feed-hover-stats"> <span> ♥ <%=item.getLikeCount()%>
+								</span> <span> 🔖 <%=item.getBookmarkCount()%>
+								</span> <span> 💬 <%=item.getCommentCount()%>
+								</span>
+
+
+							</span>
+
+
+						</span>
+
+
+						</a>
+
+
 					</div>
+
+
+					<%
+                    }
+
+                } else {
+                %>
+
+
+					<div class="empty-state">공개된 여행 일정이 없습니다.</div>
+
+
+					<%
+                }
+                %>
+
+
+				</div>
+
+
+			</div>
+
+
+
+			<!-- ======================================
+             북마크
+        ======================================= -->
+
+			<%
+        if (showBookmarkedItinerary) {
+        %>
+
+
+			<div data-profile-panel="saved" class="jsp-hidden">
+
+
+				<div class="feed-grid">
+
+
+					<%
+                if (!bookmarkedItineraries.isEmpty()) {
+
+
+                    for (
+                        ProfileFeedDto item
+                        : bookmarkedItineraries
+                    ) {
+
+
+                        String country =
+                                item.getCountry() == null
+                                ? ""
+                                : item.getCountry();
+
+
+                        String city =
+                                item.getCity() == null
+                                ? ""
+                                : item.getCity();
+
+
+                        String locationText = "";
+
+
+                        if (!country.isEmpty()
+                                && !city.isEmpty()) {
+
+                            locationText =
+                                    country
+                                    + " · "
+                                    + city;
+
+                        } else if (!country.isEmpty()) {
+
+                            locationText =
+                                    country;
+
+                        } else if (!city.isEmpty()) {
+
+                            locationText =
+                                    city;
+                        }
+
+
+                        String thumbnail =
+                                item.getThumbnailImg() == null
+                                ? ""
+                                : item.getThumbnailImg();
+                %>
+
+
+					<div class="feed-admin-shell">
+
+
+						<a class="feed-item"
+							href="<%=ctx%>/schedules/detail?id=<%=item.getItineraryId()%>">
+
+
+							<%
+                        if (!thumbnail.isEmpty()) {
+                        %> <img src="<%=ctx%><%=thumbnail%>"
+							alt="<%=item.getTitle()%>" loading="lazy"> <%
+                        } else {
+                        %> <span class="feed-fallback"></span> <%
+                        }
+                        %> <span class="feed-hover"> <span
+								class="feed-hover-copy"> <strong> <%=item.getTitle()%>
+								</strong> <%
+                                if (!locationText.isEmpty()) {
+                                %> <small> <%=locationText%>
+								</small> <%
+                                }
+                                %>
+
+
+							</span> <span class="feed-hover-stats"> <span> ♥ <%=item.getLikeCount()%>
+								</span> <span> 🔖 <%=item.getBookmarkCount()%>
+								</span> <span> 💬 <%=item.getCommentCount()%>
+								</span>
+
+
+							</span>
+
+
+						</span>
+
+
+						</a>
+
+
+					</div>
+
+
+					<%
+                    }
+
+                } else {
+                %>
+
+
+					<div class="empty-state">공개된 북마크 일정이 없습니다.</div>
+
+
+					<%
+                }
+                %>
+
+
+				</div>
+
+
+			</div>
+
+
+			<%
+        }
+        %>
+
+
+
+			<!-- ======================================
+             좋아요
+        ======================================= -->
+
+			<%
+        if (showLikedItinerary) {
+        %>
+
+
+			<div data-profile-panel="liked" class="jsp-hidden">
+
+
+				<div class="feed-grid">
+
+
+					<%
+                if (!likedItineraries.isEmpty()) {
+
+
+                    for (
+                        ProfileFeedDto item
+                        : likedItineraries
+                    ) {
+
+
+                        String country =
+                                item.getCountry() == null
+                                ? ""
+                                : item.getCountry();
+
+
+                        String city =
+                                item.getCity() == null
+                                ? ""
+                                : item.getCity();
+
+
+                        String locationText = "";
+
+
+                        if (!country.isEmpty()
+                                && !city.isEmpty()) {
+
+                            locationText =
+                                    country
+                                    + " · "
+                                    + city;
+
+                        } else if (!country.isEmpty()) {
+
+                            locationText =
+                                    country;
+
+                        } else if (!city.isEmpty()) {
+
+                            locationText =
+                                    city;
+                        }
+
+
+                        String thumbnail =
+                                item.getThumbnailImg() == null
+                                ? ""
+                                : item.getThumbnailImg();
+                %>
+
+
+					<div class="feed-admin-shell">
+
+
+						<a class="feed-item"
+							href="<%=ctx%>/schedules/detail?id=<%=item.getItineraryId()%>">
+
+
+							<%
+                        if (!thumbnail.isEmpty()) {
+                        %> <img src="<%=ctx%><%=thumbnail%>"
+							alt="<%=item.getTitle()%>" loading="lazy"> <%
+                        } else {
+                        %> <span class="feed-fallback"></span> <%
+                        }
+                        %> <span class="feed-hover"> <span
+								class="feed-hover-copy"> <strong> <%=item.getTitle()%>
+								</strong> <%
+                                if (!locationText.isEmpty()) {
+                                %> <small> <%=locationText%>
+								</small> <%
+                                }
+                                %>
+
+
+							</span> <span class="feed-hover-stats"> <span> ♥ <%=item.getLikeCount()%>
+								</span> <span> 🔖 <%=item.getBookmarkCount()%>
+								</span> <span> 💬 <%=item.getCommentCount()%>
+								</span>
+
+
+							</span>
+
+
+						</span>
+
+
+						</a>
+
+
+					</div>
+
+
+					<%
+                    }
+
+                } else {
+                %>
+
+
+					<div class="empty-state">공개된 좋아요 일정이 없습니다.</div>
+
+
+					<%
+                }
+                %>
+
+
+				</div>
+
+
+			</div>
+
+
+			<%
+        }
+        %>
+
+
+		</main>
+
+
+	</div>
+
+
+
+	<!-- =========================================================
+     신고 모달
+========================================================= -->
+
+	<div class="jsp-modal report-backdrop" id="reportModal">
+
+
+		<div class="report-modal" role="dialog" aria-modal="true"
+			aria-labelledby="profileReportTitle">
+
+
+			<form id="profileReportForm">
+
+
+				<!-- 신고 대상 -->
+
+				<input type="hidden" name="targetType" value="USER"> <input
+					type="hidden" name="targetId" value="<%=targetUserId%>">
+
+
+
+				<!-- =========================
+                 모달 헤더
+            ========================== -->
+
+				<div class="report-modal-header">
+
+
+					<div>
+
+
+						<h3 id="profileReportTitle">신고하기</h3>
+
+
+						<p>
+
+							<strong> <%=displayName%>
+							</strong> 님의 프로필에서 문제가 되는 항목을 선택해 주세요.
+
+						</p>
+
+
+					</div>
+
+
+
 					<button type="button" class="report-close-btn"
-						data-modal-close="reportModal" aria-label="신고 창 닫기">
+						id="closeReportModal" aria-label="신고 창 닫기">
+
+
 						<svg width="19" height="19" viewBox="0 0 24 24" fill="none"
 							stroke="currentColor" stroke-width="1.7" stroke-linecap="round"
 							stroke-linejoin="round">
-							<path d="M18 6 6 18M6 6l12 12" /></svg>
+
+                        <path d="M18 6 6 18M6 6l12 12" />
+
+                    </svg>
+
+
 					</button>
+
+
 				</div>
+
+
+
+				<!-- =========================
+                 신고 내용
+            ========================== -->
+
 				<div class="report-modal-body">
+
+
 					<fieldset class="report-reason-group">
+
+
 						<legend>
-							신고 사유를 선택해 주세요 <span>*</span>
+
+							신고 사유를 선택해 주세요 <span> * </span>
+
 						</legend>
-						<label class="report-radio-row"><input type="radio"
-							name="profile-report-reason" value="r0"><span
-							class="report-radio-ui" aria-hidden="true"></span><span>닉네임
-								또는 아이디가 부적절해요</span></label><label class="report-radio-row"><input
-							type="radio" name="profile-report-reason" value="r1"><span
-							class="report-radio-ui" aria-hidden="true"></span><span>프로필
-								사진이 부적절해요</span></label><label class="report-radio-row"><input
-							type="radio" name="profile-report-reason" value="r2"><span
-							class="report-radio-ui" aria-hidden="true"></span><span>게시글
-								또는 게시물 내용이 부적절해요</span></label><label class="report-radio-row"><input
-							type="radio" name="profile-report-reason" value="r3"><span
-							class="report-radio-ui" aria-hidden="true"></span><span>스팸
-								또는 광고 계정이에요</span></label><label class="report-radio-row"><input
-							type="radio" name="profile-report-reason" value="r4"><span
-							class="report-radio-ui" aria-hidden="true"></span><span>다른
-								사람을 사칭하고 있어요</span></label><label class="report-radio-row"><input
-							type="radio" name="profile-report-reason" value="r5"><span
-							class="report-radio-ui" aria-hidden="true"></span><span>개인정보
-								노출 또는 도용이 의심돼요</span></label><label class="report-radio-row"><input
-							type="radio" name="profile-report-reason" value="r6"><span
-							class="report-radio-ui" aria-hidden="true"></span><span>기타</span></label>
+
+
+
+						<label class="report-radio-row"> <input type="radio"
+							name="profileReportReason" value="NICKNAME" required> <span
+							class="report-radio-ui" aria-hidden="true"> </span> <span>
+								닉네임 또는 아이디가 부적절해요 </span>
+
+
+						</label> <label class="report-radio-row"> <input type="radio"
+							name="profileReportReason" value="PROFILE_IMAGE"> <span
+							class="report-radio-ui" aria-hidden="true"> </span> <span>
+								프로필 사진이 부적절해요 </span>
+
+
+						</label> <label class="report-radio-row"> <input type="radio"
+							name="profileReportReason" value="CONTENT"> <span
+							class="report-radio-ui" aria-hidden="true"> </span> <span>
+								게시글 또는 게시물 내용이 부적절해요 </span>
+
+
+						</label> <label class="report-radio-row"> <input type="radio"
+							name="profileReportReason" value="SPAM"> <span
+							class="report-radio-ui" aria-hidden="true"> </span> <span>
+								스팸 또는 광고 계정이에요 </span>
+
+
+						</label> <label class="report-radio-row"> <input type="radio"
+							name="profileReportReason" value="IMPERSONATION"> <span
+							class="report-radio-ui" aria-hidden="true"> </span> <span>
+								다른 사람을 사칭하고 있어요 </span>
+
+
+						</label> <label class="report-radio-row"> <input type="radio"
+							name="profileReportReason" value="PRIVACY"> <span
+							class="report-radio-ui" aria-hidden="true"> </span> <span>
+								개인정보 노출 또는 도용이 의심돼요 </span>
+
+
+						</label> <label class="report-radio-row"> <input type="radio"
+							name="profileReportReason" value="ETC"> <span
+							class="report-radio-ui" aria-hidden="true"> </span> <span>
+								기타 </span>
+
+
+						</label>
+
+
 					</fieldset>
-					<label class="report-detail-label" for="profile-report-detail">상세
-						내용 <span>(선택)</span>
+
+
+
+					<!-- 상세 내용 -->
+
+					<label class="report-detail-label" for="profileReportDetail">
+
+						상세 내용 <span> (선택) </span>
+
 					</label>
-					<textarea id="profile-report-detail" maxlength="300"
+
+
+					<textarea id="profileReportDetail" name="detail" maxlength="300"
 						placeholder="신고 사유에 대해 자세히 설명해 주세요."></textarea>
-					<div class="report-char-count">0/300</div>
+
+
+					<div class="report-char-count" id="profileReportCharCount">
+
+						0/300</div>
+
+
 				</div>
+
+
+
+				<!-- =========================
+                 모달 하단 버튼
+            ========================== -->
+
 				<div class="report-modal-footer">
+
+
 					<button type="button" class="report-cancel-btn"
-						data-modal-close="reportModal">취소</button>
+						id="cancelReportModal">취소</button>
+
+
 					<button type="submit" class="report-submit-btn">신고하기</button>
+
+
 				</div>
+
+
 			</form>
+
+
 		</div>
+
+
 	</div>
-	<jsp:include page="/common/footer.jsp" /></body>
+
+
+
+	<!-- =========================================================
+     Footer
+========================================================= -->
+
+	<jsp:include page="/common/footer.jsp" />
+
+
+
+	<!-- =========================================================
+     JS
+========================================================= -->
+
+	<script>
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function() {
+
+
+        const ctx = "<%=ctx%>";
+
+
+
+        /* =====================================
+           뒤로 가기
+        ====================================== */
+
+        const backButton =
+            document.getElementById(
+                "profileBackButton"
+            );
+
+
+        if (backButton) {
+
+            backButton.addEventListener(
+                "click",
+                function() {
+
+
+                    /*
+                     * 이전 페이지가 있는 경우
+                     */
+                    if (window.history.length > 1) {
+
+                        window.history.back();
+
+                    } else {
+
+                        /*
+                         * 주소창으로 직접 들어온 경우
+                         */
+                        window.location.href =
+                            ctx + "/schedules";
+                    }
+
+                }
+            );
+        }
+
+
+
+        /* =====================================
+           프로필 탭
+        ====================================== */
+
+        const tabs =
+            document.querySelectorAll(
+                "[data-profile-tab]"
+            );
+
+
+        const panels =
+            document.querySelectorAll(
+                "[data-profile-panel]"
+            );
+
+
+        tabs.forEach(
+            function(tab) {
+
+
+                tab.addEventListener(
+                    "click",
+                    function() {
+
+
+                        const target =
+                            tab.dataset.profileTab;
+
+
+
+                        /*
+                         * 모든 탭 비활성화
+                         */
+                        tabs.forEach(
+                            function(item) {
+
+                                item.classList.remove(
+                                    "active"
+                                );
+                            }
+                        );
+
+
+
+                        /*
+                         * 현재 탭 활성화
+                         */
+                        tab.classList.add(
+                            "active"
+                        );
+
+
+
+                        /*
+                         * 패널 전환
+                         */
+                        panels.forEach(
+                            function(panel) {
+
+
+                                if (
+                                    panel.dataset.profilePanel
+                                    === target
+                                ) {
+
+                                    panel.classList.remove(
+                                        "jsp-hidden"
+                                    );
+
+                                } else {
+
+                                    panel.classList.add(
+                                        "jsp-hidden"
+                                    );
+                                }
+
+                            }
+                        );
+
+                    }
+                );
+
+            }
+        );
+
+
+
+        /* =====================================
+           신고 모달
+        ====================================== */
+
+        const reportModal =
+            document.getElementById(
+                "reportModal"
+            );
+
+
+        const openReportModal =
+            document.getElementById(
+                "openReportModal"
+            );
+
+
+        const closeReportModal =
+            document.getElementById(
+                "closeReportModal"
+            );
+
+
+        const cancelReportModal =
+            document.getElementById(
+                "cancelReportModal"
+            );
+
+
+
+        function openModal() {
+
+            if (!reportModal) {
+                return;
+            }
+
+
+            reportModal.classList.add(
+                "open"
+            );
+
+
+            document.body.style.overflow =
+                "hidden";
+        }
+
+
+
+        function closeModal() {
+
+            if (!reportModal) {
+                return;
+            }
+
+
+            reportModal.classList.remove(
+                "open"
+            );
+
+
+            document.body.style.overflow =
+                "";
+        }
+
+
+
+        if (openReportModal) {
+
+            openReportModal.addEventListener(
+                "click",
+                openModal
+            );
+        }
+
+
+
+        if (closeReportModal) {
+
+            closeReportModal.addEventListener(
+                "click",
+                closeModal
+            );
+        }
+
+
+
+        if (cancelReportModal) {
+
+            cancelReportModal.addEventListener(
+                "click",
+                closeModal
+            );
+        }
+
+
+
+        /*
+         * 모달 바깥 클릭
+         */
+        if (reportModal) {
+
+            reportModal.addEventListener(
+                "click",
+                function(event) {
+
+
+                    if (
+                        event.target
+                        === reportModal
+                    ) {
+
+                        closeModal();
+                    }
+
+                }
+            );
+        }
+
+
+
+        /*
+         * ESC
+         */
+        document.addEventListener(
+            "keydown",
+            function(event) {
+
+
+                if (
+                    event.key === "Escape"
+                    && reportModal
+                    && reportModal.classList.contains(
+                        "open"
+                    )
+                ) {
+
+                    closeModal();
+                }
+
+            }
+        );
+
+
+
+        /* =====================================
+           신고 상세 글자 수
+        ====================================== */
+
+        const detail =
+            document.getElementById(
+                "profileReportDetail"
+            );
+
+
+        const charCount =
+            document.getElementById(
+                "profileReportCharCount"
+            );
+
+
+        if (detail && charCount) {
+
+            detail.addEventListener(
+                "input",
+                function() {
+
+
+                    charCount.textContent =
+                        detail.value.length
+                        + "/300";
+
+                }
+            );
+        }
+
+
+
+        /* =====================================
+           신고 Form
+
+           현재는 UI 동작만 처리.
+           나중에 /report Servlet과 연결.
+        ====================================== */
+
+        const reportForm =
+            document.getElementById(
+                "profileReportForm"
+            );
+
+
+        if (reportForm) {
+
+            reportForm.addEventListener(
+                "submit",
+                function(event) {
+
+
+                    event.preventDefault();
+
+
+                    const checked =
+                        reportForm.querySelector(
+                            'input[name="profileReportReason"]:checked'
+                        );
+
+
+                    if (!checked) {
+
+                        alert(
+                            "신고 사유를 선택해 주세요."
+                        );
+
+                        return;
+                    }
+
+
+                    /*
+                     * 현재 임시 처리
+                     *
+                     * 신고 DB 연동 시
+                     * 이 부분을 fetch 또는
+                     * form submit으로 변경
+                     */
+                    alert(
+                        "신고가 접수되었습니다."
+                    );
+
+
+                    reportForm.reset();
+
+
+                    if (charCount) {
+
+                        charCount.textContent =
+                            "0/300";
+                    }
+
+
+                    closeModal();
+
+                }
+            );
+        }
+
+
+    }
+);
+
+</script>
+
+
+</body>
+
 </html>

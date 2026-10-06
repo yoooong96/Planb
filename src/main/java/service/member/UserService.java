@@ -20,4 +20,5 @@ public interface UserService {
 	void signupGoogle(UserDto user) throws Exception;
 	void updateUser(UserDto user) throws Exception;
 	UserDto selectUser(String loginId) throws Exception;
+	UserDto getUserById(long userId) throws Exception;
 }

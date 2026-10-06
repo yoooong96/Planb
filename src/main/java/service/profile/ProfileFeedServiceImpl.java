@@ -28,5 +28,27 @@ public class ProfileFeedServiceImpl implements ProfileFeedService {
 	public List<ProfileFeedDto> getLikedItineraries(long userId) throws Exception {
 		return profileFeedDao.selectLikedItineraries(userId);
 	}
+	
+	@Override
+	public List<ProfileFeedDto> getPublicItineraries(
+	        long userId) throws Exception {
+
+	    return profileFeedDao.selectPublicItineraries(userId);
+	}
+	
+	@Override
+	public List<ProfileFeedDto> getPublicLikedItineraries(
+	        long userId) throws Exception {
+
+	    return profileFeedDao.selectPublicLikedItineraries(userId);
+	}
+
+
+	@Override
+	public List<ProfileFeedDto> getPublicBookmarkedItineraries(
+	        long userId) throws Exception {
+
+	    return profileFeedDao.selectPublicBookmarkedItineraries(userId);
+	}
 
 }
