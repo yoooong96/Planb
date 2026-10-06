@@ -12,95 +12,69 @@ request.setAttribute("activePage", "travel");
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title><c:out value="${itinerary.title}" /> | Planb</title>
 <jsp:include page="/common/headStyles.jsp" />
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/view/assets/css/travel/scheduleDetail.css?v=1">
 </head>
 <body class="site-shell"><jsp:include page="/common/header.jsp" />
-	<main class="relative"
-		style="height: calc(100vh - 68px); background: #f9f9fc; overflow: hidden">
-		<div class="absolute inset-0">
-			<div class="relative w-full h-full">
-				<div id="detailGoogleMap" class="w-full h-full"
-					style="background: #e8eef4"></div>
-				<div class="absolute top-4 right-4 z-20">
-					<button type="button"
-						class="flex items-center gap-2 min-w-[116px] justify-between rounded-xl border bg-white/95 px-3.5 py-2.5 text-xs font-bold shadow-lg backdrop-blur-sm transition-all hover:shadow-xl"
-						style="border-color: #D1D2F9; color: #6369D1">
-						<span class="flex items-center gap-2"><span
-							class="w-2 h-2 rounded-full" style="background: #6369D1"></span>전체</span>
-						<svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none"
-							stroke="currentColor" stroke-width="2.5">
-							<path d="m6 9 6 6 6-6" /></svg>
+	<main class="detail-layout">
+		<!-- 좌측: 일정 정보 -->
+		<aside id="detailInfoPanel" class="detail-info-panel">
+			<div class="detail-panel-header detail-info-header">
+				<!-- <div
+				class="sticky top-0 z-20 bg-white/90 backdrop-blur-sm border-b px-5 py-3 flex items-center gap-3"
+				style="border-color: #D1D2F9"> -->
+				<a href="${pageContext.request.contextPath}/schedules"
+					class="flex items-center gap-1.5 shrink-0 whitespace-nowrap text-[12.5px] font-semibold text-gray-500 hover:text-gray-900 transition-colors">
+					<svg class="w-4 h-4" fill="none" stroke="currentColor"
+						viewBox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round"
+							stroke-width="2" d="M15 19l-7-7 7-7" /></svg>목록으로
+				</a><span class="text-gray-300">|</span>
+				<nav
+					class="flex flex-1 items-center gap-1 text-[11.5px] text-gray-400 min-w-0 overflow-hidden whitespace-nowrap">
+					<a href="${pageContext.request.contextPath}/schedules"
+						class="hover:text-gray-600 shrink-0">여행일정</a> <span
+						class="shrink-0">›</span> <span
+						class="min-w-0 text-gray-700 font-medium truncate"> <c:out
+							value="${itinerary.title}" />
+					</span>
+				</nav>
+				<div class="ml-auto flex items-center gap-1.5 shrink-0">
+					<button
+						class="w-8 h-8 rounded-full border flex items-center justify-center text-gray-400 hover:text-gray-700 hover:border-gray-300 transition-all"
+						style="border-color: #D1D2F9" title="공유">
+						<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor"
+							viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round"
+								stroke-width="2"
+								d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" /></svg>
 					</button>
+					<c:if
+						test="${empty sessionScope.user or itinerary.userId ne sessionScope.user.userId}">
+
+						<button type="button" id="scheduleBookmarkButton"
+							data-bookmark-url="${pageContext.request.contextPath}/itinerary/bookmark"
+							data-itinerary-id="${itinerary.itineraryId}"
+							data-logged-in="${not empty sessionScope.user}"
+							data-login-url="${pageContext.request.contextPath}/auth/login"
+							aria-pressed="${itinerary.bookmarked}"
+							aria-label="${itinerary.bookmarked ? '북마크 해제' : '북마크 추가'}"
+							title="${itinerary.bookmarked ? '북마크 해제' : '북마크 추가'}"
+							class="w-8 h-8 rounded-full border flex items-center justify-center transition-all"
+							style="border-color: #D1D2F9; background: white">
+
+							<svg class="w-3.5 h-3.5" viewBox="0 0 24 24"
+								fill="${itinerary.bookmarked ? '#6369D1' : 'none'}"
+								stroke="#6369D1" stroke-width="2" aria-hidden="true">
+									<path stroke-linecap="round" stroke-linejoin="round"
+									d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+        						</svg>
+						</button>
+
+					</c:if>
 				</div>
 			</div>
-		</div>
-		<button id="detailPanelToggle" type="button"
-			class="absolute z-30 flex h-10 w-10 items-center justify-center rounded-full border bg-white shadow-lg transition-all duration-300"
-			style="top: 50%; left: 40%; transform: translate(-50%, -50%); border-color: #D1D2F9; color: #6369D1; transition-property: left, transform, box-shadow"
-			title="패널 접기" aria-label="패널 접기">
-			<svg class="h-4 w-4" fill="none" stroke="currentColor"
-				viewBox="0 0 24 24">
-				<path id="detailPanelChevron" stroke-linecap="round"
-					stroke-linejoin="round" stroke-width="2.5" d="M15 6l-6 6 6 6" /></svg>
-		</button>
-		<div id="detailLeftPanel"
-			class="absolute top-0 left-0 bottom-0 z-20 flex flex-col overflow-hidden"
-			style="width: 40%; transition: width .3s cubic-bezier(.4, 0, .2, 1); background: white; box-shadow: 4px 0 24px rgba(0, 0, 0, .12); pointer-events: auto">
-			<div class="overflow-y-auto flex-1 flex flex-col"
-				style="min-width: 340px">
-				<div
-					class="sticky top-0 z-20 bg-white/90 backdrop-blur-sm border-b px-5 py-3 flex items-center gap-3"
-					style="border-color: #D1D2F9">
-					<a href="${pageContext.request.contextPath}/schedules"
-						class="flex items-center gap-1.5 text-[12.5px] font-semibold text-gray-500 hover:text-gray-900 transition-colors"><svg
-							class="w-4 h-4" fill="none" stroke="currentColor"
-							viewBox="0 0 24 24">
-							<path stroke-linecap="round" stroke-linejoin="round"
-								stroke-width="2" d="M15 19l-7-7 7-7" /></svg>목록으로</a><span
-						class="text-gray-300">|</span>
-					<nav
-						class="flex items-center gap-1 text-[11.5px] text-gray-400 min-w-0">
-						<a href="${pageContext.request.contextPath}/schedules"
-							class="hover:text-gray-600 shrink-0">여행일정</a><span
-							class="shrink-0">›</span> <span
-							class="text-gray-700 font-medium truncate"> <c:out
-								value="${itinerary.title}" />
-						</span>
-					</nav>
-					<div class="ml-auto flex items-center gap-1.5 shrink-0">
-						<button
-							class="w-8 h-8 rounded-full border flex items-center justify-center text-gray-400 hover:text-gray-700 hover:border-gray-300 transition-all"
-							style="border-color: #D1D2F9" title="공유">
-							<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor"
-								viewBox="0 0 24 24">
-								<path stroke-linecap="round" stroke-linejoin="round"
-									stroke-width="2"
-									d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" /></svg>
-						</button>
-						<c:if
-							test="${empty sessionScope.user or itinerary.userId ne sessionScope.user.userId}">
-
-							<button type="button" id="scheduleBookmarkButton"
-								data-bookmark-url="${pageContext.request.contextPath}/itinerary/bookmark"
-								data-itinerary-id="${itinerary.itineraryId}"
-								data-logged-in="${not empty sessionScope.user}"
-								data-login-url="${pageContext.request.contextPath}/auth/login"
-								aria-pressed="${itinerary.bookmarked}"
-								aria-label="${itinerary.bookmarked ? '북마크 해제' : '북마크 추가'}"
-								title="${itinerary.bookmarked ? '북마크 해제' : '북마크 추가'}"
-								class="w-8 h-8 rounded-full border flex items-center justify-center transition-all"
-								style="border-color: #D1D2F9; background: white">
-
-								<svg class="w-3.5 h-3.5" viewBox="0 0 24 24"
-									fill="${itinerary.bookmarked ? '#6369D1' : 'none'}"
-									stroke="#6369D1" stroke-width="2" aria-hidden="true">
-									<path stroke-linecap="round" stroke-linejoin="round"
-										d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
-        						</svg>
-							</button>
-
-						</c:if>
-					</div>
-				</div>
+			<div class="detail-panel-body detail-info-body">
 				<div class="relative w-full overflow-hidden"
 					style="aspect-ratio: 16/7; flex-shrink: 0">
 					<c:choose>
@@ -344,31 +318,37 @@ request.setAttribute("activePage", "travel");
 						</div>
 					</div>
 				</div>
-				<div class="flex border-b sticky z-10"
-					style="border-color: #D1D2F9; top: 57px; background: white">
+			</div>
+		</aside>
 
-					<button type="button" data-detail-tab="schedule"
-						aria-selected="true" aria-controls="detailSchedulePanel"
-						class="flex-1 py-3 text-[12.5px] font-semibold relative transition-colors whitespace-nowrap"
-						style="color: #6369D1">
+		<!-- 가운데: 일정표·댓글 -->
+		<section id="detailContentPanel" class="detail-content-panel">
 
-						일정표 <span data-detail-tab-line
-							class="absolute bottom-0 left-0 right-0 h-[2.5px] rounded-t-full"
-							style="background: #6369D1"></span>
-					</button>
+			<div class="detail-panel-header detail-tabs-header">
 
-					<button type="button" data-detail-tab="comments"
-						aria-selected="false" aria-controls="detailCommentPanel"
-						class="flex-1 py-3 text-[12.5px] font-semibold relative transition-colors whitespace-nowrap"
-						style="color: #94a3b8">
+				<button type="button" data-detail-tab="schedule"
+					aria-selected="true" aria-controls="detailSchedulePanel"
+					class="flex-1 py-3 text-[12.5px] font-semibold relative transition-colors whitespace-nowrap"
+					style="color: #6369D1">
 
-						댓글 (<span id="scheduleCommentCount"><c:out
-								value="${itinerary.commentCount}" /></span>) <span
-							data-detail-tab-line
-							class="hidden absolute bottom-0 left-0 right-0 h-[2.5px] rounded-t-full"
-							style="background: #6369D1"></span>
-					</button>
-				</div>
+					일정표 <span data-detail-tab-line
+						class="absolute bottom-0 left-0 right-0 h-[2.5px] rounded-t-full"
+						style="background: #6369D1"></span>
+				</button>
+
+				<button type="button" data-detail-tab="comments"
+					aria-selected="false" aria-controls="detailCommentPanel"
+					class="flex-1 py-3 text-[12.5px] font-semibold relative transition-colors whitespace-nowrap"
+					style="color: #94a3b8">
+
+					댓글 (<span id="scheduleCommentCount"><c:out
+							value="${itinerary.commentCount}" /></span>) <span data-detail-tab-line
+						class="hidden absolute bottom-0 left-0 right-0 h-[2.5px] rounded-t-full"
+						style="background: #6369D1"></span>
+				</button>
+			</div>
+
+			<div class="detail-panel-body detail-content-body">
 				<section id="detailCommentPanel" class="hidden p-4"
 					data-itinerary-id="${itinerary.itineraryId}"
 					data-logged-in="${not empty sessionScope.user}"
@@ -433,7 +413,7 @@ request.setAttribute("activePage", "travel");
 
 												<c:otherwise>
 													<c:url var="commentProfileUrl"
-														value="/${comment.profileImg}" />
+														value="/profiles/${comment.profileImg}" />
 												</c:otherwise>
 											</c:choose>
 
@@ -470,16 +450,14 @@ request.setAttribute("activePage", "travel");
 										</c:if>
 									</div>
 
-									<p class="mt-1 text-[13px] text-gray-600"
-										style="white-space: pre-wrap; overflow-wrap: anywhere;">
-										<c:out value="${comment.content}" />
-									</p>
+									<p class="mt-1 text-[13px] text-gray-600" style="white-space: pre-wrap; overflow-wrap: anywhere;"><c:out value="${comment.content}" /></p>
 								</div>
 							</article>
 
 						</c:forEach>
 					</div>
 				</section>
+
 				<div id="detailSchedulePanel" class="p-4 space-y-3">
 					<div class="rounded-2xl border overflow-hidden"
 						style="border-color: #D1D2F9">
@@ -998,159 +976,40 @@ request.setAttribute("activePage", "travel");
 					</div>
 				</div>
 			</div>
-		</div>
+			<!-- detailSchedulePanel 종료 -->
+		</section>
+		<!-- 가운데 패널 종료 -->
+
+		<!-- 우측: 지도 -->
+		<section class="detail-map-panel" aria-label="여행 일정 지도">
+
+			<div class="detail-map-toolbar">
+				<span class="text-[13px] font-bold" style="color: #6369D1">
+					여행 경로 </span>
+
+				<button type="button"
+					class="flex items-center gap-2 rounded-xl border px-3 py-2 text-xs font-bold"
+					style="border-color: #D1D2F9; color: #6369D1">
+
+					<span class="w-2 h-2 rounded-full" style="background: #6369D1"></span>
+
+					전체
+
+					<svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+						stroke="currentColor" stroke-width="2">
+                    <path d="m6 9 6 6 6-6" />
+                </svg>
+				</button>
+			</div>
+
+			<div id="detailGoogleMap"></div>
+
+		</section>
 	</main>
-	<script>
-		(function() {
-			var panel = document.getElementById('detailLeftPanel'), btn = document
-					.getElementById('detailPanelToggle'), chev = document
-					.getElementById('detailPanelChevron'), open = true;
-			if (btn)
-				btn.addEventListener('click', function() {
-					open = !open;
-					panel.style.width = open ? '40%' : '0%';
-					panel.style.boxShadow = open ? '4px 0 24px rgba(0,0,0,.12)'
-							: 'none';
-					panel.style.pointerEvents = open ? 'auto' : 'none';
-					btn.style.left = open ? '40%' : '0';
-					btn.title = open ? '패널 접기' : '패널 펼치기';
-					btn.setAttribute('aria-label', btn.title);
-					chev.setAttribute('d', open ? 'M15 6l-6 6 6 6'
-							: 'M9 6l6 6-6 6');
-				});
-			var data = [
-					{
-						day : 1,
-						color : '#6369D1',
-						items : [ [ '제주공항 도착', 33.5069, 126.4927 ],
-								[ '흑돼지 맛집 점심', 33.4996, 126.5267 ],
-								[ '성산일출봉', 33.4582, 126.9427 ],
-								[ '광치기해변 산책', 33.4569, 126.9199 ] ]
-					},
-					{
-						day : 2,
-						color : '#ef4444',
-						items : [ [ '섭지코지 일출', 33.4265, 126.9303 ],
-								[ '카페 오션뷰', 33.2508, 126.5643 ],
-								[ '한라산 국립공원 트래킹', 33.3617, 126.5292 ],
-								[ '흑돼지거리 저녁', 33.4958, 126.5312 ] ]
-					},
-					{
-						day : 3,
-						color : '#10b981',
-						items : [ [ '협재해변', 33.3942, 126.2397 ],
-								[ '우도 당일치기', 33.5013, 126.9516 ] ]
-					} ];
-			function initDetailMap() {
-				if (!window.google || !google.maps
-						|| !document.getElementById('detailGoogleMap'))
-					return;
-				var all = [];
-				data.forEach(function(d) {
-					d.items.forEach(function(x) {
-						all.push({
-							lat : x[1],
-							lng : x[2]
-						})
-					})
-				});
-				var map = new google.maps.Map(document
-						.getElementById('detailGoogleMap'), {
-					center : {
-						lat : 33.38,
-						lng : 126.55
-					},
-					zoom : 11,
-					mapTypeControl : false,
-					streetViewControl : false,
-					fullscreenControl : false
-				});
-				var bounds = new google.maps.LatLngBounds();
-				all.forEach(function(c) {
-					bounds.extend(c)
-				});
-				map.fitBounds(bounds, 48);
-				var ds = new google.maps.DirectionsService(), num = 1;
-				data
-						.forEach(function(d) {
-							d.items
-									.forEach(function(x) {
-										var svg = encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28"><circle cx="14" cy="14" r="12" fill="'+d.color+'" stroke="white" stroke-width="2.5"/><text x="14" y="19" text-anchor="middle" font-size="11" font-weight="bold" font-family="Arial,sans-serif" fill="white">'
-												+ (num++) + '</text></svg>');
-										new google.maps.Marker(
-												{
-													position : {
-														lat : x[1],
-														lng : x[2]
-													},
-													map : map,
-													icon : {
-														url : 'data:image/svg+xml;charset=UTF-8,'
-																+ svg,
-														scaledSize : new google.maps.Size(
-																28, 28),
-														anchor : new google.maps.Point(
-																14, 14)
-													},
-													title : x[0]
-												});
-									});
-							if (d.items.length > 1) {
-								ds
-										.route(
-												{
-													origin : {
-														lat : d.items[0][1],
-														lng : d.items[0][2]
-													},
-													destination : {
-														lat : d.items[d.items.length - 1][1],
-														lng : d.items[d.items.length - 1][2]
-													},
-													waypoints : d.items
-															.slice(1, -1)
-															.map(
-																	function(x) {
-																		return {
-																			location : {
-																				lat : x[1],
-																				lng : x[2]
-																			},
-																			stopover : true
-																		}
-																	}),
-													travelMode : google.maps.TravelMode.DRIVING,
-													optimizeWaypoints : false
-												},
-												function(res, status) {
-													if (status === 'OK' && res)
-														new google.maps.Polyline(
-																{
-																	path : res.routes[0].overview_path,
-																	strokeColor : d.color,
-																	strokeOpacity : .88,
-																	strokeWeight : 5,
-																	map : map
-																});
-												});
-							}
-						});
-			}
-			window.initDetailMap = initDetailMap;
-			if (window.google && google.maps)
-				initDetailMap();
-			else {
-				var sc = document.createElement('script');
-				sc.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyB7ioaQS08aAzCl7gZPk6SyE1w7EeIrYhI&language=ko&loading=async&callback=initDetailMap';
-				sc.async = true;
-				document.head.appendChild(sc);
-			}
-		})();
-	</script>
 	<script
 		src="${pageContext.request.contextPath}/view/assets/js/auth/tripily.js"></script>
 
 	<script
-		src="${pageContext.request.contextPath}/view/assets/js/travel/scheduleDetail.js?v=3"></script>
+		src="${pageContext.request.contextPath}/view/assets/js/travel/scheduleDetail.js?v=5"></script>
 </body>
 </html>

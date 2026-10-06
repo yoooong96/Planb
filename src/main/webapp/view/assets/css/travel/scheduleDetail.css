@@ -1,0 +1,281 @@
+@charset "UTF-8";
+.detail-layout {
+	display: grid;
+	grid-template-columns: 300px minmax(380px, 1fr) 400px;
+	height: calc(100vh - 68px);
+	min-height: 0;
+	overflow: hidden;
+	background: #f5f6fa;
+	color: #272838;
+}
+
+.detail-layout, .detail-layout * {
+	box-sizing: border-box;
+}
+
+.detail-info-panel {
+	background: #fff;
+	border-right: 1px solid #e8e9f2;
+}
+
+.detail-content-panel {
+	background: #f7f8fc;
+	border-right: 1px solid #e8e9f2;
+}
+
+/* 대표 사진 */
+.detail-info-body>.relative {
+	aspect-ratio: 16/10 !important;
+}
+
+/* 제목과 여행 정보 */
+.detail-info-body>.px-5 {
+	padding-left: 16px;
+	padding-right: 16px;
+}
+
+.detail-info-panel h1 {
+	font-size: 17px;
+	line-height: 1.45;
+	letter-spacing: -.4px;
+	margin-bottom: 7px;
+	overflow-wrap: anywhere;
+}
+
+.detail-info-panel h1+p {
+	font-size: 12px;
+	line-height: 1.7;
+	color: #7c8092;
+	margin-bottom: 12px;
+	overflow-wrap: anywhere;
+}
+
+/* 정보 배지 */
+.detail-info-panel .flex.flex-wrap.gap-2 {
+	gap: 6px;
+}
+
+.detail-info-panel .flex.flex-wrap.gap-2>span {
+	padding: 5px 9px;
+	font-size: 11px;
+	border-radius: 9px;
+}
+
+/* 일정표 내부 간격 */
+#detailSchedulePanel {
+	padding: 16px;
+}
+
+#detailSchedulePanel>.rounded-2xl {
+	border-color: #e4e6f0 !important;
+	border-radius: 14px;
+	background: white;
+	box-shadow: 0 3px 12px rgba(35, 39, 70, .035);
+	margin-bottom: 14px;
+}
+
+#detailSchedulePanel>.rounded-2xl>.cursor-pointer {
+	padding: 12px 14px;
+}
+
+#detailSchedulePanel .font-black {
+	letter-spacing: -.25px;
+}
+
+/* 댓글 영역 */
+#detailCommentPanel {
+	padding: 16px;
+}
+
+#detailCommentPanel>.rounded-2xl {
+	border-radius: 14px;
+	border-color: #e2e4ef !important;
+	background: white !important;
+	padding: 14px;
+	transition: border-color .15s ease, box-shadow .15s ease;
+}
+
+#detailCommentPanel>.rounded-2xl:focus-within {
+	border-color: #9396e8 !important;
+	box-shadow: 0 0 0 3px rgba(99, 105, 209, .08);
+}
+
+#scheduleCommentContent {
+	min-height: 90px !important;
+	font-size: 12px;
+	line-height: 1.7;
+	color: #34364a;
+}
+
+#scheduleCommentContent::placeholder {
+	color: #a0a4b7;
+}
+
+#scheduleCommentSubmit {
+	padding: 7px 18px;
+	font-size: 12px;
+	border-radius: 9px;
+}
+
+#scheduleCommentSubmit:disabled {
+	opacity: .45;
+	cursor: default;
+}
+
+#scheduleCommentList>article {
+	padding: 14px;
+	margin-top: 10px;
+	gap: 10px;
+	border: 1px solid #e9eaf2;
+	border-radius: 12px;
+	background: white;
+}
+
+#scheduleCommentList>article>.rounded-full {
+	width: 34px;
+	height: 34px;
+}
+
+#scheduleCommentList article p {
+	font-size: 12px;
+	line-height: 1.75;
+}
+
+/* 우측 지도 */
+.detail-map-panel {
+	display: flex;
+	flex-direction: column;
+	min-width: 0;
+	min-height: 0;
+	background: #e8eef4;
+}
+
+.detail-map-toolbar {
+	
+}
+
+.detail-map-toolbar>span {
+	font-size: 12px;
+}
+
+.detail-map-toolbar button {
+	padding: 6px 10px;
+	border-radius: 9px;
+	background: #fafaff;
+	font-size: 11px;
+}
+
+#detailGoogleMap {
+	flex: 1;
+	min-height: 0;
+	width: 100%;
+}
+
+/* 버튼 조작 표시 */
+.detail-layout button {
+	cursor: pointer;
+}
+
+.detail-layout button:disabled {
+	cursor: default;
+}
+
+.detail-layout button:focus-visible, .detail-layout a:focus-visible {
+	outline: 2px solid #9396e8;
+	outline-offset: 3px;
+}
+
+@media ( max-width : 1280px) {
+	.detail-layout {
+		grid-template-columns: 270px minmax(340px, 1fr) 340px;
+	}
+	#detailSchedulePanel, #detailCommentPanel {
+		padding: 12px;
+	}
+}
+
+@media ( max-width : 1000px) {
+	.detail-layout {
+		grid-template-columns: 250px minmax(320px, 1fr) 300px;
+		overflow-x: auto;
+	}
+}
+/* 버튼과 짧은 정보는 한 줄로 표시 */
+.detail-info-panel button, .detail-map-toolbar button, [data-detail-tab],
+	.detail-info-panel .flex.flex-wrap.gap-2>span {
+	white-space: nowrap;
+}
+
+/* 좁은 좌측 패널에서는 경로 표시를 숨겨 버튼 공간 확보 */
+@media ( max-width : 1280px) {
+	.detail-info-header nav, .detail-info-header>.text-gray-300 {
+		display: none;
+	}
+}
+/* 패널 전체는 스크롤하지 않음 */
+.detail-info-panel, .detail-content-panel, .detail-map-panel {
+	display: flex;
+	flex-direction: column;
+	min-width: 0;
+	min-height: 0;
+	overflow: hidden;
+}
+
+/* 세 헤더 높이 통일 */
+.detail-panel-header, .detail-map-toolbar {
+	display: flex;
+	align-items: center;
+	flex: 0 0 52px;
+	height: 52px;
+	min-height: 52px;
+	padding: 0 14px;
+	background: #fff;
+	border-bottom: 1px solid #e8e9f2;
+	box-sizing: border-box;
+}
+
+.detail-info-header {
+	gap: 8px;
+}
+
+.detail-map-toolbar {
+	justify-content: space-between;
+	gap: 10px;
+}
+
+/* 탭은 헤더 높이를 모두 사용 */
+.detail-tabs-header {
+	padding: 0;
+}
+
+.detail-tabs-header>button {
+	align-self: stretch;
+	min-width: 0;
+	padding: 0 12px;
+	font-size: 12px;
+	white-space: nowrap;
+}
+
+.detail-tabs-header>button[aria-selected="true"] {
+	background: #f5f4ff;
+}
+
+/* 헤더 아래 본문에만 스크롤 적용 */
+.detail-panel-body {
+	flex: 1 1 0;
+	min-width: 0;
+	min-height: 0;
+	overflow-y: auto;
+	overscroll-behavior: contain;
+	scrollbar-width: thin;
+	scrollbar-color: #d3d5e5 transparent;
+}
+
+.detail-panel-body::-webkit-scrollbar {
+	width: 5px;
+}
+
+.detail-panel-body::-webkit-scrollbar-thumb {
+	background: #d3d5e5;
+	border-radius: 10px;
+}
