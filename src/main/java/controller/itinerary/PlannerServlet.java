@@ -15,6 +15,8 @@ import com.google.gson.Gson;
 
 import dto.itinerary.ItineraryDto;
 import dto.member.UserDto;
+import service.exchange.ExchangeRateService;
+import service.exchange.ExchangeRateServiceImpl;
 import service.itinerary.ItineraryCartService;
 import service.itinerary.ItineraryCartServiceImpl;
 import service.itinerary.ItineraryService;
@@ -26,11 +28,13 @@ public class PlannerServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     private ItineraryService itineraryService;
+    private ExchangeRateService exchangeRateService;
     private ItineraryCartService itineraryCartService;
     private Gson gson;
 
     public PlannerServlet() {
         itineraryService = new ItineraryServiceImpl();
+        exchangeRateService = new ExchangeRateServiceImpl();
         itineraryCartService = new ItineraryCartServiceImpl();
         gson = new Gson();
     }
@@ -87,6 +91,17 @@ public class PlannerServlet extends HttpServlet {
             request.setAttribute(
                     "importListJson",
                     gson.toJson(importList)
+            );
+
+            /*
+             * 환율은 DB의 마지막 갱신시각을 확인하고,
+             * 1시간 이상 지났을 때만 외부 API를 다시 호출한다.
+             */
+            request.setAttribute(
+                    "exchangeRatesJson",
+                    gson.toJson(
+                            exchangeRateService.getExchangeRates()
+                    )
             );
 
 

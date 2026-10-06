@@ -35,6 +35,9 @@
 		<!-- 콘텐츠 -->
 		<typeAlias type="dto.content.ContentViewLogDto" alias="contentViewLog"/>
 		
+		<!--  환율  -->
+		<typeAlias type="dto.exchange.ExchangeRateDto" alias="exchangeRate"/>
+		
 		
 		<!-- 여행 일정 -->
 		<typeAlias type="dto.itinerary.ItineraryDto" alias="itinerary"/>
@@ -102,6 +105,9 @@
 	
 	    <!-- 콘텐츠 -->
 	    <mapper resource="mapper/content/contentViewLog.xml"/>
+	    
+	    <!--  환율  -->
+		<mapper resource="mapper/exchange/exchangeRate.xml"/>
 	
 	    <!-- 여행 일정 -->
 	    <mapper resource="mapper/itinerary/itinerary.xml"/>

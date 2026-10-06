@@ -265,6 +265,42 @@ request.setAttribute("activePage", "planner");
         min-height: 42px;
     }
 
+
+    .planner-cost-field {
+        width: min(100%, 340px);
+        margin-right: auto;
+        justify-content: flex-start;
+        gap: 10px;
+    }
+
+    .planner-cost-mode-btn {
+        flex: 0 0 auto;
+        min-width: 88px;
+        height: 30px;
+        padding: 0 12px;
+        border: none;
+        border-radius: 10px;
+        background: #6369D1;
+        color: #FFFFFF;
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 1;
+        cursor: pointer;
+    }
+
+    .planner-item-cost {
+        text-align: right;
+    }
+
+    .planner-cost-unit {
+        color: #111827;
+    }
+
+    .planner-foreign-cost {
+        color: #9CA3AF;
+        white-space: nowrap;
+    }
+
     .planner-memo-field {
         flex: 1 1 auto;
         min-height: 72px;
@@ -1186,6 +1222,7 @@ request.setAttribute("activePage", "planner");
                         </svg>
                         <span class="text-xs font-semibold" style="color: #92720A">총 예상 예산</span>
                         <span id="plannerTotalBudget" class="text-sm font-black" style="color: #78590A">0원</span>
+                        <span id="plannerTotalBudgetForeign" class="text-xs font-semibold text-gray-400">—</span>
                     </div>
                     <button id="plannerToggleAllDays" type="button" title="모두 닫기" class="ml-auto flex items-center justify-center text-gray-500 hover:text-gray-700 w-8 h-8 rounded-lg border border-gray-200 hover:border-gray-300 transition-all">⇅</button>
                 </div>
@@ -1257,10 +1294,11 @@ request.setAttribute("activePage", "planner");
                                                 </div>
                                             </div>
 
-                                            <div class="planner-field rounded-lg border border-gray-200 flex items-center gap-2 px-3 bg-white">
+                                            <div class="planner-field planner-cost-field rounded-lg border border-gray-200 flex items-center px-3 bg-white">
+                                                <button type="button" class="planner-cost-mode-btn" data-cost-type="PER_PERSON">1인당 요금</button>
                                                 <input class="planner-item-cost w-24 min-w-0 outline-none bg-transparent text-sm font-semibold text-gray-800" value="15000" inputmode="numeric">
-                                                <span class="text-xs font-semibold text-gray-400">원</span>
-                                                <span class="planner-foreign-cost ml-auto text-xs text-indigo-400 font-semibold">1,284 엔</span>
+                                                <span class="planner-cost-unit text-xs font-semibold">원</span>
+                                                <span class="planner-foreign-cost ml-auto text-xs font-semibold">—</span>
                                             </div>
 
                                             <div class="planner-field planner-place-field rounded-lg border border-gray-200 flex items-center gap-2 px-3 bg-white">
@@ -1568,6 +1606,7 @@ request.setAttribute("activePage", "planner");
                                     placeLat:block.placeLat,
                                     placeLng:block.placeLng,
                                     cost:block.cost==null ? 0 : block.cost,
+                                    costType:block.costType||'TOTAL',
                                     note:block.memo||''
                                 };
                             })
@@ -1670,6 +1709,7 @@ request.setAttribute("activePage", "planner");
                     refreshCountryStatus();
                     refreshRegionOptions(true);
                     centerMapOnPlannerCountry(meta.country);
+                    syncForeignCosts();
                 }
 
                 if(region && meta.region){
@@ -2265,7 +2305,115 @@ request.setAttribute("activePage", "planner");
             }
             $$('[data-photo-gallery]').forEach(setupPhotoGallery);
 
-            function syncBudget(){ var total=0; $$('.planner-item-cost').forEach(function(i){total+=parseInt(i.value.replace(/[^0-9]/g,''),10)||0;}); var out=$('#plannerTotalBudget'); if(out) out.textContent=money(total); }
+            function getPlannerCurrencyCode(){
+                var input=$('#plannerCountry');
+                if(!input) return '';
+
+                var country=findPlannerCountry(input.value);
+                return country && country.currency
+                    ? country.currency
+                    : '';
+            }
+
+            function formatPlannerForeignAmount(value){
+                if(!isFinite(value)) return '—';
+
+                return new Intl.NumberFormat(
+                    'ko-KR',
+                    {maximumFractionDigits:0}
+                ).format(Math.ceil(value));
+            }
+
+            function getPlannerTravelerCount(){
+                var traveler=$('#plannerTravelerCount');
+                var count=traveler
+                    ? parseInt(traveler.value,10)
+                    : 1;
+
+                if(!Number.isFinite(count) || count<1){
+                    count=1;
+                }
+
+                return count;
+            }
+
+            function getPlannerCardCostType(card){
+                if(!card) return 'PER_PERSON';
+                return card.dataset.costType==='TOTAL'
+                    ? 'TOTAL'
+                    : 'PER_PERSON';
+            }
+
+            function getPlannerActualBlockCost(card){
+                if(!card) return 0;
+
+                var costInput=$('.planner-item-cost',card);
+                var amount=costInput
+                    ? (parseInt(String(costInput.value||'').replace(/[^0-9]/g,''),10)||0)
+                    : 0;
+
+                if(getPlannerCardCostType(card)==='PER_PERSON'){
+                    amount*=getPlannerTravelerCount();
+                }
+
+                return amount;
+            }
+
+            function syncForeignCosts(){
+                var currencyCode=getPlannerCurrencyCode();
+                var rate=currencyCode
+                    ? Number(PLANNER_EXCHANGE_RATES[currencyCode])
+                    : NaN;
+
+                $$('.planner-block-card').forEach(function(card){
+                    var cost=$('.planner-item-cost',card);
+                    var foreign=$('.planner-foreign-cost',card);
+
+                    if(!foreign) return;
+
+                    if(!currencyCode || !isFinite(rate)){
+                        foreign.textContent='—';
+                        return;
+                    }
+
+                    var krw=cost
+                        ? (parseInt(cost.value.replace(/[^0-9]/g,''),10)||0)
+                        : 0;
+
+                    foreign.textContent=
+                        formatPlannerForeignAmount(krw*rate)
+                        +' '+getPlannerCurrencyLabel(currencyCode);
+                });
+            }
+
+            function syncBudget(){
+                var total=0;
+
+                $$('.planner-block-card').forEach(function(card){
+                    total+=getPlannerActualBlockCost(card);
+                });
+
+                var out=$('#plannerTotalBudget');
+                if(out) out.textContent=money(total);
+
+                var foreignTotal=$('#plannerTotalBudgetForeign');
+                if(foreignTotal){
+                    var currencyCode=getPlannerCurrencyCode();
+                    var rate=currencyCode
+                        ? Number(PLANNER_EXCHANGE_RATES[currencyCode])
+                        : NaN;
+
+                    foreignTotal.textContent=
+                        currencyCode && isFinite(rate)
+                            ? '≈ '
+                                + formatPlannerForeignAmount(total*rate)
+                                + ' '
+                                + getPlannerCurrencyLabel(currencyCode)
+                            : '—';
+                }
+
+                syncForeignCosts();
+            }
             syncBudget();
 
             function clearEmptyHint(dayBody){
@@ -2296,6 +2444,13 @@ request.setAttribute("activePage", "planner");
                 if(start) start.value=prefill.startTime||'';
                 if(end) end.value=prefill.endTime||'';
                 if(cost) cost.value=prefill.cost||'';
+                var costModeBtn=$('.planner-cost-mode-btn',card);
+                var costType=prefill.costType || card.dataset.costType || 'PER_PERSON';
+                card.dataset.costType=costType;
+                if(costModeBtn){
+                    costModeBtn.dataset.costType=costType;
+                    costModeBtn.textContent=costType==='TOTAL' ? '전체 요금' : '1인당 요금';
+                }
                 if(place){
                     place.value=
                         prefill.placeName
@@ -2378,17 +2533,17 @@ request.setAttribute("activePage", "planner");
 
                         var startIndex=$$('.planner-day').indexOf(day);
                         if(d.kind==='item'){
-                            addBlockToDay(day,{sourceBlockId:d.item.sourceBlockId||null,title:d.item.name,type:d.item.type,startTime:d.item.time||'',endTime:d.item.endTime||'',cost:d.item.cost||'',place:d.item.location||'',googlePlaceId:d.item.googlePlaceId||'',placeName:d.item.placeName||'',placeAddress:d.item.placeAddress||'',placeLat:d.item.placeLat,placeLng:d.item.placeLng,note:d.item.note||''});
+                            addBlockToDay(day,{sourceBlockId:d.item.sourceBlockId||null,title:d.item.name,type:d.item.type,startTime:d.item.time||'',endTime:d.item.endTime||'',cost:d.item.cost||'',costType:d.item.costType||'TOTAL',place:d.item.location||'',googlePlaceId:d.item.googlePlaceId||'',placeName:d.item.placeName||'',placeAddress:d.item.placeAddress||'',placeLat:d.item.placeLat,placeLng:d.item.placeLng,note:d.item.note||''});
                             toast('일정 블록 1개를 가져왔습니다.');
                         } else if(d.kind==='day'){
-                            (d.day.items||[]).forEach(function(item){addBlockToDay(day,{sourceBlockId:item.sourceBlockId||null,title:item.name,type:item.type,startTime:item.time||'',endTime:item.endTime||'',cost:item.cost||'',place:item.location||'',googlePlaceId:item.googlePlaceId||'',placeName:item.placeName||'',placeAddress:item.placeAddress||'',placeLat:item.placeLat,placeLng:item.placeLng,note:item.note||''});});
+                            (d.day.items||[]).forEach(function(item){addBlockToDay(day,{sourceBlockId:item.sourceBlockId||null,title:item.name,type:item.type,startTime:item.time||'',endTime:item.endTime||'',cost:item.cost||'',costType:item.costType||'TOTAL',place:item.location||'',googlePlaceId:item.googlePlaceId||'',placeName:item.placeName||'',placeAddress:item.placeAddress||'',placeLat:item.placeLat,placeLng:item.placeLng,note:item.note||''});});
                             toast('D'+d.day.dayNum+' 일정을 가져왔습니다.');
                         } else if(d.kind==='plan'){
                             var schedules=d.plan.daySchedules||[];
                             var needed=Math.max(1,schedules.length);
                             while($$('.planner-day').length < startIndex + needed){ $('#plannerAddDay').click(); }
                             var targets=$$('.planner-day');
-                            schedules.forEach(function(ds,di){(ds.items||[]).forEach(function(item){addBlockToDay(targets[startIndex+di],{sourceBlockId:item.sourceBlockId||null,title:item.name,type:item.type,startTime:item.time||'',endTime:item.endTime||'',cost:item.cost||'',place:item.location||'',googlePlaceId:item.googlePlaceId||'',placeName:item.placeName||'',placeAddress:item.placeAddress||'',placeLat:item.placeLat,placeLng:item.placeLng,note:item.note||''});});});
+                            schedules.forEach(function(ds,di){(ds.items||[]).forEach(function(item){addBlockToDay(targets[startIndex+di],{sourceBlockId:item.sourceBlockId||null,title:item.name,type:item.type,startTime:item.time||'',endTime:item.endTime||'',cost:item.cost||'',costType:item.costType||'TOTAL',place:item.location||'',googlePlaceId:item.googlePlaceId||'',placeName:item.placeName||'',placeAddress:item.placeAddress||'',placeLat:item.placeLat,placeLng:item.placeLng,note:item.note||''});});});
                             toast('Day '+(startIndex+1)+'부터 '+needed+'개 Day를 가져왔습니다.');
                         }
                     }catch(err){
@@ -3341,7 +3496,26 @@ request.setAttribute("activePage", "planner");
                     if(btn.dataset.itemType===card.dataset.itemType) btn.classList.add('is-selected');
                     btn.addEventListener('click',function(){ var cfg=TYPE_CONFIG[btn.dataset.itemType]; card.dataset.itemType=btn.dataset.itemType; $$('.planner-type-btn',card).forEach(function(x){x.classList.toggle('is-selected',x===btn)}); if(badge){badge.textContent=cfg.label;badge.style.background=cfg.bg;badge.style.color=cfg.color;} markDirty(); });
                 });
-                var cost=$('.planner-item-cost',card); if(cost) cost.addEventListener('input',function(){cost.value=cost.value.replace(/[^0-9]/g,'');syncBudget();markDirty();});
+                var cost=$('.planner-item-cost',card);
+                if(cost) cost.addEventListener('input',function(){
+                    cost.value=cost.value.replace(/[^0-9]/g,'');
+                    syncBudget();
+                    markDirty();
+                });
+
+                var costModeBtn=$('.planner-cost-mode-btn',card);
+                if(costModeBtn){
+                    costModeBtn.addEventListener('click',function(){
+                        var current=getPlannerCardCostType(card);
+                        var next=current==='PER_PERSON' ? 'TOTAL' : 'PER_PERSON';
+                        card.dataset.costType=next;
+                        costModeBtn.dataset.costType=next;
+                        costModeBtn.textContent=next==='TOTAL' ? '전체 요금' : '1인당 요금';
+                        syncBudget();
+                        markDirty();
+                    });
+                }
+
                 $$('input,textarea',card).forEach(function(el){ if(el!==cost) el.addEventListener('input',markDirty); });
 
                 setupPlannerPlaceSearch(card);
@@ -3550,6 +3724,26 @@ request.setAttribute("activePage", "planner");
             var mf=$('#plannerMapFilterBtn'); if(mf) mf.addEventListener('click',function(e){e.stopPropagation();$('#plannerMapFilterMenu').classList.toggle('hidden')}); document.addEventListener('click',function(e){var m=$('#plannerMapFilterMenu');if(m&&!e.target.closest('#plannerMapFilterBtn')&&!e.target.closest('#plannerMapFilterMenu'))m.classList.add('hidden')}); bindMapOptions();
 
             /*
+             * /planner Servlet이 DB에서 넘긴 KRW 기준 환율.
+             * 1 KRW = rates[통화코드] 형태입니다.
+             */
+            var PLANNER_EXCHANGE_RATES=
+                ${empty exchangeRatesJson ? '{}' : exchangeRatesJson};
+
+            /*
+             * 환율 표시용 통화 한글명.
+             * DB/API에서는 ISO 통화코드를 그대로 사용하고,
+             * 화면에서만 한글 화폐단위로 변환한다.
+             */
+            var PLANNER_CURRENCY_LABELS={"AED":"디르함","AFN":"아프가니스탄 아프가니","ALL":"알바니아 레크","AMD":"아르메니아 드람","AOA":"앙골라 콴자","ARS":"아르헨티나 페소","AUD":"호주 달러","AWG":"아루바 플로린","AZN":"아제르바이잔 마나트","BAM":"보스니아-헤르체고비나 태환 마르크","BBD":"바베이도스 달러","BDT":"방글라데시 타카","BGN":"불가리아 레프","BHD":"바레인 디나르","BIF":"부룬디 프랑","BMD":"버뮤다 달러","BND":"부루나이 달러","BOB":"볼리비아 볼리비아노","BRL":"헤알","BSD":"바하마 달러","BWP":"보츠와나 풀라","BYN":"벨라루스 루블","BZD":"벨리즈 달러","CAD":"캐나다 달러","CDF":"콩고 프랑","CHF":"프랑","CLP":"칠레 페소","CNY":"위안","COP":"콜롬비아 페소","CRC":"코스타리카 콜론","CUP":"쿠바 페소","CVE":"카보베르데 에스쿠도","CZK":"체코 코루나","DJF":"지부티 프랑","DKK":"덴마크 크로네","DOP":"도미니카 페소","DZD":"알제리 디나르","EGP":"이집트 파운드","ERN":"에리트리아 나크파","ETB":"에티오피아 비르","EUR":"유로","FJD":"피지 달러","FKP":"포클랜드제도 파운드","GBP":"파운드","GEL":"조지아 라리","GHS":"가나 세디","GIP":"지브롤터 파운드","GMD":"감비아 달라시","GNF":"기니 프랑","GTQ":"과테말라 케트살","GYD":"가이아나 달러","HKD":"홍콩 달러","HNL":"온두라스 렘피라","HTG":"아이티 구르드","HUF":"헝가리 포린트","IDR":"루피아","ILS":"이스라엘 신권 세켈","INR":"루피","IQD":"이라크 디나르","IRR":"이란 리얄","ISK":"아이슬란드 크로나","JMD":"자메이카 달러","JOD":"요르단 디나르","JPY":"엔","KES":"케냐 실링","KGS":"키르기스스탄 솜","KHR":"캄보디아 리엘","KMF":"코모르 프랑","KPW":"조선 민주주의 인민 공화국 원","KRW":"원","KWD":"쿠웨이트 디나르","KYD":"케이맨 제도 달러","KZT":"카자흐스탄 텡게","LAK":"라오스 키프","LBP":"레바논 파운드","LKR":"스리랑카 루피","LRD":"라이베리아 달러","LYD":"리비아 디나르","MAD":"모로코 디르함","MDL":"몰도바 레이","MGA":"마다가스카르 아리아리","MKD":"마케도니아 디나르","MMK":"미얀마 키얏","MNT":"몽골 투그릭","MOP":"마카오 파타카","MRU":"모리타니 우기야","MUR":"모리셔스 루피","MVR":"몰디브 제도 루피아","MWK":"말라위 콰차","MXN":"멕시코 페소","MYR":"링깃","MZN":"모잠비크 메티칼","NGN":"나이지리아 나이라","NIO":"니카라과 코르도바","NOK":"노르웨이 크로네","NPR":"네팔 루피","NZD":"뉴질랜드 달러","OMR":"오만 리알","PAB":"파나마 발보아","PEN":"페루 솔","PGK":"파푸아뉴기니 키나","PHP":"페소","PKR":"파키스탄 루피","PLN":"폴란드 즈워티","PYG":"파라과이 과라니","QAR":"카타르 리얄","RON":"루마니아 레우","RSD":"세르비아 디나르","RUB":"루블","RWF":"르완다 프랑","SAR":"리얄","SBD":"솔로몬 제도 달러","SCR":"세이셸 루피","SDG":"수단 파운드","SEK":"스웨덴 크로나","SGD":"싱가포르 달러","SHP":"세인트헬레나 파운드","SLE":"시에라리온 리온","SOS":"소말리아 실링","SRD":"수리남 달러","SSP":"남수단 파운드","STN":"상투메 프린시페 도브라","SYP":"시리아 파운드","SZL":"스와질란드 릴랑게니","THB":"바트","TJS":"타지키스탄 소모니","TMT":"투르크메니스탄 마나트","TND":"튀니지 디나르","TOP":"통가 파앙가","TRY":"리라","TTD":"트리니다드 토바고 달러","TWD":"대만 달러","TZS":"탄자니아 실링","UAH":"우크라이나 그리브나","UGX":"우간다 실링","USD":"달러","UYU":"우루과이 페소","UZS":"우즈베키스탄 숨","VES":"베네수엘라 볼리바르","VND":"동","VUV":"바누아투 바투","WST":"서 사모아 탈라","XAF":"중앙아프리카 CFA 프랑","XCD":"동카리브 달러","XCG":"XCG","XOF":"서아프리카 CFA 프랑","XPF":"CFP 프랑","YER":"예멘 리알","ZAR":"랜드","ZMW":"잠비아 콰차"};
+
+            function getPlannerCurrencyLabel(currencyCode){
+                return PLANNER_CURRENCY_LABELS[currencyCode]
+                    || currencyCode
+                    || '';
+            }
+
+            /*
              * 국가 선택 시 지도 중심 이동용 좌표.
              * 별도 Geocoding/Routes API를 호출하지 않는다.
              */
@@ -3591,7 +3785,7 @@ request.setAttribute("activePage", "planner");
                 }
             }
 
-            var PLANNER_COUNTRIES=[{"code": "GH", "name": "가나"}, {"code": "GA", "name": "가봉"}, {"code": "GY", "name": "가이아나"}, {"code": "GM", "name": "감비아"}, {"code": "GG", "name": "건지"}, {"code": "GP", "name": "과들루프"}, {"code": "GT", "name": "과테말라"}, {"code": "GU", "name": "괌"}, {"code": "GD", "name": "그레나다"}, {"code": "GR", "name": "그리스"}, {"code": "GL", "name": "그린란드"}, {"code": "GN", "name": "기니"}, {"code": "GW", "name": "기니비사우"}, {"code": "NA", "name": "나미비아"}, {"code": "NR", "name": "나우루"}, {"code": "NG", "name": "나이지리아"}, {"code": "AQ", "name": "남극 대륙"}, {"code": "SS", "name": "남수단"}, {"code": "ZA", "name": "남아프리카"}, {"code": "NL", "name": "네덜란드"}, {"code": "BQ", "name": "네덜란드령 카리브"}, {"code": "NP", "name": "네팔"}, {"code": "NO", "name": "노르웨이"}, {"code": "NF", "name": "노퍽섬"}, {"code": "NZ", "name": "뉴질랜드"}, {"code": "NC", "name": "뉴칼레도니아"}, {"code": "NU", "name": "니우에"}, {"code": "NE", "name": "니제르"}, {"code": "NI", "name": "니카라과"}, {"code": "TW", "name": "대만"}, {"code": "KR", "name": "대한민국"}, {"code": "DK", "name": "덴마크"}, {"code": "DM", "name": "도미니카"}, {"code": "DO", "name": "도미니카 공화국"}, {"code": "DE", "name": "독일"}, {"code": "TL", "name": "동티모르"}, {"code": "LA", "name": "라오스"}, {"code": "LR", "name": "라이베리아"}, {"code": "LV", "name": "라트비아"}, {"code": "RU", "name": "러시아"}, {"code": "LB", "name": "레바논"}, {"code": "LS", "name": "레소토"}, {"code": "RE", "name": "레위니옹"}, {"code": "RO", "name": "루마니아"}, {"code": "LU", "name": "룩셈부르크"}, {"code": "RW", "name": "르완다"}, {"code": "LY", "name": "리비아"}, {"code": "LT", "name": "리투아니아"}, {"code": "LI", "name": "리히텐슈타인"}, {"code": "MG", "name": "마다가스카르"}, {"code": "MQ", "name": "마르티니크"}, {"code": "MH", "name": "마셜 제도"}, {"code": "YT", "name": "마요트"}, {"code": "MO", "name": "마카오(중국 특별행정구)"}, {"code": "MW", "name": "말라위"}, {"code": "MY", "name": "말레이시아"}, {"code": "ML", "name": "말리"}, {"code": "IM", "name": "맨섬"}, {"code": "MX", "name": "멕시코"}, {"code": "MC", "name": "모나코"}, {"code": "MA", "name": "모로코"}, {"code": "MU", "name": "모리셔스"}, {"code": "MR", "name": "모리타니"}, {"code": "MZ", "name": "모잠비크"}, {"code": "ME", "name": "몬테네그로"}, {"code": "MS", "name": "몬트세라트"}, {"code": "MD", "name": "몰도바"}, {"code": "MV", "name": "몰디브"}, {"code": "MT", "name": "몰타"}, {"code": "MN", "name": "몽골"}, {"code": "US", "name": "미국"}, {"code": "VI", "name": "미국령 버진아일랜드"}, {"code": "UM", "name": "미국령 해외 제도"}, {"code": "MM", "name": "미얀마"}, {"code": "FM", "name": "미크로네시아"}, {"code": "VU", "name": "바누아투"}, {"code": "BH", "name": "바레인"}, {"code": "BB", "name": "바베이도스"}, {"code": "VA", "name": "바티칸 시국"}, {"code": "BS", "name": "바하마"}, {"code": "BD", "name": "방글라데시"}, {"code": "BM", "name": "버뮤다"}, {"code": "BJ", "name": "베냉"}, {"code": "VE", "name": "베네수엘라"}, {"code": "VN", "name": "베트남"}, {"code": "BE", "name": "벨기에"}, {"code": "BY", "name": "벨라루스"}, {"code": "BZ", "name": "벨리즈"}, {"code": "BA", "name": "보스니아 헤르체고비나"}, {"code": "BW", "name": "보츠와나"}, {"code": "BO", "name": "볼리비아"}, {"code": "BI", "name": "부룬디"}, {"code": "BF", "name": "부르키나파소"}, {"code": "BV", "name": "부베섬"}, {"code": "BT", "name": "부탄"}, {"code": "MP", "name": "북마리아나제도"}, {"code": "MK", "name": "북마케도니아"}, {"code": "KP", "name": "북한"}, {"code": "BG", "name": "불가리아"}, {"code": "BR", "name": "브라질"}, {"code": "BN", "name": "브루나이"}, {"code": "WS", "name": "사모아"}, {"code": "SA", "name": "사우디아라비아"}, {"code": "GS", "name": "사우스조지아 사우스샌드위치 제도"}, {"code": "SM", "name": "산마리노"}, {"code": "ST", "name": "상투메 프린시페"}, {"code": "MF", "name": "생마르탱"}, {"code": "BL", "name": "생바르텔레미"}, {"code": "PM", "name": "생피에르 미클롱"}, {"code": "EH", "name": "서사하라"}, {"code": "SN", "name": "세네갈"}, {"code": "RS", "name": "세르비아"}, {"code": "SC", "name": "세이셸"}, {"code": "LC", "name": "세인트루시아"}, {"code": "VC", "name": "세인트빈센트그레나딘"}, {"code": "KN", "name": "세인트키츠 네비스"}, {"code": "SH", "name": "세인트헬레나"}, {"code": "SO", "name": "소말리아"}, {"code": "SB", "name": "솔로몬 제도"}, {"code": "SD", "name": "수단"}, {"code": "SR", "name": "수리남"}, {"code": "LK", "name": "스리랑카"}, {"code": "SJ", "name": "스발바르제도-얀마웬섬"}, {"code": "SE", "name": "스웨덴"}, {"code": "CH", "name": "스위스"}, {"code": "ES", "name": "스페인"}, {"code": "SK", "name": "슬로바키아"}, {"code": "SI", "name": "슬로베니아"}, {"code": "SY", "name": "시리아"}, {"code": "SL", "name": "시에라리온"}, {"code": "SX", "name": "신트마르턴"}, {"code": "SG", "name": "싱가포르"}, {"code": "AE", "name": "아랍에미리트"}, {"code": "AW", "name": "아루바"}, {"code": "AM", "name": "아르메니아"}, {"code": "AR", "name": "아르헨티나"}, {"code": "AS", "name": "아메리칸 사모아"}, {"code": "IS", "name": "아이슬란드"}, {"code": "HT", "name": "아이티"}, {"code": "IE", "name": "아일랜드"}, {"code": "AZ", "name": "아제르바이잔"}, {"code": "AF", "name": "아프가니스탄"}, {"code": "AD", "name": "안도라"}, {"code": "AL", "name": "알바니아"}, {"code": "DZ", "name": "알제리"}, {"code": "AO", "name": "앙골라"}, {"code": "AG", "name": "앤티가 바부다"}, {"code": "AI", "name": "앵귈라"}, {"code": "ER", "name": "에리트리아"}, {"code": "SZ", "name": "에스와티니"}, {"code": "EE", "name": "에스토니아"}, {"code": "EC", "name": "에콰도르"}, {"code": "ET", "name": "에티오피아"}, {"code": "SV", "name": "엘살바도르"}, {"code": "GB", "name": "영국"}, {"code": "VG", "name": "영국령 버진아일랜드"}, {"code": "IO", "name": "영국령 인도양 지역"}, {"code": "YE", "name": "예멘"}, {"code": "OM", "name": "오만"}, {"code": "AU", "name": "오스트레일리아"}, {"code": "AT", "name": "오스트리아"}, {"code": "HN", "name": "온두라스"}, {"code": "AX", "name": "올란드 제도"}, {"code": "WF", "name": "왈리스-푸투나 제도"}, {"code": "JO", "name": "요르단"}, {"code": "UG", "name": "우간다"}, {"code": "UY", "name": "우루과이"}, {"code": "UZ", "name": "우즈베키스탄"}, {"code": "UA", "name": "우크라이나"}, {"code": "IQ", "name": "이라크"}, {"code": "IR", "name": "이란"}, {"code": "IL", "name": "이스라엘"}, {"code": "EG", "name": "이집트"}, {"code": "IT", "name": "이탈리아"}, {"code": "IN", "name": "인도"}, {"code": "ID", "name": "인도네시아"}, {"code": "JP", "name": "일본"}, {"code": "JM", "name": "자메이카"}, {"code": "ZM", "name": "잠비아"}, {"code": "JE", "name": "저지"}, {"code": "GQ", "name": "적도 기니"}, {"code": "GE", "name": "조지아"}, {"code": "CN", "name": "중국"}, {"code": "CF", "name": "중앙 아프리카 공화국"}, {"code": "DJ", "name": "지부티"}, {"code": "GI", "name": "지브롤터"}, {"code": "ZW", "name": "짐바브웨"}, {"code": "TD", "name": "차드"}, {"code": "CZ", "name": "체코"}, {"code": "CL", "name": "칠레"}, {"code": "CM", "name": "카메룬"}, {"code": "CV", "name": "카보베르데"}, {"code": "KZ", "name": "카자흐스탄"}, {"code": "QA", "name": "카타르"}, {"code": "KH", "name": "캄보디아"}, {"code": "CA", "name": "캐나다"}, {"code": "KE", "name": "케냐"}, {"code": "KY", "name": "케이맨 제도"}, {"code": "KM", "name": "코모로"}, {"code": "CR", "name": "코스타리카"}, {"code": "CC", "name": "코코스 제도"}, {"code": "CI", "name": "코트디부아르"}, {"code": "CO", "name": "콜롬비아"}, {"code": "CG", "name": "콩고-브라자빌"}, {"code": "CD", "name": "콩고-킨샤사"}, {"code": "CU", "name": "쿠바"}, {"code": "KW", "name": "쿠웨이트"}, {"code": "CK", "name": "쿡 제도"}, {"code": "CW", "name": "퀴라소"}, {"code": "HR", "name": "크로아티아"}, {"code": "CX", "name": "크리스마스섬"}, {"code": "KG", "name": "키르기스스탄"}, {"code": "KI", "name": "키리바시"}, {"code": "CY", "name": "키프로스"}, {"code": "TJ", "name": "타지키스탄"}, {"code": "TZ", "name": "탄자니아"}, {"code": "TH", "name": "태국"}, {"code": "TC", "name": "터크스 케이커스 제도"}, {"code": "TG", "name": "토고"}, {"code": "TK", "name": "토켈라우"}, {"code": "TO", "name": "통가"}, {"code": "TM", "name": "투르크메니스탄"}, {"code": "TV", "name": "투발루"}, {"code": "TN", "name": "튀니지"}, {"code": "TR", "name": "튀르키예"}, {"code": "TT", "name": "트리니다드 토바고"}, {"code": "PA", "name": "파나마"}, {"code": "PY", "name": "파라과이"}, {"code": "PK", "name": "파키스탄"}, {"code": "PG", "name": "파푸아뉴기니"}, {"code": "PW", "name": "팔라우"}, {"code": "PS", "name": "팔레스타인 지구"}, {"code": "FO", "name": "페로 제도"}, {"code": "PE", "name": "페루"}, {"code": "PT", "name": "포르투갈"}, {"code": "FK", "name": "포클랜드 제도"}, {"code": "PL", "name": "폴란드"}, {"code": "PR", "name": "푸에르토리코"}, {"code": "FR", "name": "프랑스"}, {"code": "GF", "name": "프랑스령 기아나"}, {"code": "TF", "name": "프랑스령 남방 지역"}, {"code": "PF", "name": "프랑스령 폴리네시아"}, {"code": "FJ", "name": "피지"}, {"code": "FI", "name": "핀란드"}, {"code": "PH", "name": "필리핀"}, {"code": "PN", "name": "핏케언 제도"}, {"code": "HM", "name": "허드 맥도널드 제도"}, {"code": "HU", "name": "헝가리"}, {"code": "HK", "name": "홍콩(중국 특별행정구)"}];
+            var PLANNER_COUNTRIES=[{"code":"GH","name":"가나","currency":"GHS"},{"code":"GA","name":"가봉","currency":"XAF"},{"code":"GY","name":"가이아나","currency":"GYD"},{"code":"GM","name":"감비아","currency":"GMD"},{"code":"GG","name":"건지","currency":"GBP"},{"code":"GP","name":"과들루프","currency":"EUR"},{"code":"GT","name":"과테말라","currency":"GTQ"},{"code":"GU","name":"괌","currency":"USD"},{"code":"GD","name":"그레나다","currency":"XCD"},{"code":"GR","name":"그리스","currency":"EUR"},{"code":"GL","name":"그린란드","currency":"DKK"},{"code":"GN","name":"기니","currency":"GNF"},{"code":"GW","name":"기니비사우","currency":"XOF"},{"code":"NA","name":"나미비아","currency":"ZAR"},{"code":"NR","name":"나우루","currency":"AUD"},{"code":"NG","name":"나이지리아","currency":"NGN"},{"code":"AQ","name":"남극 대륙","currency":"USD"},{"code":"SS","name":"남수단","currency":"SSP"},{"code":"ZA","name":"남아프리카","currency":"ZAR"},{"code":"NL","name":"네덜란드","currency":"EUR"},{"code":"BQ","name":"네덜란드령 카리브","currency":"USD"},{"code":"NP","name":"네팔","currency":"NPR"},{"code":"NO","name":"노르웨이","currency":"NOK"},{"code":"NF","name":"노퍽섬","currency":"AUD"},{"code":"NZ","name":"뉴질랜드","currency":"NZD"},{"code":"NC","name":"뉴칼레도니아","currency":"XPF"},{"code":"NU","name":"니우에","currency":"NZD"},{"code":"NE","name":"니제르","currency":"XOF"},{"code":"NI","name":"니카라과","currency":"NIO"},{"code":"TW","name":"대만","currency":"TWD"},{"code":"KR","name":"대한민국","currency":"KRW"},{"code":"DK","name":"덴마크","currency":"DKK"},{"code":"DM","name":"도미니카","currency":"XCD"},{"code":"DO","name":"도미니카 공화국","currency":"DOP"},{"code":"DE","name":"독일","currency":"EUR"},{"code":"TL","name":"동티모르","currency":"USD"},{"code":"LA","name":"라오스","currency":"LAK"},{"code":"LR","name":"라이베리아","currency":"LRD"},{"code":"LV","name":"라트비아","currency":"EUR"},{"code":"RU","name":"러시아","currency":"RUB"},{"code":"LB","name":"레바논","currency":"LBP"},{"code":"LS","name":"레소토","currency":"ZAR"},{"code":"RE","name":"레위니옹","currency":"EUR"},{"code":"RO","name":"루마니아","currency":"RON"},{"code":"LU","name":"룩셈부르크","currency":"EUR"},{"code":"RW","name":"르완다","currency":"RWF"},{"code":"LY","name":"리비아","currency":"LYD"},{"code":"LT","name":"리투아니아","currency":"EUR"},{"code":"LI","name":"리히텐슈타인","currency":"CHF"},{"code":"MG","name":"마다가스카르","currency":"MGA"},{"code":"MQ","name":"마르티니크","currency":"EUR"},{"code":"MH","name":"마셜 제도","currency":"USD"},{"code":"YT","name":"마요트","currency":"EUR"},{"code":"MO","name":"마카오(중국 특별행정구)","currency":"MOP"},{"code":"MW","name":"말라위","currency":"MWK"},{"code":"MY","name":"말레이시아","currency":"MYR"},{"code":"ML","name":"말리","currency":"XOF"},{"code":"IM","name":"맨섬","currency":"GBP"},{"code":"MX","name":"멕시코","currency":"MXN"},{"code":"MC","name":"모나코","currency":"EUR"},{"code":"MA","name":"모로코","currency":"MAD"},{"code":"MU","name":"모리셔스","currency":"MUR"},{"code":"MR","name":"모리타니","currency":"MRU"},{"code":"MZ","name":"모잠비크","currency":"MZN"},{"code":"ME","name":"몬테네그로","currency":"EUR"},{"code":"MS","name":"몬트세라트","currency":"XCD"},{"code":"MD","name":"몰도바","currency":"MDL"},{"code":"MV","name":"몰디브","currency":"MVR"},{"code":"MT","name":"몰타","currency":"EUR"},{"code":"MN","name":"몽골","currency":"MNT"},{"code":"US","name":"미국","currency":"USD"},{"code":"VI","name":"미국령 버진아일랜드","currency":"USD"},{"code":"UM","name":"미국령 해외 제도","currency":"USD"},{"code":"MM","name":"미얀마","currency":"MMK"},{"code":"FM","name":"미크로네시아","currency":"USD"},{"code":"VU","name":"바누아투","currency":"VUV"},{"code":"BH","name":"바레인","currency":"BHD"},{"code":"BB","name":"바베이도스","currency":"BBD"},{"code":"VA","name":"바티칸 시국","currency":"EUR"},{"code":"BS","name":"바하마","currency":"BSD"},{"code":"BD","name":"방글라데시","currency":"BDT"},{"code":"BM","name":"버뮤다","currency":"BMD"},{"code":"BJ","name":"베냉","currency":"XOF"},{"code":"VE","name":"베네수엘라","currency":"VES"},{"code":"VN","name":"베트남","currency":"VND"},{"code":"BE","name":"벨기에","currency":"EUR"},{"code":"BY","name":"벨라루스","currency":"BYN"},{"code":"BZ","name":"벨리즈","currency":"BZD"},{"code":"BA","name":"보스니아 헤르체고비나","currency":"BAM"},{"code":"BW","name":"보츠와나","currency":"BWP"},{"code":"BO","name":"볼리비아","currency":"BOB"},{"code":"BI","name":"부룬디","currency":"BIF"},{"code":"BF","name":"부르키나파소","currency":"XOF"},{"code":"BV","name":"부베섬","currency":"NOK"},{"code":"BT","name":"부탄","currency":"INR"},{"code":"MP","name":"북마리아나제도","currency":"USD"},{"code":"MK","name":"북마케도니아","currency":"MKD"},{"code":"KP","name":"북한","currency":"KPW"},{"code":"BG","name":"불가리아","currency":"BGN"},{"code":"BR","name":"브라질","currency":"BRL"},{"code":"BN","name":"브루나이","currency":"BND"},{"code":"WS","name":"사모아","currency":"WST"},{"code":"SA","name":"사우디아라비아","currency":"SAR"},{"code":"GS","name":"사우스조지아 사우스샌드위치 제도","currency":"GBP"},{"code":"SM","name":"산마리노","currency":"EUR"},{"code":"ST","name":"상투메 프린시페","currency":"STN"},{"code":"MF","name":"생마르탱","currency":"EUR"},{"code":"BL","name":"생바르텔레미","currency":"EUR"},{"code":"PM","name":"생피에르 미클롱","currency":"EUR"},{"code":"EH","name":"서사하라","currency":"MAD"},{"code":"SN","name":"세네갈","currency":"XOF"},{"code":"RS","name":"세르비아","currency":"RSD"},{"code":"SC","name":"세이셸","currency":"SCR"},{"code":"LC","name":"세인트루시아","currency":"XCD"},{"code":"VC","name":"세인트빈센트그레나딘","currency":"XCD"},{"code":"KN","name":"세인트키츠 네비스","currency":"XCD"},{"code":"SH","name":"세인트헬레나","currency":"SHP"},{"code":"SO","name":"소말리아","currency":"SOS"},{"code":"SB","name":"솔로몬 제도","currency":"SBD"},{"code":"SD","name":"수단","currency":"SDG"},{"code":"SR","name":"수리남","currency":"SRD"},{"code":"LK","name":"스리랑카","currency":"LKR"},{"code":"SJ","name":"스발바르제도-얀마웬섬","currency":"NOK"},{"code":"SE","name":"스웨덴","currency":"SEK"},{"code":"CH","name":"스위스","currency":"CHF"},{"code":"ES","name":"스페인","currency":"EUR"},{"code":"SK","name":"슬로바키아","currency":"EUR"},{"code":"SI","name":"슬로베니아","currency":"EUR"},{"code":"SY","name":"시리아","currency":"SYP"},{"code":"SL","name":"시에라리온","currency":"SLE"},{"code":"SX","name":"신트마르턴","currency":"XCG"},{"code":"SG","name":"싱가포르","currency":"SGD"},{"code":"AE","name":"아랍에미리트","currency":"AED"},{"code":"AW","name":"아루바","currency":"AWG"},{"code":"AM","name":"아르메니아","currency":"AMD"},{"code":"AR","name":"아르헨티나","currency":"ARS"},{"code":"AS","name":"아메리칸 사모아","currency":"USD"},{"code":"IS","name":"아이슬란드","currency":"ISK"},{"code":"HT","name":"아이티","currency":"HTG"},{"code":"IE","name":"아일랜드","currency":"EUR"},{"code":"AZ","name":"아제르바이잔","currency":"AZN"},{"code":"AF","name":"아프가니스탄","currency":"AFN"},{"code":"AD","name":"안도라","currency":"EUR"},{"code":"AL","name":"알바니아","currency":"ALL"},{"code":"DZ","name":"알제리","currency":"DZD"},{"code":"AO","name":"앙골라","currency":"AOA"},{"code":"AG","name":"앤티가 바부다","currency":"XCD"},{"code":"AI","name":"앵귈라","currency":"XCD"},{"code":"ER","name":"에리트리아","currency":"ERN"},{"code":"SZ","name":"에스와티니","currency":"SZL"},{"code":"EE","name":"에스토니아","currency":"EUR"},{"code":"EC","name":"에콰도르","currency":"USD"},{"code":"ET","name":"에티오피아","currency":"ETB"},{"code":"SV","name":"엘살바도르","currency":"USD"},{"code":"GB","name":"영국","currency":"GBP"},{"code":"VG","name":"영국령 버진아일랜드","currency":"USD"},{"code":"IO","name":"영국령 인도양 지역","currency":"USD"},{"code":"YE","name":"예멘","currency":"YER"},{"code":"OM","name":"오만","currency":"OMR"},{"code":"AU","name":"오스트레일리아","currency":"AUD"},{"code":"AT","name":"오스트리아","currency":"EUR"},{"code":"HN","name":"온두라스","currency":"HNL"},{"code":"AX","name":"올란드 제도","currency":"EUR"},{"code":"WF","name":"왈리스-푸투나 제도","currency":"XPF"},{"code":"JO","name":"요르단","currency":"JOD"},{"code":"UG","name":"우간다","currency":"UGX"},{"code":"UY","name":"우루과이","currency":"UYU"},{"code":"UZ","name":"우즈베키스탄","currency":"UZS"},{"code":"UA","name":"우크라이나","currency":"UAH"},{"code":"IQ","name":"이라크","currency":"IQD"},{"code":"IR","name":"이란","currency":"IRR"},{"code":"IL","name":"이스라엘","currency":"ILS"},{"code":"EG","name":"이집트","currency":"EGP"},{"code":"IT","name":"이탈리아","currency":"EUR"},{"code":"IN","name":"인도","currency":"INR"},{"code":"ID","name":"인도네시아","currency":"IDR"},{"code":"JP","name":"일본","currency":"JPY"},{"code":"JM","name":"자메이카","currency":"JMD"},{"code":"ZM","name":"잠비아","currency":"ZMW"},{"code":"JE","name":"저지","currency":"GBP"},{"code":"GQ","name":"적도 기니","currency":"XAF"},{"code":"GE","name":"조지아","currency":"GEL"},{"code":"CN","name":"중국","currency":"CNY"},{"code":"CF","name":"중앙 아프리카 공화국","currency":"XAF"},{"code":"DJ","name":"지부티","currency":"DJF"},{"code":"GI","name":"지브롤터","currency":"GIP"},{"code":"ZW","name":"짐바브웨","currency":"USD"},{"code":"TD","name":"차드","currency":"XAF"},{"code":"CZ","name":"체코","currency":"CZK"},{"code":"CL","name":"칠레","currency":"CLP"},{"code":"CM","name":"카메룬","currency":"XAF"},{"code":"CV","name":"카보베르데","currency":"CVE"},{"code":"KZ","name":"카자흐스탄","currency":"KZT"},{"code":"QA","name":"카타르","currency":"QAR"},{"code":"KH","name":"캄보디아","currency":"KHR"},{"code":"CA","name":"캐나다","currency":"CAD"},{"code":"KE","name":"케냐","currency":"KES"},{"code":"KY","name":"케이맨 제도","currency":"KYD"},{"code":"KM","name":"코모로","currency":"KMF"},{"code":"CR","name":"코스타리카","currency":"CRC"},{"code":"CC","name":"코코스 제도","currency":"AUD"},{"code":"CI","name":"코트디부아르","currency":"XOF"},{"code":"CO","name":"콜롬비아","currency":"COP"},{"code":"CG","name":"콩고-브라자빌","currency":"XAF"},{"code":"CD","name":"콩고-킨샤사","currency":"CDF"},{"code":"CU","name":"쿠바","currency":"CUP"},{"code":"KW","name":"쿠웨이트","currency":"KWD"},{"code":"CK","name":"쿡 제도","currency":"NZD"},{"code":"CW","name":"퀴라소","currency":"XCG"},{"code":"HR","name":"크로아티아","currency":"EUR"},{"code":"CX","name":"크리스마스섬","currency":"AUD"},{"code":"KG","name":"키르기스스탄","currency":"KGS"},{"code":"KI","name":"키리바시","currency":"AUD"},{"code":"CY","name":"키프로스","currency":"EUR"},{"code":"TJ","name":"타지키스탄","currency":"TJS"},{"code":"TZ","name":"탄자니아","currency":"TZS"},{"code":"TH","name":"태국","currency":"THB"},{"code":"TC","name":"터크스 케이커스 제도","currency":"USD"},{"code":"TG","name":"토고","currency":"XOF"},{"code":"TK","name":"토켈라우","currency":"NZD"},{"code":"TO","name":"통가","currency":"TOP"},{"code":"TM","name":"투르크메니스탄","currency":"TMT"},{"code":"TV","name":"투발루","currency":"AUD"},{"code":"TN","name":"튀니지","currency":"TND"},{"code":"TR","name":"튀르키예","currency":"TRY"},{"code":"TT","name":"트리니다드 토바고","currency":"TTD"},{"code":"PA","name":"파나마","currency":"PAB"},{"code":"PY","name":"파라과이","currency":"PYG"},{"code":"PK","name":"파키스탄","currency":"PKR"},{"code":"PG","name":"파푸아뉴기니","currency":"PGK"},{"code":"PW","name":"팔라우","currency":"USD"},{"code":"PS","name":"팔레스타인 지구","currency":"ILS"},{"code":"FO","name":"페로 제도","currency":"DKK"},{"code":"PE","name":"페루","currency":"PEN"},{"code":"PT","name":"포르투갈","currency":"EUR"},{"code":"FK","name":"포클랜드 제도","currency":"FKP"},{"code":"PL","name":"폴란드","currency":"PLN"},{"code":"PR","name":"푸에르토리코","currency":"USD"},{"code":"FR","name":"프랑스","currency":"EUR"},{"code":"GF","name":"프랑스령 기아나","currency":"EUR"},{"code":"TF","name":"프랑스령 남방 지역","currency":"EUR"},{"code":"PF","name":"프랑스령 폴리네시아","currency":"XPF"},{"code":"FJ","name":"피지","currency":"FJD"},{"code":"FI","name":"핀란드","currency":"EUR"},{"code":"PH","name":"필리핀","currency":"PHP"},{"code":"PN","name":"핏케언 제도","currency":"NZD"},{"code":"HM","name":"허드 맥도널드 제도","currency":"AUD"},{"code":"HU","name":"헝가리","currency":"HUF"},{"code":"HK","name":"홍콩(중국 특별행정구)","currency":"HKD"}];
             var PLANNER_REGION_MAP={"대한민국": ["서울", "부산", "인천", "대구", "대전", "광주", "울산", "경기", "강원", "충북", "충남", "전북", "전남", "경북", "경남", "제주"], "일본": ["도쿄", "오사카", "교토", "후쿠오카", "삿포로", "나고야", "오키나와", "나라", "고베", "요코하마"], "중국": ["베이징", "상하이", "광저우", "선전", "칭다오", "청두", "시안", "항저우"], "대만": ["타이베이", "가오슝", "타이중", "타이난", "화롄"], "태국": ["방콕", "치앙마이", "푸껫", "파타야", "끄라비"], "베트남": ["하노이", "호찌민", "다낭", "나트랑", "호이안", "푸꾸옥"], "미국": ["뉴욕", "로스앤젤레스", "샌프란시스코", "라스베이거스", "시애틀", "시카고", "보스턴", "하와이"], "프랑스": ["파리", "니스", "리옹", "마르세유", "보르도"], "이탈리아": ["로마", "밀라노", "피렌체", "베네치아", "나폴리"], "스페인": ["마드리드", "바르셀로나", "세비야", "발렌시아"], "영국": ["런던", "에든버러", "맨체스터", "리버풀"], "독일": ["베를린", "뮌헨", "프랑크푸르트", "함부르크"], "싱가포르": ["싱가포르"], "말레이시아": ["쿠알라룸푸르", "코타키나발루", "페낭", "말라카"], "인도네시아": ["발리", "자카르타", "욕야카르타", "롬복"], "필리핀": ["마닐라", "세부", "보라카이", "보홀"], "호주": ["시드니", "멜버른", "브리즈번", "골드코스트", "퍼스"], "캐나다": ["밴쿠버", "토론토", "몬트리올", "퀘벡"]};
 
             function normalizePlannerText(v){ return String(v||'').trim(); }
@@ -3705,6 +3899,7 @@ request.setAttribute("activePage", "planner");
                         updateCountryClear();
                         filterPlans();
                         centerMapOnPlannerCountry(c.name);
+                        syncForeignCosts();
                         markDirty();
                     });
 
@@ -3862,6 +4057,8 @@ request.setAttribute("activePage", "planner");
                             plannerCountryInput.value
                         );
                     }
+
+                    syncForeignCosts();
                 });
             }
             if(plannerCountryClear){
@@ -3875,6 +4072,7 @@ request.setAttribute("activePage", "planner");
                     filterPlans();
                     plannerCountryDropdown.classList.add('hidden');
                     plannerCountryInput.focus();
+                    syncForeignCosts();
                     markDirty();
                 });
             }
@@ -4071,6 +4269,7 @@ request.setAttribute("activePage", "planner");
                                 : null,
                             blockType:plannerBlockTypeToDb(card.dataset.itemType),
                             blockOrder:blockIndex+1,
+                            costType:getPlannerCardCostType(card),
                             title:title ? title.value.trim() : '',
                             memo:memo ? memo.value.trim() : '',
                             cost:cost && cost.value ? Number(cost.value) : 0,
@@ -4493,6 +4692,8 @@ request.setAttribute("activePage", "planner");
                     if(!Number.isFinite(n) || n<1) n=1;
                     if(n>99) n=99;
                     travelerCountInput.value=String(n);
+                    syncBudget();
+                    markDirty();
                 });
             }
 

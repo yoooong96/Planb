@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.exchange.exchangeRate">
+
+    <select id="selectAll" resultType="dto.exchange.ExchangeRateDto">
+        SELECT
+            currency_code,
+            rate,
+            updated_at
+        FROM TB_EXCHANGE_RATE
+        ORDER BY currency_code
+    </select>
+
+    <select id="selectLatestUpdatedAt" resultType="java.sql.Timestamp">
+        SELECT MAX(updated_at)
+        FROM TB_EXCHANGE_RATE
+    </select>
+
+    <insert id="upsert" parameterType="dto.exchange.ExchangeRateDto">
+        INSERT INTO TB_EXCHANGE_RATE (
+            currency_code,
+            rate,
+            updated_at
+        )
+        VALUES (
+            #{currencyCode},
+            #{rate},
+            #{updatedAt}
+        )
+        ON DUPLICATE KEY UPDATE
+            rate = VALUES(rate),
+            updated_at = VALUES(updated_at)
+    </insert>
+
+</mapper>

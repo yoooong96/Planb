@@ -23,7 +23,8 @@ public class ItineraryBlockDto {
     private Integer blockOrder;            // DAY 내부 블록 순서
     private String title;                  // 표시 제목
     private String memo;                   // 상세 메모
-    private BigDecimal cost;               // 비용
+    private BigDecimal cost;               // 입력 비용
+    private String costType;                // PER_PERSON / TOTAL
 
     private Time startTime;                // 시작 시간
     private Time endTime;                  // 종료 시간
@@ -138,6 +139,14 @@ public class ItineraryBlockDto {
         this.cost = cost;
     }
 
+    public String getCostType() {
+        return costType;
+    }
+
+    public void setCostType(String costType) {
+        this.costType = costType;
+    }
+
     public Time getStartTime() {
         return startTime;
     }
@@ -177,6 +186,7 @@ public class ItineraryBlockDto {
                 + ", title=" + title
                 + ", memo=" + memo
                 + ", cost=" + cost
+                + ", costType=" + costType
                 + ", startTime=" + startTime
                 + ", endTime=" + endTime
                 + ", images=" + images + "]";

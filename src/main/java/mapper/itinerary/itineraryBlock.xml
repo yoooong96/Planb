@@ -25,6 +25,7 @@
             title,
             memo,
             cost,
+            cost_type,
             start_time,
             end_time
         )
@@ -41,6 +42,7 @@
             #{title},
             #{memo},
             #{cost},
+            #{costType},
             #{startTime},
             #{endTime}
         )
@@ -67,6 +69,7 @@
             title,
             memo,
             cost,
+            cost_type,
             start_time,
             end_time
         FROM TB_ITINERARY_BLOCK
@@ -93,6 +96,7 @@
             title = #{title},
             memo = #{memo},
             cost = #{cost},
+            cost_type = #{costType},
             start_time = #{startTime},
             end_time = #{endTime}
         WHERE block_id = #{blockId}
