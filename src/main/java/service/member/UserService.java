@@ -9,6 +9,7 @@ public interface UserService {
 	UserDto login(String id, String password) throws Exception;
 	boolean checkUserId(String id) throws Exception;
 	boolean withdraw(long userId, String password) throws Exception;
+	void withdraw(long userId) throws Exception;
 	Long findPasswordUser(String loginId, String name, String email, String phone) throws Exception;
 	void resetPassword(long userId, String password) throws Exception;
 	void changePassword(long userId, String currentPassword, String newPassword) throws Exception;

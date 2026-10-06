@@ -10,15 +10,21 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import dto.member.UserDto;
 import service.email.EmailService;
 import service.member.UserService;
 import service.member.UserServiceImpl;
 
 /**
- * Servlet implementation class emailSend
+ * 이메일 인증번호 발송
+ *
+ * 회원가입: /auth/emailSend
+ *
+ * 회원탈퇴: /auth/emailSend purpose=withdraw
  */
 @WebServlet("/auth/emailSend")
 public class emailSend extends HttpServlet {
+
 	private static final long serialVersionUID = 1L;
 
 	private UserService userService = new UserServiceImpl();
@@ -28,101 +34,223 @@ public class emailSend extends HttpServlet {
 	private SecureRandom random = new SecureRandom();
 
 	public emailSend() {
+
 		super();
-		// TODO Auto-generated constructor stub
+
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
+	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+
+		request.setCharacterEncoding("UTF-8");
+
+		response.setContentType("application/json; charset=UTF-8");
+
 		String email = request.getParameter("email");
+
+		String purpose = request.getParameter("purpose");
+
+		boolean withdrawMode = "withdraw".equals(purpose);
+
+		/*
+		 * ===================================================== 이메일 입력 확인
+		 * ======================================================
+		 */
 
 		if (email == null || email.trim().isEmpty()) {
 
 			sendJson(response, false, "이메일을 입력해주세요.");
 
 			return;
-
 		}
 
 		email = email.trim().toLowerCase();
 
 		/*
-		 * 기본 이메일 형식 확인
+		 * ===================================================== 이메일 형식 확인
+		 * ======================================================
 		 */
+
 		if (!email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
 
 			sendJson(response, false, "올바른 이메일 형식이 아닙니다.");
 
 			return;
-
 		}
 
 		try {
 
+			HttpSession session;
+
 			/*
-			 * 이미 가입된 이메일인지 재확인
+			 * ================================================= 회원 탈퇴 인증
+			 * ==================================================
 			 */
-			if (!userService.isEmailAvailable(email)) {
 
-				sendJson(response, false, "이미 가입된 이메일입니다.");
+			if (withdrawMode) {
 
-				return;
+				session = request.getSession(false);
 
+				if (session == null) {
+
+					sendJson(response, false, "로그인이 필요합니다.");
+
+					return;
+				}
+
+				UserDto user = (UserDto) session.getAttribute("user");
+
+				if (user == null) {
+
+					sendJson(response, false, "로그인이 필요합니다.");
+
+					return;
+				}
+
+				String userEmail = user.getEmail();
+
+				if (userEmail == null || userEmail.trim().isEmpty()) {
+
+					sendJson(response, false, "회원 이메일 정보를 확인할 수 없습니다.");
+
+					return;
+				}
+
+				/*
+				 * 로그인한 회원의 이메일과 인증 요청 이메일 비교
+				 */
+				if (!userEmail.trim().equalsIgnoreCase(email)) {
+
+					sendJson(response, false, "현재 로그인한 계정의 이메일과 일치하지 않습니다.");
+
+					return;
+				}
+
+			} else {
+
+				/*
+				 * ============================================= 회원가입 인증
+				 * 
+				 * 회원가입에서는 이미 사용 중인 이메일이면 인증번호 전송 불가
+				 * ==============================================
+				 */
+
+				if (!userService.isEmailAvailable(email)) {
+
+					sendJson(response, false, "이미 가입된 이메일입니다.");
+
+					return;
+				}
+
+				session = request.getSession();
 			}
 
-			HttpSession session = request.getSession();
+			long now = System.currentTimeMillis();
 
 			/*
-			 * 너무 연속으로 보내는 것을 방지
+			 * ================================================= 탈퇴 / 회원가입 세션 KEY 분리
+			 * ==================================================
 			 */
-			Long lastSentAt = (Long) session.getAttribute("emailVerificationSentAt");
 
-			long now = System.currentTimeMillis();
+			String sentAtKey;
+
+			String emailKey;
+
+			String codeKey;
+
+			String expiresKey;
+
+			String failCountKey;
+
+			if (withdrawMode) {
+
+				sentAtKey = "withdrawEmailVerificationSentAt";
+
+				emailKey = "withdrawEmailVerificationEmail";
+
+				codeKey = "withdrawEmailVerificationCode";
+
+				expiresKey = "withdrawEmailVerificationExpiresAt";
+
+				failCountKey = "withdrawEmailVerificationFailCount";
+
+			} else {
+
+				sentAtKey = "emailVerificationSentAt";
+
+				emailKey = "emailVerificationEmail";
+
+				codeKey = "emailVerificationCode";
+
+				expiresKey = "emailVerificationExpiresAt";
+
+				failCountKey = "emailVerificationFailCount";
+			}
+
+			/*
+			 * ================================================= 연속 전송 방지
+			 * ==================================================
+			 */
+
+			Long lastSentAt = (Long) session.getAttribute(sentAtKey);
 
 			if (lastSentAt != null && now - lastSentAt < 60000) {
 
 				sendJson(response, false, "인증번호는 1분 후 다시 요청할 수 있습니다.");
 
 				return;
-
 			}
 
 			/*
-			 * 6자리 인증번호 생성
+			 * ================================================= 인증번호 생성
+			 * ==================================================
 			 */
+
 			String code = String.format("%06d", random.nextInt(1000000));
 
 			/*
-			 * 실제 이메일 발송
+			 * ================================================= 이메일 전송
+			 * ==================================================
 			 */
+
 			emailService.sendVerificationCode(email, code);
 
 			/*
-			 * 이메일 전송 성공 후 세션에 인증정보 저장
+			 * ================================================= 인증정보 세션 저장
+			 * ==================================================
 			 */
-			session.setAttribute("emailVerificationEmail", email);
 
-			session.setAttribute("emailVerificationCode", code);
+			session.setAttribute(emailKey, email);
+
+			session.setAttribute(codeKey, code);
 
 			/*
-			 * 5분
+			 * 인증번호 유효시간 5분
 			 */
-			session.setAttribute("emailVerificationExpiresAt", now + (5 * 60 * 1000));
+			session.setAttribute(expiresKey, now + (5 * 60 * 1000));
 
-			session.setAttribute("emailVerificationSentAt", now);
+			session.setAttribute(sentAtKey, now);
+
+			session.setAttribute(failCountKey, 0);
 
 			/*
-			 * 새 인증번호를 발급했으므로 기존 인증 완료 상태 초기화
+			 * ================================================= 인증 완료 상태 초기화
+			 * ==================================================
 			 */
-			session.setAttribute("emailVerified", false);
 
-			session.removeAttribute("verifiedEmail");
+			if (withdrawMode) {
 
-			session.setAttribute("emailVerificationFailCount", 0);
+				session.setAttribute("withdrawEmailVerified", false);
+
+				session.removeAttribute("withdrawVerifiedEmail");
+
+			} else {
+
+				session.setAttribute("emailVerified", false);
+
+				session.removeAttribute("verifiedEmail");
+			}
 
 			sendJson(response, true, "인증번호를 발송했습니다. 이메일을 확인해주세요.");
 
@@ -133,22 +261,15 @@ public class emailSend extends HttpServlet {
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 
 			sendJson(response, false, "인증번호 발송 중 오류가 발생했습니다.");
-
 		}
-
 	}
 
 	private void sendJson(HttpServletResponse response, boolean success, String message) throws IOException {
 
-		/*
-		 * 현재 사용하는 메시지는 서버에서 고정된 문자열이라 간단하게 JSON으로 응답
-		 */
 		response.getWriter().print(
 
 				"{" + "\"success\":" + success + "," + "\"message\":\"" + message + "\"" + "}"
 
 		);
-
 	}
-
 }

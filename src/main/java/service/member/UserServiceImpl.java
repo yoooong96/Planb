@@ -177,4 +177,14 @@ public class UserServiceImpl implements UserService {
 
 	}
 
+	@Override
+	public void withdraw(long userId) throws Exception {
+		int result = userDao.withdrawUser(userId);
+
+		if (result <= 0) {
+
+			throw new Exception("회원 탈퇴 처리에 실패했습니다.");
+		}
+	}
+
 }
