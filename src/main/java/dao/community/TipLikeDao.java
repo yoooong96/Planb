@@ -9,4 +9,6 @@ public interface TipLikeDao {
 	TipLikeDto selectTipLike(TipLikeDto tipLikeDto);
 
 	int deleteTipLike(TipLikeDto tipLikeDto);
+	
+	int selectTipLikeCount(long tipId);
 }

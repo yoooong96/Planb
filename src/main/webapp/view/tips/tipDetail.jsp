@@ -1,19 +1,22 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%
 request.setAttribute("activePage", "tips");
 %>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Planb</title><jsp:include
-	page="/common/headStyles.jsp" /></head>
-<body class="site-shell"><jsp:include page="/common/header.jsp" />
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Planb</title>
+	<jsp:include page="/common/headStyles.jsp" /></head>
+	<link rel="stylesheet" href="${pageContext.request.contextPath}/view/assets/css/tips/tipDetail.css">
+<body class="site-shell">
+	<jsp:include page="/common/header.jsp" />
 	<div class="min-h-screen" style="background-color: #f5f5fb">
     	<div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-			<a href="${pageContext.request.contextPath}/view/tips/tipList.jsp"
+			<a href="${pageContext.request.contextPath}/tips"
 				class="flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-gray-200 text-sm font-semibold text-gray-600 hover:border-gray-400 hover:text-gray-800 transition-colors shadow-sm mb-6"><svg
 					width="14" height="14" viewBox="0 0 24 24" fill="none"
 					stroke="currentColor" stroke-width="2">
@@ -36,79 +39,122 @@ request.setAttribute("activePage", "tips");
 					<div
 						class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
 						<div class="relative overflow-hidden" style="height: 280px">
-							<img
-								src="https://images.unsplash.com/photo-1585208798174-6cedd86e019a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx0cmFtJTIwbGlzYm9uJTIwc3RyZWV0JTIwdHJhbnNwb3J0YXRpb258ZW58MXx8fHwxNzg5MjgzNjU4fDA&ixlib=rb-4.1.0&q=80&w=600"
-								alt="리스본 대중교통 완벽 가이드 (트램, 지하철, 교통카드)"
-								class="absolute inset-0 w-full h-full object-cover">
+							<c:choose>
+							    <c:when test="${not empty tip.thumbnailImg}">
+							        <img src="${pageContext.request.contextPath}${tip.thumbnailImg}" alt="${tip.title}"
+							            class="absolute inset-0 w-full h-full object-cover">
+							            
+							    </c:when>
+							    <c:otherwise>
+							        <div class="absolute inset-0 flex items-center justify-center bg-gray-100 text-gray-400">
+							            이미지 없음
+							        </div>
+							    </c:otherwise>
+							</c:choose>
 							<div class="absolute inset-0"
 								style="background: linear-gradient(to top, rgba(0, 0, 0, .72) 0%, rgba(0, 0, 0, .18) 55%, transparent 100%)"></div>
 							<div class="absolute bottom-6 left-7 right-7">
-								<span
-									class="inline-block text-xs font-bold px-3 py-1 rounded-full mb-3"
-									style="color: #EC4899; background-color: #FDF2F8">교통</span>
 								<h1
-									class="text-white text-2xl md:text-3xl font-extrabold leading-snug">리스본
-									대중교통 완벽 가이드 (트램, 지하철, 교통카드)</h1>
+								    class="text-white text-2xl md:text-3xl font-extrabold leading-snug">
+								    <c:out value="${tip.title}" />
+								</h1>
 							</div>
 						</div>
 						<div class="p-7">
 							<div
 								class="flex items-center justify-between mb-7 pb-6 border-b border-gray-100">
 								<div class="flex items-center gap-3">
-									<div
-										class="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold"
-										style="background-color: #8B5CF6">지</div>
-									<div>
-										<p class="font-bold text-sm text-gray-900">지민</p>
-										<p class="text-xs text-gray-400">2시간 전</p>
-									</div>
+									<!-- 프로필 원형 -->
+								    <div class="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold"
+								         style="background: linear-gradient(135deg, #6369D1, #8B5CF6);">
+								        <c:choose>
+								            <c:when test="${not empty tip.nickname}">
+								                <c:out value="${tip.nickname.substring(0, 1)}" />
+								            </c:when>
+								            <c:otherwise>
+								                U
+								            </c:otherwise>
+								        </c:choose>
+								    </div>
+									<!-- 작성자 정보 -->
+								    <div>
+								        <p class="text-sm font-semibold text-gray-800">
+								            <c:out value="${tip.nickname}" />
+								        </p>
+								        <p class="text-xs text-gray-400">
+								            <c:out value="${tip.timeAgo}" />
+								        </p>
+								    </div>
 								</div>
 								<div class="flex items-center gap-4 text-sm text-gray-400">
 									<button
 										class="flex items-center gap-1.5 hover:text-red-400 transition-colors">
 										<svg width="16" height="16" viewBox="0 0 24 24" fill="none"
 											stroke="currentColor" stroke-width="2">
-											<path
-												d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" /></svg>
+											<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" /></svg>
 										24
 									</button>
-									<span class="flex items-center gap-1.5"><svg width="16"
-											height="16" viewBox="0 0 24 24" fill="none"
-											stroke="currentColor" stroke-width="2">
-											<path
-												d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg>8</span>
+									<span class="flex items-center gap-1.5">
+										<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+											<pathd="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+										</svg>
+										8
+									</span>
 								</div>
 							</div>
 							<div class="prose prose-gray max-w-none">
-								<p class="text-gray-700 text-base leading-relaxed mb-6">리스본
-									여행을 준비하면서 가장 궁금했던 교통편을 정리했어요. 트램 이용 꿀팁부터 지하철 노선까지 자세히 설명해 드릴게요.
-									특히 28번 트램은 꼭 타보세요!</p>
-								<p class="text-gray-600 text-sm leading-relaxed">여행을 준비할 때
-									가장 중요한 것 중 하나는 현지 정보를 미리 파악하는 것입니다. 이 글에서 소개한 내용들이 여러분의 여행에 도움이
-									되길 바랍니다.</p>
-								<br>
-								<p class="text-gray-600 text-sm leading-relaxed">혹시 더 궁금한 점이
-									있으시면 댓글로 남겨주세요. 제가 직접 경험한 것들을 최대한 자세히 답변드리겠습니다. 좋은 여행 되세요! 🌍</p>
+							    <p class="text-gray-700 text-base leading-relaxed whitespace-pre-wrap">
+							        <c:out value="${tip.content}" />
+							    </p>
 							</div>
-							<div
-								class="flex flex-wrap gap-2 mt-8 pt-6 border-t border-gray-100">
-								<span class="text-xs font-semibold px-3 py-1 rounded-full"
-									style="background-color: var(- -brand-light); color: var(- -brand)">#여행꿀팁</span><span
-									class="text-xs font-semibold px-3 py-1 rounded-full"
-									style="background-color: var(- -brand-light); color: var(- -brand)">#교통</span><span
-									class="text-xs font-semibold px-3 py-1 rounded-full"
-									style="background-color: var(- -brand-light); color: var(- -brand)">#실전정보</span>
+							<!-- 추가 이미지 : 대표 이미지(sortOrder 1)는 제외 -->
+							<c:if test="${not empty tipMediaList}">
+							    <div class="tip-detail-images">
+							
+							        <c:forEach var="media"
+							                   items="${tipMediaList}"
+							                   varStatus="status">
+							
+							            <!-- 첫 번째 이미지(대표 이미지)는 제외 -->
+							            <c:if test="${status.index > 0 && media.mediaType eq 'IMAGE'}">
+							                <img
+							                    src="${pageContext.request.contextPath}${media.mediaUrl}"
+							                    alt="${tip.title}"
+							                    class="tip-detail-image">
+							            </c:if>
+							
+							        </c:forEach>
+							
+							    </div>
+							</c:if>
+							<div class="flex flex-wrap gap-2 mt-8 pt-6 border-t border-gray-100">
+							    <c:forEach var="tag" items="${tip.hashtagList}">
+							        <span class="text-xs font-semibold px-3 py-1 rounded-full"
+							            style="background-color: var(--brand-light); color: var(--brand);">
+							            <c:choose>
+							                <c:when test="${tag.startsWith('#')}">
+							                    <c:out value="${tag}" />
+							                </c:when>
+							                <c:otherwise>
+							                    #<c:out value="${tag}" />
+							                </c:otherwise>
+							            </c:choose>
+							        </span>
+							    </c:forEach>
 							</div>
 							<div class="flex items-center justify-center gap-4 mt-8">
-								<button type="button"
-									class="flex items-center gap-2 px-8 py-3 rounded-full font-semibold text-sm border-2 transition-all"
-									style="border-color: var(- -brand); color: var(- -brand)">
-									<svg width="16" height="16" viewBox="0 0 24 24" fill="none"
-										stroke="currentColor" stroke-width="2">
-										<path
-											d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" /></svg>
-									좋아요 24
-								</button>
+								<form action="${pageContext.request.contextPath}/tipLike" method="post" class="tip-like-form">
+							    <input type="hidden" name="tipId" value="${tip.tipId}">
+							    <button type="submit" class="tip-like-btn">
+							        <svg class="tip-like-icon" viewBox="0 0 24 24"
+							             fill="${liked ? 'currentColor' : 'none'}"
+							             stroke="currentColor"
+							             stroke-width="2">
+							            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+							        </svg>
+							        좋아요 ${tip.likeCount}
+							    </button>
+							</form>
 								<button type="button"
 									class="flex items-center gap-2 px-8 py-3 rounded-full font-semibold text-sm border-2 border-gray-200 text-gray-500 hover:border-gray-400 transition-all">
 									<svg width="16" height="16" viewBox="0 0 24 24" fill="none"

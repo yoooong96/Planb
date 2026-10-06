@@ -451,7 +451,7 @@ request.setAttribute("activePage", "tips");
 				</div>
 				<div class="grid gap-5" style="grid-template-columns: repeat(4, minmax(0, 1fr))" data-card-grid>
 					<c:forEach var="tip" items="${tipList}">
-						<a href="${pageContext.request.contextPath}/view/tips/tipDetail.jsp?id=${tip.tipId}"
+						<a href="${pageContext.request.contextPath}/tipDetail?tipId=${tip.tipId}"
 							class="relative bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md 
 							transition-shadow cursor-pointer group overflow-hidden flex flex-col">
 				

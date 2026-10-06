@@ -4,9 +4,9 @@
 
 <mapper namespace="mapper.community.tipMedia">
 
-	<insert id="insertTipMedia" parameterType="tipMedia"
-			useGeneratedKeys="true" keyProperty="mediaId">
-
+	<insert id="insertTipMedia" parameterType="dto.community.TipMediaDto" useGeneratedKeys="true" keyProperty="mediaId">
+	    INSERT INTO TB_TIP_MEDIA (tip_id, media_type, media_url, sort_order)
+	    VALUES (#{tipId}, #{mediaType}, #{mediaUrl}, #{sortOrder})
 	</insert>
 
 	<select id="selectTipMedia" parameterType="Long" resultType="tipMedia">
@@ -20,5 +20,19 @@
 	<delete id="deleteTipMedia" parameterType="Long">
 
 	</delete>
+	
+	<!-- 게시글별 여행꿀팁 이미지 목록 조회 -->
+	<select id="selectTipMediaList" parameterType="long" resultType="dto.community.TipMediaDto">
+	    SELECT
+	        media_id AS mediaId,
+	        tip_id AS tipId,
+	        media_type AS mediaType,
+	        media_url AS mediaUrl,
+	        sort_order AS sortOrder,
+	        created_at AS createdAt
+	    FROM TB_TIP_MEDIA
+	    WHERE tip_id = #{tipId}
+	    ORDER BY sort_order ASC
+	</select>
 
 </mapper>

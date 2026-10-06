@@ -78,6 +78,11 @@ public class TipServiceImpl implements TipService {
 	}
 	
 	@Override
+	public TipDto selectTipDetail(long tipId) {
+	    return tipDao.selectTipDetail(tipId);
+	}
+	
+	@Override
 	public int countTipListByFilter(String country, String keyword) {
 		List<String> countryKeywords = null;
 		if (country != null && !country.trim().isEmpty()) {
@@ -92,6 +97,21 @@ public class TipServiceImpl implements TipService {
 	@Override
 	public List<TipDto> selectMyTipList(long userId) {
 		return tipDao.selectMyTipList(userId);
+	}
+	
+	@Override
+	public List<TipDto> selectMyTipList(long userId, int offset, int pageSize) {
+	    return tipDao.selectMyTipList(userId, offset, pageSize);
+	}
+	
+	@Override
+	public int countMyTipList(long userId) {
+	    return tipDao.countMyTipList(userId);
+	}
+	
+	@Override
+	public int updateTip(TipDto tip) {
+	    return tipDao.updateTip(tip);
 	}
 	
 }

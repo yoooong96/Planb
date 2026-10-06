@@ -1,0 +1,85 @@
+@charset "UTF-8";
+
+/* 상세페이지 추가 이미지 */
+.tip-detail-images {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 24px;
+}
+
+.tip-detail-image {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 720px;
+    object-fit: contain;
+    border-radius: 16px;
+}
+
+/* 태블릿 / 모바일 */
+@media (max-width: 768px) {
+    .tip-detail-images {
+        gap: 12px;
+        margin-top: 18px;
+    }
+    .tip-detail-image {
+        max-height: none;
+        border-radius: 12px;
+    }
+}
+
+/* =========================
+   좋아요 버튼
+========================= */
+.tip-like-form {
+    margin: 0;
+}
+
+.tip-like-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+
+    padding: 0.75rem 2rem;
+
+    border: 2px solid var(--brand);
+    border-radius: 9999px;
+
+    background: transparent;
+    color: var(--brand);
+
+    font-size: 0.875rem;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.tip-like-btn:hover {
+    background: var(--brand);
+    color: #ffffff;
+}
+
+.tip-like-btn:active {
+    transform: scale(0.97);
+}
+
+.tip-like-icon {
+    width: 1rem;
+    height: 1rem;
+    flex-shrink: 0;
+}
+
+/* =========================
+   반응형
+========================= */
+@media (max-width: 768px) {
+    .tip-like-btn {
+        padding: 0.7rem 1.25rem;
+        font-size: 0.8125rem;
+    }
+}

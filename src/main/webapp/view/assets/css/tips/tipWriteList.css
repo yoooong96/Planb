@@ -433,3 +433,145 @@
 		gap: 8px;
 	}
 }
+/* ========================================
+   내가 작성한 글 - 페이지네이션
+======================================== */
+
+.tip-write-pagination {
+    width: 100%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+
+    gap: 8px;
+
+    margin: 36px auto 48px;
+    padding: 0 16px;
+
+    box-sizing: border-box;
+}
+
+
+/* 기본 페이지 버튼 */
+.tip-write-pagination .tip-page-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 42px;
+    height: 42px;
+    min-width: 42px;
+
+    padding: 0;
+
+    background: #ffffff;
+
+    border: 1px solid #e2e4f0;
+    border-radius: 50%;
+
+    color: #676b7c;
+
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1;
+
+    text-decoration: none;
+
+    box-shadow: 0 2px 8px rgba(40, 45, 80, 0.05);
+
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+/* 마우스 오버 */
+.tip-write-pagination a.tip-page-btn:hover {
+    background: #f4f3ff;
+    border-color: #7778e8;
+
+    color: #6369d1;
+
+    transform: translateY(-2px);
+
+    box-shadow: 0 5px 14px rgba(99, 105, 209, 0.15);
+}
+
+
+/* 현재 페이지 */
+.tip-write-pagination .tip-page-btn.active {
+    background: #6369d1;
+    border-color: #6369d1;
+
+    color: #ffffff;
+
+    box-shadow: 0 5px 14px rgba(99, 105, 209, 0.28);
+}
+
+
+/* 이전 / 다음 */
+.tip-write-pagination .tip-page-arrow {
+    font-size: 21px;
+    font-weight: 500;
+}
+
+
+/* 비활성 이전 / 다음 */
+.tip-write-pagination .tip-page-btn.disabled {
+    background: #f1f2f7;
+    border-color: #e7e8ef;
+
+    color: #c2c5d0;
+
+    box-shadow: none;
+
+    cursor: default;
+}
+
+
+/* ========================================
+   반응형
+======================================== */
+
+@media (max-width: 768px) {
+
+    .tip-write-pagination {
+        gap: 6px;
+
+        margin-top: 28px;
+        margin-bottom: 36px;
+
+        padding: 0 12px;
+    }
+
+    .tip-write-pagination .tip-page-btn {
+        width: 38px;
+        height: 38px;
+        min-width: 38px;
+
+        font-size: 13px;
+    }
+
+    .tip-write-pagination .tip-page-arrow {
+        font-size: 19px;
+    }
+}
+
+
+@media (max-width: 480px) {
+
+    .tip-write-pagination {
+        gap: 5px;
+    }
+
+    .tip-write-pagination .tip-page-btn {
+        width: 36px;
+        height: 36px;
+        min-width: 36px;
+    }
+}

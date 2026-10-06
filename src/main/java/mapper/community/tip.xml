@@ -5,30 +5,8 @@
 <mapper namespace="mapper.community.tip">
 
 	<insert id="insertTip" parameterType="tip" useGeneratedKeys="true" keyProperty="tipId">
-		INSERT INTO TB_TIP (
-	        user_id,
-	        title,
-	        content,
-	        hashtag,
-	        thumbnail_img,
-	        visibility,
-	        view_count,
-	        status,
-	        created_at,
-	        updated_at
-    	)
-	    VALUES (
-	        #{userId},
-	        #{title},
-	        #{content},
-	        #{hashtag},
-	        #{thumbnailImg},
-	        'PUBLIC',
-	        0,
-	        'ACTIVE',
-	        NOW(),
-	        NOW()
-    	)
+		INSERT INTO TB_TIP (user_id, title, content, hashtag, thumbnail_img, visibility, view_count, status, created_at, updated_at)
+	    VALUES (#{userId}, #{title}, #{content}, #{hashtag}, #{thumbnailImg}, 'PUBLIC', 0, 'ACTIVE', NOW(), NOW())
 	</insert>
 
 	<select id="selectTip" parameterType="Long" resultType="tip">
@@ -43,8 +21,17 @@
 		SELECT * FROM TB_TIP WHERE status = 'ACTIVE' AND hashtag LIKE CONCAT('%', #{keyword}, '%') ORDER BY created_at DESC
 	</select>
 
-	<update id="updateTip" parameterType="tip">
-
+	<!-- 여행꿀팁 수정 -->
+	<update id="updateTip" parameterType="dto.community.TipDto">
+	    UPDATE TB_TIP
+	    <set>
+	        title = #{title}, hashtag = #{hashtag}, content = #{content},
+	        <if test="thumbnailImg != null and thumbnailImg != ''">
+	            thumbnail_img = #{thumbnailImg},
+	        </if>
+	        updated_at = NOW()
+	    </set>
+	    WHERE tip_id = #{tipId} AND user_id = #{userId} AND status = 'ACTIVE'
 	</update>
 
 	<delete id="deleteTip" parameterType="Long">
@@ -54,24 +41,14 @@
 	<select id="selectTipListByFilter" parameterType="map" resultType="tip">
 		SELECT t.*, u.nickname AS nickname,
 			(
-				SELECT COUNT(*)
-				FROM TB_TIP_LIKE tl
-				WHERE tl.tip_id = t.tip_id
+				SELECT COUNT(*) FROM TB_TIP_LIKE tl WHERE tl.tip_id = t.tip_id
 			) AS like_count,
 			
 			(
-				SELECT COUNT(*)
-				FROM TB_TIP_COMMENT tc
-				WHERE tc.tip_id = t.tip_id
-				  AND tc.status = 'ACTIVE'
+				SELECT COUNT(*) FROM TB_TIP_COMMENT tc WHERE tc.tip_id = t.tip_id AND tc.status = 'ACTIVE'
 			) AS comment_count
 
-		FROM TB_TIP t
-	
-		LEFT JOIN TB_USER u ON t.user_id = u.user_id
-	
-		WHERE t.status = 'ACTIVE' AND t.visibility = 'PUBLIC'
-	
+		FROM TB_TIP t LEFT JOIN TB_USER u ON t.user_id = u.user_id WHERE t.status = 'ACTIVE' AND t.visibility = 'PUBLIC'
 		<if test="countryKeywords != null and countryKeywords.size() > 0">
 			AND (
 				<foreach collection="countryKeywords"
@@ -79,7 +56,6 @@
 					separator=" OR ">
 					
 					t.hashtag LIKE CONCAT('%#', #{countryKeyword}, '%')
-					
 				</foreach>
 			)
 		</if>
@@ -141,6 +117,58 @@
 				SELECT COUNT(*) FROM TB_TIP_COMMENT tc WHERE tc.tip_id = t.tip_id AND tc.status = 'ACTIVE'
 			) AS commentCount
 		FROM TB_TIP t WHERE t.user_id = #{userId} AND t.status = 'ACTIVE' ORDER BY t.created_at DESC
+	</select>
+	
+	<select id="selectMyTipListPaging" parameterType="map" resultType="dto.community.TipDto">
+	    SELECT
+	        t.tip_id AS tipId,
+	        t.user_id AS userId,
+	        t.title,
+	        t.content,
+	        t.thumbnail_img AS thumbnailImg,
+	        t.visibility,
+	        t.view_count AS viewCount,
+	        t.status,
+	        t.created_at AS createdAt,
+	        t.updated_at AS updatedAt,
+	        t.hashtag,
+	        (
+	            SELECT COUNT(*) FROM TB_TIP_LIKE tl WHERE tl.tip_id = t.tip_id
+	        ) AS likeCount,
+	
+	        (
+	            SELECT COUNT(*) FROM TB_TIP_COMMENT tc WHERE tc.tip_id = t.tip_id AND tc.status = 'ACTIVE'
+	        ) AS commentCount
+	
+	    FROM TB_TIP t WHERE t.user_id = #{userId} AND t.status = 'ACTIVE' ORDER BY t.created_at DESC LIMIT #{pageSize} OFFSET #{offset}
+	</select>
+	
+	<select id="countMyTipList" parameterType="long" resultType="int">
+	    SELECT COUNT(*) FROM TB_TIP WHERE user_id = #{userId} AND status = 'ACTIVE'
+	</select>
+	
+	<!-- 여행꿀팁 게시글 1건 조회 -->
+	<select id="selectTipDetail" parameterType="long" resultType="dto.community.TipDto">
+	    SELECT
+	        t.tip_id AS tipId,
+	        t.user_id AS userId,
+	        t.title,
+	        t.content,
+	        t.thumbnail_img AS thumbnailImg,
+	        t.visibility,
+	        t.view_count AS viewCount,
+	        t.status,
+	        t.deleted_by_user_id AS deletedByUserId,
+	        t.deleted_at AS deletedAt,
+	        t.created_at AS createdAt,
+	        t.updated_at AS updatedAt,
+	        t.hashtag,
+	
+	        u.nickname AS nickname
+	    FROM TB_TIP t
+	    JOIN TB_USER u ON t.user_id = u.user_id
+	
+	    WHERE t.tip_id = #{tipId} AND t.status = 'ACTIVE'
 	</select>
 
 </mapper>
