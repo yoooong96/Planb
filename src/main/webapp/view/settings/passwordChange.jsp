@@ -12,7 +12,7 @@ UserDto user = (UserDto) session.getAttribute("user");
 
 if (user == null) {
 
-	response.sendRedirect(ctx + "/view/auth/login.jsp");
+	response.sendRedirect(ctx + "/auth/login");
 
 	return;
 }

@@ -18,7 +18,7 @@ String settingsPage =
     <div class="settings-sidebar-head">
 
         <a class="settings-back"
-           href="<%=ctx%>/view/profile/myProfile.jsp"
+           href="<%=ctx%>/profile/myProfile"
            aria-label="내 프로필로 돌아가기">
 
             ‹
@@ -46,7 +46,7 @@ String settingsPage =
         <a
             class="settings-nav-link
             <%="profile".equals(settingsPage) ? "active" : ""%>"
-            href="<%=ctx%>/view/settings/settings.jsp">
+            href="<%=ctx%>/profile/edit">
 
             <span class="settings-nav-icon">
                 ◯
@@ -63,7 +63,7 @@ String settingsPage =
         <a
             class="settings-nav-link
             <%="password".equals(settingsPage) ? "active" : ""%>"
-            href="<%=ctx%>/view/settings/passwordChange.jsp">
+            href="<%=ctx%>/settings/passwordChange">
 
             <span class="settings-nav-icon">
                 ▣
@@ -165,7 +165,7 @@ String settingsPage =
         <!-- 회원 탈퇴 -->
         <a
             class="danger"
-            href="<%=ctx%>/view/auth/withdraw.jsp">
+            href="<%=ctx%>/auth/withdraw">
 
             <span class="settings-nav-icon">
                 ×

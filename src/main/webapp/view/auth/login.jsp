@@ -94,7 +94,7 @@ request.setAttribute("activePage", "auth");
 			<div class="login-header">
 
 
-				<a href="${pageContext.request.contextPath}/view/home/home.jsp"
+				<a href="${pageContext.request.contextPath}/home"
 					class="login-logo"> <span class="tripily-mark"
 					aria-hidden="true"> <svg width="22" height="22"
 							viewBox="0 0 24 24" fill="none">
@@ -204,7 +204,7 @@ request.setAttribute("activePage", "auth");
 
 
 						</label> <a
-							href="${pageContext.request.contextPath}/view/auth/findPassword.jsp"
+							href="${pageContext.request.contextPath}/auth/findPassword"
 							class="find-password"> 비밀번호 찾기 </a>
 
 
@@ -293,7 +293,7 @@ request.setAttribute("activePage", "auth");
 
 
 					아직 회원이 아니신가요? <a
-						href="${pageContext.request.contextPath}/view/auth/signup.jsp">
+						href="${pageContext.request.contextPath}/auth/signup">
 
 						회원가입 </a>
 

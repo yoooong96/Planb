@@ -25,6 +25,10 @@ public class PasswordChange extends HttpServlet {
 		super();
 
 	}
+	
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.getRequestDispatcher("/view/settings/passwordChange.jsp").forward(request, response);
+	}
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -41,7 +45,7 @@ public class PasswordChange extends HttpServlet {
 
 		if (session == null) {
 
-			response.sendRedirect(request.getContextPath() + "/view/auth/login.jsp");
+			response.sendRedirect(request.getContextPath() + "/auth/login");
 
 			return;
 
@@ -51,7 +55,7 @@ public class PasswordChange extends HttpServlet {
 
 		if (user == null) {
 
-			response.sendRedirect(request.getContextPath() + "/view/auth/login.jsp");
+			response.sendRedirect(request.getContextPath() + "/auth/login");
 
 			return;
 

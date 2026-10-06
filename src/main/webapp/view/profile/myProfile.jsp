@@ -460,7 +460,7 @@ if (bookmarkCount == null) {
 
 
 
-							<a class="icon-action" href="<%=ctx%>/view/settings/settings.jsp"
+							<a class="icon-action" href="<%=ctx%>/profile/edit"
 								aria-label="설정" title="설정"> ⚙ </a>
 
 

@@ -413,7 +413,7 @@ public class GoogleCallback extends HttpServlet {
 
                 response.sendRedirect(
                         request.getContextPath()
-                        + "/view/home/home.jsp"
+                        + "/home"
                 );
 
 
@@ -479,7 +479,7 @@ public class GoogleCallback extends HttpServlet {
 
             response.sendRedirect(
                     request.getContextPath()
-                    + "/view/auth/googleAdditionalInfo.jsp"
+                    + "/auth/googleAdditionalInfo"
             );
 
 
@@ -497,7 +497,7 @@ public class GoogleCallback extends HttpServlet {
 
             response.sendRedirect(
                     request.getContextPath()
-                    + "/view/auth/login.jsp"
+                    + "/auth/login"
             );
 
         }

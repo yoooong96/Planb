@@ -53,7 +53,7 @@ public class GoogleSignupComplete extends HttpServlet {
 
 		if (session == null) {
 
-			response.sendRedirect(request.getContextPath() + "/view/auth/login.jsp");
+			response.sendRedirect(request.getContextPath() + "/auth/login");
 
 			return;
 		}
@@ -70,7 +70,7 @@ public class GoogleSignupComplete extends HttpServlet {
 
 		if (!Boolean.TRUE.equals(googleVerified) || googleSub == null || googleEmail == null) {
 
-			response.sendRedirect(request.getContextPath() + "/view/auth/login.jsp");
+			response.sendRedirect(request.getContextPath() + "/auth/login");
 
 			return;
 		}
@@ -156,7 +156,7 @@ public class GoogleSignupComplete extends HttpServlet {
 
 				clearGoogleSignupSession(session);
 
-				response.sendRedirect(request.getContextPath() + "/view/home/home.jsp");
+				response.sendRedirect(request.getContextPath() + "/home");
 
 				return;
 			}
@@ -303,7 +303,7 @@ public class GoogleSignupComplete extends HttpServlet {
 			 * =====================================================
 			 */
 
-			response.sendRedirect(request.getContextPath() + "/view/home/home.jsp");
+			response.sendRedirect(request.getContextPath() + "/home");
 
 		} catch (Exception e) {
 
@@ -503,7 +503,7 @@ public class GoogleSignupComplete extends HttpServlet {
 
 		request.setAttribute("errorMessage", message);
 
-		request.getRequestDispatcher("/view/auth/googleAdditionalInfo.jsp").forward(request, response);
+		request.getRequestDispatcher("/auth/googleAdditionalInfo").forward(request, response);
 	}
 
 	/*

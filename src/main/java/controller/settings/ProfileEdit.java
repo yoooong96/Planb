@@ -38,6 +38,10 @@ public class ProfileEdit extends HttpServlet {
 	public ProfileEdit() {
 		super();
 	}
+	
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.getRequestDispatcher("/view/settings/settings.jsp").forward(request, response);
+	}
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)

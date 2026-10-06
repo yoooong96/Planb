@@ -202,7 +202,7 @@ if (user != null
                  로그인 상태
             ========================== -->
             <% if (loggedIn) { %>
-            <a class="site-profile-btn site-profile-btn--user<%=isAdminHeader ? " site-profile-btn--admin" : ""%>" href="<%=ctx%>/view/profile/myProfile.jsp"
+            <a class="site-profile-btn site-profile-btn--user<%=isAdminHeader ? " site-profile-btn--admin" : ""%>" href="<%=ctx%>/profile/myProfile"
                 title="마이페이지">
                 <!-- 프로필 이미지 -->
                 <span class="site-profile-avatar site-profile-avatar--img">
@@ -227,10 +227,10 @@ if (user != null
                  비로그인 상태
             ========================== -->
             <div class="site-auth-actions">
-                <a class="site-auth-btn site-auth-btn--outline" href="<%=ctx%>/view/auth/login.jsp">
+                <a class="site-auth-btn site-auth-btn--outline" href="<%=ctx%>/auth/login">
                     로그인
                 </a>
-                <a class="site-auth-btn site-auth-btn--fill" href="<%=ctx%>/view/auth/signup.jsp">
+                <a class="site-auth-btn site-auth-btn--fill" href="<%=ctx%>/auth/signup">
                     회원가입
                 </a>
             </div>

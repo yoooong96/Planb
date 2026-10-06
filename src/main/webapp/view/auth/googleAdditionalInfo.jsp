@@ -22,7 +22,7 @@ String googlePicture = (String) session.getAttribute("googleSignupPicture");
  */
 if (!Boolean.TRUE.equals(googleVerified) || googleEmail == null) {
 
-	response.sendRedirect(ctx + "/view/auth/login.jsp");
+	response.sendRedirect(ctx + "/auth/login");
 
 	return;
 }

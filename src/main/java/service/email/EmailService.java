@@ -17,9 +17,9 @@ public class EmailService {
 	 *
 	 * 절대 일반 비밀번호를 넣으면 안 되고 Google 앱 비밀번호를 사용해야 합니다.
 	 */
-	private static final String MAIL_USERNAME = "pink092000@gmail.com";
+	private static final String MAIL_USERNAME = System.getenv("MAIL_USERNAME");
 
-	private static final String MAIL_PASSWORD = "epkkzsqvsmxrvzii";
+	private static final String MAIL_PASSWORD = System.getenv("MAIL_PASSWORD");
 
 	public void sendVerificationCode(String receiverEmail, String verificationCode) throws Exception {
 
@@ -54,7 +54,7 @@ public class EmailService {
 
 		message.setRecipient(Message.RecipientType.TO, new InternetAddress(receiverEmail));
 
-		message.setSubject("[Planb] 회원가입 이메일 인증번호", "UTF-8");
+		message.setSubject("[Planb] 이메일 인증번호", "UTF-8");
 
 		String html =
 
@@ -64,7 +64,7 @@ public class EmailService {
 						+ "<h2 style='" + "margin:0 0 18px;" + "color:#222;" + "'>" + "Planb 이메일 인증" + "</h2>"
 
 						+ "<p style='" + "font-size:14px;" + "color:#555;" + "line-height:1.7;" + "'>"
-						+ "회원가입을 계속하려면 아래 인증번호를 입력해주세요." + "</p>"
+						+ "이메일 인증을 계속하려면 아래 인증번호를 입력해주세요." + "</p>"
 
 						+ "<div style='" + "margin:28px 0;" + "padding:20px;" + "background:#f6f6ff;"
 						+ "text-align:center;" + "font-size:30px;" + "font-weight:bold;" + "letter-spacing:8px;"

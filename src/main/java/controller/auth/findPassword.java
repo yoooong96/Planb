@@ -25,6 +25,10 @@ public class findPassword extends HttpServlet {
 		super();
 		// TODO Auto-generated constructor stub
 	}
+	
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.getRequestDispatcher("/view/auth/findPassword.jsp").forward(request, response);
+	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {

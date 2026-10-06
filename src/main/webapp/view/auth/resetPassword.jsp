@@ -20,7 +20,7 @@ Object resetUserIdObj = session.getAttribute("passwordResetUserId");
  */
 if (resetUserIdObj == null) {
 
-	response.sendRedirect(ctx + "/view/auth/findPassword.jsp");
+	response.sendRedirect(ctx + "/auth/findPassword");
 
 	return;
 }

@@ -24,6 +24,12 @@ public class resetPassword extends HttpServlet {
 		super();
 		// TODO Auto-generated constructor stub
 	}
+	
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		request.getRequestDispatcher("/view/auth/resetPassword.jsp").forward(request, response);
+	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
@@ -35,14 +41,14 @@ public class resetPassword extends HttpServlet {
 
 		HttpSession session = request.getSession(false);
 		if (session == null) {
-			response.sendRedirect(request.getContextPath() + "/view/auth/findPassword.jsp");
+			response.sendRedirect(request.getContextPath() + "/auth/findPassword");
 			return;
 		}
 
 		Long userId = (Long) session.getAttribute("passwordResetUserId");
 
 		if (userId == null) {
-			response.sendRedirect(request.getContextPath() + "/view/auth/findPassword.jsp");
+			response.sendRedirect(request.getContextPath() + "/auth/findPassword");
 			return;
 
 		}
@@ -63,7 +69,7 @@ public class resetPassword extends HttpServlet {
 			 * 재설정 권한 제거
 			 */
 			session.removeAttribute("passwordResetUserId");
-			response.sendRedirect(request.getContextPath() + "/view/auth/login.jsp?reset=success");
+			response.sendRedirect(request.getContextPath() + "/auth/login?reset=success");
 		} catch (Exception e) {
 			request.setAttribute("errorMessage", e.getMessage());
 			request.getRequestDispatcher("/view/auth/resetPassword.jsp").forward(request, response);

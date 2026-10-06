@@ -30,6 +30,10 @@ public class withdraw extends HttpServlet {
 		super();
 
 	}
+	
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.getRequestDispatcher("/view/auth/withdraw.jsp").forward(request, response);
+	}
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)

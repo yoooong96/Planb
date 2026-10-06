@@ -2,49 +2,26 @@
 	pageEncoding="UTF-8" import="dto.member.UserDto"%>
 
 <%
-request.setAttribute(
-    "activePage",
-    "profile"
-);
+request.setAttribute("activePage", "profile");
 
-request.setAttribute(
-    "settingsPage",
-    "withdraw"
-);
+request.setAttribute("settingsPage", "withdraw");
 
-String ctx =
-        request.getContextPath();
+String ctx = request.getContextPath();
 
-UserDto user =
-        (UserDto)
-        session.getAttribute(
-            "user"
-        );
+UserDto user = (UserDto) session.getAttribute("user");
 
 if (user == null) {
 
-    response.sendRedirect(
-        ctx + "/view/auth/login.jsp"
-    );
+	response.sendRedirect(ctx + "/view/auth/login.jsp");
 
-    return;
+	return;
 }
 
-String loginId =
-        user.getLoginId() == null
-            ? ""
-            : user.getLoginId();
+String loginId = user.getLoginId() == null ? "" : user.getLoginId();
 
-String email =
-        user.getEmail() == null
-            ? ""
-            : user.getEmail();
+String email = user.getEmail() == null ? "" : user.getEmail();
 
-String errorMessage =
-        (String)
-        request.getAttribute(
-            "errorMessage"
-        );
+String errorMessage = (String) request.getAttribute("errorMessage");
 %>
 
 <!DOCTYPE html>
@@ -313,10 +290,9 @@ String errorMessage =
 								</div>
 
 
-								<% if (
-                                errorMessage != null
-                                && !errorMessage.trim().isEmpty()
-                            ) { %>
+								<%
+								if (errorMessage != null && !errorMessage.trim().isEmpty()) {
+								%>
 
 								<div class="withdraw-error-box">
 
@@ -324,7 +300,9 @@ String errorMessage =
 
 								</div>
 
-								<% } %>
+								<%
+								}
+								%>
 
 
 								<label class="withdraw-agree"> <input type="checkbox"
@@ -379,560 +357,297 @@ document.addEventListener(
     "DOMContentLoaded",
     function () {
 
-        var contextPath = "<%=ctx%>";
+        var contextPath = "<%=ctx%>
+		";
 
-        var email =
-            document.getElementById(
-                "withdrawEmail"
-            );
+			var email = document.getElementById("withdrawEmail");
 
-        var sendButton =
-            document.getElementById(
-                "sendWithdrawEmailCode"
-            );
+			var sendButton = document.getElementById("sendWithdrawEmailCode");
 
-        var verificationArea =
-            document.getElementById(
-                "withdrawVerificationArea"
-            );
+			var verificationArea = document
+					.getElementById("withdrawVerificationArea");
 
-        var verificationCode =
-            document.getElementById(
-                "withdrawVerificationCode"
-            );
+			var verificationCode = document
+					.getElementById("withdrawVerificationCode");
 
-        var verifyButton =
-            document.getElementById(
-                "verifyWithdrawEmailCode"
-            );
+			var verifyButton = document
+					.getElementById("verifyWithdrawEmailCode");
 
-        var sendMessage =
-            document.getElementById(
-                "withdrawEmailSendMessage"
-            );
+			var sendMessage = document
+					.getElementById("withdrawEmailSendMessage");
 
-        var verifyMessage =
-            document.getElementById(
-                "withdrawVerificationMessage"
-            );
+			var verifyMessage = document
+					.getElementById("withdrawVerificationMessage");
 
-        var agree =
-            document.getElementById(
-                "withdrawAgree"
-            );
+			var agree = document.getElementById("withdrawAgree");
 
-        var submitButton =
-            document.getElementById(
-                "withdrawSubmitButton"
-            );
+			var submitButton = document.getElementById("withdrawSubmitButton");
 
-        var form =
-            document.getElementById(
-                "withdrawForm"
-            );
+			var form = document.getElementById("withdrawForm");
 
-        var emailVerified =
-            false;
+			var emailVerified = false;
 
+			function setMessage(element, message, success) {
 
+				if (!element) {
+					return;
+				}
 
-        function setMessage(
-            element,
-            message,
-            success
-        ) {
+				element.textContent = message || "";
 
-            if (!element) {
-                return;
-            }
+				element.className = "withdraw-message";
 
+				if (!message) {
+					return;
+				}
 
-            element.textContent =
-                message || "";
+				if (success) {
 
+					element.classList.add("success");
 
-            element.className =
-                "withdraw-message";
+				} else {
 
+					element.classList.add("error");
+				}
+			}
 
-            if (!message) {
-                return;
-            }
+			function requestJson(url, body, callback) {
 
+				var xhr = new XMLHttpRequest();
 
-            if (success) {
+				xhr.open("POST", url, true);
 
-                element.classList.add(
-                    "success"
-                );
+				xhr.setRequestHeader("Accept", "application/json");
 
-            } else {
+				xhr.setRequestHeader("Content-Type",
+						"application/x-www-form-urlencoded; charset=UTF-8");
 
-                element.classList.add(
-                    "error"
-                );
-            }
-        }
+				xhr.onreadystatechange = function() {
 
+					if (xhr.readyState !== 4) {
 
+						return;
+					}
 
-        function requestJson(
-            url,
-            body,
-            callback
-        ) {
+					var data = null;
 
-            var xhr =
-                new XMLHttpRequest();
+					try {
 
+						data = JSON.parse(xhr.responseText);
 
-            xhr.open(
-                "POST",
-                url,
-                true
-            );
+					} catch (e) {
 
+						callback(new Error("서버 응답을 처리할 수 없습니다."), null);
 
-            xhr.setRequestHeader(
-                "Accept",
-                "application/json"
-            );
+						return;
+					}
 
+					if (xhr.status >= 200 && xhr.status < 300) {
 
-            xhr.setRequestHeader(
-                "Content-Type",
-                "application/x-www-form-urlencoded; charset=UTF-8"
-            );
+						callback(null, data);
 
+					} else {
 
-            xhr.onreadystatechange =
-                function () {
+						callback(new Error("요청 처리 중 오류가 발생했습니다."), data);
+					}
+				};
 
-                    if (
-                        xhr.readyState !== 4
-                    ) {
+				xhr.onerror = function() {
 
-                        return;
-                    }
+					callback(new Error("서버와 통신할 수 없습니다."), null);
+				};
 
+				xhr.send(body);
+			}
 
-                    var data =
-                        null;
+			function updateSubmitButton() {
 
+				submitButton.disabled = !emailVerified || !agree.checked;
+			}
 
-                    try {
+			sendButton.addEventListener("click", function() {
 
-                        data =
-                            JSON.parse(
-                                xhr.responseText
-                            );
+				var emailValue = email.value.trim();
 
-                    } catch (e) {
+				emailVerified = false;
 
-                        callback(
-                            new Error(
-                                "서버 응답을 처리할 수 없습니다."
-                            ),
-                            null
-                        );
+				updateSubmitButton();
 
-                        return;
-                    }
+				setMessage(sendMessage, "", false);
 
+				setMessage(verifyMessage, "", false);
 
-                    if (
-                        xhr.status >= 200
-                        && xhr.status < 300
-                    ) {
+				if (!emailValue) {
 
-                        callback(
-                            null,
-                            data
-                        );
+					setMessage(sendMessage, "등록된 이메일을 찾을 수 없습니다.", false);
 
-                    } else {
+					return;
+				}
 
-                        callback(
-                            new Error(
-                                "요청 처리 중 오류가 발생했습니다."
-                            ),
-                            data
-                        );
-                    }
-                };
+				sendButton.disabled = true;
 
+				sendButton.textContent = "발송 중...";
 
-            xhr.onerror =
-                function () {
+				requestJson(
 
-                    callback(
-                        new Error(
-                            "서버와 통신할 수 없습니다."
-                        ),
-                        null
-                    );
-                };
+				contextPath + "/auth/emailSend",
 
+						"email=" + encodeURIComponent(emailValue)
+								+ "&purpose=withdraw",
 
-            xhr.send(
-                body
-            );
-        }
+						function(error, data) {
 
+							sendButton.disabled = false;
 
+							sendButton.textContent = "인증번호 전송";
 
-        function updateSubmitButton() {
+							if (error) {
 
-            submitButton.disabled =
-                !emailVerified
-                || !agree.checked;
-        }
+								setMessage(sendMessage, error.message, false);
 
+								return;
+							}
 
+							if (!data || data.success !== true) {
 
-        sendButton.addEventListener(
-            "click",
-            function () {
+								setMessage(sendMessage,
 
-                var emailValue =
-                    email.value.trim();
+								data && data.message ? data.message
+										: "인증번호 발송에 실패했습니다.",
 
+								false);
 
-                emailVerified =
-                    false;
+								return;
+							}
 
+							verificationArea.hidden = false;
 
-                updateSubmitButton();
+							verificationCode.value = "";
 
+							verificationCode.readOnly = false;
 
-                setMessage(
-                    sendMessage,
-                    "",
-                    false
-                );
+							verifyButton.disabled = false;
 
+							verifyButton.textContent = "인증 확인";
 
-                setMessage(
-                    verifyMessage,
-                    "",
-                    false
-                );
+							setMessage(sendMessage,
 
+							data.message || "인증번호를 발송했습니다.",
 
-                if (!emailValue) {
+							true);
 
-                    setMessage(
-                        sendMessage,
-                        "등록된 이메일을 찾을 수 없습니다.",
-                        false
-                    );
+							verificationCode.focus();
+						});
+			});
 
-                    return;
-                }
+			verifyButton.addEventListener("click", function() {
 
+				var emailValue = email.value.trim();
 
-                sendButton.disabled =
-                    true;
+				var code = verificationCode.value.trim();
 
+				if (code.length !== 6) {
 
-                sendButton.textContent =
-                    "발송 중...";
+					setMessage(verifyMessage, "6자리 인증번호를 입력해주세요.", false);
 
+					return;
+				}
 
-                requestJson(
+				verifyButton.disabled = true;
 
-                    contextPath
-                        + "/auth/emailSend",
+				verifyButton.textContent = "확인 중...";
 
-                    "email="
-                        + encodeURIComponent(
-                            emailValue
-                        )
-                        + "&purpose=withdraw",
+				requestJson(
 
-                    function (
-                        error,
-                        data
-                    ) {
+				contextPath + "/auth/emailVerify",
 
-                        sendButton.disabled =
-                            false;
+				"email=" + encodeURIComponent(emailValue) + "&code="
+						+ encodeURIComponent(code) + "&purpose=withdraw",
 
+				function(error, data) {
 
-                        sendButton.textContent =
-                            "인증번호 전송";
+					verifyButton.disabled = false;
 
+					verifyButton.textContent = "인증 확인";
 
-                        if (error) {
+					if (error) {
 
-                            setMessage(
-                                sendMessage,
-                                error.message,
-                                false
-                            );
+						setMessage(verifyMessage, error.message, false);
 
-                            return;
-                        }
+						return;
+					}
 
+					if (!data || data.success !== true) {
 
-                        if (
-                            !data
-                            || data.success !== true
-                        ) {
+						setMessage(verifyMessage,
 
-                            setMessage(
-                                sendMessage,
+						data && data.message ? data.message
+								: "인증번호가 올바르지 않습니다.",
 
-                                data
-                                && data.message
-                                    ? data.message
-                                    : "인증번호 발송에 실패했습니다.",
+						false);
 
-                                false
-                            );
+						return;
+					}
 
-                            return;
-                        }
+					emailVerified = true;
 
+					setMessage(verifyMessage, "이메일 인증이 완료되었습니다.", true);
 
-                        verificationArea.hidden =
-                            false;
+					verificationCode.readOnly = true;
 
+					verifyButton.disabled = true;
 
-                        verificationCode.value =
-                            "";
+					verifyButton.textContent = "인증완료";
 
+					sendButton.disabled = true;
 
-                        verificationCode.readOnly =
-                            false;
+					sendButton.textContent = "인증완료";
 
+					updateSubmitButton();
+				});
+			});
 
-                        verifyButton.disabled =
-                            false;
+			agree.addEventListener("change", function() {
 
+				updateSubmitButton();
+			});
 
-                        verifyButton.textContent =
-                            "인증 확인";
+			form.addEventListener("submit", function(event) {
 
+				if (!emailVerified) {
 
-                        setMessage(
-                            sendMessage,
+					event.preventDefault();
 
-                            data.message
-                                || "인증번호를 발송했습니다.",
+					alert("이메일 인증을 완료해주세요.");
 
-                            true
-                        );
+					return;
+				}
 
+				if (!agree.checked) {
 
-                        verificationCode.focus();
-                    }
-                );
-            }
-        );
+					event.preventDefault();
 
+					alert("회원 탈퇴에 동의해주세요.");
 
+					return;
+				}
 
-        verifyButton.addEventListener(
-            "click",
-            function () {
+				if (!window.confirm("정말 회원 탈퇴를 진행하시겠습니까?")) {
 
-                var emailValue =
-                    email.value.trim();
+					event.preventDefault();
 
+					return;
+				}
 
-                var code =
-                    verificationCode
-                        .value
-                        .trim();
+				submitButton.disabled = true;
 
+				submitButton.textContent = "탈퇴 처리 중...";
+			});
 
-                if (
-                    code.length !== 6
-                ) {
+			updateSubmitButton();
 
-                    setMessage(
-                        verifyMessage,
-                        "6자리 인증번호를 입력해주세요.",
-                        false
-                    );
-
-                    return;
-                }
-
-
-                verifyButton.disabled =
-                    true;
-
-
-                verifyButton.textContent =
-                    "확인 중...";
-
-
-                requestJson(
-
-                    contextPath
-                        + "/auth/emailVerify",
-
-                    "email="
-                        + encodeURIComponent(
-                            emailValue
-                        )
-                        + "&code="
-                        + encodeURIComponent(
-                            code
-                        )
-                        + "&purpose=withdraw",
-
-                    function (
-                        error,
-                        data
-                    ) {
-
-                        verifyButton.disabled =
-                            false;
-
-
-                        verifyButton.textContent =
-                            "인증 확인";
-
-
-                        if (error) {
-
-                            setMessage(
-                                verifyMessage,
-                                error.message,
-                                false
-                            );
-
-                            return;
-                        }
-
-
-                        if (
-                            !data
-                            || data.success !== true
-                        ) {
-
-                            setMessage(
-                                verifyMessage,
-
-                                data
-                                && data.message
-                                    ? data.message
-                                    : "인증번호가 올바르지 않습니다.",
-
-                                false
-                            );
-
-                            return;
-                        }
-
-
-                        emailVerified =
-                            true;
-
-
-                        setMessage(
-                            verifyMessage,
-                            "이메일 인증이 완료되었습니다.",
-                            true
-                        );
-
-
-                        verificationCode.readOnly =
-                            true;
-
-
-                        verifyButton.disabled =
-                            true;
-
-
-                        verifyButton.textContent =
-                            "인증완료";
-
-
-                        sendButton.disabled =
-                            true;
-
-
-                        sendButton.textContent =
-                            "인증완료";
-
-
-                        updateSubmitButton();
-                    }
-                );
-            }
-        );
-
-
-
-        agree.addEventListener(
-            "change",
-            function () {
-
-                updateSubmitButton();
-            }
-        );
-
-
-
-        form.addEventListener(
-            "submit",
-            function (event) {
-
-                if (!emailVerified) {
-
-                    event.preventDefault();
-
-                    alert(
-                        "이메일 인증을 완료해주세요."
-                    );
-
-                    return;
-                }
-
-
-                if (!agree.checked) {
-
-                    event.preventDefault();
-
-                    alert(
-                        "회원 탈퇴에 동의해주세요."
-                    );
-
-                    return;
-                }
-
-
-                if (
-                    !window.confirm(
-                        "정말 회원 탈퇴를 진행하시겠습니까?"
-                    )
-                ) {
-
-                    event.preventDefault();
-
-                    return;
-                }
-
-
-                submitButton.disabled =
-                    true;
-
-
-                submitButton.textContent =
-                    "탈퇴 처리 중...";
-            }
-        );
-
-
-        updateSubmitButton();
-
-    }
-);
-</script>
+		});
+	</script>
 
 
 </body>

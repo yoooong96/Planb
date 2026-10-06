@@ -1,25 +1,23 @@
-package controller.auth;
+package controller.profile;
 
 import java.io.IOException;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
- * Servlet implementation class logout
+ * Servlet implementation class myProfile
  */
-@WebServlet("/auth/logout")
-public class logout extends HttpServlet {
+@WebServlet("/profile/myProfile")
+public class myProfile extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public logout() {
+    public myProfile() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -27,14 +25,10 @@ public class logout extends HttpServlet {
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		HttpSession session = request.getSession(false);
-		
-		if(session != null) {
-			session.invalidate();
-		}
-		
-		response.sendRedirect(request.getContextPath()+"/home");
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		request.getRequestDispatcher("/view/profile/myProfile.jsp").forward(request, response);
 	}
 
 }

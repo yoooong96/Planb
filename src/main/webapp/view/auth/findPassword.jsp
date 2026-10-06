@@ -372,7 +372,7 @@ String phone = request.getParameter("phone") == null ? "" : request.getParameter
 
 				<p>
 
-					비밀번호가 기억나셨나요? <a href="<%=ctx%>/view/auth/login.jsp"> 로그인 </a>
+					비밀번호가 기억나셨나요? <a href="<%=ctx%>/auth/login"> 로그인 </a>
 
 				</p>
 

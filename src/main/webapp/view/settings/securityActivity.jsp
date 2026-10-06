@@ -13,7 +13,7 @@ UserDto user =
         (UserDto) session.getAttribute("user");
 
 if (user == null) {
-    response.sendRedirect(ctx + "/view/auth/login.jsp");
+    response.sendRedirect(ctx + "/auth/login");
     return;
 }
 
@@ -133,7 +133,7 @@ String loginId =
 
                         <a
                             class="settings-soft-btn"
-                            href="<%=ctx%>/view/settings/passwordChange.jsp"
+                            href="<%=ctx%>/settings/passwordChange"
                             style="text-decoration:none;">
 
                             변경

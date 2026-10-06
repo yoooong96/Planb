@@ -584,7 +584,7 @@ String errorMessage =
             <p class="login-link">
                 이미 계정이 있으신가요?
 
-                <a href="<%=ctx%>/view/auth/login.jsp">
+                <a href="<%=ctx%>/auth/login">
                     로그인
                 </a>
             </p>
