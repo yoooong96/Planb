@@ -58,7 +58,7 @@ public class ProfileEdit extends HttpServlet {
 
 		if (session == null) {
 
-			response.sendRedirect(request.getContextPath() + "/view/auth/login.jsp");
+			response.sendRedirect(request.getContextPath() + "/auth/login");
 
 			return;
 		}
@@ -67,7 +67,7 @@ public class ProfileEdit extends HttpServlet {
 
 		if (loginUser == null) {
 
-			response.sendRedirect(request.getContextPath() + "/view/auth/login.jsp");
+			response.sendRedirect(request.getContextPath() + "/auth/login");
 
 			return;
 		}
@@ -368,7 +368,7 @@ public class ProfileEdit extends HttpServlet {
 			 * =====================================================
 			 */
 
-			response.sendRedirect(request.getContextPath() + "/view/profile/myProfile.jsp" + "?updated=success");
+			response.sendRedirect(request.getContextPath() + "/profile/myProfile" + "?updated=success");
 
 		} catch (Exception e) {
 
@@ -391,7 +391,7 @@ public class ProfileEdit extends HttpServlet {
 
 			request.setAttribute("errorMessage", e.getMessage());
 
-			request.getRequestDispatcher("/view/profile/myProfile.jsp").forward(request, response);
+			request.getRequestDispatcher("/profile/myProfile").forward(request, response);
 		}
 	}
 

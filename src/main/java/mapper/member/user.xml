@@ -143,6 +143,15 @@
 		DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'),
 		'@deleted.local'
 		),
+		
+		provider_user_id =
+		CONCAT(
+		'withdrawn_',
+		user_id,
+		'_',
+		DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'),
+		'@deleted.local'
+		),
 
 		updated_at = NOW()
 

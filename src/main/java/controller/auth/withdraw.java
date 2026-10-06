@@ -50,7 +50,7 @@ public class withdraw extends HttpServlet {
 
 		if (session == null) {
 
-			response.sendRedirect(request.getContextPath() + "/view/auth/login.jsp");
+			response.sendRedirect(request.getContextPath() + "/auth/login");
 
 			return;
 		}
@@ -59,7 +59,7 @@ public class withdraw extends HttpServlet {
 
 		if (user == null) {
 
-			response.sendRedirect(request.getContextPath() + "/view/auth/login.jsp");
+			response.sendRedirect(request.getContextPath() + "/auth/login");
 
 			return;
 		}
@@ -138,7 +138,7 @@ public class withdraw extends HttpServlet {
 			 * ==================================================
 			 */
 
-			response.sendRedirect(request.getContextPath() + "/view/auth/login.jsp" + "?withdraw=success");
+			response.sendRedirect(request.getContextPath() + "/auth/login" + "?withdraw=success");
 
 		} catch (Exception e) {
 

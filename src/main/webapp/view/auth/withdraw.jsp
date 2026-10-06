@@ -12,7 +12,7 @@ UserDto user = (UserDto) session.getAttribute("user");
 
 if (user == null) {
 
-	response.sendRedirect(ctx + "/view/auth/login.jsp");
+	response.sendRedirect(ctx + "/auth/login");
 
 	return;
 }
@@ -324,7 +324,7 @@ String errorMessage = (String) request.getAttribute("errorMessage");
 
 
 							<a class="settings-soft-btn"
-								href="<%=ctx%>/view/profile/myProfile.jsp"
+								href="<%=ctx%>/profile/myProfile"
 								style="min-width: 104px; text-decoration: none;"> 취소 </a>
 
 
@@ -357,8 +357,7 @@ document.addEventListener(
     "DOMContentLoaded",
     function () {
 
-        var contextPath = "<%=ctx%>
-		";
+        	var contextPath = "<%=ctx%>";
 
 			var email = document.getElementById("withdrawEmail");
 

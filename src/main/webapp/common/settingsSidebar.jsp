@@ -80,7 +80,7 @@ String settingsPage =
         <a
             class="settings-nav-link
             <%="notification".equals(settingsPage) ? "active" : ""%>"
-            href="<%=ctx%>/view/settings/notificationSettings.jsp">
+            href="<%=ctx%>/settings/notificationSettings">
 
             <span class="settings-nav-icon">
                 ♢
@@ -97,7 +97,7 @@ String settingsPage =
         <a
             class="settings-nav-link
             <%="privacy".equals(settingsPage) ? "active" : ""%>"
-            href="<%=ctx%>/view/settings/privacySettings.jsp">
+            href="<%=ctx%>/settings/privacySettings">
 
             <span class="settings-nav-icon">
                 ▤
@@ -114,7 +114,7 @@ String settingsPage =
         <a
             class="settings-nav-link
             <%="security".equals(settingsPage) ? "active" : ""%>"
-            href="<%=ctx%>/view/settings/securityActivity.jsp">
+            href="<%=ctx%>/settings/securityActivity">
 
             <span class="settings-nav-icon">
                 ⚙
@@ -131,7 +131,7 @@ String settingsPage =
         <a
             class="settings-nav-link
             <%="support".equals(settingsPage) ? "active" : ""%>"
-            href="<%=ctx%>/view/support/support.jsp">
+            href="<%=ctx%>/support/support">
 
             <span class="settings-nav-icon">
                 ?
