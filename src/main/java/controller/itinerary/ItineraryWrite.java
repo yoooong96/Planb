@@ -140,7 +140,7 @@ public class ItineraryWrite extends HttpServlet {
              */
             response.sendRedirect(
                     request.getContextPath()
-                    + "/view/travel/scheduleDetail.jsp?id="
+                    + "/schedules/detail?id="
                     + itineraryId
             );
 

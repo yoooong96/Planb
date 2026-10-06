@@ -175,7 +175,7 @@ public class ItineraryModify extends HttpServlet {
              */
             response.sendRedirect(
                     request.getContextPath()
-                    + "/view/travel/scheduleDetail.jsp?id="
+                    + "/schedules/detail?id="
                     + itineraryDto.getItineraryId()
             );
 
