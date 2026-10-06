@@ -76,14 +76,29 @@ request.setAttribute("activePage", "travel");
 									stroke-width="2"
 									d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" /></svg>
 						</button>
-						<button
-							class="w-8 h-8 rounded-full border flex items-center justify-center transition-all"
-							style="border-color: #D1D2F9; background: white" title="저장">
-							<svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none"
-								stroke="#6369D1" stroke-width="2">
-								<path stroke-linecap="round" stroke-linejoin="round"
-									d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" /></svg>
-						</button>
+						<c:if
+							test="${empty sessionScope.user or itinerary.userId ne sessionScope.user.userId}">
+
+							<button type="button" id="scheduleBookmarkButton"
+								data-bookmark-url="${pageContext.request.contextPath}/itinerary/bookmark"
+								data-itinerary-id="${itinerary.itineraryId}"
+								data-logged-in="${not empty sessionScope.user}"
+								data-login-url="${pageContext.request.contextPath}/auth/login"
+								aria-pressed="${itinerary.bookmarked}"
+								aria-label="${itinerary.bookmarked ? '북마크 해제' : '북마크 추가'}"
+								title="${itinerary.bookmarked ? '북마크 해제' : '북마크 추가'}"
+								class="w-8 h-8 rounded-full border flex items-center justify-center transition-all"
+								style="border-color: #D1D2F9; background: white">
+
+								<svg class="w-3.5 h-3.5" viewBox="0 0 24 24"
+									fill="${itinerary.bookmarked ? '#6369D1' : 'none'}"
+									stroke="#6369D1" stroke-width="2" aria-hidden="true">
+									<path stroke-linecap="round" stroke-linejoin="round"
+										d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+        						</svg>
+							</button>
+
+						</c:if>
 					</div>
 				</div>
 				<div class="relative w-full overflow-hidden"
@@ -339,12 +354,6 @@ request.setAttribute("activePage", "travel");
 							class="absolute bottom-0 left-0 right-0 h-[2.5px] rounded-t-full"
 							style="background: #6369D1"></div>
 					</button>
-					<button
-						class="flex-1 py-3 text-[12.5px] font-semibold relative transition-colors whitespace-nowrap"
-						style="color: #94a3b8">여행 후기</button>
-					<button
-						class="flex-1 py-3 text-[12.5px] font-semibold relative transition-colors whitespace-nowrap"
-						style="color: #94a3b8">여행 팁</button>
 					<button
 						class="flex-1 py-3 text-[12.5px] font-semibold relative transition-colors whitespace-nowrap"
 						style="color: #94a3b8">댓글 (3)</button>
@@ -1020,6 +1029,6 @@ request.setAttribute("activePage", "travel");
 		src="${pageContext.request.contextPath}/view/assets/js/auth/tripily.js"></script>
 
 	<script
-		src="${pageContext.request.contextPath}/view/assets/js/travel/scheduleDetail.js?v=1"></script>
+		src="${pageContext.request.contextPath}/view/assets/js/travel/scheduleDetail.js?v=2"></script>
 </body>
 </html>

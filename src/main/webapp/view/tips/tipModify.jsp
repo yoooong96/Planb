@@ -1,23 +1,23 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%
 request.setAttribute("activePage", "tips");
 %>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-	<meta charset="UTF-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>여행꿀팁 작성 · Tripily</title>
-	<jsp:include page="/common/headStyles.jsp" />
-	<script defer src="${pageContext.request.contextPath}/view/assets/js/tips/tipWrite.js"></script>
+    <title>여행꿀팁 수정 · Tripily</title>
+    <jsp:include page="/common/headStyles.jsp" />
 </head>
 <body class="site-shell"><jsp:include page="/common/header.jsp" />
 	<div class="min-h-screen" style="background: #f5f5ff">
 		<div class="relative" style="height: 220px">
 			<img
 				src="https://images.unsplash.com/photo-1488646953014-85cb44e25828?fit=crop&w=1600&q=80"
-				alt="여행꿀팁 작성" class="absolute inset-0 w-full h-full object-cover"
+				alt="여행꿀팁 수정" class="absolute inset-0 w-full h-full object-cover"
 				style="object-position: center 30%">
 			<div class="absolute inset-0"
 				style="background: linear-gradient(135deg, rgba(20, 12, 70, .80) 0%, rgba(99, 105, 209, .50) 55%, rgba(20, 12, 70, .40) 100%)"></div>
@@ -35,19 +35,18 @@ request.setAttribute("activePage", "tips");
 			</div>
 		</div>
 		<div class="max-w-3xl mx-auto px-4 py-10">
-			<form action="${pageContext.request.contextPath}/tipWrite" method="post" enctype="multipart/form-data"
-				  class="bg-white rounded-2xl shadow-md overflow-hidden" style="border: 1.5px solid #D1D2F9">
-				<div class="flex items-center justify-between px-8 py-5"
-					style="background: linear-gradient(135deg, #6369D1 0%, #8b91e3 100%)">
+			<form action="${pageContext.request.contextPath}/tipModify" method="post" enctype="multipart/form-data"
+      				class="bg-white rounded-2xl shadow-md overflow-hidden" style="border: 1.5px solid #D1D2F9">
+	    	<input type="hidden" name="tipId" value="${tip.tipId}">
+				<div class="flex items-center justify-between px-8 py-5" style="background: linear-gradient(135deg, #6369D1 0%, #8b91e3 100%)">
 					<div>
-						<h2 class="text-lg font-bold text-white">여행꿀팁 작성하기</h2>
-						<p class="text-sm mt-0.5" style="color: #D1D2F9">여러분의 소중한 경험이
-							누군가에게 특별한 여행이 됩니다.</p>
+						<h2 class="text-lg font-bold text-white">여행꿀팁 수정하기</h2>
+						<p class="text-sm mt-0.5" style="color: #D1D2F9">여러분의 소중한 경험이 누군가에게 특별한 여행이 됩니다.</p>
 					</div>
-					<a href="${pageContext.request.contextPath}/tips"
+					<a href="${pageContext.request.contextPath}/tipWriteList"
 						class="flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-semibold text-white"
-						style="background: rgba(255, 255, 255, .15); border: 1px solid rgba(255, 255, 255, .3)">‹
-						목록으로</a>
+						style="background: rgba(255, 255, 255, .15); border: 1px solid rgba(255, 255, 255, .3)">
+						‹ 목록으로</a>
 				</div>
 				<div class="px-8 py-8 flex flex-col gap-8">
 					<div>
@@ -57,10 +56,10 @@ request.setAttribute("activePage", "tips");
 							<span class="text-red-500 text-xs">*</span></label>
 						<div class="relative">
 							<input type="text" name="title" maxlength="100" data-char-input
-								class="jsp-focus w-full rounded-xl px-4 py-3 text-sm text-gray-800 outline-none"
-								style="border: 1.5px solid #D1D2F9" placeholder="제목을 입력해주세요." equired>
+       								class="jsp-focus w-full rounded-xl px-4 py-3 text-sm text-gray-800 outline-none" style="border: 1.5px solid #D1D2F9"
+       								placeholder="제목을 입력해주세요." value="${tip.title}" required>
 							<span class="absolute right-4 top-1/2 -translate-y-1/2 text-xs text-gray-300">
-								<span data-char-count>0</span>/100
+								<span data-char-count>${tip.title.length()}</span>/100
 							</span>
 						</div>
 					</div>
@@ -71,8 +70,9 @@ request.setAttribute("activePage", "tips");
 								해시태그
 							<span class="text-xs font-normal text-gray-400">(선택)</span>
 						</label>
-						<input type="text" name="hashtag" class="jsp-focus w-full rounded-xl px-4 py-3 text-sm text-gray-800 outline-none"
-							style="border: 1.5px solid #D1D2F9" placeholder="#일본 #도쿄 #교통 #맛집">
+						<input type="text" name="hashtag" value="${tip.hashtag}"
+       							class="jsp-focus w-full rounded-xl px-4 py-3 text-sm text-gray-800 outline-none" style="border: 1.5px solid #D1D2F9"
+       							placeholder="#일본 #도쿄 #교통 #맛집">
 						<p class="mt-2 text-xs text-gray-400">
 							여행 국가나 관련 키워드를 해시태그로 입력해주세요. 예: #일본 #도쿄 #교통
 						</p>
@@ -94,8 +94,8 @@ request.setAttribute("activePage", "tips");
 								<button type="button" class="px-2 py-1 text-xs">🖼</button>
 							</div>
 							<textarea name="content" class="w-full min-h-[220px] p-4 outline-none resize-y text-sm text-gray-700"
-								placeholder="여행에서 직접 경험한 소중한 팁을 자세히 적어주세요." required>
-							</textarea>
+          							placeholder="여행에서 직접 경험한 소중한 팁을 자세히 적어주세요." required>${tip.content}
+          					</textarea>
 						</div>
 					</div>
 					<div>
@@ -103,6 +103,18 @@ request.setAttribute("activePage", "tips");
 							<label class="flex items-center gap-2 text-sm font-bold" style="color: #6369D1">📎 사진 첨부</label>
 							<span class="text-xs text-gray-400">최대 5장</span>
 						</div>
+						<c:if test="${not empty tip.thumbnailImg}">
+						    <div class="mb-4">
+						        <p class="text-xs font-semibold text-gray-500 mb-2">현재 등록된 이미지</p>
+						        <div class="relative overflow-hidden rounded-xl"
+						             style="width: min(180px, 100%); aspect-ratio: 4 / 3; border: 1.5px solid #D1D2F9;">
+						            <img src="${pageContext.request.contextPath}${tip.thumbnailImg}"
+						                 alt="현재 등록된 이미지"
+						                 class="w-full h-full object-cover">
+						        </div>
+						        <p class="text-xs text-gray-400 mt-2">새 사진을 선택하지 않으면 현재 이미지가 유지됩니다.</p>
+						    </div>
+						</c:if>
 						<label class="rounded-xl py-12 flex flex-col items-center justify-center gap-3 cursor-pointer"
 							style="border: 2px dashed #D1D2F9; background: #fafaff">
 							<input type="file" id="tipImages" name="images" multiple accept="image/*" class="hidden">
@@ -114,34 +126,59 @@ request.setAttribute("activePage", "tips");
 								</svg>
 							</div>
 							<div class="text-center">
-								<p class="text-sm font-semibold text-[#6369D1]">사진을 드래그하거나 클릭하여 업로드하세요. </p>
+								<p class="text-sm font-semibold text-[#6369D1]">사진을 변경하려면 새 이미지를 선택해주세요.</p>
 								<p class="text-xs text-gray-400 mt-0.5">JPG, PNG, GIF 파일 (최대 10MB) </p>
 							</div>
 						</label>
 						<!-- 선택한 이미지 미리보기 -->
-						<div id="tipImagePreview"
-						     style="
-						        display: grid;
-						        grid-template-columns: repeat(auto-fill, minmax(140px, 180px));
-						        gap: 12px;
-						        margin-top: 16px;
-						        width: 100%;
-						     ">
+						<div id="tipImagePreview" class="grid gap-3 mt-4"
+							style="grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));">
 						</div>
 					</div>
 					<div class="flex justify-end gap-3 pt-2">
-						<a href="${pageContext.request.contextPath}/tips" class="px-8 py-3 rounded-full text-sm font-semibold"
+						<a href="${pageContext.request.contextPath}/tipWriteList" class="px-8 py-3 rounded-full text-sm font-semibold"
 							style="border: 2px solid #D1D2F9; color: #6369D1">취소
 						</a>
-						<button
-							class="px-8 py-3 rounded-full text-white text-sm font-bold shadow-md"
-							style="background: linear-gradient(135deg, #6369D1 0%, #8b91e3 100%)">등록하기
+						<button type="submit" class="px-8 py-3 rounded-full text-white text-sm font-bold shadow-md"
+						        style="background: linear-gradient(135deg, #6369D1 0%, #8b91e3 100%)">
+						    수정하기
 						</button>
 					</div>
 				</div>
 			</form>
 		</div>
 	</div>
+	
+	<script>
+		const tipImages = document.getElementById("tipImages");
+		const tipImagePreview = document.getElementById("tipImagePreview");
+		tipImages.addEventListener("change", function () {
+			tipImagePreview.innerHTML = "";
+			const files = Array.from(this.files);
+			if (files.length > 5) {
+				alert("사진은 최대 5장까지 첨부할 수 있습니다.");
+				this.value = "";
+				return;
+			}
+			files.forEach(function(file) {
+				if (!file.type.startsWith("image/")) {
+					return;
+				}
+				const reader = new FileReader();
+				reader.onload = function(e) {
+					const preview = document.createElement("div");
+					preview.className = "relative overflow-hidden rounded-xl border bg-gray-50";
+					preview.style.borderColor = "#D1D2F9";
+					preview.style.aspectRatio = "4 / 3";
+					preview.innerHTML = `
+						<img src="\${e.target.result}"alt="첨부 이미지 미리보기"class="w-full h-full object-cover">
+					`;
+					tipImagePreview.appendChild(preview);
+				};
+				reader.readAsDataURL(file);
+			});
+		});
+	</script>
 	<jsp:include page="/common/footer.jsp" />
 </body>
 </html>

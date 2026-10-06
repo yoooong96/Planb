@@ -11,6 +11,8 @@ public interface TipDao {
 
 	// 여행꿀팁 상세조회
 	TipDto selectTip(Long tipId);
+	
+	TipDto selectTipDetail(long tipId);
 
 	// 여행꿀팁 수정
 	int updateTip(TipDto tipDto);
@@ -29,4 +31,10 @@ public interface TipDao {
 	int countTipListByFilter(List<String> countryKeywords, String keyword);
 	
 	List<TipDto> selectMyTipList(long userId);
+	
+	// 내가 작성한 글 페이지 조회
+	List<TipDto> selectMyTipList(long userId, int offset, int pageSize);
+	
+	// 내가 작성한 여행꿀팁 전체 개수
+	int countMyTipList(long userId);
 }

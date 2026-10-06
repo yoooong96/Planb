@@ -10,6 +10,7 @@ public class ItineraryCommentDto {
 	private String status;		// 댓글 상태
 	private Timestamp createdAt;// 작성 일시
 	private Timestamp updatedAt;// 수정 일시
+	private String nickname; 	// 작성자 최신닉네임(db에는 필요없음)
 	public ItineraryCommentDto() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -67,12 +68,17 @@ public class ItineraryCommentDto {
 	public void setUpdatedAt(Timestamp updatedAt) {
 		this.updatedAt = updatedAt;
 	}
+	public String getNickname() {
+	    return nickname;
+	}
+
+	public void setNickname(String nickname) {
+	    this.nickname = nickname;
+	}
 	@Override
 	public String toString() {
 		return "ItineraryCommentDto [commentId=" + commentId + ", itineraryId=" + itineraryId + ", userId=" + userId
 				+ ", content=" + content + ", status=" + status + ", createdAt=" + createdAt + ", updatedAt="
 				+ updatedAt + "]";
 	}
-	
-	
 }

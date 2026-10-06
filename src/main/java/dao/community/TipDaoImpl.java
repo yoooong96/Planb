@@ -28,11 +28,27 @@ public class TipDaoImpl implements TipDao {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	@Override
+	public TipDto selectTipDetail(long tipId) {
+		try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+	        return sqlSession.selectOne("mapper.community.tip.selectTipDetail", tipId);
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        throw e;
+	    }
+	}
 
 	@Override
 	public int updateTip(TipDto tipDto) {
-		// TODO Auto-generated method stub
-		return 0;
+		try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+	        int result = sqlSession.update("mapper.community.tip.updateTip", tipDto);
+	        sqlSession.commit();
+	        return result;
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        throw e;
+	    }
 	}
 
 	@Override
@@ -108,4 +124,32 @@ public class TipDaoImpl implements TipDao {
 			throw e;
 		}
 	}
+
+	@Override
+	public List<TipDto> selectMyTipList(long userId, int offset, int pageSize) {
+		Map<String, Object> param = new HashMap<>();
+
+	    param.put("userId", userId);
+	    param.put("offset", offset);
+	    param.put("pageSize", pageSize);
+
+	    try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+	    	return sqlSession.selectList("mapper.community.tip.selectMyTipListPaging", param
+	    	);
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        throw e;
+	    }
+	}
+	
+	@Override
+	public int countMyTipList(long userId) {
+	    try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+	        return sqlSession.selectOne("mapper.community.tip.countMyTipList", userId);
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        throw e;
+	    }
+	}
+	
 }

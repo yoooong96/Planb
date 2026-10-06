@@ -26,7 +26,7 @@
 				</p>
 				<h1>내가 작성한 글</h1>
 				<p class="tip-my-description">
-					총<strong>${tipList.size()}</strong>개의 여행 꿀팁을 작성했습니다.
+					총 <strong>${totalCount}</strong>개의 여행 꿀팁을 작성했습니다.
 				</p>
 			</div>
 			<div class="tip-my-banner-actions"> 
@@ -100,12 +100,19 @@
 					<!-- 수정 / 삭제 버튼 -->
 					<div class="tip-my-card-actions">
 						<a href="${pageContext.request.contextPath}/tipModify?tipId=${tip.tipId}" class="tip-edit-btn">
-							<svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 20h9" />
-								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-									d="M16.5 3.5a2.1 2.1 0 013 3L8 18l-4 1 1-4z" />
-							</svg>
-							수정하기
+						    <svg xmlns="http://www.w3.org/2000/svg"
+						         width="16"
+						         height="16"
+						         viewBox="0 0 24 24"
+						         fill="none"
+						         stroke="currentColor"
+						         stroke-width="2"
+						         stroke-linecap="round"
+						         stroke-linejoin="round">
+						        <path d="M12 20h9"/>
+						        <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4Z"/>
+						    </svg>
+						    수정하기
 						</a>
 						<button type="button" class="tip-delete-btn" data-tip-id="${tip.tipId}">
 							<svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
@@ -117,6 +124,56 @@
 					</div>
 				</article>
 			</c:forEach>
+			<!-- ========================================
+			     페이지네이션
+			======================================== -->
+			<c:if test="${totalPages > 0}">
+			    <nav class="tip-write-pagination" aria-label="페이지 이동">
+			        <c:choose>
+			            <c:when test="${currentPage > 1}">
+			                <a href="${pageContext.request.contextPath}/tipWriteList?page=${currentPage - 1}"
+			                   class="tip-page-btn tip-page-arrow"
+			                   aria-label="이전 페이지">
+			                    ‹
+			                </a>
+			            </c:when>
+			            <c:otherwise>
+			                <span class="tip-page-btn tip-page-arrow disabled">
+			                    ‹
+			                </span>
+			            </c:otherwise>
+			        </c:choose>
+			        <c:forEach var="pageNum" begin="1" end="${totalPages}">
+			            <c:choose>
+			                <c:when test="${pageNum == currentPage}">
+			                    <span class="tip-page-btn active">
+			                        ${pageNum}
+			                    </span>
+			                </c:when>
+			                <c:otherwise>
+			                    <a href="${pageContext.request.contextPath}/tipWriteList?page=${pageNum}"
+			                       class="tip-page-btn">
+			                        ${pageNum}
+			                    </a>
+			                </c:otherwise>
+			            </c:choose>
+			        </c:forEach>
+			        <c:choose>
+			            <c:when test="${currentPage < totalPages}">
+			                <a href="${pageContext.request.contextPath}/tipWriteList?page=${currentPage + 1}"
+			                   class="tip-page-btn tip-page-arrow"
+			                   aria-label="다음 페이지">
+			                    ›
+			                </a>
+			            </c:when>
+			            <c:otherwise>
+			                <span class="tip-page-btn tip-page-arrow disabled">
+			                    ›
+			                </span>
+			            </c:otherwise>
+			        </c:choose>
+			    </nav>
+			</c:if>
 		</div>
 	</main>
 	<jsp:include page="/common/footer.jsp" />

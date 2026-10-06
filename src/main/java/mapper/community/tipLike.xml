@@ -4,16 +4,29 @@
 
 <mapper namespace="mapper.community.tipLike">
 
-	<insert id="insertTipLike" parameterType="tipLike">
-
+	<!-- 좋아요 등록 -->
+	<insert id="insertTipLike" parameterType="dto.community.TipLikeDto">
+	    INSERT INTO TB_TIP_LIKE (tip_id, user_id) VALUES (#{tipId}, #{userId})
 	</insert>
-
-	<select id="selectTipLike" parameterType="tipLike" resultType="tipLike">
-
+	
+	<!-- 좋아요 여부 조회 -->
+	<select id="selectTipLike" parameterType="dto.community.TipLikeDto" resultType="dto.community.TipLikeDto">
+	    SELECT tip_id AS tipId, user_id AS userId, created_at AS createdAt
+	    FROM TB_TIP_LIKE
+	    WHERE tip_id = #{tipId} AND user_id = #{userId}
 	</select>
-
-	<delete id="deleteTipLike" parameterType="tipLike">
-
+	
+	<!-- 좋아요 취소 -->
+	<delete id="deleteTipLike" parameterType="dto.community.TipLikeDto">
+	    DELETE FROM TB_TIP_LIKE
+	    WHERE tip_id = #{tipId} AND user_id = #{userId}
 	</delete>
+	
+	<!-- 좋아요 개수 -->
+	<select id="selectTipLikeCount" parameterType="long" resultType="int">
+	    SELECT COUNT(*)
+	    FROM TB_TIP_LIKE
+	    WHERE tip_id = #{tipId}
+	</select>
 
 </mapper>
