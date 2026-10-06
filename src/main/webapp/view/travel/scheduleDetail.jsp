@@ -276,8 +276,11 @@ request.setAttribute("activePage", "travel");
 				</div>
 				<div class="px-5 py-3 border-b flex items-center gap-3"
 					style="border-color: #D1D2F9">
+					<c:url var="authorProfileUrl" value="/profile/userProfile">
+    					<c:param name="userId" value="${itinerary.userId}" />
+					</c:url>
 					<a
-						href="${pageContext.request.contextPath}/view/profile/userProfile.jsp"
+						href="${authorProfileUrl}"
 						class="flex items-center gap-2.5 flex-1 min-w-0 hover:opacity-75 transition-opacity text-left"><img
 						src="https://i.pravatar.cc/40?img=12" alt="여행좋아"
 						class="w-9 h-9 rounded-full object-cover border-2 shrink-0"
