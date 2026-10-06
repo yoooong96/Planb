@@ -288,6 +288,24 @@ request.setAttribute("activePage", "planner");
         cursor: pointer;
     }
 
+    .planner-cost-mode-btn {
+        transition: background-color .15s ease, box-shadow .15s ease, transform .15s ease;
+    }
+
+    .planner-cost-mode-btn:hover {
+        background: #555AC4;
+        box-shadow: 0 2px 8px rgba(99, 105, 209, .22);
+    }
+
+    .planner-day-header {
+        transition: filter .15s ease, box-shadow .15s ease;
+    }
+
+    .planner-day-header:hover {
+        filter: brightness(.92);
+        box-shadow: 0 3px 10px rgba(79, 70, 229, .12);
+    }
+
     .planner-item-cost {
         text-align: right;
     }
@@ -1453,14 +1471,14 @@ request.setAttribute("activePage", "planner");
                         </div>
                         <div class="relative"><button id="plannerMapFilterBtn" type="button" class="flex items-center gap-2 rounded-xl border px-3 py-1.5 text-xs font-bold shadow-sm hover:shadow-md transition-all"
                             style="border-color: #D1D2F9; color: #6369D1; background: #F5F5FF; min-width: 86px">
-                            <span class="w-2 h-2 rounded-full shrink-0" style="background: #6369D1"></span>
+                            <span id="plannerMapFilterDot" class="w-2 h-2 rounded-full shrink-0" style="background: #6369D1"></span>
                             <span id="plannerMapFilterLabel" class="flex-1 text-left">전체</span>
                             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="m6 9 6 6 6-6" />
                             </svg>
                         </button>
-                            <div id="plannerMapFilterMenu" class="hidden absolute right-0 mt-1.5 w-36 rounded-xl border bg-white shadow-xl z-30 overflow-hidden" style="border-color:#D1D2F9">
+                            <div id="plannerMapFilterMenu" class="hidden absolute right-0 mt-1.5 w-44 rounded-xl border bg-white shadow-xl z-30 overflow-hidden" style="border-color:#D1D2F9">
                                 <button type="button" data-map-day="all" class="w-full text-left px-3 py-2 text-xs font-bold hover:bg-purple-50" style="color:#6369D1">전체</button>
                                 <button type="button" data-map-day="1" class="w-full text-left px-3 py-2 text-xs font-bold hover:bg-purple-50 text-gray-600">1일차</button>
                             </div>
@@ -1468,8 +1486,10 @@ request.setAttribute("activePage", "planner");
                     </div>
                 </div>
 
-                <div class="flex-1 flex flex-col min-h-0">
+                <div class="flex-1 flex flex-col min-h-0 relative">
                     <div id="plannerGoogleMap" class="flex-1 w-full" style="min-height: 360px; position:relative"></div>
+                    <div id="plannerMapAllLegendOverlay" class="hidden absolute right-3 top-3 z-20 rounded-2xl px-3 py-2 text-xs text-white shadow-xl pointer-events-none"
+                        style="background:rgba(17,24,39,.68); backdrop-filter:blur(6px); min-width:120px"></div>
                 </div>
 
                 <div class="px-4 py-3 border-t border-gray-100 shrink-0">
@@ -1498,6 +1518,15 @@ request.setAttribute("activePage", "planner");
                 activity:{label:'활동',color:'#EC4899',bg:'#FDF2F8'}
             };
             var map, mapMarkers=[], mapPolylines=[], mapSearchMarkers=[];
+            var plannerActiveMapDay='all';
+            var plannerDayLinePalette=['#6369D1','#F59E0B','#10B981','#EC4899','#06B6D4','#8B5CF6','#EF4444','#14B8A6'];
+            function getPlannerDayLineColor(dayNumber){
+                var dayIndex=parseInt(dayNumber,10);
+                if(!dayIndex||dayIndex<1){
+                    dayIndex=1;
+                }
+                return plannerDayLinePalette[(dayIndex-1)%plannerDayLinePalette.length];
+            }
             var plannerPlacesLibraryPromise=null;
             var dirty=false;
 
@@ -2795,6 +2824,100 @@ request.setAttribute("activePage", "planner");
                 mapSearchMarkers=[];
             }
 
+            function copyPlannerPlaceSelection(sourceInput,targetInput){
+                if(!sourceInput || !targetInput){
+                    return false;
+                }
+
+                var point=plannerSelectedPlacePoint(sourceInput);
+                if(!point){
+                    return false;
+                }
+
+                targetInput.value=
+                    sourceInput.value
+                    || point.name
+                    || '';
+
+                targetInput.dataset.googlePlaceId=
+                    sourceInput.dataset.googlePlaceId || '';
+
+                targetInput.dataset.placeName=
+                    sourceInput.dataset.placeName
+                    || point.name
+                    || '';
+
+                targetInput.dataset.placeAddress=
+                    sourceInput.dataset.placeAddress
+                    || point.address
+                    || '';
+
+                targetInput.dataset.lat=
+                    sourceInput.dataset.lat
+                    || String(point.lat);
+
+                targetInput.dataset.lng=
+                    sourceInput.dataset.lng
+                    || String(point.lng);
+
+                updatePlannerPlacePinState(
+                    targetInput.closest('.planner-block-card')
+                );
+
+                return true;
+            }
+
+            function plannerPreviousAccommodationInput(card){
+                if(!card){
+                    return null;
+                }
+
+                var cards=$$('.planner-block-card');
+                var currentIndex=cards.indexOf(card);
+
+                if(currentIndex<0){
+                    return null;
+                }
+
+                for(var i=currentIndex-1;i>=0;i--){
+                    var previousCard=cards[i];
+
+                    if(previousCard.dataset.itemType!=='accommodation'){
+                        continue;
+                    }
+
+                    var previousInput=
+                        $('.planner-place-search',previousCard);
+
+                    if(plannerSelectedPlacePoint(previousInput)){
+                        return previousInput;
+                    }
+                }
+
+                return null;
+            }
+
+            function inheritPreviousAccommodationPlace(card){
+                if(!card || card.dataset.itemType!=='accommodation'){
+                    return false;
+                }
+
+                var currentInput=
+                    $('.planner-place-search',card);
+
+                var previousInput=
+                    plannerPreviousAccommodationInput(card);
+
+                if(!currentInput || !previousInput){
+                    return false;
+                }
+
+                return copyPlannerPlaceSelection(
+                    previousInput,
+                    currentInput
+                );
+            }
+
             function plannerPreviousPlacePoint(card){
                 if(!card) return null;
 
@@ -3494,7 +3617,39 @@ request.setAttribute("activePage", "planner");
                 if(title) title.addEventListener('input',function(){ if(label)label.textContent=title.value||'제목 없음';markDirty(); });
                 $$('.planner-type-btn',card).forEach(function(btn){
                     if(btn.dataset.itemType===card.dataset.itemType) btn.classList.add('is-selected');
-                    btn.addEventListener('click',function(){ var cfg=TYPE_CONFIG[btn.dataset.itemType]; card.dataset.itemType=btn.dataset.itemType; $$('.planner-type-btn',card).forEach(function(x){x.classList.toggle('is-selected',x===btn)}); if(badge){badge.textContent=cfg.label;badge.style.background=cfg.bg;badge.style.color=cfg.color;} markDirty(); });
+                    btn.addEventListener('click',function(){
+                        var cfg=TYPE_CONFIG[btn.dataset.itemType];
+                        card.dataset.itemType=btn.dataset.itemType;
+
+                        $$('.planner-type-btn',card).forEach(function(x){
+                            x.classList.toggle('is-selected',x===btn);
+                        });
+
+                        if(badge){
+                            badge.textContent=cfg.label;
+                            badge.style.background=cfg.bg;
+                            badge.style.color=cfg.color;
+                        }
+
+                        /*
+                         * 숙소 블록으로 변경했을 때 앞쪽 일정에 이미 선택된
+                         * 숙소가 있으면 그 장소 snapshot을 그대로 이어받는다.
+                         * 다른 숙소를 쓰려면 사용자가 장소검색에서 다시 선택하면 된다.
+                         */
+                        if(btn.dataset.itemType==='accommodation'){
+                            inheritPreviousAccommodationPlace(card);
+                        }
+
+                        /*
+                         * 이미 장소가 선택되어 지도에 핀이 있는 블록이라면
+                         * 타입 변경 즉시 현재 지도 필터를 유지한 채 다시 그린다.
+                         */
+                        if(plannerSelectedPlacePoint($('.planner-place-search',card))){
+                            refreshMap(plannerActiveMapDay);
+                        }
+
+                        markDirty();
+                    });
                 });
                 var cost=$('.planner-item-cost',card);
                 if(cost) cost.addEventListener('input',function(){
@@ -3719,9 +3874,85 @@ request.setAttribute("activePage", "planner");
             var allBtn=$('#plannerToggleAllDays');
             if(allBtn) allBtn.addEventListener('click',function(){ var bodies=$$('.planner-day-body'), anyOpen=bodies.some(function(x){return !x.classList.contains('is-collapsed')}); bodies.forEach(function(x){x.classList.toggle('is-collapsed',anyOpen)}); allBtn.title=anyOpen?'모두 열기':'모두 닫기'; });
 
-            function rebuildMapFilter(){ var menu=$('#plannerMapFilterMenu'); if(!menu)return; menu.innerHTML='<button type="button" data-map-day="all" class="w-full text-left px-3 py-2 text-xs font-bold hover:bg-purple-50" style="color:#6369D1">전체</button>'+$$('.planner-day').map(function(d){var n=d.dataset.dayNumber;return '<button type="button" data-map-day="'+n+'" class="w-full text-left px-3 py-2 text-xs font-bold hover:bg-purple-50 text-gray-600">'+n+'일차</button>'}).join(''); bindMapOptions(); }
-            function bindMapOptions(){ $$('#plannerMapFilterMenu [data-map-day]').forEach(function(b){ b.onclick=function(){ $('#plannerMapFilterLabel').textContent=b.dataset.mapDay==='all'?'전체':b.dataset.mapDay+'일차'; $('#plannerMapFilterMenu').classList.add('hidden'); refreshMap(b.dataset.mapDay); }; }); }
-            var mf=$('#plannerMapFilterBtn'); if(mf) mf.addEventListener('click',function(e){e.stopPropagation();$('#plannerMapFilterMenu').classList.toggle('hidden')}); document.addEventListener('click',function(e){var m=$('#plannerMapFilterMenu');if(m&&!e.target.closest('#plannerMapFilterBtn')&&!e.target.closest('#plannerMapFilterMenu'))m.classList.add('hidden')}); bindMapOptions();
+            function renderPlannerMapAllLegend(){
+                var overlay=$('#plannerMapAllLegendOverlay');
+                if(!overlay){
+                    return;
+                }
+
+                if(plannerActiveMapDay!=='all'){
+                    overlay.classList.add('hidden');
+                    overlay.innerHTML='';
+                    return;
+                }
+
+                var dayNumbers=$$('.planner-day').map(function(dayCard){
+                    return String(dayCard.dataset.dayNumber||'');
+                }).filter(function(dayNumber){
+                    return !!dayNumber;
+                });
+
+                if(!dayNumbers.length){
+                    overlay.classList.add('hidden');
+                    overlay.innerHTML='';
+                    return;
+                }
+
+                overlay.innerHTML=dayNumbers.map(function(dayNumber){
+                    var lineColor=getPlannerDayLineColor(dayNumber);
+                    return '<div class="flex items-center gap-2 py-1">'
+                        +'<span class="font-bold text-white/90">'+dayNumber+'일차</span>'
+                        +'<span class="inline-flex items-center gap-1.5 ml-auto">'
+                        +'<span style="width:18px;height:4px;border-radius:999px;background:'+lineColor+';display:inline-block"></span>'
+                        +'<span style="width:10px;height:10px;border-radius:999px;background:'+lineColor+';display:inline-block"></span>'
+                        +'</span>'
+                        +'</div>';
+                }).join('');
+
+                overlay.classList.remove('hidden');
+            }
+            function updatePlannerMapFilterButton(){
+                var label=$('#plannerMapFilterLabel');
+                var dot=$('#plannerMapFilterDot');
+                if(label){
+                    label.textContent=plannerActiveMapDay==='all' ? '전체' : plannerActiveMapDay+'일차';
+                }
+                if(dot){
+                    dot.style.background=plannerActiveMapDay==='all'
+                        ? '#6369D1'
+                        : getPlannerDayLineColor(plannerActiveMapDay);
+                }
+                renderPlannerMapAllLegend();
+            }
+            function rebuildMapFilter(){
+                var menu=$('#plannerMapFilterMenu');
+                if(!menu)return;
+                menu.innerHTML='<button type="button" data-map-day="all" class="w-full text-left px-3 py-2 text-xs font-bold hover:bg-purple-50" style="color:#6369D1">전체</button>'
+                    +$$('.planner-day').map(function(d){
+                        var n=String(d.dataset.dayNumber||'');
+                        var lineColor=getPlannerDayLineColor(n);
+                        return '<button type="button" data-map-day="'+n+'" class="w-full flex flex-nowrap items-center justify-between gap-3 text-left px-3 py-2 text-xs font-bold hover:bg-purple-50 text-gray-700 whitespace-nowrap">'
+                            +'<span>'+n+'일차</span>'
+                            +'<span class="inline-flex items-center gap-1.5 shrink-0">'
+                            +'<span style="width:18px;height:4px;border-radius:999px;background:'+lineColor+';display:inline-block"></span>'
+                            +'<span style="width:10px;height:10px;border-radius:999px;background:'+lineColor+';display:inline-block"></span>'
+                            +'</span>'
+                            +'</button>';
+                    }).join('');
+                bindMapOptions();
+                updatePlannerMapFilterButton();
+            }
+            function bindMapOptions(){
+                $$('#plannerMapFilterMenu [data-map-day]').forEach(function(b){
+                    b.onclick=function(){
+                        plannerActiveMapDay=b.dataset.mapDay || 'all';
+                        updatePlannerMapFilterButton();
+                        $('#plannerMapFilterMenu').classList.add('hidden');
+                        refreshMap(plannerActiveMapDay);
+                    };
+                });
+            }
+            var mf=$('#plannerMapFilterBtn'); if(mf) mf.addEventListener('click',function(e){e.stopPropagation();$('#plannerMapFilterMenu').classList.toggle('hidden')}); document.addEventListener('click',function(e){var m=$('#plannerMapFilterMenu');if(m&&!e.target.closest('#plannerMapFilterBtn')&&!e.target.closest('#plannerMapFilterMenu'))m.classList.add('hidden')}); bindMapOptions(); updatePlannerMapFilterButton();
 
             /*
              * /planner Servlet이 DB에서 넘긴 KRW 기준 환율.
@@ -4784,7 +5015,7 @@ request.setAttribute("activePage", "planner");
                 try{
                     el.dataset.fallback='0';
                     el.innerHTML='';
-                    map=new google.maps.Map(el,{center:{lat:37.5665,lng:126.9780},zoom:11,mapTypeControl:false,streetViewControl:false,fullscreenControl:false,styles:[{featureType:'poi',elementType:'labels',stylers:[{visibility:'off'}]},{featureType:'transit',elementType:'labels',stylers:[{visibility:'off'}]}]});
+                    map=new google.maps.Map(el,{center:{lat:37.5665,lng:126.9780},zoom:11,gestureHandling:'greedy',mapTypeControl:false,streetViewControl:false,fullscreenControl:false,styles:[{featureType:'poi',elementType:'labels',stylers:[{visibility:'off'}]},{featureType:'transit',elementType:'labels',stylers:[{visibility:'off'}]}]});
 
                     $$('.planner-block-card').forEach(function(card){
                         setupPlannerPlaceSearch(card);
@@ -4838,6 +5069,12 @@ request.setAttribute("activePage", "planner");
             }
 
             window.refreshMap=function(day){
+                if(day==null || day===''){
+                    day=plannerActiveMapDay;
+                }else{
+                    plannerActiveMapDay=String(day);
+                }
+
                 if(!map||!window.google||!google.maps){
                     showPlannerMapFallback();
                     return;
@@ -4945,14 +5182,87 @@ request.setAttribute("activePage", "planner");
                             };
                         }),
                         geodesic:true,
-                        strokeColor:'#6369D1',
-                        strokeOpacity:.78,
+                        strokeColor:getPlannerDayLineColor(dayKey),
+                        strokeOpacity:.82,
                         strokeWeight:4,
                         map:map
                     });
 
                     mapPolylines.push(line);
                 });
+
+                /*
+                 * N일차 마지막 일정 → N+1일차 첫 일정도 연결한다.
+                 * 전환선 색상은 도착하는 N+1일차의 동선 색상을 사용한다.
+                 * 전체 보기에서는 모든 전환선을, 특정 DAY 보기에서는
+                 * 그 DAY로 들어오는 전환선만 표시한다.
+                 */
+                var allDayGroups={};
+
+                allPoints.forEach(function(point){
+                    if(!allDayGroups[point.day]){
+                        allDayGroups[point.day]=[];
+                    }
+                    allDayGroups[point.day].push(point);
+                });
+
+                Object.keys(allDayGroups).forEach(function(dayKey){
+                    allDayGroups[dayKey].sort(function(a,b){
+                        return a.order-b.order;
+                    });
+                });
+
+                Object.keys(allDayGroups).forEach(function(dayKey){
+                    var currentDayNumber=parseInt(dayKey,10);
+
+                    if(!currentDayNumber){
+                        return;
+                    }
+
+                    var nextDayKey=String(currentDayNumber+1);
+                    var currentGroup=allDayGroups[dayKey];
+                    var nextGroup=allDayGroups[nextDayKey];
+
+                    if(!currentGroup || !currentGroup.length
+                            || !nextGroup || !nextGroup.length){
+                        return;
+                    }
+
+                    if(day!=='all' && String(day)!==nextDayKey){
+                        return;
+                    }
+
+                    var fromPoint=currentGroup[currentGroup.length-1];
+                    var toPoint=nextGroup[0];
+
+                    var transitionLine=
+                        new google.maps.Polyline({
+                            path:[
+                                {lat:fromPoint.lat,lng:fromPoint.lng},
+                                {lat:toPoint.lat,lng:toPoint.lng}
+                            ],
+                            geodesic:true,
+                            strokeColor:getPlannerDayLineColor(nextDayKey),
+                            strokeOpacity:.82,
+                            strokeWeight:4,
+                            map:map
+                        });
+
+                    mapPolylines.push(transitionLine);
+
+                    /*
+                     * 특정 N+1일차만 보는 경우 이전 DAY의 마지막 장소는
+                     * marker로 표시하지 않지만 선이 잘리지 않도록 bounds에는 포함한다.
+                     */
+                    if(day!=='all' && String(day)===nextDayKey){
+                        bounds.extend({
+                            lat:fromPoint.lat,
+                            lng:fromPoint.lng
+                        });
+                    }
+                });
+
+                renderPlannerMapAllLegend();
 
                 if(has){
                     if(visiblePoints.length===1){
