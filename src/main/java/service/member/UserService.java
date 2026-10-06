@@ -11,6 +11,7 @@ public interface UserService {
 	boolean withdraw(long userId, String password) throws Exception;
 	Long findPasswordUser(String loginId, String name, String email, String phone) throws Exception;
 	void resetPassword(long userId, String password) throws Exception;
+	void changePassword(long userId, String currentPassword, String newPassword) throws Exception;
 	boolean isLoginIdAvailable(String loginId);
 	boolean isNicknameAvailable(String nickname);
 	boolean isEmailAvailable(String email);

@@ -144,4 +144,37 @@ public class UserServiceImpl implements UserService {
 		return userDao.selectUser(loginId);
 	}
 
+	@Override
+	public void changePassword(long userId, String currentPassword, String newPassword) throws Exception {
+
+		String savedPassword = userDao.selectPasswordByUserId(userId);
+
+		if (savedPassword == null) {
+
+			throw new Exception("비밀번호 정보를 찾을 수 없습니다.");
+
+		}
+
+		if (!savedPassword.equals(currentPassword)) {
+
+			throw new Exception("현재 비밀번호가 올바르지 않습니다.");
+
+		}
+
+		if (savedPassword.equals(newPassword)) {
+
+			throw new Exception("새 비밀번호는 현재 비밀번호와 다르게 설정해주세요.");
+
+		}
+
+		int result = userDao.resetPassword(userId, newPassword);
+
+		if (result <= 0) {
+
+			throw new Exception("비밀번호 변경에 실패했습니다.");
+
+		}
+
+	}
+
 }
