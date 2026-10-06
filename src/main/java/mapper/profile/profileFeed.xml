@@ -295,4 +295,43 @@
 	
 	</select>
 	
+	<select id="selectReceivedLikeCount"
+        parameterType="long"
+        resultType="int">
+
+    SELECT COUNT(*)
+
+    FROM TB_ITINERARY_LIKE l
+
+    INNER JOIN TB_ITINERARY i
+        ON i.itinerary_id = l.itinerary_id
+
+    WHERE i.user_id = #{value}
+
+      AND i.status = 'ACTIVE'
+
+      AND l.user_id != i.user_id
+
+</select>
+
+
+<select id="selectReceivedBookmarkCount"
+        parameterType="long"
+        resultType="int">
+
+    SELECT COUNT(*)
+
+    FROM TB_ITINERARY_BOOKMARK b
+
+    INNER JOIN TB_ITINERARY i
+        ON i.itinerary_id = b.itinerary_id
+
+    WHERE i.user_id = #{value}
+
+      AND i.status = 'ACTIVE'
+
+      AND b.user_id != i.user_id
+
+</select>
+	
 </mapper>

@@ -106,5 +106,38 @@ public class ProfileFeedDaoImpl implements ProfileFeedDao {
 	        );
 	    }
 	}
+	
+	@Override
+	public int selectReceivedLikeCount(
+	        long userId) throws Exception {
+
+	    try (SqlSession sqlSession =
+	            MybatisSqlSessionFactory
+	                .getSqlSessionFactory()
+	                .openSession()) {
+
+	        return sqlSession.selectOne(
+	            "mapper.profile.profileFeed.selectReceivedLikeCount",
+	            userId
+	        );
+	    }
+	}
+
+
+	@Override
+	public int selectReceivedBookmarkCount(
+	        long userId) throws Exception {
+
+	    try (SqlSession sqlSession =
+	            MybatisSqlSessionFactory
+	                .getSqlSessionFactory()
+	                .openSession()) {
+
+	        return sqlSession.selectOne(
+	            "mapper.profile.profileFeed.selectReceivedBookmarkCount",
+	            userId
+	        );
+	    }
+	}
 
 }

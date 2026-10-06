@@ -21,49 +21,67 @@ import service.profile.ProfileFeedServiceImpl;
 @WebServlet("/profile/myProfile")
 public class myProfile extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public myProfile() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#HttpServlet()
 	 */
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+	public myProfile() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-    	ProfileFeedService profileFeedService = new ProfileFeedServiceImpl();
-    	
-    	HttpSession session = request.getSession(false);
-    	if(session == null) {
-    		response.sendRedirect(request.getContextPath()+"/auth/login");
-    		return;
-    	}
-    	
-    	UserDto user = (UserDto) session.getAttribute("user");
-    	if(user==null) {
-    		response.sendRedirect(request.getContextPath()+"/auth/login");
-    		return;
-    	}
-    	
-    	long userId = user.getUserId();
-    	try {
-    		List<ProfileFeedDto> myItineraries = profileFeedService.getMyItineraries(userId);
-    		List<ProfileFeedDto> bookmarkedItineraries = profileFeedService.getBookmarkedItineraries(userId);
-    		List<ProfileFeedDto> likedItineraries = profileFeedService.getLikedItineraries(userId);
+		ProfileFeedService profileFeedService = new ProfileFeedServiceImpl();
 
-    		request.setAttribute("myItineraries", myItineraries);
-    		request.setAttribute("bookmarkedItineraries", bookmarkedItineraries);
-    		request.setAttribute("likedItineraries", likedItineraries);
-    		request.setAttribute("postCount", myItineraries.size());
-    		request.getRequestDispatcher("/view/profile/myProfile.jsp").forward(request, response);
-    	} catch(Exception e) {
-    		throw new ServletException(e);
-    	}
+		HttpSession session = request.getSession(false);
+		if (session == null) {
+			response.sendRedirect(request.getContextPath() + "/auth/login");
+			return;
+		}
+
+		UserDto user = (UserDto) session.getAttribute("user");
+		if (user == null) {
+			response.sendRedirect(request.getContextPath() + "/auth/login");
+			return;
+		}
+
+		long userId = user.getUserId();
+		try {
+			List<ProfileFeedDto> myItineraries = profileFeedService.getMyItineraries(userId);
+			List<ProfileFeedDto> bookmarkedItineraries = profileFeedService.getBookmarkedItineraries(userId);
+			List<ProfileFeedDto> likedItineraries = profileFeedService.getLikedItineraries(userId);
+			/*
+			 * ========================================= 프로필 상단 통계
+			 * =========================================
+			 */
+
+			int postCount = myItineraries.size();
+
+			int likeCount = profileFeedService.getReceivedLikeCount(userId);
+
+			int bookmarkCount = profileFeedService.getReceivedBookmarkCount(userId);
+
+			request.setAttribute("postCount", postCount);
+
+			request.setAttribute("likeCount", likeCount);
+
+			request.setAttribute("bookmarkCount", bookmarkCount);
+
+			request.setAttribute("myItineraries", myItineraries);
+			request.setAttribute("bookmarkedItineraries", bookmarkedItineraries);
+			request.setAttribute("likedItineraries", likedItineraries);
+
+
+			request.getRequestDispatcher("/view/profile/myProfile.jsp").forward(request, response);
+		} catch (Exception e) {
+			throw new ServletException(e);
+		}
 	}
 
 }
