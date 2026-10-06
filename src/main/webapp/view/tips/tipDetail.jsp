@@ -12,6 +12,7 @@ request.setAttribute("activePage", "tips");
 	<title>Planb</title>
 	<jsp:include page="/common/headStyles.jsp" /></head>
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/view/assets/css/tips/tipDetail.css">
+	<script defer src="${pageContext.request.contextPath}/view/assets/js/tips/tipDetail.js"></script>
 <body class="site-shell">
 	<jsp:include page="/common/header.jsp" />
 	<div class="min-h-screen" style="background-color: #f5f5fb">
@@ -143,18 +144,19 @@ request.setAttribute("activePage", "tips");
 							    </c:forEach>
 							</div>
 							<div class="flex items-center justify-center gap-4 mt-8">
-								<form action="${pageContext.request.contextPath}/tipLike" method="post" class="tip-like-form">
-							    <input type="hidden" name="tipId" value="${tip.tipId}">
-							    <button type="submit" class="tip-like-btn">
-							        <svg class="tip-like-icon" viewBox="0 0 24 24"
-							             fill="${liked ? 'currentColor' : 'none'}"
-							             stroke="currentColor"
-							             stroke-width="2">
-							            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-							        </svg>
-							        좋아요 ${tip.likeCount}
-							    </button>
-							</form>
+								<form action="${pageContext.request.contextPath}/tipLike" method="post" id="tipLikeForm" class="tip-like-form"
+								      data-login-url="${pageContext.request.contextPath}/auth/login">
+								    <input type="hidden" name="tipId" value="${tip.tipId}">
+								    <button type="submit" id="tipLikeBtn" class="tip-like-btn">
+								        <svg id="tipLikeIcon" class="tip-like-icon" viewBox="0 0 24 24" fill="${liked ? 'currentColor' : 'none'}"
+								             stroke="currentColor" stroke-width="2">
+								            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+								        </svg>
+								        <span id="tipLikeText">
+								            좋아요 ${tip.likeCount}
+								        </span>
+								    </button>
+								</form>
 								<button type="button"
 									class="flex items-center gap-2 px-8 py-3 rounded-full font-semibold text-sm border-2 border-gray-200 text-gray-500 hover:border-gray-400 transition-all">
 									<svg width="16" height="16" viewBox="0 0 24 24" fill="none"

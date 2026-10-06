@@ -1,31 +1,72 @@
 package dao.community;
 
+import java.util.List;
+
+import org.apache.ibatis.session.SqlSession;
+
+import config.MybatisSqlSessionFactory;
 import dto.community.TipCommentDto;
 
 public class TipCommentDaoImpl implements TipCommentDao {
 
-	@Override
-	public int insertTipComment(TipCommentDto tipCommentDto) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+    // 댓글 작성
+    @Override
+    public int insertTipComment(TipCommentDto tipCommentDto) {
+        try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+            int result = sqlSession.insert("mapper.community.tipComment.insertTipComment", tipCommentDto);
+            sqlSession.commit();
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
 
-	@Override
-	public TipCommentDto selectTipComment(Long commentId) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    // 댓글 1개 조회
+    @Override
+    public TipCommentDto selectTipComment(Long commentId) {
+        try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+            return sqlSession.selectOne("mapper.community.tipComment.selectTipComment", commentId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
 
-	@Override
-	public int updateTipComment(TipCommentDto tipCommentDto) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+    // 댓글 목록 조회
+    @Override
+    public List<TipCommentDto> selectTipCommentList(long tipId) {
+        try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+            return sqlSession.selectList("mapper.community.tipComment.selectTipCommentList", tipId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
 
-	@Override
-	public int deleteTipComment(Long commentId) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+    // 댓글 수정
+    @Override
+    public int updateTipComment(TipCommentDto tipCommentDto) {
+        try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+            int result = sqlSession.update("mapper.community.tipComment.updateTipComment", tipCommentDto);
+            sqlSession.commit();
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
 
+    // 댓글 삭제
+    @Override
+    public int deleteTipComment(Long commentId) {
+        try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+            int result = sqlSession.delete("mapper.community.tipComment.deleteTipComment", commentId);
+            sqlSession.commit();
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
 }

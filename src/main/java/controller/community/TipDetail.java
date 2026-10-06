@@ -89,8 +89,7 @@ public class TipDetail extends HttpServlet {
             // 5. 상세 JSP 이동
             request.getRequestDispatcher("/view/tips/tipDetail.jsp").forward(request, response);
         } catch (NumberFormatException e) {
-            response.sendRedirect(request.getContextPath() + "/tips"
-            );
+            response.sendRedirect(request.getContextPath() + "/tips");
         }
     }
 }
