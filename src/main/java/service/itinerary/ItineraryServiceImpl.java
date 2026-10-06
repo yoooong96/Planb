@@ -25,6 +25,7 @@ import dao.itinerary.ItineraryLikeDaoImpl;
 import dto.itinerary.ItineraryBlockDto;
 import dto.itinerary.ItineraryBlockImageDto;
 import dto.itinerary.ItineraryBookmarkDto;
+import dto.itinerary.ItineraryCommentDto;
 import dto.itinerary.ItineraryDayDto;
 import dto.itinerary.ItineraryDto;
 import dto.itinerary.ItineraryLikeDto;
@@ -201,6 +202,18 @@ public class ItineraryServiceImpl implements ItineraryService {
 					itinerary.setLiked(false);
 				}
 
+				// 로그인 회원의 북마크 여부
+				itinerary.setBookmarked(false);
+
+				if (loginUserId != null && loginUserId > 0 && !isOwner) {
+
+					ItineraryBookmarkDto bookmark = new ItineraryBookmarkDto();
+					bookmark.setItineraryId(itineraryId);
+					bookmark.setUserId(loginUserId);
+
+					itinerary.setBookmarked(itineraryBookmarkDao.selectItineraryBookmark(sqlSession, bookmark));
+				}
+
 				sqlSession.commit();
 
 				return itinerary;
@@ -264,6 +277,159 @@ public class ItineraryServiceImpl implements ItineraryService {
 				Map<String, Object> result = new HashMap<>();
 				result.put("liked", !alreadyLiked);
 				result.put("likeCount", likeCount);
+
+				sqlSession.commit();
+
+				return result;
+
+			} catch (Exception e) {
+				sqlSession.rollback();
+				throw e;
+			}
+		}
+	}
+
+	private void checkCommentAccess(ItineraryDto itinerary, Long loginUserId) {
+
+		if (itinerary == null || !"ACTIVE".equals(itinerary.getStatus())) {
+
+			throw new IllegalArgumentException("일정을 찾을 수 없습니다.");
+		}
+
+		boolean isOwner = loginUserId != null && loginUserId.equals(itinerary.getUserId());
+
+		if (!"PUBLIC".equals(itinerary.getVisibility()) && !isOwner) {
+			throw new SecurityException("접근할 수 없는 일정입니다.");
+		}
+	}
+
+	// 댓글 불러오기.
+	@Override
+	public List<ItineraryCommentDto> getItineraryComments(Long itineraryId, Long loginUserId) throws Exception {
+
+		if (itineraryId == null || itineraryId <= 0) {
+			throw new IllegalArgumentException("올바른 일정 번호가 아닙니다.");
+		}
+
+		ItineraryDto itinerary = getItinerary(itineraryId);
+
+		checkCommentAccess(itinerary, loginUserId);
+
+		try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+
+			return itineraryCommentDao.selectItineraryComments(sqlSession, itineraryId);
+		}
+	}
+
+	// 댓글작성
+	@Override
+	public Map<String, Object> writeItineraryComment(Long itineraryId, Long loginUserId, String content)
+			throws Exception {
+
+		if (loginUserId == null || loginUserId <= 0) {
+			throw new SecurityException("로그인 후 이용할 수 있습니다.");
+		}
+
+		if (itineraryId == null || itineraryId <= 0) {
+			throw new IllegalArgumentException("올바른 일정 번호가 아닙니다.");
+		}
+
+		if (content == null || content.strip().isEmpty()) {
+			throw new IllegalArgumentException("댓글 내용을 입력해주세요.");
+		}
+
+		// 저장할 내용 기준으로 길이 검사
+		content = content.strip();
+
+		if (content.codePointCount(0, content.length()) > 1000) {
+			throw new IllegalArgumentException("댓글은 1,000자까지 입력할 수 있습니다.");
+		}
+
+		try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession(false)) {
+
+			try {
+				// 기존 일정 조회·잠금 메서드 재사용
+				ItineraryDto itinerary = itineraryBookmarkDao.selectBookmarkTargetForUpdate(sqlSession, itineraryId);
+
+				checkCommentAccess(itinerary, loginUserId);
+
+				ItineraryCommentDto comment = new ItineraryCommentDto();
+
+				comment.setItineraryId(itineraryId);
+				comment.setUserId(loginUserId);
+				comment.setContent(content);
+
+				int insertedRows = itineraryCommentDao.insertItineraryComment(sqlSession, comment);
+
+				if (insertedRows != 1) {
+					throw new IllegalStateException("댓글 등록에 실패했습니다.");
+				}
+
+				// 등록 후 최신 댓글 목록과 개수 조회
+				List<ItineraryCommentDto> comments = itineraryCommentDao.selectItineraryComments(sqlSession,
+						itineraryId);
+
+				int commentCount = itineraryCommentDao.countItineraryComments(sqlSession, itineraryId);
+
+				Map<String, Object> result = new HashMap<>();
+				result.put("comments", comments);
+				result.put("commentCount", commentCount);
+
+				sqlSession.commit();
+
+				return result;
+
+			} catch (Exception e) {
+				sqlSession.rollback();
+				throw e;
+			}
+		}
+	}
+
+	// 댓글 삭제
+	@Override
+	public Map<String, Object> deleteItineraryComment(Long itineraryId, Long commentId, Long loginUserId)
+			throws Exception {
+
+		if (loginUserId == null || loginUserId <= 0) {
+			throw new SecurityException("로그인 후 이용할 수 있습니다.");
+		}
+
+		if (itineraryId == null || itineraryId <= 0) {
+			throw new IllegalArgumentException("올바른 일정 번호가 아닙니다.");
+		}
+
+		if (commentId == null || commentId <= 0) {
+			throw new IllegalArgumentException("올바른 댓글 번호가 아닙니다.");
+		}
+
+		try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession(false)) {
+
+			try {
+				ItineraryDto itinerary = itineraryBookmarkDao.selectBookmarkTargetForUpdate(sqlSession, itineraryId);
+
+				checkCommentAccess(itinerary, loginUserId);
+
+				ItineraryCommentDto comment = new ItineraryCommentDto();
+
+				comment.setItineraryId(itineraryId);
+				comment.setCommentId(commentId);
+				comment.setUserId(loginUserId);
+
+				int updatedRows = itineraryCommentDao.softDeleteItineraryComment(sqlSession, comment);
+
+				if (updatedRows != 1) {
+					throw new IllegalArgumentException("삭제할 수 있는 댓글이 없습니다.");
+				}
+
+				List<ItineraryCommentDto> comments = itineraryCommentDao.selectItineraryComments(sqlSession,
+						itineraryId);
+
+				int commentCount = itineraryCommentDao.countItineraryComments(sqlSession, itineraryId);
+
+				Map<String, Object> result = new HashMap<>();
+				result.put("comments", comments);
+				result.put("commentCount", commentCount);
 
 				sqlSession.commit();
 

@@ -1,12 +1,85 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
-	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="mapper.itinerary.itineraryComment">
-	<select id="countItineraryComments" parameterType="java.lang.Long" resultType="int">
+
+	<resultMap id="itineraryCommentMap"
+		type="dto.itinerary.ItineraryCommentDto">
+
+		<id property="commentId" column="comment_id" />
+		<result property="itineraryId" column="itinerary_id" />
+		<result property="userId" column="user_id" />
+		<result property="content" column="content" />
+		<result property="status" column="status" />
+		<result property="createdAt" column="created_at" />
+		<result property="updatedAt" column="updated_at" />
+		<result property="nickname" column="nickname" />
+	</resultMap>
+
+	<!-- 삭제되지 않은 댓글 수 -->
+	<select id="countItineraryComments"
+		parameterType="java.lang.Long" resultType="int">
+
 		SELECT COUNT(*)
-		FROM TB_ITINERARY_COMMENT
+		FROM tb_itinerary_comment
 		WHERE itinerary_id = #{itineraryId}
 		AND status = 'ACTIVE'
+
 	</select>
+
+	<!-- 댓글 목록: 먼저 작성된 댓글부터 -->
+	<select id="selectItineraryComments"
+		parameterType="java.lang.Long" resultMap="itineraryCommentMap">
+
+		SELECT
+		c.comment_id,
+		c.itinerary_id,
+		c.user_id,
+		c.content,
+		c.status,
+		c.created_at,
+		c.updated_at,
+		u.nickname
+		FROM tb_itinerary_comment c
+		JOIN tb_user u
+		ON u.user_id = c.user_id
+		WHERE c.itinerary_id = #{itineraryId}
+		AND c.status = 'ACTIVE'
+		ORDER BY c.created_at ASC, c.comment_id ASC
+
+	</select>
+
+	<!-- 댓글 작성 -->
+	<insert id="insertItineraryComment"
+		parameterType="dto.itinerary.ItineraryCommentDto"
+		useGeneratedKeys="true" keyProperty="commentId" keyColumn="comment_id">
+
+		INSERT INTO tb_itinerary_comment (
+		itinerary_id,
+		user_id,
+		content
+		)
+		VALUES (
+		#{itineraryId},
+		#{userId},
+		#{content}
+		)
+
+	</insert>
+
+	<!-- 본인이 작성한 댓글만 삭제 처리 -->
+	<update id="softDeleteItineraryComment"
+		parameterType="dto.itinerary.ItineraryCommentDto">
+
+		UPDATE tb_itinerary_comment
+		SET status = 'DELETED'
+		WHERE comment_id = #{commentId}
+		AND itinerary_id = #{itineraryId}
+		AND user_id = #{userId}
+		AND status = 'ACTIVE'
+
+	</update>
+
 </mapper>
