@@ -114,4 +114,17 @@ public class TipServiceImpl implements TipService {
 	    return tipDao.updateTip(tip);
 	}
 	
+	@Override
+	public int deleteTip(long tipId, long userId) {
+	    TipDto tipDto = new TipDto();
+	    tipDto.setTipId(tipId);
+	    tipDto.setUserId(userId);
+	    return tipDao.deleteTip(tipDto);
+	}
+	
+	@Override
+	public int updateTipThumbnail(TipDto tipDto) {
+	    return tipDao.updateTipThumbnail(tipDto);
+	}
+	
 }

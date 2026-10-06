@@ -322,6 +322,69 @@
 	height: 14px;
 }
 
+/* 내가 작성한 글 - 삭제 버튼 */
+.tip-write-list-delete-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 2.75rem;
+    padding: 0.65rem 1.25rem;
+
+    /* 기본부터 삭제 버튼임을 표시 */
+    border: 1px solid #fecaca;
+    border-radius: 9999px;
+
+    background: #fff5f5;
+    color: #ef4444;
+
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1;
+
+    white-space: nowrap;
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease,
+        transform 0.15s ease;
+}
+
+/* 마우스 오버 */
+.tip-write-list-delete-btn:hover {
+    border-color: #ef4444;
+    background: #ef4444;
+    color: #ffffff;
+}
+
+/* 클릭 */
+.tip-write-list-delete-btn:active {
+    background: #dc2626;
+    border-color: #dc2626;
+    color: #ffffff;
+    transform: scale(0.97);
+}
+
+/* 모바일 */
+@media (max-width: 640px) {
+    .tip-write-list-delete-btn {
+        min-height: 2.5rem;
+        padding: 0.55rem 0.9rem;
+        font-size: 0.8125rem;
+    }
+}
+
+/* 모바일 */
+@media (max-width: 640px) {
+    .tip-write-list-delete-btn {
+        min-height: 2.5rem;
+        padding: 0.55rem 0.9rem;
+        font-size: 0.8125rem;
+    }
+}
+
 
 /* ========================================
    게시글 없음

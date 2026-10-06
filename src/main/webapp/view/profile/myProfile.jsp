@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8" import="dto.member.UserDto"%>
-
+	pageEncoding="UTF-8" import="dto.member.UserDto"
+	import="dto.profile.ProfileFeedDto" import="java.util.List"%>
 
 
 <%
@@ -75,18 +75,26 @@ if (profilePath == null || profilePath.trim().isEmpty()) {
 }
 
 /* =========================
-
-   통계
-
-
-
-   아직 DB 연동 전이라 0
-
-   추후 Servlet에서 request에 넣으면
-
-   그대로 출력 가능
-
+내 여행 일정
 ========================= */
+
+List<ProfileFeedDto> myItineraries =(List<ProfileFeedDto>) request.getAttribute("myItineraries");
+
+if (myItineraries == null) {
+ myItineraries = new java.util.ArrayList<ProfileFeedDto>();
+}
+
+List<ProfileFeedDto> bookmarkedItineraries =(List<ProfileFeedDto>) request.getAttribute("bookmarkedItineraries");
+if (bookmarkedItineraries == null) {
+	bookmarkedItineraries = new java.util.ArrayList<ProfileFeedDto>();
+}
+
+List<ProfileFeedDto> likedItineraries =(List<ProfileFeedDto>) request.getAttribute("likedItineraries");
+if (likedItineraries == null) {
+	likedItineraries = new java.util.ArrayList<ProfileFeedDto>();
+}
+
+
 
 Integer postCount = (Integer) request.getAttribute("postCount");
 
@@ -747,316 +755,123 @@ if (bookmarkCount == null) {
 
 		<main class="profile-content">
 
-
-
-
-
-			<!-- ======================================
-
-             내 게시물
-
-        ======================================= -->
-
-
-
 			<div data-profile-panel="posts">
-
-
-
-
 
 				<div class="feed-grid">
 
+					<%
+					if (!myItineraries.isEmpty()) {
 
+						for (ProfileFeedDto item : myItineraries) {
 
+							String country = item.getCountry() == null ? "" : item.getCountry();
 
+							String city = item.getCity() == null ? "" : item.getCity();
 
-					<!-- 샘플 게시물 1 -->
+							String locationText = "";
+
+							if (!country.isEmpty() && !city.isEmpty()) {
+
+						locationText = country + " · " + city;
+
+							} else if (!country.isEmpty()) {
+
+						locationText = country;
+
+							} else if (!city.isEmpty()) {
+
+						locationText = city;
+							}
+
+							String thumbnail = item.getThumbnailImg() == null ? "" : item.getThumbnailImg();
+					%>
+
 
 					<div class="feed-admin-shell">
 
 
-
-
-
 						<a class="feed-item"
-							href="<%=ctx%>/view/travel/scheduleDetail.jsp?id=1"> <img
-							src="https://images.unsplash.com/photo-1628411848698-e3b3249a272a?fit=crop&w=700&q=80"
-							alt="제주 여행"> <span class="feed-hover"> <span
-								class="feed-hover-copy"> <strong> 제주 3박 4일 감성 여행
-
-								</strong> <small> 제주 </small>
+							href="<%=ctx%>/schedules/detail?id=<%=item.getItineraryId()%>">
 
 
+							<%
+							if (!thumbnail.isEmpty()) {
+							%> <img src="<%=ctx %><%=thumbnail%>" alt="<%=item.getTitle()%>"> <%
+							} else {
+							%> <span class="feed-fallback"></span> <%
+ }
+ %> <span class="feed-hover"> <span class="feed-hover-copy">
+									<strong> <%=item.getTitle()%>
+								</strong> <%
+ if (!locationText.isEmpty()) {
+ %> <small> <%=locationText%>
+								</small> <%
+ }
+ %> <%
+ if ("PRIVATE".equals(item.getVisibility())) {
+ %> <small> 비공개 </small> <%
+ }
+ %>
 
-							</span> <span class="feed-hover-stats"> <span> ♥ 49 </span> <span>
-
-										🔖 15 </span> <span> 💬 5 </span>
-
-
+							</span> <span class="feed-hover-stats"> <span> ♥ <%=item.getLikeCount()%>
+								</span> <span> 🔖 <%=item.getBookmarkCount()%>
+								</span> <span> 💬 <%=item.getCommentCount()%>
+								</span>
 
 							</span>
-
-
-
 
 
 						</span>
 
 
-
-
-
 						</a>
 
 
-
-
-
-
-
-						<!-- 게시물 수정 / 삭제 -->
-
+						<!-- 본인 일정 수정 / 삭제 메뉴 -->
 						<div class="feed-owner-actions">
-
-
-
 
 
 							<button type="button" class="feed-owner-more" data-owner-more
 								aria-label="게시글 메뉴">•••</button>
 
 
-
-
-
 							<div class="feed-owner-menu" role="menu">
 
 
+								<a
+									href="<%=ctx%>/view/itinerary/planner.jsp?id=<%=item.getItineraryId()%>">
 
-
-
-								<a href="<%=ctx%>/view/itinerary/planner.jsp?id=1"> 수정 </a>
-
-
-
+									수정 </a>
 
 
 								<button type="button" class="danger">삭제</button>
 
 
-
-
-
 							</div>
-
-
-
 
 
 						</div>
 
 
-
-
-
 					</div>
 
 
+					<%
+					}
 
+					} else {
+					%>
 
 
+					<div class="empty-state">아직 작성한 여행 일정이 없습니다.</div>
 
 
-					<!-- 샘플 게시물 2 -->
-
-					<div class="feed-admin-shell">
-
-
-
-
-
-						<a class="feed-item"
-							href="<%=ctx%>/view/travel/scheduleDetail.jsp?id=2"> <img
-							src="https://images.unsplash.com/photo-1506816561089-5cc37b3aa9b0?fit=crop&w=700&q=80"
-							alt="서울 여행"> <span class="feed-hover"> <span
-								class="feed-hover-copy"> <strong> 서울 2박 3일 역사 탐방
-
-								</strong> <small> 서울 </small>
-
-
-
-							</span> <span class="feed-hover-stats"> <span> ♥ 56 </span> <span>
-
-										🔖 18 </span> <span> 💬 6 </span>
-
-
-
-							</span>
-
-
-
-
-
-						</span>
-
-
-
-
-
-						</a>
-
-
-
-
-
-						<div class="feed-owner-actions">
-
-
-
-
-
-							<button type="button" class="feed-owner-more" data-owner-more
-								aria-label="게시글 메뉴">•••</button>
-
-
-
-
-
-							<div class="feed-owner-menu" role="menu">
-
-
-
-
-
-								<a href="<%=ctx%>/view/itinerary/planner.jsp?id=2"> 수정 </a>
-
-
-
-
-
-								<button type="button" class="danger">삭제</button>
-
-
-
-
-
-							</div>
-
-
-
-
-
-						</div>
-
-
-
-
-
-					</div>
-
-
-
-
-
-
-
-					<!-- 샘플 게시물 3 -->
-
-					<div class="feed-admin-shell">
-
-
-
-
-
-						<a class="feed-item"
-							href="<%=ctx%>/view/travel/scheduleDetail.jsp?id=3"> <img
-							src="https://images.unsplash.com/photo-1538485399081-7191377e8241?fit=crop&w=700&q=80"
-							alt="부산 여행"> <span class="feed-hover"> <span
-								class="feed-hover-copy"> <strong> 부산 1박 2일 바다 여행
-
-								</strong> <small> 부산 </small>
-
-
-
-							</span> <span class="feed-hover-stats"> <span> ♥ 63 </span> <span>
-
-										🔖 21 </span> <span> 💬 7 </span>
-
-
-
-							</span>
-
-
-
-
-
-						</span>
-
-
-
-
-
-						</a>
-
-
-
-
-
-						<div class="feed-owner-actions">
-
-
-
-
-
-							<button type="button" class="feed-owner-more" data-owner-more
-								aria-label="게시글 메뉴">•••</button>
-
-
-
-
-
-							<div class="feed-owner-menu" role="menu">
-
-
-
-
-
-								<a href="<%=ctx%>/view/itinerary/planner.jsp?id=3"> 수정 </a>
-
-
-
-
-
-								<button type="button" class="danger">삭제</button>
-
-
-
-
-
-							</div>
-
-
-
-
-
-						</div>
-
-
-
-
-
-					</div>
-
-
-
+					<%
+					}
+					%>
 
 
 				</div>
-
-
-
-
 
 			</div>
 
@@ -1066,259 +881,189 @@ if (bookmarkCount == null) {
 
 
 
+
+
 			<!-- ======================================
-
-             북마크
-
-        ======================================= -->
-
-
+		     북마크
+		======================================= -->
 
 			<div data-profile-panel="saved" class="jsp-hidden">
 
-
-
-
-
 				<div class="feed-grid">
 
+					<%
+					if (bookmarkedItineraries != null && !bookmarkedItineraries.isEmpty()) {
 
+						for (ProfileFeedDto item : bookmarkedItineraries) {
 
+							String country = item.getCountry() == null ? "" : item.getCountry();
 
+							String city = item.getCity() == null ? "" : item.getCity();
 
-					<div class="feed-admin-shell">
+							String locationText = "";
 
+							if (!country.isEmpty() && !city.isEmpty()) {
 
+						locationText = country + " · " + city;
 
+							} else if (!country.isEmpty()) {
 
+						locationText = country;
 
-						<a class="feed-item"
-							href="<%=ctx%>/view/travel/scheduleDetail.jsp?id=4"> <img
-							src="https://images.unsplash.com/photo-1597552661064-af143a5f3bee?fit=crop&w=700&q=80"
-							alt="경주 여행"> <span class="feed-hover"> <span
-								class="feed-hover-copy"> <strong> 경주 1박 2일 문화 여행
+							} else if (!city.isEmpty()) {
 
-								</strong> <small> 경주 </small>
+						locationText = city;
+							}
 
-
-
-							</span> <span class="feed-hover-stats"> <span> ♥ 70 </span> <span>
-
-										🔖 24 </span> <span> 💬 8 </span>
-
-
-
-							</span>
-
-
-
-
-
-						</span>
-
-
-
-
-
-						</a>
-
-
-
-
-
-					</div>
-
-
-
-
-
+							String thumbnail = item.getThumbnailImg() == null ? "" : item.getThumbnailImg();
+					%>
 
 
 					<div class="feed-admin-shell">
 
-
-
-
-
 						<a class="feed-item"
-							href="<%=ctx%>/view/travel/scheduleDetail.jsp?id=7"> <img
-							src="https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?fit=crop&w=700&q=80"
-							alt="도쿄 여행"> <span class="feed-hover"> <span
-								class="feed-hover-copy"> <strong> 도쿄 3박 4일 완전 정복
-
-								</strong> <small> 도쿄 </small>
+							href="<%=ctx%>/schedules/detail?id=<%=item.getItineraryId()%>">
 
 
+							<%
+							if (!thumbnail.isEmpty()) {
+							%> <img src="<%=ctx %><%=thumbnail%>"
+							alt="<%=item.getTitle()%>"> <%
+ } else {
+ %> <span class="feed-fallback"></span> <%
+ }
+ %> <span class="feed-hover"> <span
+								class="feed-hover-copy"> <strong> <%=item.getTitle()%>
+								</strong> <%
+ if (!locationText.isEmpty()) {
+ %> <small> <%=locationText%>
+								</small> <%
+ }
+ %>
 
-							</span> <span class="feed-hover-stats"> <span> ♥ 91 </span> <span>
-
-										🔖 33 </span> <span> 💬 11 </span>
-
-
+							</span> <span class="feed-hover-stats"> <span> ♥ <%=item.getLikeCount()%>
+								</span> <span> 🔖 <%=item.getBookmarkCount()%>
+								</span> <span> 💬 <%=item.getCommentCount()%>
+								</span>
 
 							</span>
 
-
-
-
-
 						</span>
 
-
-
-
-
 						</a>
-
-
-
-
 
 					</div>
 
 
+					<%
+					}
+
+					} else {
+					%>
 
 
+					<div class="empty-state">아직 북마크한 여행 일정이 없습니다.</div>
+
+
+					<%
+					}
+					%>
 
 				</div>
 
-
-
-
-
 			</div>
-
-
-
-
 
 
 
 			<!-- ======================================
-
-             좋아요
-
-        ======================================= -->
-
-
+		     좋아요
+		======================================= -->
 
 			<div data-profile-panel="liked" class="jsp-hidden">
 
-
-
-
-
 				<div class="feed-grid">
 
+					<%
+					if (likedItineraries != null && !likedItineraries.isEmpty()) {
 
+						for (ProfileFeedDto item : likedItineraries) {
 
+							String country = item.getCountry() == null ? "" : item.getCountry();
 
+							String city = item.getCity() == null ? "" : item.getCity();
 
-					<div class="feed-admin-shell">
+							String locationText = "";
 
+							if (!country.isEmpty() && !city.isEmpty()) {
 
+						locationText = country + " · " + city;
 
+							} else if (!country.isEmpty()) {
 
+						locationText = country;
 
-						<a class="feed-item"
-							href="<%=ctx%>/view/travel/scheduleDetail.jsp?id=8"> <img
-							src="https://images.unsplash.com/photo-1613395877344-13d4a8e0d49e?fit=crop&w=700&q=80"
-							alt="산토리니 여행"> <span class="feed-hover"> <span
-								class="feed-hover-copy"> <strong> 산토리니 4박 5일 </strong> <small>
+							} else if (!city.isEmpty()) {
 
-										그리스 · 산토리니 </small>
+						locationText = city;
+							}
 
-
-
-							</span> <span class="feed-hover-stats"> <span> ♥ 98 </span> <span>
-
-										🔖 36 </span> <span> 💬 12 </span>
-
-
-
-							</span>
-
-
-
-
-
-						</span>
-
-
-
-
-
-						</a>
-
-
-
-
-
-					</div>
-
-
-
-
-
+							String thumbnail = item.getThumbnailImg() == null ? "" : item.getThumbnailImg();
+					%>
 
 
 					<div class="feed-admin-shell">
 
-
-
-
-
 						<a class="feed-item"
-							href="<%=ctx%>/view/travel/scheduleDetail.jsp?id=9"> <img
-							src="https://images.unsplash.com/photo-1619794578892-cbdd3ff81c95?fit=crop&w=700&q=80"
-							alt="파리 여행"> <span class="feed-hover"> <span
-								class="feed-hover-copy"> <strong> 파리 5박 6일 예술 &
-
-										낭만 </strong> <small> 프랑스 · 파리 </small>
+							href="<%=ctx%>/schedules/detail?id=<%=item.getItineraryId()%>">
 
 
+							<%
+							if (!thumbnail.isEmpty()) {
+							%> <img src="<%=ctx %><%=thumbnail%>"
+							alt="<%=item.getTitle()%>"> <%
+ } else {
+ %> <span class="feed-fallback"></span> <%
+ }
+ %> <span class="feed-hover"> <span
+								class="feed-hover-copy"> <strong> <%=item.getTitle()%>
+								</strong> <%
+ if (!locationText.isEmpty()) {
+ %> <small> <%=locationText%>
+								</small> <%
+ }
+ %>
 
-							</span> <span class="feed-hover-stats"> <span> ♥ 105 </span> <span>
-
-										🔖 39 </span> <span> 💬 13 </span>
-
-
+							</span> <span class="feed-hover-stats"> <span> ♥ <%=item.getLikeCount()%>
+								</span> <span> 🔖 <%=item.getBookmarkCount()%>
+								</span> <span> 💬 <%=item.getCommentCount()%>
+								</span>
 
 							</span>
 
-
-
-
-
 						</span>
 
-
-
-
-
 						</a>
-
-
-
-
 
 					</div>
 
 
+					<%
+					}
+
+					} else {
+					%>
 
 
+					<div class="empty-state">아직 좋아요한 여행 일정이 없습니다.</div>
+
+
+					<%
+					}
+					%>
 
 				</div>
 
-
-
-
-
 			</div>
-
-
-
-
 
 
 

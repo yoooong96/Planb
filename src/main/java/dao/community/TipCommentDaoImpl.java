@@ -59,9 +59,9 @@ public class TipCommentDaoImpl implements TipCommentDao {
 
     // 댓글 삭제
     @Override
-    public int deleteTipComment(Long commentId) {
+    public int deleteTipComment(TipCommentDto tipCommentDto) {
         try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
-            int result = sqlSession.delete("mapper.community.tipComment.deleteTipComment", commentId);
+            int result = sqlSession.delete("mapper.community.tipComment.deleteTipComment", tipCommentDto);
             sqlSession.commit();
             return result;
         } catch (Exception e) {

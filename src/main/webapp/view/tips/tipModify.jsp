@@ -11,8 +11,10 @@ request.setAttribute("activePage", "tips");
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>여행꿀팁 수정 · Tripily</title>
     <jsp:include page="/common/headStyles.jsp" />
+    <script defer src="${pageContext.request.contextPath}/view/assets/js/tips/tipModify.js"></script>
 </head>
-<body class="site-shell"><jsp:include page="/common/header.jsp" />
+<body class="site-shell">
+	<jsp:include page="/common/header.jsp" />
 	<div class="min-h-screen" style="background: #f5f5ff">
 		<div class="relative" style="height: 220px">
 			<img
@@ -103,16 +105,56 @@ request.setAttribute("activePage", "tips");
 							<label class="flex items-center gap-2 text-sm font-bold" style="color: #6369D1">📎 사진 첨부</label>
 							<span class="text-xs text-gray-400">최대 5장</span>
 						</div>
-						<c:if test="${not empty tip.thumbnailImg}">
+						<c:if test="${not empty tipMediaList}">
 						    <div class="mb-4">
-						        <p class="text-xs font-semibold text-gray-500 mb-2">현재 등록된 이미지</p>
-						        <div class="relative overflow-hidden rounded-xl"
-						             style="width: min(180px, 100%); aspect-ratio: 4 / 3; border: 1.5px solid #D1D2F9;">
-						            <img src="${pageContext.request.contextPath}${tip.thumbnailImg}"
-						                 alt="현재 등록된 이미지"
-						                 class="w-full h-full object-cover">
+						
+						        <p class="text-xs font-semibold text-gray-500 mb-2">
+						            현재 등록된 이미지
+						        </p>
+						
+						        <div id="existingImageList"
+						             class="grid gap-3"
+						             style="grid-template-columns: repeat(auto-fit, minmax(min(120px, 100%), 1fr));">
+						
+						            <c:forEach var="media" items="${tipMediaList}">
+						
+						                <c:if test="${media.mediaType eq 'IMAGE'}">
+						
+						                    <div class="existing-image-item relative overflow-hidden rounded-xl border bg-gray-50"
+						                         data-media-id="${media.mediaId}"
+						                         style="border-color: #D1D2F9; aspect-ratio: 4 / 3;">
+						
+						                        <img
+						                            src="${pageContext.request.contextPath}${media.mediaUrl}"
+						                            alt="현재 등록된 이미지"
+						                            class="w-full h-full object-cover">
+						
+						                        <button
+						                            type="button"
+						                            class="existing-image-delete absolute top-2 right-2
+						                                   w-7 h-7 rounded-full
+						                                   bg-black/60 text-white
+						                                   flex items-center justify-center"
+						                            data-media-id="${media.mediaId}"
+						                            aria-label="이미지 삭제">
+						                            ×
+						                        </button>
+						
+						                    </div>
+						
+						                </c:if>
+						
+						            </c:forEach>
+						
 						        </div>
-						        <p class="text-xs text-gray-400 mt-2">새 사진을 선택하지 않으면 현재 이미지가 유지됩니다.</p>
+						
+						        <!-- 삭제할 기존 이미지 ID 저장 -->
+						        <div id="deletedMediaInputs"></div>
+						
+						        <p class="text-xs text-gray-400 mt-2">
+						            삭제할 사진은 우측 상단의 × 버튼을 눌러주세요.
+						        </p>
+						
 						    </div>
 						</c:if>
 						<label class="rounded-xl py-12 flex flex-col items-center justify-center gap-3 cursor-pointer"
@@ -149,36 +191,7 @@ request.setAttribute("activePage", "tips");
 		</div>
 	</div>
 	
-	<script>
-		const tipImages = document.getElementById("tipImages");
-		const tipImagePreview = document.getElementById("tipImagePreview");
-		tipImages.addEventListener("change", function () {
-			tipImagePreview.innerHTML = "";
-			const files = Array.from(this.files);
-			if (files.length > 5) {
-				alert("사진은 최대 5장까지 첨부할 수 있습니다.");
-				this.value = "";
-				return;
-			}
-			files.forEach(function(file) {
-				if (!file.type.startsWith("image/")) {
-					return;
-				}
-				const reader = new FileReader();
-				reader.onload = function(e) {
-					const preview = document.createElement("div");
-					preview.className = "relative overflow-hidden rounded-xl border bg-gray-50";
-					preview.style.borderColor = "#D1D2F9";
-					preview.style.aspectRatio = "4 / 3";
-					preview.innerHTML = `
-						<img src="\${e.target.result}"alt="첨부 이미지 미리보기"class="w-full h-full object-cover">
-					`;
-					tipImagePreview.appendChild(preview);
-				};
-				reader.readAsDataURL(file);
-			});
-		});
-	</script>
+	
 	<jsp:include page="/common/footer.jsp" />
 </body>
 </html>

@@ -29,17 +29,17 @@ request.setAttribute("activePage", "profile");
 					</header>
 					<section class="support-entry-grid">
 						<a class="support-entry-card"
-							href="${pageContext.request.contextPath}/view/support/faq.jsp"><span
+							href="${pageContext.request.contextPath}/support/faq"><span
 							class="support-entry-icon">▧</span><span><strong>자주
 									묻는 질문</strong><small>계정, 프로필, 게시글 관련 안내를 확인합니다.</small></span><span>›</span></a><a
 							class="support-entry-card"
-							href="${pageContext.request.contextPath}/view/support/inquiry.jsp"><span
+							href="${pageContext.request.contextPath}/support/inquiry"><span
 							class="support-entry-icon">◯</span><span><strong>문의하기</strong><small>문의
 									유형과 내용을 작성해 접수하는 화면입니다.</small></span><span>›</span></a>
 					</section>
 					<section class="settings-panel support-links support-legal-links">
 						<a
-							href="${pageContext.request.contextPath}/view/support/adInquiry.jsp"><span
+							href="${pageContext.request.contextPath}/support/adInquiry"><span
 							style="display: inline-flex; align-items: center; gap: 8px">📣
 								광고 문의하기</span><span>›</span></a>
 						<button type="button">

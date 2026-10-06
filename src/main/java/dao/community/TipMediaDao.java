@@ -12,7 +12,11 @@ public interface TipMediaDao {
 
 	int updateTipMedia(TipMediaDto tipMediaDto);
 
-	int deleteTipMedia(Long mediaId);
+	int deleteTipMedia(long mediaId, long tipId);
 	
 	List<TipMediaDto> selectTipMediaList(long tipId);
+	
+	int deleteTipMediaByTipId(long tipId);
+	
+	TipMediaDto selectFirstTipMedia(long tipId);
 }

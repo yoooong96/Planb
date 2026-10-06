@@ -18,7 +18,7 @@ public interface TipDao {
 	int updateTip(TipDto tipDto);
 
 	// 여행꿀팁 삭제
-	int deleteTip(Long tipId);
+	int deleteTip(TipDto tipDto);
 
 	// 여행꿀팁 전체조회
 	List<TipDto> selectTipList();
@@ -37,4 +37,6 @@ public interface TipDao {
 	
 	// 내가 작성한 여행꿀팁 전체 개수
 	int countMyTipList(long userId);
+
+	int updateTipThumbnail(TipDto tipDto);
 }

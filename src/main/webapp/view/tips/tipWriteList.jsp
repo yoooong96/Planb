@@ -12,6 +12,7 @@
 	<title>내가 작성한 글 | Tripily</title>
 	<jsp:include page="/common/headStyles.jsp" />
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/view/assets/css/tips/tipWriteList.css">
+	<script defer src="${pageContext.request.contextPath}/view/assets/js/tips/tipWriteList.js"></script>
 </head>
 <body class="site-shell">
 	<jsp:include page="/common/header.jsp" />
@@ -63,7 +64,9 @@
 			</c:if>
 			<!-- 작성 글 목록 -->
 			<c:forEach var="tip" items="${tipList}">
-				<article class="tip-my-card">
+				<article class="tip-my-card"
+             			 onclick="location.href='${pageContext.request.contextPath}/tipDetail?tipId=${tip.tipId}'"
+             			 style="cursor: pointer;">
 					<div class="tip-my-card-content">
 						<!-- 해시태그 -->
 						<c:if test="${not empty tip.hashtag}">
@@ -114,12 +117,8 @@
 						    </svg>
 						    수정하기
 						</a>
-						<button type="button" class="tip-delete-btn" data-tip-id="${tip.tipId}">
-							<svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-									d="M3 6h18M8 6V4h8v2m-9 0 1 14h8l1-14M10 11v5M14 11v5" />
-							</svg>
-							삭제하기
+						<button type="button" class="tip-write-list-delete-btn" data-tip-id="${tip.tipId}">
+						    삭제
 						</button>
 					</div>
 				</article>

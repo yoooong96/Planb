@@ -23,4 +23,19 @@ public class TipMediaServiceImpl implements TipMediaService {
     public List<TipMediaDto> selectTipMediaList(long tipId) {
         return tipMediaDao.selectTipMediaList(tipId);
     }
+    
+    @Override
+    public int deleteTipMediaByTipId(long tipId) {
+        return tipMediaDao.deleteTipMediaByTipId(tipId);
+    }
+    
+    @Override
+    public int deleteTipMedia(long mediaId, long tipId) {
+        return tipMediaDao.deleteTipMedia(mediaId, tipId);
+    }
+    
+    @Override
+    public TipMediaDto selectFirstTipMedia(long tipId) {
+        return tipMediaDao.selectFirstTipMedia(tipId);
+    }
 }

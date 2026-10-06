@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatix.org//DTD mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.profile.profileFeed">
+
+	<select id="selectMyItineraries" parameterType="long" resultType="dto.profile.ProfileFeedDto">
+	
+		select 
+			itinerary_id AS itineraryId,
+			title,
+			country,
+			city,
+			thumbnail_img AS thumbnailImg,
+			visibility,
+			(
+				select count(*)
+				from TB_ITINERARY_LIKE l
+				where l.itinerary_id = itinerary_id
+			) AS likeCount,
+			(
+				SELECT COUNT(*)
+	            FROM TB_ITINERARY_BOOKMARK b
+	            WHERE b.itinerary_id = itinerary_id
+	        ) AS bookmarkCount,
+	        
+	        (
+	            SELECT COUNT(*)
+	            FROM TB_ITINERARY_COMMENT c
+	            WHERE c.itinerary_id = itinerary_id
+	              AND c.status = 'ACTIVE'
+	        ) AS commentCount
+		
+		from TB_ITINERARY
+		where user_id = #{userId}
+			AND status = 'ACTIVE'
+			
+		ORDER BY created_at DESC
+	
+	</select>
+	
+	<!-- =========================================
+     내가 북마크한 여행 일정
+========================================== -->
+
+	<select
+	    id="selectBookmarkedItineraries"
+	    parameterType="long"
+	    resultType="dto.profile.ProfileFeedDto">
+	
+	    SELECT
+	
+	        i.itinerary_id AS itineraryId,
+	        i.title AS title,
+	        i.country AS country,
+	        i.city AS city,
+	        i.thumbnail_img AS thumbnailImg,
+	        i.visibility AS visibility,
+	
+	
+	        (
+	            SELECT COUNT(*)
+	            FROM TB_ITINERARY_LIKE l
+	            WHERE l.itinerary_id = i.itinerary_id
+	        ) AS likeCount,
+	
+	
+	        (
+	            SELECT COUNT(*)
+	            FROM TB_ITINERARY_BOOKMARK bm
+	            WHERE bm.itinerary_id = i.itinerary_id
+	        ) AS bookmarkCount,
+	
+	
+	        (
+	            SELECT COUNT(*)
+	            FROM TB_ITINERARY_COMMENT c
+	            WHERE c.itinerary_id = i.itinerary_id
+	              AND c.status = 'ACTIVE'
+	        ) AS commentCount
+	
+	
+	    FROM TB_ITINERARY_BOOKMARK b
+	
+	
+	    INNER JOIN TB_ITINERARY i
+	
+	        ON i.itinerary_id =
+	           b.itinerary_id
+	
+	
+	    WHERE b.user_id = #{value}
+	
+	      AND i.status = 'ACTIVE'
+	
+	
+	    ORDER BY b.created_at DESC
+	
+	</select>
+	
+	<!-- =========================================
+     내가 좋아요한 여행 일정
+========================================== -->
+
+	<select
+	    id="selectLikedItineraries"
+	    parameterType="long"
+	    resultType="dto.profile.ProfileFeedDto">
+	
+	    SELECT
+	
+	        i.itinerary_id AS itineraryId,
+	        i.title AS title,
+	        i.country AS country,
+	        i.city AS city,
+	        i.thumbnail_img AS thumbnailImg,
+	        i.visibility AS visibility,
+	
+	
+	        (
+	            SELECT COUNT(*)
+	            FROM TB_ITINERARY_LIKE x
+	            WHERE x.itinerary_id = i.itinerary_id
+	        ) AS likeCount,
+	
+	
+	        (
+	            SELECT COUNT(*)
+	            FROM TB_ITINERARY_BOOKMARK b
+	            WHERE b.itinerary_id = i.itinerary_id
+	        ) AS bookmarkCount,
+	
+	
+	        (
+	            SELECT COUNT(*)
+	            FROM TB_ITINERARY_COMMENT c
+	            WHERE c.itinerary_id = i.itinerary_id
+	              AND c.status = 'ACTIVE'
+	        ) AS commentCount
+	
+	
+	    FROM TB_ITINERARY_LIKE l
+	
+	
+	    INNER JOIN TB_ITINERARY i
+	
+	        ON i.itinerary_id =
+	           l.itinerary_id
+	
+	
+	    WHERE l.user_id = #{value}
+	
+	      AND i.status = 'ACTIVE'
+	
+	
+	    ORDER BY l.created_at DESC
+	
+	</select>
+	
+	
+</mapper>

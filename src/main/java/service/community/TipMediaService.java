@@ -10,4 +10,10 @@ public interface TipMediaService {
     int insertTipMedia(TipMediaDto tipMediaDto);
     
     List<TipMediaDto> selectTipMediaList(long tipId);
+    
+    int deleteTipMediaByTipId(long tipId);
+    
+    int deleteTipMedia(long mediaId, long tipId);
+    
+    TipMediaDto selectFirstTipMedia(long tipId);
 }
