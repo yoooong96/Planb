@@ -61,18 +61,7 @@ public final class ItineraryImageStorage {
                     );
         }
 
-        /*
-         * 별도 설정이 없으면 운영체제를 자동 판별한다.
-         *
-         * Windows:
-         * \\DESKTOP-SK3JQT0\planb-data\uploads\itinerary
-         *
-         * macOS:
-         * /Volumes/planb-data/uploads/itinerary
-         *
-         * Linux:
-         * /mnt/planb-data/uploads/itinerary
-         */
+     
         if (!hasText(configured)) {
             configured = getDefaultRootByOs();
         }
