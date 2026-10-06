@@ -450,7 +450,7 @@ request.setAttribute("activePage", "travel");
 										</c:if>
 									</div>
 
-									<p class="mt-1 text-[13px] text-gray-600" style="white-space: pre-wrap; overflow-wrap: anywhere;"><c:out value="${comment.content}" /></p>
+<p class="mt-1 text-[13px] text-gray-600" style="white-space: pre-wrap; overflow-wrap: anywhere;"><c:out value="${comment.content}" /></p>
 								</div>
 							</article>
 
@@ -459,524 +459,239 @@ request.setAttribute("activePage", "travel");
 				</section>
 
 				<div id="detailSchedulePanel" class="p-4 space-y-3">
-					<div class="rounded-2xl border overflow-hidden"
-						style="border-color: #D1D2F9">
-						<div
-							class="flex items-center gap-3 px-4 py-3 cursor-pointer hover:opacity-90 transition-opacity"
-							style="background: rgba(99, 105, 209, .071)">
-							<div
-								class="w-8 h-8 rounded-full flex items-center justify-center text-white text-[13px] font-black shrink-0"
-								style="background: #6369D1">1</div>
-							<div class="flex-1 min-w-0">
-								<span class="font-black text-[13.5px]" style="color: #6369D1">Day
-									1</span><span class="text-gray-400 text-[11px] ml-2">2026.10.03
-									(토)</span>
-							</div>
-							<button data-toast="1일차 일정을 장바구니에 담았어요!"
-								class="flex items-center gap-1 text-[8px] font-bold px-2.5 py-1 rounded-full border transition-all shrink-0"
-								style="border-color: #e4e4f0; color: #94a3b8; background: white">
-								<svg class="w-3 h-3" fill="none" stroke="currentColor"
-									viewBox="0 0 24 24">
-									<path stroke-linecap="round" stroke-linejoin="round"
-										stroke-width="2.5"
-										d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13 5.4 5M7 13l-2.3 2.3c-.6.6-.2 1.7.7 1.7H17m0 0a2 2 0 100 4 2 2 0 000-4Zm-8 2a2 2 0 11-4 0 2 2 0 014 0Z" /></svg>
-								담기
-							</button>
-							<svg class="w-4 h-4 text-gray-400 transition-transform shrink-0"
-								style="transform: rotate(180deg)" fill="none"
-								stroke="currentColor" viewBox="0 0 24 24">
-								<path stroke-linecap="round" stroke-linejoin="round"
-									stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
-						</div>
-						<div class="px-4 pb-3 pt-1">
-							<div class="flex gap-3 relative pt-3">
-								<div class="flex flex-col items-center shrink-0"
-									style="width: 18px">
-									<div
-										class="w-3 h-3 rounded-full border-2 border-white shrink-0"
-										style="background: #6369D1; box-shadow: 0 0 0 2px #6369D140; margin-top: 2px"></div>
-									<div class="flex-1 w-0.5 mt-1"
-										style="background: #6369D130; min-height: 28px"></div>
+
+					<c:if test="${empty itinerary.days}">
+						<p class="py-8 text-center text-[12px] text-gray-400">등록된 세부
+							일정이 없습니다.</p>
+					</c:if>
+
+					<c:forEach var="day" items="${itinerary.days}"
+						varStatus="dayStatus">
+
+						<div class="rounded-2xl border overflow-hidden"
+							style="border-color: #D1D2F9">
+
+							<!-- 일차 정보 -->
+							<div class="flex items-center gap-3 px-4 py-3"
+								style="background: rgba(99, 105, 209, .071)">
+
+								<div
+									class="w-8 h-8 rounded-full flex items-center justify-center
+                           text-white text-[13px] font-black shrink-0"
+									style="background: #6369D1">${dayStatus.count}</div>
+
+								<div class="flex-1 min-w-0">
+
+									<div class="flex items-center gap-2 flex-wrap">
+										<span class="font-black text-[13px]" style="color: #6369D1">
+											Day ${dayStatus.count} </span>
+
+										<c:if test="${not empty day.dayDate}">
+											<span class="text-gray-400 text-[11px]"> <fmt:formatDate
+													value="${day.dayDate}" pattern="yyyy.MM.dd (E)" />
+											</span>
+										</c:if>
+									</div>
+
+									<c:if test="${not empty day.title}">
+										<p class="mt-1 text-[12px] text-gray-600">
+											<c:out value="${day.title}" />
+										</p>
+									</c:if>
+
 								</div>
-								<div class="flex-1 min-w-0 pb-1">
-									<div class="flex items-start gap-2">
-										<div class="flex-1 min-w-0">
-											<div class="flex items-center gap-2 mb-0.5 flex-wrap">
-												<span
-													class="text-[10.5px] font-mono shrink-0 px-1.5 py-0.5 rounded-md font-bold"
-													style="background: #6369D115; color: #6369D1">11:00</span><span
-													class="font-bold text-[13px] text-gray-900 leading-tight">제주공항
-													도착</span>
+							</div>
+
+							<!-- 해당 일차의 블록 목록 -->
+							<div class="px-4 pb-3 pt-1">
+
+								<c:if test="${empty day.blocks}">
+									<p class="py-4 text-center text-[12px] text-gray-400">등록된
+										블록이 없습니다.</p>
+								</c:if>
+
+								<c:forEach var="block" items="${day.blocks}"
+									varStatus="blockStatus">
+
+									<div class="flex gap-3 relative pt-3">
+
+										<!-- 일정 연결선 -->
+										<div class="flex flex-col items-center shrink-0"
+											style="width: 18px">
+
+											<div
+												class="w-3 h-3 rounded-full border-2 border-white shrink-0"
+												style="background: #6369D1; box-shadow: 0 0 0 2px #6369D140; margin-top: 4px">
 											</div>
-											<p class="text-[11.5px] text-gray-500 leading-relaxed">렌터카
-												수령 후 출발!</p>
-											<a href="https://www.airport.co.kr" target="_blank"
-												rel="noopener noreferrer"
-												class="inline-flex items-center gap-1 text-[10.5px] mt-1 font-medium transition-colors hover:underline"
-												style="color: #6369D1"><svg class="w-3 h-3" fill="none"
-													stroke="currentColor" viewBox="0 0 24 24">
-													<path stroke-linecap="round" stroke-linejoin="round"
-														stroke-width="2"
-														d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>공식
-												사이트</a>
+
+											<c:if test="${not blockStatus.last}">
+												<div class="flex-1 w-0.5 mt-1"
+													style="background: #6369D130; min-height: 28px"></div>
+											</c:if>
+
 										</div>
-										<div class="flex flex-col items-end gap-2 shrink-0">
-											<img
-												src="https://images.unsplash.com/photo-1628411848698-e3b3249a272a?w=120&h=80&fit=crop"
-												alt="제주공항 도착" class="rounded-xl object-cover"
-												style="width: 72px; height: 52px">
-											<button data-toast="&quot;제주공항 도착&quot;을(를) 장바구니에 담았어요!"
-												class="flex items-center gap-1 text-[8px] font-bold px-2 py-1 rounded-full border transition-all"
-												style="border-color: #e4e4f0; color: #94a3b8; background: white">
-												<svg class="w-2.5 h-2.5" fill="none" stroke="currentColor"
-													viewBox="0 0 24 24">
-													<path stroke-linecap="round" stroke-linejoin="round"
-														stroke-width="2.5" d="M12 4v16m8-8H4" /></svg>
-												담기
-											</button>
+
+										<div class="flex-1 min-w-0 pb-3">
+
+											<!-- 시간과 제목 -->
+											<div class="flex items-center gap-2 flex-wrap">
+
+												<c:if
+													test="${not empty block.startTime
+                                    or not empty block.endTime}">
+
+													<span
+														class="text-[10px] font-mono shrink-0
+                                               px-1.5 py-0.5 rounded-md font-bold"
+														style="background: #6369D115; color: #6369D1"> <c:if
+															test="${not empty block.startTime}">
+															<fmt:formatDate value="${block.startTime}"
+																pattern="HH:mm" />
+														</c:if> <c:if
+															test="${not empty block.startTime
+                                            and not empty block.endTime}">
+                                            –
+                                        </c:if> <c:if
+															test="${not empty block.endTime}">
+															<fmt:formatDate value="${block.endTime}" pattern="HH:mm" />
+														</c:if>
+
+													</span>
+												</c:if>
+
+												<span
+													class="font-bold text-[13px]
+                                             text-gray-900 leading-snug"
+													style="overflow-wrap: anywhere"> <c:out
+														value="${empty block.title
+                                        ? block.placeName : block.title}" />
+												</span>
+
+											</div>
+
+											<!-- 블록 종류 -->
+											<c:if test="${not empty block.blockType}">
+												<span
+													class="inline-block mt-1 text-[10px]
+                                             text-gray-400">
+													<c:choose>
+														<c:when test="${block.blockType eq 'MEAL'}">
+                                            식사
+                                        </c:when>
+														<c:when test="${block.blockType eq 'ATTRACTION'}">
+                                            관광
+                                        </c:when>
+														<c:when test="${block.blockType eq 'LODGING'}">
+                                            숙박
+                                        </c:when>
+														<c:when test="${block.blockType eq 'TRANSPORT'}">
+                                            이동
+                                        </c:when>
+														<c:when test="${block.blockType eq 'ACTIVITY'}">
+                                            체험
+                                        </c:when>
+														<c:otherwise>
+															<c:out value="${block.blockType}" />
+														</c:otherwise>
+													</c:choose>
+												</span>
+											</c:if>
+
+											<!-- 장소 -->
+											<c:if
+												test="${not empty block.placeName
+                                and block.placeName ne block.title}">
+												<p class="mt-1 text-[11px] text-gray-500">
+													<c:out value="${block.placeName}" />
+												</p>
+											</c:if>
+
+											<c:if test="${not empty block.placeAddress}">
+												<p class="mt-1 text-[11px] text-gray-400"
+													style="overflow-wrap: anywhere">
+													<c:out value="${block.placeAddress}" />
+												</p>
+											</c:if>
+
+											<!-- 메모: 태그 안쪽의 불필요한 공백 제거 -->
+											<c:if test="${not empty block.memo}">
+												<p class="mt-2 text-[12px] text-gray-600 leading-relaxed"
+													style="white-space: pre-wrap; overflow-wrap: anywhere;"><c:out value="${block.memo}" /></p>
+											</c:if>
+
+											<!-- 비용: 0원도 표시 -->
+											<c:if test="${not empty block.cost}">
+												<p class="mt-2 text-[11px] font-semibold"
+													style="color: #6369D1">
+
+													<fmt:formatNumber value="${block.cost}" pattern="#,##0.##" />
+													원
+
+													<c:choose>
+														<c:when test="${block.costType eq 'PER_PERSON'}">
+															<span class="font-normal text-gray-400"> · 1인 기준 </span>
+														</c:when>
+														<c:when test="${block.costType eq 'TOTAL'}">
+															<span class="font-normal text-gray-400"> · 전체 금액 </span>
+														</c:when>
+													</c:choose>
+
+												</p>
+											</c:if>
+
+											<!-- 블록 사진: 최대 3장 -->
+											<c:if test="${not empty block.images}">
+												<div class="flex gap-2 mt-3 overflow-x-auto">
+
+													<c:forEach var="image" items="${block.images}" end="2">
+
+														<c:if test="${not empty image.imageUrl}">
+															<c:choose>
+
+																<c:when
+																	test="${image.imageUrl.startsWith('https://')
+                                                    or image.imageUrl.startsWith('http://')}">
+																	<c:set var="blockImageUrl" value="${image.imageUrl}" />
+																</c:when>
+
+																<c:when test="${image.imageUrl.startsWith('/')}">
+																	<c:url var="blockImageUrl" value="${image.imageUrl}" />
+																</c:when>
+
+																<c:otherwise>
+																	<c:url var="blockImageUrl" value="/${image.imageUrl}" />
+																</c:otherwise>
+
+															</c:choose>
+
+															<a href="<c:out value='${blockImageUrl}'/>"
+																target="_blank" rel="noopener noreferrer"
+																class="block shrink-0 rounded-lg
+                                                       overflow-hidden border"
+																style="width: 88px; height: 66px; border-color: #e4e4f0">
+
+																<img src="<c:out value='${blockImageUrl}'/>"
+																alt="일정 블록 사진" loading="lazy"
+																class="w-full h-full object-cover">
+															</a>
+
+														</c:if>
+													</c:forEach>
+
+												</div>
+											</c:if>
+
 										</div>
 									</div>
-								</div>
-							</div>
-							<div class="flex gap-3 relative pt-3">
-								<div class="flex flex-col items-center shrink-0"
-									style="width: 18px">
-									<div
-										class="w-3 h-3 rounded-full border-2 border-white shrink-0"
-										style="background: #6369D1; box-shadow: 0 0 0 2px #6369D140; margin-top: 2px"></div>
-									<div class="flex-1 w-0.5 mt-1"
-										style="background: #6369D130; min-height: 28px"></div>
-								</div>
-								<div class="flex-1 min-w-0 pb-1">
-									<div class="flex items-start gap-2">
-										<div class="flex-1 min-w-0">
-											<div class="flex items-center gap-2 mb-0.5 flex-wrap">
-												<span
-													class="text-[10.5px] font-mono shrink-0 px-1.5 py-0.5 rounded-md font-bold"
-													style="background: #6369D115; color: #6369D1">12:00</span><span
-													class="font-bold text-[13px] text-gray-900 leading-tight">흑돼지
-													맛집 점심</span>
-											</div>
-											<p class="text-[11.5px] text-gray-500 leading-relaxed">제주
-												돈사돈 본점 · 웨이팅 있지만 기다릴만해요.</p>
-										</div>
-										<div class="flex flex-col items-end gap-2 shrink-0">
-											<img
-												src="https://images.unsplash.com/photo-1544025162-d76694265947?w=120&h=80&fit=crop"
-												alt="흑돼지 맛집 점심" class="rounded-xl object-cover"
-												style="width: 72px; height: 52px">
-											<button data-toast="&quot;흑돼지 맛집 점심&quot;을(를) 장바구니에 담았어요!"
-												class="flex items-center gap-1 text-[8px] font-bold px-2 py-1 rounded-full border transition-all"
-												style="border-color: #e4e4f0; color: #94a3b8; background: white">
-												<svg class="w-2.5 h-2.5" fill="none" stroke="currentColor"
-													viewBox="0 0 24 24">
-													<path stroke-linecap="round" stroke-linejoin="round"
-														stroke-width="2.5" d="M12 4v16m8-8H4" /></svg>
-												담기
-											</button>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="flex gap-3 relative pt-3">
-								<div class="flex flex-col items-center shrink-0"
-									style="width: 18px">
-									<div
-										class="w-3 h-3 rounded-full border-2 border-white shrink-0"
-										style="background: #6369D1; box-shadow: 0 0 0 2px #6369D140; margin-top: 2px"></div>
-									<div class="flex-1 w-0.5 mt-1"
-										style="background: #6369D130; min-height: 28px"></div>
-								</div>
-								<div class="flex-1 min-w-0 pb-1">
-									<div class="flex items-start gap-2">
-										<div class="flex-1 min-w-0">
-											<div class="flex items-center gap-2 mb-0.5 flex-wrap">
-												<span
-													class="text-[10.5px] font-mono shrink-0 px-1.5 py-0.5 rounded-md font-bold"
-													style="background: #6369D115; color: #6369D1">14:00</span><span
-													class="font-bold text-[13px] text-gray-900 leading-tight">성산일출봉</span>
-											</div>
-											<p class="text-[11.5px] text-gray-500 leading-relaxed">유네스코
-												세계유산! 탁 트인 파노라마 뷰.</p>
-											<a href="https://www.jeju.go.kr" target="_blank"
-												rel="noopener noreferrer"
-												class="inline-flex items-center gap-1 text-[10.5px] mt-1 font-medium transition-colors hover:underline"
-												style="color: #6369D1"><svg class="w-3 h-3" fill="none"
-													stroke="currentColor" viewBox="0 0 24 24">
-													<path stroke-linecap="round" stroke-linejoin="round"
-														stroke-width="2"
-														d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>공식
-												사이트</a>
-										</div>
-										<div class="flex flex-col items-end gap-2 shrink-0">
-											<img
-												src="https://images.unsplash.com/photo-1599840386256-807f9707efe2?w=120&h=80&fit=crop"
-												alt="성산일출봉" class="rounded-xl object-cover"
-												style="width: 72px; height: 52px">
-											<button data-toast="&quot;성산일출봉&quot;을(를) 장바구니에 담았어요!"
-												class="flex items-center gap-1 text-[8px] font-bold px-2 py-1 rounded-full border transition-all"
-												style="border-color: #e4e4f0; color: #94a3b8; background: white">
-												<svg class="w-2.5 h-2.5" fill="none" stroke="currentColor"
-													viewBox="0 0 24 24">
-													<path stroke-linecap="round" stroke-linejoin="round"
-														stroke-width="2.5" d="M12 4v16m8-8H4" /></svg>
-												담기
-											</button>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="flex gap-3 relative pt-3">
-								<div class="flex flex-col items-center shrink-0"
-									style="width: 18px">
-									<div
-										class="w-3 h-3 rounded-full border-2 border-white shrink-0"
-										style="background: #6369D1; box-shadow: 0 0 0 2px #6369D140; margin-top: 2px"></div>
-								</div>
-								<div class="flex-1 min-w-0 pb-1">
-									<div class="flex items-start gap-2">
-										<div class="flex-1 min-w-0">
-											<div class="flex items-center gap-2 mb-0.5 flex-wrap">
-												<span
-													class="text-[10.5px] font-mono shrink-0 px-1.5 py-0.5 rounded-md font-bold"
-													style="background: #6369D115; color: #6369D1">17:00</span><span
-													class="font-bold text-[13px] text-gray-900 leading-tight">광치기해변
-													산책</span>
-											</div>
-											<p class="text-[11.5px] text-gray-500 leading-relaxed">노을
-												질 때 방문하면 정말 예뻐요.</p>
-										</div>
-										<div class="flex flex-col items-end gap-2 shrink-0">
-											<img
-												src="https://images.unsplash.com/photo-1674606042265-c9f03a77e286?w=120&h=80&fit=crop"
-												alt="광치기해변 산책" class="rounded-xl object-cover"
-												style="width: 72px; height: 52px">
-											<button data-toast="&quot;광치기해변 산책&quot;을(를) 장바구니에 담았어요!"
-												class="flex items-center gap-1 text-[8px] font-bold px-2 py-1 rounded-full border transition-all"
-												style="border-color: #e4e4f0; color: #94a3b8; background: white">
-												<svg class="w-2.5 h-2.5" fill="none" stroke="currentColor"
-													viewBox="0 0 24 24">
-													<path stroke-linecap="round" stroke-linejoin="round"
-														stroke-width="2.5" d="M12 4v16m8-8H4" /></svg>
-												담기
-											</button>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="rounded-2xl border overflow-hidden"
-						style="border-color: #D1D2F9">
-						<div
-							class="flex items-center gap-3 px-4 py-3 cursor-pointer hover:opacity-90 transition-opacity"
-							style="background: rgba(239, 68, 68, .071)">
-							<div
-								class="w-8 h-8 rounded-full flex items-center justify-center text-white text-[13px] font-black shrink-0"
-								style="background: #ef4444">2</div>
-							<div class="flex-1 min-w-0">
-								<span class="font-black text-[13.5px]" style="color: #ef4444">Day
-									2</span><span class="text-gray-400 text-[11px] ml-2">2026.10.04
-									(일)</span>
-							</div>
-							<button data-toast="2일차 일정을 장바구니에 담았어요!"
-								class="flex items-center gap-1 text-[8px] font-bold px-2.5 py-1 rounded-full border transition-all shrink-0"
-								style="border-color: #e4e4f0; color: #94a3b8; background: white">
-								<svg class="w-3 h-3" fill="none" stroke="currentColor"
-									viewBox="0 0 24 24">
-									<path stroke-linecap="round" stroke-linejoin="round"
-										stroke-width="2.5"
-										d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13 5.4 5M7 13l-2.3 2.3c-.6.6-.2 1.7.7 1.7H17m0 0a2 2 0 100 4 2 2 0 000-4Zm-8 2a2 2 0 11-4 0 2 2 0 014 0Z" /></svg>
-								담기
-							</button>
-							<svg class="w-4 h-4 text-gray-400 transition-transform shrink-0"
-								style="transform: rotate(180deg)" fill="none"
-								stroke="currentColor" viewBox="0 0 24 24">
-								<path stroke-linecap="round" stroke-linejoin="round"
-									stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
-						</div>
-						<div class="px-4 pb-3 pt-1">
-							<div class="flex gap-3 relative pt-3">
-								<div class="flex flex-col items-center shrink-0"
-									style="width: 18px">
-									<div
-										class="w-3 h-3 rounded-full border-2 border-white shrink-0"
-										style="background: #ef4444; box-shadow: 0 0 0 2px #ef444440; margin-top: 2px"></div>
-									<div class="flex-1 w-0.5 mt-1"
-										style="background: #ef444430; min-height: 28px"></div>
-								</div>
-								<div class="flex-1 min-w-0 pb-1">
-									<div class="flex items-start gap-2">
-										<div class="flex-1 min-w-0">
-											<div class="flex items-center gap-2 mb-0.5 flex-wrap">
-												<span
-													class="text-[10.5px] font-mono shrink-0 px-1.5 py-0.5 rounded-md font-bold"
-													style="background: #ef444415; color: #ef4444">09:00</span><span
-													class="font-bold text-[13px] text-gray-900 leading-tight">섭지코지
-													일출</span>
-											</div>
-											<p class="text-[11.5px] text-gray-500 leading-relaxed">이른
-												아침의 섭지코지는 환상적이에요.</p>
-										</div>
-										<div class="flex flex-col items-end gap-2 shrink-0">
-											<img
-												src="https://images.unsplash.com/photo-1678284949334-5f9edb02e55e?w=120&h=80&fit=crop"
-												alt="섭지코지 일출" class="rounded-xl object-cover"
-												style="width: 72px; height: 52px">
-											<button data-toast="&quot;섭지코지 일출&quot;을(를) 장바구니에 담았어요!"
-												class="flex items-center gap-1 text-[8px] font-bold px-2 py-1 rounded-full border transition-all"
-												style="border-color: #e4e4f0; color: #94a3b8; background: white">
-												<svg class="w-2.5 h-2.5" fill="none" stroke="currentColor"
-													viewBox="0 0 24 24">
-													<path stroke-linecap="round" stroke-linejoin="round"
-														stroke-width="2.5" d="M12 4v16m8-8H4" /></svg>
-												담기
-											</button>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="flex gap-3 relative pt-3">
-								<div class="flex flex-col items-center shrink-0"
-									style="width: 18px">
-									<div
-										class="w-3 h-3 rounded-full border-2 border-white shrink-0"
-										style="background: #ef4444; box-shadow: 0 0 0 2px #ef444440; margin-top: 2px"></div>
-									<div class="flex-1 w-0.5 mt-1"
-										style="background: #ef444430; min-height: 28px"></div>
-								</div>
-								<div class="flex-1 min-w-0 pb-1">
-									<div class="flex items-start gap-2">
-										<div class="flex-1 min-w-0">
-											<div class="flex items-center gap-2 mb-0.5 flex-wrap">
-												<span
-													class="text-[10.5px] font-mono shrink-0 px-1.5 py-0.5 rounded-md font-bold"
-													style="background: #ef444415; color: #ef4444">11:00</span><span
-													class="font-bold text-[13px] text-gray-900 leading-tight">카페
-													오션뷰</span>
-											</div>
-											<p class="text-[11.5px] text-gray-500 leading-relaxed">바다가
-												보이는 감성 카페에서 브런치!</p>
-										</div>
-										<div class="flex flex-col items-end gap-2 shrink-0">
-											<img
-												src="https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=120&h=80&fit=crop"
-												alt="카페 오션뷰" class="rounded-xl object-cover"
-												style="width: 72px; height: 52px">
-											<button data-toast="&quot;카페 오션뷰&quot;을(를) 장바구니에 담았어요!"
-												class="flex items-center gap-1 text-[8px] font-bold px-2 py-1 rounded-full border transition-all"
-												style="border-color: #e4e4f0; color: #94a3b8; background: white">
-												<svg class="w-2.5 h-2.5" fill="none" stroke="currentColor"
-													viewBox="0 0 24 24">
-													<path stroke-linecap="round" stroke-linejoin="round"
-														stroke-width="2.5" d="M12 4v16m8-8H4" /></svg>
-												담기
-											</button>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="flex gap-3 relative pt-3">
-								<div class="flex flex-col items-center shrink-0"
-									style="width: 18px">
-									<div
-										class="w-3 h-3 rounded-full border-2 border-white shrink-0"
-										style="background: #ef4444; box-shadow: 0 0 0 2px #ef444440; margin-top: 2px"></div>
-									<div class="flex-1 w-0.5 mt-1"
-										style="background: #ef444430; min-height: 28px"></div>
-								</div>
-								<div class="flex-1 min-w-0 pb-1">
-									<div class="flex items-start gap-2">
-										<div class="flex-1 min-w-0">
-											<div class="flex items-center gap-2 mb-0.5 flex-wrap">
-												<span
-													class="text-[10.5px] font-mono shrink-0 px-1.5 py-0.5 rounded-md font-bold"
-													style="background: #ef444415; color: #ef4444">14:00</span><span
-													class="font-bold text-[13px] text-gray-900 leading-tight">한라산
-													국립공원 트래킹</span>
-											</div>
-											<p class="text-[11.5px] text-gray-500 leading-relaxed">영실코스
-												추천! 약 3시간 소요.</p>
-											<a href="https://www.hallasan.go.kr" target="_blank"
-												rel="noopener noreferrer"
-												class="inline-flex items-center gap-1 text-[10.5px] mt-1 font-medium transition-colors hover:underline"
-												style="color: #6369D1"><svg class="w-3 h-3" fill="none"
-													stroke="currentColor" viewBox="0 0 24 24">
-													<path stroke-linecap="round" stroke-linejoin="round"
-														stroke-width="2"
-														d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>공식
-												사이트</a>
-										</div>
-										<div class="flex flex-col items-end gap-2 shrink-0">
-											<img
-												src="https://images.unsplash.com/photo-1674606042265-c9f03a77e286?w=120&h=80&fit=crop"
-												alt="한라산 국립공원 트래킹" class="rounded-xl object-cover"
-												style="width: 72px; height: 52px">
-											<button data-toast="&quot;한라산 국립공원 트래킹&quot;을(를) 장바구니에 담았어요!"
-												class="flex items-center gap-1 text-[8px] font-bold px-2 py-1 rounded-full border transition-all"
-												style="border-color: #e4e4f0; color: #94a3b8; background: white">
-												<svg class="w-2.5 h-2.5" fill="none" stroke="currentColor"
-													viewBox="0 0 24 24">
-													<path stroke-linecap="round" stroke-linejoin="round"
-														stroke-width="2.5" d="M12 4v16m8-8H4" /></svg>
-												담기
-											</button>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="flex gap-3 relative pt-3">
-								<div class="flex flex-col items-center shrink-0"
-									style="width: 18px">
-									<div
-										class="w-3 h-3 rounded-full border-2 border-white shrink-0"
-										style="background: #ef4444; box-shadow: 0 0 0 2px #ef444440; margin-top: 2px"></div>
-								</div>
-								<div class="flex-1 min-w-0 pb-1">
-									<div class="flex items-start gap-2">
-										<div class="flex-1 min-w-0">
-											<div class="flex items-center gap-2 mb-0.5 flex-wrap">
-												<span
-													class="text-[10.5px] font-mono shrink-0 px-1.5 py-0.5 rounded-md font-bold"
-													style="background: #ef444415; color: #ef4444">18:00</span><span
-													class="font-bold text-[13px] text-gray-900 leading-tight">흑돼지거리
-													저녁</span>
-											</div>
-											<p class="text-[11.5px] text-gray-500 leading-relaxed">제주
-												흑돼지거리에서 즐기는 저녁.</p>
-										</div>
-										<div class="flex flex-col items-end gap-2 shrink-0">
-											<img
-												src="https://images.unsplash.com/photo-1544025162-d76694265947?w=120&h=80&fit=crop"
-												alt="흑돼지거리 저녁" class="rounded-xl object-cover"
-												style="width: 72px; height: 52px">
-											<button data-toast="&quot;흑돼지거리 저녁&quot;을(를) 장바구니에 담았어요!"
-												class="flex items-center gap-1 text-[8px] font-bold px-2 py-1 rounded-full border transition-all"
-												style="border-color: #e4e4f0; color: #94a3b8; background: white">
-												<svg class="w-2.5 h-2.5" fill="none" stroke="currentColor"
-													viewBox="0 0 24 24">
-													<path stroke-linecap="round" stroke-linejoin="round"
-														stroke-width="2.5" d="M12 4v16m8-8H4" /></svg>
-												담기
-											</button>
-										</div>
-									</div>
-								</div>
+
+								</c:forEach>
 							</div>
 						</div>
-					</div>
-					<div class="rounded-2xl border overflow-hidden"
-						style="border-color: #D1D2F9">
-						<div
-							class="flex items-center gap-3 px-4 py-3 cursor-pointer hover:opacity-90 transition-opacity"
-							style="background: rgba(16, 185, 129, .071)">
-							<div
-								class="w-8 h-8 rounded-full flex items-center justify-center text-white text-[13px] font-black shrink-0"
-								style="background: #10b981">3</div>
-							<div class="flex-1 min-w-0">
-								<span class="font-black text-[13.5px]" style="color: #10b981">Day
-									3</span><span class="text-gray-400 text-[11px] ml-2">2026.10.05
-									(월)</span>
-							</div>
-							<button data-toast="3일차 일정을 장바구니에 담았어요!"
-								class="flex items-center gap-1 text-[8px] font-bold px-2.5 py-1 rounded-full border transition-all shrink-0"
-								style="border-color: #e4e4f0; color: #94a3b8; background: white">
-								<svg class="w-3 h-3" fill="none" stroke="currentColor"
-									viewBox="0 0 24 24">
-									<path stroke-linecap="round" stroke-linejoin="round"
-										stroke-width="2.5"
-										d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13 5.4 5M7 13l-2.3 2.3c-.6.6-.2 1.7.7 1.7H17m0 0a2 2 0 100 4 2 2 0 000-4Zm-8 2a2 2 0 11-4 0 2 2 0 014 0Z" /></svg>
-								담기
-							</button>
-							<svg class="w-4 h-4 text-gray-400 transition-transform shrink-0"
-								style="transform: rotate(180deg)" fill="none"
-								stroke="currentColor" viewBox="0 0 24 24">
-								<path stroke-linecap="round" stroke-linejoin="round"
-									stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
-						</div>
-						<div class="px-4 pb-3 pt-1">
-							<div class="flex gap-3 relative pt-3">
-								<div class="flex flex-col items-center shrink-0"
-									style="width: 18px">
-									<div
-										class="w-3 h-3 rounded-full border-2 border-white shrink-0"
-										style="background: #10b981; box-shadow: 0 0 0 2px #10b98140; margin-top: 2px"></div>
-									<div class="flex-1 w-0.5 mt-1"
-										style="background: #10b98130; min-height: 28px"></div>
-								</div>
-								<div class="flex-1 min-w-0 pb-1">
-									<div class="flex items-start gap-2">
-										<div class="flex-1 min-w-0">
-											<div class="flex items-center gap-2 mb-0.5 flex-wrap">
-												<span
-													class="text-[10.5px] font-mono shrink-0 px-1.5 py-0.5 rounded-md font-bold"
-													style="background: #10b98115; color: #10b981">10:00</span><span
-													class="font-bold text-[13px] text-gray-900 leading-tight">협재해변</span>
-											</div>
-											<p class="text-[11.5px] text-gray-500 leading-relaxed">에메랄드빛
-												제주 바다!</p>
-										</div>
-										<div class="flex flex-col items-end gap-2 shrink-0">
-											<img
-												src="https://images.unsplash.com/photo-1616798249081-30877e213b16?w=120&h=80&fit=crop"
-												alt="협재해변" class="rounded-xl object-cover"
-												style="width: 72px; height: 52px">
-											<button data-toast="&quot;협재해변&quot;을(를) 장바구니에 담았어요!"
-												class="flex items-center gap-1 text-[8px] font-bold px-2 py-1 rounded-full border transition-all"
-												style="border-color: #e4e4f0; color: #94a3b8; background: white">
-												<svg class="w-2.5 h-2.5" fill="none" stroke="currentColor"
-													viewBox="0 0 24 24">
-													<path stroke-linecap="round" stroke-linejoin="round"
-														stroke-width="2.5" d="M12 4v16m8-8H4" /></svg>
-												담기
-											</button>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="flex gap-3 relative pt-3">
-								<div class="flex flex-col items-center shrink-0"
-									style="width: 18px">
-									<div
-										class="w-3 h-3 rounded-full border-2 border-white shrink-0"
-										style="background: #10b981; box-shadow: 0 0 0 2px #10b98140; margin-top: 2px"></div>
-								</div>
-								<div class="flex-1 min-w-0 pb-1">
-									<div class="flex items-start gap-2">
-										<div class="flex-1 min-w-0">
-											<div class="flex items-center gap-2 mb-0.5 flex-wrap">
-												<span
-													class="text-[10.5px] font-mono shrink-0 px-1.5 py-0.5 rounded-md font-bold"
-													style="background: #10b98115; color: #10b981">13:00</span><span
-													class="font-bold text-[13px] text-gray-900 leading-tight">우도
-													당일치기</span>
-											</div>
-											<p class="text-[11.5px] text-gray-500 leading-relaxed">배
-												타고 우도로! 땅콩아이스크림 필수.</p>
-										</div>
-										<div class="flex flex-col items-end gap-2 shrink-0">
-											<img
-												src="https://images.unsplash.com/photo-1599840386256-807f9707efe2?w=120&h=80&fit=crop"
-												alt="우도 당일치기" class="rounded-xl object-cover"
-												style="width: 72px; height: 52px">
-											<button data-toast="&quot;우도 당일치기&quot;을(를) 장바구니에 담았어요!"
-												class="flex items-center gap-1 text-[8px] font-bold px-2 py-1 rounded-full border transition-all"
-												style="border-color: #e4e4f0; color: #94a3b8; background: white">
-												<svg class="w-2.5 h-2.5" fill="none" stroke="currentColor"
-													viewBox="0 0 24 24">
-													<path stroke-linecap="round" stroke-linejoin="round"
-														stroke-width="2.5" d="M12 4v16m8-8H4" /></svg>
-												담기
-											</button>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
+
+					</c:forEach>
 				</div>
+				<!-- detailSchedulePanel 종료 -->
 			</div>
-			<!-- detailSchedulePanel 종료 -->
 		</section>
 		<!-- 가운데 패널 종료 -->
 
