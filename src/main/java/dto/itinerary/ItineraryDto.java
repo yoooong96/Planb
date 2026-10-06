@@ -31,6 +31,11 @@ public class ItineraryDto {
     private Timestamp deletedAt;           // 삭제 일시
     private Timestamp createdAt;           // 작성 일시
     private Timestamp updatedAt;           // 수정 일시
+    
+    private String nickname;
+	private String profileImg;
+	private int likeCount;
+	private int commentCount;
 
     // 일정 -> DAY 계층
     private List<ItineraryDayDto> days;
@@ -243,6 +248,14 @@ public class ItineraryDto {
     public void setLiked(boolean liked) {
         this.liked = liked;
     }
+
+    public String getProfileImg() {
+        return profileImg;
+    }
+
+    public void setProfileImg(String profileImg) {
+        this.profileImg = profileImg;
+    }
     
 	@Override
     public String toString() {
@@ -268,10 +281,6 @@ public class ItineraryDto {
                 + ", updatedAt=" + updatedAt
                 + ", days=" + days + "]";
     }
-	// 목록 카드에서 보여줄 조회 결과 26.10.01 추가.
-	private String nickname;
-	private int likeCount;
-	private int commentCount;
 
 	public String getNickname() {
 	    return nickname;

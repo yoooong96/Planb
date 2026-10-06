@@ -1,7 +1,10 @@
 @charset "UTF-8";
+
 .detail-layout {
+	padding-left: 5px;
 	display: grid;
-	grid-template-columns: 300px minmax(380px, 1fr) 400px;
+	/* 왼쪽 / 가운데 / 지도 */
+    grid-template-columns: 300px minmax(380px, 1fr) 440px;
 	height: calc(100vh - 68px);
 	min-height: 0;
 	overflow: hidden;
@@ -187,8 +190,8 @@
 
 @media ( max-width : 1280px) {
 	.detail-layout {
-		grid-template-columns: 270px minmax(340px, 1fr) 340px;
-	}
+        grid-template-columns: 270px minmax(340px, 1fr) 370px;
+    }
 	#detailSchedulePanel, #detailCommentPanel {
 		padding: 12px;
 	}
@@ -196,7 +199,7 @@
 
 @media ( max-width : 1000px) {
 	.detail-layout {
-		grid-template-columns: 250px minmax(320px, 1fr) 300px;
+		grid-template-columns: 250px minmax(320px, 1fr) 330px;
 		overflow-x: auto;
 	}
 }

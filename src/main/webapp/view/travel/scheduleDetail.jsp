@@ -276,19 +276,70 @@ request.setAttribute("activePage", "travel");
 				</div>
 				<div class="px-5 py-3 border-b flex items-center gap-3"
 					style="border-color: #D1D2F9">
+
 					<c:url var="authorProfileUrl" value="/profile/userProfile">
-    					<c:param name="userId" value="${itinerary.userId}" />
+						<c:param name="userId" value="${itinerary.userId}" />
 					</c:url>
-					<a
-						href="${authorProfileUrl}"
-						class="flex items-center gap-2.5 flex-1 min-w-0 hover:opacity-75 transition-opacity text-left"><img
-						src="https://i.pravatar.cc/40?img=12" alt="여행좋아"
-						class="w-9 h-9 rounded-full object-cover border-2 shrink-0"
-						style="border-color: #D1D2F9">
+
+					<a href="${authorProfileUrl}"
+						class="flex items-center gap-2.5 flex-1 min-w-0
+               hover:opacity-75 transition-opacity text-left">
+						
+						<div
+							class="w-9 h-9 rounded-full overflow-hidden border-2 shrink-0 flex items-center justify-center"
+							style="border-color: #D1D2F9; background: #F0F0FF; color: #6369D1">
+
+							<c:choose>
+								<c:when test="${not empty itinerary.profileImg}">
+
+									<c:choose>
+										<c:when
+											test="${itinerary.profileImg.startsWith('https://')
+                            or itinerary.profileImg.startsWith('http://')}">
+											<c:set var="authorImageUrl" value="${itinerary.profileImg}" />
+										</c:when>
+
+										<c:when test="${itinerary.profileImg.startsWith('/')}">
+											<c:url var="authorImageUrl" value="${itinerary.profileImg}" />
+										</c:when>
+
+										<c:otherwise>
+											<c:url var="authorImageUrl"
+												value="/profiles/${itinerary.profileImg}" />
+										</c:otherwise>
+									</c:choose>
+
+									<img src="<c:out value='${authorImageUrl}'/>" alt="작성자 프로필"
+										class="w-full h-full object-cover">
+
+								</c:when>
+
+								<c:otherwise>
+									<svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+										stroke="currentColor" stroke-width="2" aria-hidden="true">
+                        <circle cx="12" cy="8" r="4" />
+                        <path d="M4 21v-2a8 8 0 0 1 16 0v2" />
+                    </svg>
+								</c:otherwise>
+							</c:choose>
+
+						</div>
+
 						<div class="min-w-0">
-							<p class="text-[13px] font-bold text-gray-900 hover:underline">여행좋아</p>
-							<p class="text-[11px] text-gray-400">2026.08.20 게시</p>
-						</div></a>
+							<p
+								class="text-[13px] font-bold text-gray-900
+                      hover:underline truncate">
+								<c:out value="${itinerary.nickname}" />
+							</p>
+
+							<p class="text-[11px] text-gray-400">
+								<fmt:formatDate value="${itinerary.createdAt}"
+									pattern="yyyy.MM.dd" />
+								게시
+							</p>
+						</div>
+
+					</a>
 				</div>
 				<div class="px-5 py-3 border-b" style="border-color: #D1D2F9">
 					<p
@@ -453,7 +504,10 @@ request.setAttribute("activePage", "travel");
 										</c:if>
 									</div>
 
-<p class="mt-1 text-[13px] text-gray-600" style="white-space: pre-wrap; overflow-wrap: anywhere;"><c:out value="${comment.content}" /></p>
+									<p class="mt-1 text-[13px] text-gray-600"
+										style="white-space: pre-wrap; overflow-wrap: anywhere;">
+										<c:out value="${comment.content}" />
+									</p>
 								</div>
 							</article>
 
@@ -619,7 +673,9 @@ request.setAttribute("activePage", "travel");
 											<!-- 메모: 태그 안쪽의 불필요한 공백 제거 -->
 											<c:if test="${not empty block.memo}">
 												<p class="mt-2 text-[12px] text-gray-600 leading-relaxed"
-													style="white-space: pre-wrap; overflow-wrap: anywhere;"><c:out value="${block.memo}" /></p>
+													style="white-space: pre-wrap; overflow-wrap: anywhere;">
+													<c:out value="${block.memo}" />
+												</p>
 											</c:if>
 
 											<!-- 비용: 0원도 표시 -->
@@ -728,6 +784,6 @@ request.setAttribute("activePage", "travel");
 		src="${pageContext.request.contextPath}/view/assets/js/auth/tripily.js"></script>
 
 	<script
-		src="${pageContext.request.contextPath}/view/assets/js/travel/scheduleDetail.js?v=5"></script>
+		src="${pageContext.request.contextPath}/view/assets/js/travel/scheduleDetail.js?v=6"></script>
 </body>
 </html>

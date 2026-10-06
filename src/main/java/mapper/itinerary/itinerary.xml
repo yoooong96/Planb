@@ -4,34 +4,35 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="mapper.itinerary.itinerary">
 	<!-- 26.10.01 김상민 -->
-	<select id="selectScheduleList" parameterType="map" resultType="itinerary">
+	<select id="selectScheduleList" parameterType="map"
+		resultType="itinerary">
 		SELECT
 		i.*,
 		u.nickname,
 		(
-			SELECT COUNT(*)
-			FROM TB_ITINERARY_LIKE l
-			WHERE l.itinerary_id = i.itinerary_id
+		SELECT COUNT(*)
+		FROM TB_ITINERARY_LIKE l
+		WHERE l.itinerary_id = i.itinerary_id
 		) AS like_count,
 		(
-			SELECT COUNT(*)
-			FROM TB_ITINERARY_COMMENT c
-			WHERE c.itinerary_id = i.itinerary_id
-			AND c.status = 'ACTIVE'
+		SELECT COUNT(*)
+		FROM TB_ITINERARY_COMMENT c
+		WHERE c.itinerary_id = i.itinerary_id
+		AND c.status = 'ACTIVE'
 		) AS comment_count,
-		
+
 		EXISTS (
-			SELECT 1
-			FROM TB_ITINERARY_LIKE my_like
-			WHERE my_like.itinerary_id = i.itinerary_id
-			AND my_like.user_id = #{loginUserId}
+		SELECT 1
+		FROM TB_ITINERARY_LIKE my_like
+		WHERE my_like.itinerary_id = i.itinerary_id
+		AND my_like.user_id = #{loginUserId}
 		) AS liked,
 
 		EXISTS (
-			SELECT 1
-			FROM TB_ITINERARY_BOOKMARK b
-			WHERE b.itinerary_id = i.itinerary_id
-			AND b.user_id = #{loginUserId, jdbcType=BIGINT}
+		SELECT 1
+		FROM TB_ITINERARY_BOOKMARK b
+		WHERE b.itinerary_id = i.itinerary_id
+		AND b.user_id = #{loginUserId, jdbcType=BIGINT}
 		) AS bookmarked
 
 		FROM
@@ -163,6 +164,7 @@
 
 		SELECT
 		u.nickname,
+		u.profile_img AS profileImg,
 		i.view_count
 		FROM TB_ITINERARY i
 		JOIN TB_USER u

@@ -367,24 +367,14 @@ public class ItineraryServiceImpl implements ItineraryService {
 
 
 				itinerary.setNickname(detailInfo.getNickname());
-
+				itinerary.setProfileImg(detailInfo.getProfileImg());
 				itinerary.setViewCount(detailInfo.getViewCount());
-
-
-
 				itinerary.setLikeCount(itineraryLikeDao.countItineraryLikes(sqlSession, itineraryId));
-
-
-
 				itinerary.setCommentCount(itineraryCommentDao.countItineraryComments(sqlSession, itineraryId));
-
-
 
 				// 로그인 회원이 좋아요를 눌렀는지 확인
 
 				if (loginUserId != null && loginUserId > 0) {
-
-
 
 					ItineraryLikeDto like = new ItineraryLikeDto();
 
@@ -392,37 +382,23 @@ public class ItineraryServiceImpl implements ItineraryService {
 
 					like.setUserId(loginUserId);
 
-
-
 					itinerary.setLiked(itineraryLikeDao.selectItineraryLike(sqlSession, like));
 
-
-
 				} else {
-
 					itinerary.setLiked(false);
-
 				}
-
-
 
 				// 로그인 회원의 북마크 여부
 
 				itinerary.setBookmarked(false);
 
-
-
 				if (loginUserId != null && loginUserId > 0 && !isOwner) {
-
-
 
 					ItineraryBookmarkDto bookmark = new ItineraryBookmarkDto();
 
 					bookmark.setItineraryId(itineraryId);
 
 					bookmark.setUserId(loginUserId);
-
-
 
 					itinerary.setBookmarked(itineraryBookmarkDao.selectItineraryBookmark(sqlSession, bookmark));
 
