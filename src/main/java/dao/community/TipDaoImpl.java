@@ -50,11 +50,26 @@ public class TipDaoImpl implements TipDao {
 	        throw e;
 	    }
 	}
+	
+	@Override
+	public int updateTipThumbnail(TipDto tipDto) {
+	    try (SqlSession session = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+	        int result = session.update("mapper.community.tip.updateTipThumbnail", tipDto);
+	        session.commit();
+	        return result;
+	    }
+	}
 
 	@Override
-	public int deleteTip(Long tipId) {
-		// TODO Auto-generated method stub
-		return 0;
+	public int deleteTip(TipDto tipDto) {
+	    try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+	        int result = sqlSession.update("mapper.community.tip.deleteTip",tipDto );
+	        sqlSession.commit();
+	        return result;
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        throw e;
+	    }
 	}
 
 	// 여행꿀팁 전체 조회

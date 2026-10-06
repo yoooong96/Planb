@@ -23,28 +23,22 @@ request.setAttribute("activePage", "tips");
 					stroke="currentColor" stroke-width="2">
 					<path d="M15 18l-6-6 6-6" /></svg>목록으로</a>
 			<div class="flex gap-6 items-start">
-				<div
-					class="hidden lg:flex flex-col items-center justify-center gap-3 rounded-2xl shrink-0"
-					style="width: 160px; min-height: 600px; background-color: var(- -brand-light); color: var(- -brand)">
-					<div
-						class="w-12 h-12 rounded-full flex items-center justify-center font-extrabold text-sm text-white"
-						style="background-color: var(- -brand)">AD</div>
-					<p class="text-xs font-semibold text-center px-3"
-						style="color: var(- -brand)">
+				<div class="hidden lg:flex flex-col items-center justify-center gap-3 rounded-2xl shrink-0"
+					 style="width: 160px; min-height: 600px; background-color: var(- -brand-light); color: var(- -brand)">
+					<div class="w-12 h-12 rounded-full flex items-center justify-center font-extrabold text-sm text-white"
+						 style="background-color: var(- -brand)">AD</div>
+					<p class="text-xs font-semibold text-center px-3" style="color: var(- -brand)">
 						좌측 광고 영역<br>
-						<span class="text-[10px] font-normal opacity-60">(예:
-							160x600)</span>
+						<span class="text-[10px] font-normal opacity-60">(예: 160x600)</span>
 					</p>
 				</div>
 				<div class="flex-1 min-w-0">
-					<div
-						class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+					<div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
 						<div class="relative overflow-hidden" style="height: 280px">
 							<c:choose>
 							    <c:when test="${not empty tip.thumbnailImg}">
 							        <img src="${pageContext.request.contextPath}${tip.thumbnailImg}" alt="${tip.title}"
-							            class="absolute inset-0 w-full h-full object-cover">
-							            
+							            class="absolute inset-0 w-full h-full object-cover">=
 							    </c:when>
 							    <c:otherwise>
 							        <div class="absolute inset-0 flex items-center justify-center bg-gray-100 text-gray-400">
@@ -55,8 +49,7 @@ request.setAttribute("activePage", "tips");
 							<div class="absolute inset-0"
 								style="background: linear-gradient(to top, rgba(0, 0, 0, .72) 0%, rgba(0, 0, 0, .18) 55%, transparent 100%)"></div>
 							<div class="absolute bottom-6 left-7 right-7">
-								<h1
-								    class="text-white text-2xl md:text-3xl font-extrabold leading-snug">
+								<h1 class="text-white text-2xl md:text-3xl font-extrabold leading-snug">
 								    <c:out value="${tip.title}" />
 								</h1>
 							</div>
@@ -93,13 +86,22 @@ request.setAttribute("activePage", "tips");
 										<svg width="16" height="16" viewBox="0 0 24 24" fill="none"
 											stroke="currentColor" stroke-width="2">
 											<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" /></svg>
-										24
+										<span class="tip-like-count">
+										    ${tip.likeCount}
+										</span>
 									</button>
 									<span class="flex items-center gap-1.5">
-										<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-											<pathd="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-										</svg>
-										8
+									    <svg width="16"
+									         height="16"
+									         viewBox="0 0 24 24"
+									         fill="none"
+									         stroke="currentColor"
+									         stroke-width="2">
+									        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+									    </svg>
+									    <span class="tip-comment-count">
+									        ${tipCommentList.size()}
+									    </span>
 									</span>
 								</div>
 							</div>
@@ -111,21 +113,12 @@ request.setAttribute("activePage", "tips");
 							<!-- 추가 이미지 : 대표 이미지(sortOrder 1)는 제외 -->
 							<c:if test="${not empty tipMediaList}">
 							    <div class="tip-detail-images">
-							
-							        <c:forEach var="media"
-							                   items="${tipMediaList}"
-							                   varStatus="status">
-							
+							        <c:forEach var="media" items="${tipMediaList}" varStatus="status">
 							            <!-- 첫 번째 이미지(대표 이미지)는 제외 -->
 							            <c:if test="${status.index > 0 && media.mediaType eq 'IMAGE'}">
-							                <img
-							                    src="${pageContext.request.contextPath}${media.mediaUrl}"
-							                    alt="${tip.title}"
-							                    class="tip-detail-image">
+							                <img src="${pageContext.request.contextPath}${media.mediaUrl}" alt="${tip.title}" class="tip-detail-image">
 							            </c:if>
-							
 							        </c:forEach>
-							
 							    </div>
 							</c:if>
 							<div class="flex flex-wrap gap-2 mt-8 pt-6 border-t border-gray-100">
@@ -143,156 +136,148 @@ request.setAttribute("activePage", "tips");
 							        </span>
 							    </c:forEach>
 							</div>
-							<div class="flex items-center justify-center gap-4 mt-8">
-								<form action="${pageContext.request.contextPath}/tipLike" method="post" id="tipLikeForm" class="tip-like-form"
-								      data-login-url="${pageContext.request.contextPath}/auth/login">
-								    <input type="hidden" name="tipId" value="${tip.tipId}">
-								    <button type="submit" id="tipLikeBtn" class="tip-like-btn">
-								        <svg id="tipLikeIcon" class="tip-like-icon" viewBox="0 0 24 24" fill="${liked ? 'currentColor' : 'none'}"
-								             stroke="currentColor" stroke-width="2">
-								            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-								        </svg>
-								        <span id="tipLikeText">
-								            좋아요 ${tip.likeCount}
-								        </span>
-								    </button>
-								</form>
-								<button type="button"
-									class="flex items-center gap-2 px-8 py-3 rounded-full font-semibold text-sm border-2 border-gray-200 text-gray-500 hover:border-gray-400 transition-all">
-									<svg width="16" height="16" viewBox="0 0 24 24" fill="none"
-										stroke="currentColor" stroke-width="2">
-										<circle cx="18" cy="5" r="3" />
-										<circle cx="6" cy="12" r="3" />
-										<circle cx="18" cy="19" r="3" />
-										<line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
-										<line x1="15.41" y1="6.51" x2="8.59" y2="10.49" /></svg>
-									공유하기
-								</button>
+							<!-- 좋아요 / 게시글 관리 버튼 -->
+							<div class="tip-detail-actions">
+							    <!-- 좋아요 -->
+							    <form action="${pageContext.request.contextPath}/tipLike" method="post" id="tipLikeForm" class="tip-like-form"
+							          data-login-url="${pageContext.request.contextPath}/auth/login">
+							        <input type="hidden" name="tipId" value="${tip.tipId}">
+							        <button type="submit" id="tipLikeBtn" class="tip-like-btn ${liked ? 'active' : ''}">
+							            <svg id="tipLikeIcon" class="tip-like-icon" viewBox="0 0 24 24" fill="${liked ? 'currentColor' : 'none'}"
+							                 stroke="currentColor" stroke-width="2">
+							                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+							            </svg>
+							            <span id="tipLikeText">
+							                좋아요
+							                <span class="tip-like-count">${tip.likeCount}</span>
+							            </span>
+							        </button>
+							    </form>
+							    <!-- 작성자 본인만 -->
+							    <c:if test="${not empty sessionScope.user  && sessionScope.user.userId eq tip.userId}">
+							        <a href="${pageContext.request.contextPath}/tipModify?tipId=${tip.tipId}" class="tip-detail-edit-btn">
+							            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+							                <path d="M12 20h9" />
+							                <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z" />
+							            </svg>
+							            수정하기
+							        </a>
+							        <button type="button" class="tip-detail-delete-btn" id="tipDeleteButton" data-tip-id="${tip.tipId}">
+							            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+							                <path d="M3 6h18" />
+							                <path d="M8 6V4h8v2" />
+							                <path d="M19 6l-1 14H6L5 6" />
+							            </svg>
+							            삭제하기
+							        </button>
+							    </c:if>
 							</div>
 						</div>
 					</div>
-					<div
-						class="bg-white rounded-3xl shadow-sm border border-gray-100 p-7 mt-4">
-						<h3
-							class="flex items-center gap-2 text-base font-extrabold text-gray-900 mb-6">
-							<svg width="18" height="18" viewBox="0 0 24 24" fill="none"
-								stroke="currentColor" stroke-width="2.2"
-								style="color: var(- -brand)">
-								<path
-									d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg>
-							댓글 3
-						</h3>
-						<div class="flex flex-col gap-5 mb-8">
-							<div class="flex gap-3">
-								<div
-									class="w-9 h-9 rounded-full shrink-0 flex items-center justify-center text-white text-sm font-bold"
-									style="background-color: #6369D1">수</div>
-								<div class="flex-1 min-w-0">
-									<div class="flex items-center gap-2 mb-1">
-										<span class="text-sm font-bold text-gray-900">수빈</span><span
-											class="text-xs text-gray-400">2026.09.11</span>
-									</div>
-									<p class="text-sm text-gray-700 leading-relaxed">덕분에 여행 준비가
-										훨씬 수월해졌어요! 특히 교통 정보가 정말 유용했습니다 🙏</p>
-									<button type="button"
-										class="flex items-center gap-1 mt-2 text-xs transition-colors"
-										style="color: #9ca3af">
-										<svg width="13" height="13" viewBox="0 0 24 24" fill="none"
-											stroke="currentColor" stroke-width="2">
-											<path
-												d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" /></svg>
-										좋아요 12
-									</button>
-								</div>
-							</div>
-							<div class="flex gap-3">
-								<div
-									class="w-9 h-9 rounded-full shrink-0 flex items-center justify-center text-white text-sm font-bold"
-									style="background-color: #10B981">도</div>
-								<div class="flex-1 min-w-0">
-									<div class="flex items-center gap-2 mb-1">
-										<span class="text-sm font-bold text-gray-900">도현</span><span
-											class="text-xs text-gray-400">2026.09.12</span>
-									</div>
-									<p class="text-sm text-gray-700 leading-relaxed">저도 비슷한 경험이
-										있는데 정말 공감돼요. 다음번엔 꼭 이 팁 활용해볼게요!</p>
-									<button type="button"
-										class="flex items-center gap-1 mt-2 text-xs transition-colors"
-										style="color: #9ca3af">
-										<svg width="13" height="13" viewBox="0 0 24 24" fill="none"
-											stroke="currentColor" stroke-width="2">
-											<path
-												d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" /></svg>
-										좋아요 8
-									</button>
-								</div>
-							</div>
-							<div class="flex gap-3">
-								<div
-									class="w-9 h-9 rounded-full shrink-0 flex items-center justify-center text-white text-sm font-bold"
-									style="background-color: #F59E0B">나</div>
-								<div class="flex-1 min-w-0">
-									<div class="flex items-center gap-2 mb-1">
-										<span class="text-sm font-bold text-gray-900">나연</span><span
-											class="text-xs text-gray-400">2026.09.13</span>
-									</div>
-									<p class="text-sm text-gray-700 leading-relaxed">사진도 첨부해주시면
-										더 좋을 것 같아요. 아무튼 꿀팁 감사합니다 😊</p>
-									<button type="button"
-										class="flex items-center gap-1 mt-2 text-xs transition-colors"
-										style="color: #9ca3af">
-										<svg width="13" height="13" viewBox="0 0 24 24" fill="none"
-											stroke="currentColor" stroke-width="2">
-											<path
-												d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" /></svg>
-										좋아요 4
-									</button>
-								</div>
-							</div>
-						</div>
-						<div class="flex items-center gap-3 pt-5 border-t border-gray-100">
-							<div
-								class="w-9 h-9 rounded-full shrink-0 flex items-center justify-center text-white text-sm font-bold"
-								style="background-color: var(- -brand)">나</div>
-							<input type="text" placeholder="댓글을 입력해주세요..."
-								class="jsp-focus flex-1 text-sm text-gray-700 placeholder-gray-400 outline-none border border-gray-200 rounded-full px-4 py-2.5 transition-all">
-							<button type="button"
-								class="jsp-brand-hover shrink-0 px-5 py-2.5 rounded-full text-white text-sm font-semibold transition-colors"
-								style="background-color: var(- -brand)">등록</button>
-						</div>
+					<!-- 댓글 -->
+					<div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-7 mt-4">
+					    <!-- 댓글 제목 -->
+					    <h3 class="flex items-center gap-2 text-base font-extrabold text-gray-900 mb-6">
+					        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+					            stroke-width="2.2" style="color: var(--brand)">
+					            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+					        </svg>
+					        댓글 <span class="tip-comment-count">${tipCommentList.size()}</span>
+					    </h3>
+					    <!-- 댓글 목록 -->
+					    <div class="flex flex-col gap-5 mb-8" id="tipCommentList">
+					        <!-- 댓글이 없는 경우 -->
+					        <c:if test="${empty tipCommentList}">
+					            <div class="py-6 text-center text-sm text-gray-400">
+					                아직 작성된 댓글이 없습니다.
+					            </div>
+					        </c:if>
+					        <!-- 실제 DB 댓글 -->
+					        <c:forEach var="comment" items="${tipCommentList}">
+					            <div class="flex gap-3" data-comment-id="${comment.commentId}">
+					                <!-- 프로필 -->
+					                <div class="w-9 h-9 rounded-full shrink-0 flex items-center justify-center text-white text-sm font-bold"
+					                     style="background-color: var(--brand)">
+					                    <c:out value="${comment.nickname.substring(0, 1)}" />
+					                </div>
+					                <div class="flex-1 min-w-0">
+					                    <!-- 작성자 / 작성일 -->
+					                    <div class="flex items-center gap-2 mb-1">
+					                        <span class="text-sm font-bold text-gray-900">
+					                            <c:out value="${comment.nickname}" />
+					                        </span>
+					                        <span class="tip-comment-time text-xs text-gray-400">
+											    ${comment.timeAgo}
+											    <c:if test="${comment.edited}">
+											        <span class="tip-comment-edited ml-1">(수정됨)</span>
+											    </c:if>
+											</span>
+					                        <!-- 본인 댓글일 때만 수정 / 삭제 -->
+					                        <c:if test="${not empty sessionScope.user && sessionScope.user.userId eq comment.userId}">
+					                            <div class="flex items-center gap-2 ml-auto">
+					                                <button type="button" class="tip-comment-edit text-xs text-gray-400 hover:text-gray-700">
+					                                    수정
+					                                </button>
+					                                <button type="button" class="tip-comment-delete text-xs text-gray-400 hover:text-red-500">
+					                                    삭제
+					                                </button>
+					                            </div>
+					                        </c:if>
+					                    </div>
+					                    <!-- 댓글 내용 -->
+					                    <p class="tip-comment-content text-sm text-gray-700 leading-relaxed">
+					                        <c:out value="${comment.content}" />
+					                    </p>
+					                </div>
+					            </div>
+					        </c:forEach>
+					    </div>
+					    <!-- 댓글 작성 -->
+					    <div class="flex items-center gap-3 pt-5 border-t border-gray-100">
+					        <!-- 로그인 상태 -->
+					        <c:if test="${not empty sessionScope.user}">
+					            <div class="w-9 h-9 rounded-full shrink-0 flex items-center justify-center text-white text-sm font-bold"
+					                style="background-color: var(--brand)">
+					                <c:out value="${sessionScope.user.nickName.substring(0, 1)}" />
+					            </div>
+					            <form id="tipCommentForm" action="${pageContext.request.contextPath}/tipCommentWrite"
+					                  method="post" class="flex items-center gap-3 flex-1">
+					                <input type="hidden" name="tipId" value="${tip.tipId}">
+					                <input type="text"
+					                       name="content"
+					                       id="tipCommentContent"
+					                       placeholder="댓글을 입력해주세요..."
+					                       autocomplete="off"
+					                       class="jsp-focus flex-1 min-w-0 text-sm text-gray-700 placeholder-gray-400 outline-none border border-gray-200 rounded-full px-4 py-2.5 transition-all">
+					                <button type="submit"
+					                    class="jsp-brand-hover shrink-0 px-5 py-2.5 rounded-full text-white text-sm font-semibold transition-colors"
+					                    style="background-color: var(--brand)">
+					                    등록
+					                </button>
+					            </form>
+					        </c:if>
+					        <!-- 비로그인 상태 -->
+					        <c:if test="${empty sessionScope.user}">
+					            <div class="w-full text-center text-sm text-gray-400 py-2">
+					                댓글을 작성하려면 로그인이 필요합니다.
+					            </div>
+					        </c:if>
+					    </div>
 					</div>
-					<div class="mt-6 mb-10">
-						<h3 class="text-lg font-extrabold text-gray-900 mb-4">비슷한 꿀팁</h3>
-						<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-							<a
-								href="${pageContext.request.contextPath}/view/tips/tipDetail.jsp?id=7"
-								class="flex gap-3 p-4 bg-white rounded-2xl border border-gray-100 shadow-sm text-left w-full group hover:border-[#D1D2F9] transition-all"><img
-								src="https://images.unsplash.com/photo-1572414323397-e7918784a4b7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxuZXclMjB5b3JrJTIwc3Vid2F5JTIwbWV0cm8lMjB0cmFuc3BvcnRhdGlvbnxlbnwxfHx8fDE3ODkyODM2NjB8MA&ixlib=rb-4.1.0&q=80&w=600"
-								alt="뉴욕 지하철 이용 방법 (메트로카드, 노선, 주의사항)"
-								class="shrink-0 w-16 h-14 rounded-xl object-cover">
-							<div class="min-w-0">
-									<h4
-										class="font-bold text-sm text-gray-900 line-clamp-2 group-hover:text-[#6369D1] transition-colors">뉴욕
-										지하철 이용 방법 (메트로카드, 노선, 주의사항)</h4>
-									<p class="text-[10px] text-gray-400 mt-1">나 · 3일 전</p>
-								</div></a>
-						</div>
-					</div>
+				<!-- 우측 광고 -->
 				</div>
-				<div
-					class="hidden lg:flex flex-col items-center justify-center gap-3 rounded-2xl shrink-0"
-					style="width: 160px; min-height: 600px; background-color: var(- -brand-light); color: var(- -brand)">
-					<div
-						class="w-12 h-12 rounded-full flex items-center justify-center font-extrabold text-sm text-white"
+				<div class="hidden lg:flex flex-col items-center justify-center gap-3 rounded-2xl shrink-0"
+					 style="width: 160px; min-height: 600px; background-color: var(- -brand-light); color: var(- -brand)">
+					<div class="w-12 h-12 rounded-full flex items-center justify-center font-extrabold text-sm text-white"
 						style="background-color: var(- -brand)">AD</div>
-					<p class="text-xs font-semibold text-center px-3"
-						style="color: var(- -brand)">
+					<p class="text-xs font-semibold text-center px-3" style="color: var(- -brand)">
 						우측 광고 영역<br>
-						<span class="text-[10px] font-normal opacity-60">(예:
-							160x600)</span>
+						<span class="text-[10px] font-normal opacity-60">(예: 160x600)</span>
 					</p>
 				</div>
 			</div>
 		</div>
-	</div><jsp:include page="/common/footer.jsp" /></body>
+	</div>
+	<jsp:include page="/common/footer.jsp" />
+</body>
 </html>

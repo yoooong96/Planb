@@ -17,8 +17,14 @@
 
 	</update>
 
-	<delete id="deleteTipMedia" parameterType="Long">
-
+	<delete id="deleteTipMedia" parameterType="map">
+	    DELETE FROM TB_TIP_MEDIA
+	    WHERE media_id = #{mediaId} AND tip_id = #{tipId}
+	</delete>
+	
+	<delete id="deleteTipMediaByTipId" parameterType="long">
+	    DELETE FROM TB_TIP_MEDIA
+	    WHERE tip_id = #{tipId}
 	</delete>
 	
 	<!-- 게시글별 여행꿀팁 이미지 목록 조회 -->
@@ -33,6 +39,14 @@
 	    FROM TB_TIP_MEDIA
 	    WHERE tip_id = #{tipId}
 	    ORDER BY sort_order ASC
+	</select>
+	
+	<select id="selectFirstTipMedia" parameterType="long" resultType="dto.community.TipMediaDto">
+	    SELECT media_id, tip_id, media_type, media_url, sort_order, created_at
+	    FROM TB_TIP_MEDIA
+	    WHERE tip_id = #{tipId} AND media_type = 'IMAGE'
+	    ORDER BY sort_order ASC, media_id ASC
+	    LIMIT 1
 	</select>
 
 </mapper>

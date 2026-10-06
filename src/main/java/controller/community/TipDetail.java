@@ -20,6 +20,9 @@ import service.community.TipMediaService;
 import service.community.TipMediaServiceImpl;
 import service.community.TipService;
 import service.community.TipServiceImpl;
+import dto.community.TipCommentDto;
+import service.community.TipCommentService;
+import service.community.TipCommentServiceImpl;
 
 @WebServlet("/tipDetail")
 public class TipDetail extends HttpServlet {
@@ -54,6 +57,11 @@ public class TipDetail extends HttpServlet {
          	TipMediaService tipMediaService = new TipMediaServiceImpl();
          	List<TipMediaDto> tipMediaList = tipMediaService.selectTipMediaList(tipId);
          	
+         	// 댓글 목록 조회
+         	TipCommentService tipCommentService =  new TipCommentServiceImpl();
+
+         	List<TipCommentDto> tipCommentList = tipCommentService.selectTipCommentList(tipId);
+         	
          	// 좋아요 Service
          	TipLikeService tipLikeService = new TipLikeServiceImpl();
 
@@ -85,6 +93,7 @@ public class TipDetail extends HttpServlet {
          	request.setAttribute("tip", tip);
          	request.setAttribute("tipMediaList", tipMediaList);
          	request.setAttribute("liked", liked);
+         	request.setAttribute("tipCommentList", tipCommentList);
          	
             // 5. 상세 JSP 이동
             request.getRequestDispatcher("/view/tips/tipDetail.jsp").forward(request, response);

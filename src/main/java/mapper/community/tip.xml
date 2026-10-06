@@ -33,9 +33,26 @@
 	    </set>
 	    WHERE tip_id = #{tipId} AND user_id = #{userId} AND status = 'ACTIVE'
 	</update>
+	
+	<!-- 여행꿀팁 대표 이미지 수정 -->
+	<update id="updateTipThumbnail" parameterType="dto.community.TipDto">
+	    UPDATE TB_TIP
+	    SET thumbnail_img = #{thumbnailImg},
+	        updated_at = NOW()
+	
+	    WHERE tip_id = #{tipId}
+	      AND user_id = #{userId}
+	      AND status = 'ACTIVE'
+	</update>
 
-	<delete id="deleteTip" parameterType="Long">
-
+	<delete id="deleteTip" parameterType="tip">
+		UPDATE TB_TIP
+	    SET status = 'DELETED',
+	        deleted_by_user_id = #{userId},
+	        deleted_at = NOW(),
+	        updated_at = NOW()
+	
+	    WHERE tip_id = #{tipId} AND user_id = #{userId} AND status = 'ACTIVE'
 	</delete>
 	
 	<select id="selectTipListByFilter" parameterType="map" resultType="tip">

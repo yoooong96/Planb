@@ -30,4 +30,8 @@ public interface TipService {
 	
 	// 여행꿀팁 수정
 	int updateTip(TipDto tip);
+	
+	int deleteTip(long tipId, long userId);
+	
+	int updateTipThumbnail(TipDto tipDto);
 }

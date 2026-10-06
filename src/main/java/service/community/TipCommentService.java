@@ -1,10 +1,10 @@
-package dao.community;
+package service.community;
 
 import java.util.List;
 
 import dto.community.TipCommentDto;
 
-public interface TipCommentDao {
+public interface TipCommentService {
 
     // 댓글 작성
     int insertTipComment(TipCommentDto tipCommentDto);

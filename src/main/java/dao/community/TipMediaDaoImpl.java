@@ -1,6 +1,8 @@
 package dao.community;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 
@@ -35,9 +37,17 @@ public class TipMediaDaoImpl implements TipMediaDao {
 	}
 
 	@Override
-	public int deleteTipMedia(Long mediaId) {
-		// TODO Auto-generated method stub
-		return 0;
+	public int deleteTipMedia(long mediaId, long tipId) {
+	    Map<String, Object> param = new HashMap<>();
+
+	    param.put("mediaId", mediaId);
+	    param.put("tipId", tipId);
+
+	    try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+	        int result = sqlSession.delete("mapper.community.tipMedia.deleteTipMedia",param);
+	        sqlSession.commit();
+	        return result;
+	    }
 	}
 
 	@Override
@@ -49,5 +59,23 @@ public class TipMediaDaoImpl implements TipMediaDao {
 	        throw e;
 	    }
 	}
-
+	
+	@Override
+	public int deleteTipMediaByTipId(long tipId) {
+	    try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+	        int result = sqlSession.delete("mapper.community.tipMedia.deleteTipMediaByTipId", tipId);
+	        sqlSession.commit();
+	        return result;
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        throw e;
+	    }
+	}
+	
+	@Override
+	public TipMediaDto selectFirstTipMedia(long tipId) {
+	    try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+	        return sqlSession.selectOne("mapper.community.tipMedia.selectFirstTipMedia", tipId);
+	    }
+	}
 }
