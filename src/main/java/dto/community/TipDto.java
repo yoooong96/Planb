@@ -20,7 +20,7 @@ public class TipDto {
 	private String hashtag;			// 해시태그
 	private String nickname;		// 작성자 닉네임
 	private int likeCount;			// 좋아요 수
-	private int commentCount;
+	private int commentCount;		// 댓글 수
 	
 	public TipDto() {
 		super();

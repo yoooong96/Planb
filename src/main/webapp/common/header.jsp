@@ -104,8 +104,8 @@ if (user != null
  				여행꿀팁
             </a>
             <!-- 여행 메이트 -->
-            <a class="<%=homeHeader ? "site-nav-pill" : "site-nav-link"%> <%="mate".equals(activePage) ? "active" : ""%>"
-               href="<%=ctx%>/view/mate/mateList.jsp">
+            <a class="<%=homeHeader ? "site-nav-pill" : "site-nav-link"%> <%="mates".equals(activePage) ? "active" : ""%>"
+               href="<%=ctx%>/mates">
 				여행 메이트
             </a>
         </nav>

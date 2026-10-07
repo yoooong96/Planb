@@ -66,7 +66,7 @@ public class TipWrite extends HttpServlet {
 	        response.sendRedirect(request.getContextPath() + "/auth/login");
 	        return;
 	    }
-	    UserDto user =(UserDto) session.getAttribute("user");
+	    UserDto user = (UserDto) session.getAttribute("user");
 	    // ========================================
 	    // 2. 작성한 값 받기
 	    // ========================================

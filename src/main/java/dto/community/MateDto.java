@@ -8,7 +8,7 @@ public class MateDto {
 	private String title;				// 제목
 	private String content;				// 내용
 	private String img;					// 대표 이미지
-	private String visibility;			// 공개 설정
+	private String visibility;			// 공개 설정 여부
 	private int viewCount;				// 조회수
 	private String status;				// 게시글 상태
 	private Long deletedByUserId;		// 삭제 처리자
