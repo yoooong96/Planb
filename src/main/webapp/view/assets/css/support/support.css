@@ -2204,3 +2204,417 @@
         text-align: center;
     }
 }
+/* ============================================================
+   FAQ PAGE EXTENSION
+   검색 / 카테고리 / Empty / CTA
+============================================================ */
+
+.faq-page {
+    max-width: 760px;
+}
+
+
+/* ============================================================
+   검색
+============================================================ */
+
+.faq-search-box {
+    width: 100%;
+    height: 52px;
+
+    display: flex;
+    align-items: center;
+
+    margin-bottom: 14px;
+    padding: 0 15px;
+
+    border: 1px solid var(--support-line-strong);
+    border-radius: 13px;
+
+    background: #fff;
+
+    transition:
+        border-color .16s ease,
+        box-shadow .16s ease;
+}
+
+
+.faq-search-box:focus-within {
+    border-color: rgba(99, 105, 209, .7);
+
+    box-shadow:
+        0 0 0 3px
+        rgba(99, 105, 209, .08);
+}
+
+
+.faq-search-icon {
+    width: 24px;
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+
+    flex: 0 0 auto;
+
+    color: #9596a0;
+}
+
+
+.faq-search-box input {
+    min-width: 0;
+    flex: 1;
+
+    height: 100%;
+
+    padding: 0 8px;
+
+    border: 0;
+    outline: 0;
+
+    background: transparent;
+
+    color: var(--support-ink);
+
+    font: inherit;
+    font-size: 12px;
+}
+
+
+.faq-search-box input::placeholder {
+    color: #aaaab3;
+}
+
+
+.faq-search-clear {
+    width: 28px;
+    height: 28px;
+
+    display: none;
+    align-items: center;
+    justify-content: center;
+
+    flex: 0 0 auto;
+
+    padding: 0;
+
+    border: 0;
+    border-radius: 50%;
+
+    background: #f2f2f6;
+
+    color: #868790;
+
+    font-size: 17px;
+    line-height: 1;
+
+    cursor: pointer;
+}
+
+
+.faq-search-clear.visible {
+    display: flex;
+}
+
+
+.faq-search-clear:hover {
+    background: #e9e9f0;
+
+    color: #55565f;
+}
+
+
+
+/* ============================================================
+   카테고리
+============================================================ */
+
+.faq-category-list {
+    display: flex;
+    flex-wrap: wrap;
+
+    gap: 7px;
+
+    margin-bottom: 18px;
+}
+
+
+.faq-category {
+    min-height: 33px;
+
+    padding: 0 12px;
+
+    border: 1px solid #e3e3eb;
+    border-radius: 999px;
+
+    background: #fff;
+
+    color: #787983;
+
+    font: inherit;
+    font-size: 10px;
+    font-weight: 650;
+
+    cursor: pointer;
+
+    transition:
+        border-color .15s ease,
+        background .15s ease,
+        color .15s ease;
+}
+
+
+.faq-category:hover {
+    border-color: #c9caef;
+
+    background: #f8f8ff;
+
+    color: #6369D1;
+}
+
+
+.faq-category.active {
+    border-color: #6369D1;
+
+    background: #6369D1;
+
+    color: #fff;
+}
+
+
+
+/* ============================================================
+   FAQ ITEM 보완
+============================================================ */
+
+.settings-page .faq-item > button {
+    padding: 18px 20px;
+
+    min-height: 64px;
+}
+
+
+.settings-page .faq-item > button > span:first-child {
+    padding-right: 15px;
+}
+
+
+.settings-page .faq-item p {
+    padding-top: 0;
+}
+
+
+.settings-page .faq-item p strong {
+    color: #4d4e58;
+
+    font-weight: 750;
+}
+
+
+.settings-page .faq-item p a {
+    color: #6369D1;
+
+    font-weight: 700;
+
+    text-decoration: none;
+}
+
+
+.settings-page .faq-item p a:hover {
+    text-decoration: underline;
+}
+
+
+.settings-page .faq-item.open .faq-symbol {
+    color: #6369D1;
+}
+
+
+
+/* ============================================================
+   검색 결과 없음
+============================================================ */
+
+.faq-empty {
+    min-height: 230px;
+
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    margin-top: 12px;
+
+    border: 1px solid var(--support-line);
+    border-radius: 14px;
+
+    background: #fafafd;
+
+    text-align: center;
+}
+
+
+.faq-empty-icon {
+    width: 42px;
+    height: 42px;
+
+    display: grid;
+    place-items: center;
+
+    margin-bottom: 11px;
+
+    border-radius: 50%;
+
+    background: #ececff;
+
+    color: #6369D1;
+
+    font-size: 16px;
+    font-weight: 850;
+}
+
+
+.faq-empty strong {
+    color: #45464f;
+
+    font-size: 12px;
+}
+
+
+.faq-empty p {
+    margin: 7px 0 0;
+
+    color: #9697a0;
+
+    font-size: 10px;
+    line-height: 1.6;
+}
+
+
+
+/* ============================================================
+   문의하기 CTA
+============================================================ */
+
+.faq-help {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 25px;
+
+    margin-top: 18px;
+    padding: 20px 21px;
+
+    border: 1px solid #e5e5ee;
+    border-radius: 14px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #fbfbff,
+            #f6f6ff
+        );
+}
+
+
+.faq-help-copy span {
+    display: block;
+
+    margin-bottom: 4px;
+
+    color: #9a9ba4;
+
+    font-size: 8.5px;
+}
+
+
+.faq-help-copy strong {
+    display: block;
+
+    color: #393a44;
+
+    font-size: 12px;
+}
+
+
+.faq-help-copy p {
+    margin: 5px 0 0;
+
+    color: #858690;
+
+    font-size: 9.5px;
+    line-height: 1.5;
+}
+
+
+.faq-help-button {
+    min-width: 105px;
+    height: 38px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    flex: 0 0 auto;
+
+    padding: 0 14px;
+
+    border-radius: 9px;
+
+    background: #6369D1;
+
+    color: #fff;
+
+    font-size: 10px;
+    font-weight: 750;
+
+    text-decoration: none;
+
+    transition:
+        background .15s ease,
+        transform .15s ease;
+}
+
+
+.faq-help-button:hover {
+    background: #5056BB;
+
+    transform: translateY(-1px);
+}
+
+
+
+/* ============================================================
+   MOBILE
+============================================================ */
+
+@media (max-width: 680px) {
+
+    .faq-category-list {
+        gap: 6px;
+    }
+
+
+    .faq-category {
+        min-height: 31px;
+
+        padding: 0 10px;
+
+        font-size: 9px;
+    }
+
+
+    .faq-help {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+
+    .faq-help-button {
+        width: 100%;
+    }
+
+}
