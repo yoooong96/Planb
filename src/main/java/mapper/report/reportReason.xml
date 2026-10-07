@@ -1,16 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatix.org//DTD mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="mapper.itinerary.reportReason">
-	<insert id="insertReportReason" parameterType="reportReason">
-	</insert>
 
-	<select id="selectReportReason" parameterType="Integer">
-	</select>
-	
-	<update id="updateReportReason" parameterType="reportReason">
-	</update>
-	
-	<delete id="deleteReportReason" parameterType="reportReason">
-	</delete>
+    <resultMap id="reportReasonMap"
+        type="dto.report.ReportReasonDto">
+
+        <id property="reasonId" column="reason_id" />
+        <result property="reasonCode" column="reason_code" />
+        <result property="reasonName" column="reason_name" />
+        <result property="targetType" column="target_type" />
+        <result property="isActive" column="is_active" />
+        <result property="createdAt" column="created_at" />
+    </resultMap>
+
+    <!-- 일정 신고 팝업에 표시할 사유 -->
+    <select id="selectContentReportReasons"
+        resultMap="reportReasonMap">
+
+        SELECT
+            reason_id,
+            reason_code,
+            reason_name,
+            target_type,
+            is_active,
+            created_at
+        FROM TB_REPORT_REASON
+        WHERE is_active = 1
+          AND target_type IN ('ALL', 'CONTENT')
+        ORDER BY reason_id ASC
+
+    </select>
+
+    <!-- 제출된 사유가 사용 가능한지 서버에서 확인 -->
+    <select id="selectContentReportReason"
+        parameterType="java.lang.Integer"
+        resultMap="reportReasonMap">
+
+        SELECT
+            reason_id,
+            reason_code,
+            reason_name,
+            target_type,
+            is_active,
+            created_at
+        FROM TB_REPORT_REASON
+        WHERE reason_id = #{reasonId}
+          AND is_active = 1
+          AND target_type IN ('ALL', 'CONTENT')
+
+    </select>
+
 </mapper>

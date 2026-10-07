@@ -13,6 +13,8 @@ import dto.itinerary.ItineraryDto;
 import dto.member.UserDto;
 import service.itinerary.ItineraryService;
 import service.itinerary.ItineraryServiceImpl;
+import service.report.ReportService;
+import service.report.ReportServiceImpl;
 
 /**
  * Servlet implementation class ScheduleDetail
@@ -71,6 +73,11 @@ public class ScheduleDetail extends HttpServlet {
 			request.setAttribute("itinerary", itinerary);
 
 			request.setAttribute("comments", service.getItineraryComments(itineraryId, loginUserId));
+
+			// 신고 팝업에 표시할 활성 신고 사유 조회
+			ReportService reportService = new ReportServiceImpl();
+
+			request.setAttribute("reportReasons", reportService.getContentReportReasons());
 
 			request.getRequestDispatcher("/view/travel/scheduleDetail.jsp").forward(request, response);
 

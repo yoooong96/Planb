@@ -13,16 +13,13 @@ request.setAttribute("activePage", "travel");
 <title><c:out value="${itinerary.title}" /> | Planb</title>
 <jsp:include page="/common/headStyles.jsp" />
 <link rel="stylesheet"
-	href="${pageContext.request.contextPath}/view/assets/css/travel/scheduleDetail.css?v=1">
+	href="${pageContext.request.contextPath}/view/assets/css/travel/scheduleDetail.css?v=2">
 </head>
 <body class="site-shell"><jsp:include page="/common/header.jsp" />
 	<main class="detail-layout">
 		<!-- 좌측: 일정 정보 -->
 		<aside id="detailInfoPanel" class="detail-info-panel">
 			<div class="detail-panel-header detail-info-header">
-				<!-- <div
-				class="sticky top-0 z-20 bg-white/90 backdrop-blur-sm border-b px-5 py-3 flex items-center gap-3"
-				style="border-color: #D1D2F9"> -->
 				<a href="${pageContext.request.contextPath}/schedules"
 					class="flex items-center gap-1.5 shrink-0 whitespace-nowrap text-[12.5px] font-semibold text-gray-500 hover:text-gray-900 transition-colors">
 					<svg class="w-4 h-4" fill="none" stroke="currentColor"
@@ -103,9 +100,6 @@ request.setAttribute("activePage", "travel");
 								style="background: #F0F0FF; color: #6369D1">여행 일정</div>
 						</c:otherwise>
 					</c:choose>
-					<!-- <img
-						src="https://images.unsplash.com/photo-1628411848698-e3b3249a272a?w=600&h=400&fit=crop"
-						alt="제주도 2박 3일 힐링 여행" class="w-full h-full object-cover"> -->
 					<div
 						class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
 					<span
@@ -119,7 +113,8 @@ request.setAttribute("activePage", "travel");
 						class="absolute bottom-4 left-4 text-white text-xs font-bold bg-black/50 rounded-full px-2.5 py-1">
 						<c:out value="${itinerary.durationText}" />
 					</span>
-					<div class="absolute right-4 bottom-4 z-10">
+
+					<!-- <div class="absolute right-4 bottom-4 z-10">
 						<button type="button"
 							class="group flex items-center gap-2 rounded-2xl border border-white/70 bg-black/45 p-1.5 pr-2 backdrop-blur-md shadow-lg transition-all hover:bg-black/60">
 							<div class="flex -space-x-2">
@@ -147,7 +142,7 @@ request.setAttribute("activePage", "travel");
 								<path stroke-linecap="round" stroke-linejoin="round"
 									d="m6 9 6 6 6-6" /></svg>
 						</button>
-					</div>
+					</div> -->
 				</div>
 				<div class="px-5 pt-4 pb-3 border-b" style="border-color: #D1D2F9">
 					<!-- 제목 -->
@@ -262,9 +257,13 @@ request.setAttribute("activePage", "travel");
 									d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13 5.4 5M7 13l-2.3 2.3c-.6.6-.2 1.7.7 1.7H17m0 0a2 2 0 100 4 2 2 0 000-4Zm-8 2a2 2 0 11-4 0 2 2 0 014 0Z" /></svg>
 							전체 일정 장바구니에 담기
 						</button>
-						<button type="button"
-							class="flex items-center gap-1 px-3 py-2.5 rounded-xl text-[12px] font-bold border transition-all hover:bg-[#FFE8DE] hover:border-[#FF8A5B] hover:text-[#D95B2B]"
-							style="background: #FFF5F0; border-color: #FFB08A; color: #E76F3C">
+						<button type="button" id="scheduleReportButton"
+							data-logged-in="${not empty sessionScope.user}"
+							data-is-owner="${not empty sessionScope.user and itinerary.userId eq sessionScope.user.userId}"
+							data-login-url="${pageContext.request.contextPath}/auth/login"
+							aria-haspopup="dialog" aria-controls="scheduleReportModal"
+							class="flex items-center gap-1 px-3 py-2.5 rounded-xl text-[12px] font-bold border transition-all hover:bg-[#FFE8DE] hover:border-[#FF8A5B] hover:text-[#D95B2B]">
+							<!-- style="background: #FFF5F0; border-color: #FFB08A; color: #E76F3C" -->
 							<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor"
 								viewBox="0 0 24 24">
 								<path stroke-linecap="round" stroke-linejoin="round"
@@ -284,7 +283,7 @@ request.setAttribute("activePage", "travel");
 					<a href="${authorProfileUrl}"
 						class="flex items-center gap-2.5 flex-1 min-w-0
                hover:opacity-75 transition-opacity text-left">
-						
+
 						<div
 							class="w-9 h-9 rounded-full overflow-hidden border-2 shrink-0 flex items-center justify-center"
 							style="border-color: #D1D2F9; background: #F0F0FF; color: #6369D1">
@@ -340,37 +339,6 @@ request.setAttribute("activePage", "travel");
 						</div>
 
 					</a>
-				</div>
-				<div class="px-5 py-3 border-b" style="border-color: #D1D2F9">
-					<p
-						class="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-2">사진</p>
-					<div class="flex gap-2 overflow-x-auto pb-1"
-						style="scrollbar-width: none">
-						<div class="rounded-xl overflow-hidden shrink-0"
-							style="width: 100px; height: 70px">
-							<img
-								src="https://images.unsplash.com/photo-1628411848698-e3b3249a272a?w=300&h=200&fit=crop"
-								alt="" class="w-full h-full object-cover">
-						</div>
-						<div class="rounded-xl overflow-hidden shrink-0"
-							style="width: 100px; height: 70px">
-							<img
-								src="https://images.unsplash.com/photo-1616798249081-30877e213b16?w=300&h=200&fit=crop"
-								alt="" class="w-full h-full object-cover">
-						</div>
-						<div class="rounded-xl overflow-hidden shrink-0"
-							style="width: 100px; height: 70px">
-							<img
-								src="https://images.unsplash.com/photo-1599840386256-807f9707efe2?w=300&h=200&fit=crop"
-								alt="" class="w-full h-full object-cover">
-						</div>
-						<div class="rounded-xl overflow-hidden shrink-0"
-							style="width: 100px; height: 70px">
-							<img
-								src="https://images.unsplash.com/photo-1678284949334-5f9edb02e55e?w=300&h=200&fit=crop"
-								alt="" class="w-full h-full object-cover">
-						</div>
-					</div>
 				</div>
 			</div>
 		</aside>
@@ -780,10 +748,106 @@ request.setAttribute("activePage", "travel");
 
 		</section>
 	</main>
+
+	<!-- 일정 신고 팝업 -->
+	<dialog id="scheduleReportModal" class="schedule-report-modal"
+		aria-labelledby="scheduleReportTitle"
+		aria-describedby="scheduleReportNotice">
+
+	<div class="schedule-report-header">
+		<div>
+			<h2 id="scheduleReportTitle">신고하기</h2>
+			<p id="scheduleReportNotice">허위신고 시 불이익이 발생할 수 있습니다.</p>
+		</div>
+
+		<button type="button" class="schedule-report-close" data-report-close
+			aria-label="신고 팝업 닫기">
+
+			<svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+				stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M6 6l12 12M18 6L6 18" />
+            </svg>
+		</button>
+	</div>
+
+	<!-- 신고 입력 화면 -->
+	<form id="scheduleReportForm" class="schedule-report-form"
+		action="${pageContext.request.contextPath}/itinerary/report"
+		method="post">
+
+		<input type="hidden" name="itineraryId"
+			value="${itinerary.itineraryId}">
+
+		<fieldset class="schedule-report-reasons">
+			<legend>
+				신고 사유를 선택해 주세요 <span class="schedule-report-required">*</span>
+			</legend>
+
+			<c:forEach var="reason" items="${reportReasons}">
+				<label class="schedule-report-reason"> <input type="radio"
+					name="reasonId" value="${reason.reasonId}" required> <span>
+						<c:out value="${reason.reasonName}" />
+				</span>
+				</label>
+			</c:forEach>
+
+			<c:if test="${empty reportReasons}">
+				<p class="schedule-report-empty">등록된 신고 사유가 없습니다.</p>
+			</c:if>
+		</fieldset>
+
+		<div class="schedule-report-detail">
+			<label for="scheduleReportDetail"> 상세 내용 <span>(선택)</span>
+			</label>
+
+			<textarea id="scheduleReportDetail" name="detail" rows="4"
+				aria-describedby="scheduleReportLength"
+				placeholder="신고 사유에 대해 자세히 설명해 주세요."></textarea>
+
+			<p class="schedule-report-counter">
+				<span id="scheduleReportLength">0</span>/300
+			</p>
+		</div>
+
+		<p id="scheduleReportError" class="schedule-report-error" role="alert"
+			hidden></p>
+
+		<div class="schedule-report-actions">
+			<button type="button" class="schedule-report-cancel"
+				data-report-close>취소</button>
+
+			<button type="submit" id="scheduleReportSubmit"
+				class="schedule-report-submit" disabled>신고하기</button>
+		</div>
+	</form>
+
+	<!-- 접수 성공 후 표시할 화면 -->
+	<div id="scheduleReportSuccess" class="schedule-report-success"
+		role="status" hidden>
+
+		<div class="schedule-report-success-icon">
+			<svg width="32" height="32" viewBox="0 0 24 24" fill="none"
+				stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+					d="M5 12l4 4L19 6" />
+            </svg>
+		</div>
+
+		<h3>신고가 접수되었습니다</h3>
+
+		<p>
+			검토 후 적절한 조치를 취하겠습니다.<br> 신고해 주셔서 감사합니다.
+		</p>
+
+		<button type="button" class="schedule-report-confirm"
+			data-report-close>확인</button>
+	</div>
+
+	</dialog>
 	<script
 		src="${pageContext.request.contextPath}/view/assets/js/auth/tripily.js"></script>
 
 	<script
-		src="${pageContext.request.contextPath}/view/assets/js/travel/scheduleDetail.js?v=6"></script>
+		src="${pageContext.request.contextPath}/view/assets/js/travel/scheduleDetail.js?v=7"></script>
 </body>
 </html>

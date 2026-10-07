@@ -4,7 +4,7 @@
 	padding-left: 5px;
 	display: grid;
 	/* 왼쪽 / 가운데 / 지도 */
-    grid-template-columns: 300px minmax(380px, 1fr) 440px;
+	grid-template-columns: 300px minmax(380px, 1fr) 440px;
 	height: calc(100vh - 68px);
 	min-height: 0;
 	overflow: hidden;
@@ -190,8 +190,8 @@
 
 @media ( max-width : 1280px) {
 	.detail-layout {
-        grid-template-columns: 270px minmax(340px, 1fr) 370px;
-    }
+		grid-template-columns: 270px minmax(340px, 1fr) 370px;
+	}
 	#detailSchedulePanel, #detailCommentPanel {
 		padding: 12px;
 	}
@@ -281,4 +281,246 @@
 .detail-panel-body::-webkit-scrollbar-thumb {
 	background: #d3d5e5;
 	border-radius: 10px;
+}
+
+/* 신고 팝업 */
+.schedule-report-modal {
+	width: min(560px, calc(100vw - 32px));
+	max-height: calc(100dvh - 40px);
+	margin: auto;
+	padding: 0;
+	border: 0;
+	border-radius: 22px;
+	background: #fff;
+	color: #182030;
+	overflow-y: auto;
+	box-shadow: 0 24px 80px rgba(0, 0, 0, .2);
+}
+
+.schedule-report-modal, .schedule-report-modal * {
+	box-sizing: border-box;
+}
+
+.schedule-report-modal::backdrop {
+	background: rgba(0, 0, 0, .45);
+}
+
+/* hidden 속성을 스타일보다 우선 적용 */
+.schedule-report-modal [hidden] {
+	display: none !important;
+}
+
+.schedule-report-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 16px;
+	padding: 24px;
+	border-bottom: 1px solid #eef0f4;
+}
+
+.schedule-report-header h2 {
+	margin: 0;
+	font-size: 20px;
+	font-weight: 800;
+}
+
+.schedule-report-header p {
+	margin: 5px 0 0;
+	color: #98a2b3;
+	font-size: 13px;
+}
+
+.schedule-report-close {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 32px;
+	height: 32px;
+	flex-shrink: 0;
+	padding: 0;
+	border: 0;
+	border-radius: 8px;
+	background: transparent;
+	color: #98a2b3;
+	cursor: pointer;
+}
+
+.schedule-report-close:hover {
+	background: #f5f5fa;
+}
+
+.schedule-report-form {
+	padding: 24px;
+}
+
+.schedule-report-reasons {
+	min-width: 0;
+	margin: 0;
+	padding: 0;
+	border: 0;
+}
+
+.schedule-report-reasons legend {
+	margin-bottom: 12px;
+	padding: 0;
+	font-size: 14px;
+	font-weight: 700;
+}
+
+.schedule-report-required {
+	color: #ef4444;
+}
+
+.schedule-report-reason {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	margin-bottom: 10px;
+	color: #707b8e;
+	font-size: 14px;
+	cursor: pointer;
+}
+
+.schedule-report-reason input {
+	width: 18px;
+	height: 18px;
+	margin: 0;
+	flex-shrink: 0;
+	accent-color: #6369d1;
+}
+
+.schedule-report-detail {
+	margin-top: 24px;
+}
+
+.schedule-report-detail label {
+	display: block;
+	margin-bottom: 12px;
+	font-size: 14px;
+	font-weight: 700;
+}
+
+.schedule-report-detail label span {
+	color: #98a2b3;
+	font-weight: 400;
+}
+
+.schedule-report-detail textarea {
+	display: block;
+	width: 100%;
+	min-height: 116px;
+	padding: 14px 16px;
+	border: 1px solid #dedff2;
+	border-radius: 15px;
+	background: #fff;
+	color: #374151;
+	font: inherit;
+	font-size: 14px;
+	line-height: 1.6;
+	resize: vertical;
+}
+
+.schedule-report-detail textarea::placeholder {
+	color: #98a2b3;
+}
+
+.schedule-report-detail textarea:focus {
+	outline: none;
+	border-color: #6369d1;
+	box-shadow: 0 0 0 3px rgba(99, 105, 209, .1);
+}
+
+.schedule-report-counter {
+	margin: 8px 0 0;
+	text-align: right;
+	color: #98a2b3;
+	font-size: 12px;
+}
+
+.schedule-report-error, .schedule-report-empty {
+	margin: 12px 0 0;
+	color: #dc2626;
+	font-size: 13px;
+}
+
+.schedule-report-actions {
+	display: flex;
+	gap: 10px;
+	margin-top: 24px;
+}
+
+.schedule-report-actions button {
+	flex: 1;
+	min-width: 0;
+	padding: 14px 12px;
+	border-radius: 14px;
+	font: inherit;
+	font-size: 16px;
+	font-weight: 600;
+	cursor: pointer;
+}
+
+.schedule-report-cancel {
+	border: 1px solid #dedff2;
+	background: #fff;
+	color: #707b8e;
+}
+
+.schedule-report-submit {
+	border: 1px solid transparent;
+	background: #ef646b;
+	color: #fff;
+}
+
+.schedule-report-submit:disabled {
+	background: #f8b2b6;
+	cursor: not-allowed;
+}
+
+.schedule-report-success {
+	padding: 48px 24px;
+	text-align: center;
+}
+
+.schedule-report-success-icon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 70px;
+	height: 70px;
+	margin: 0 auto 24px;
+	border-radius: 50%;
+	background: #f0efff;
+	color: #6369d1;
+}
+
+.schedule-report-success h3 {
+	margin: 0;
+	font-size: 19px;
+	font-weight: 800;
+}
+
+.schedule-report-success p {
+	margin: 16px 0 26px;
+	color: #707b8e;
+	font-size: 14px;
+	line-height: 1.8;
+}
+
+.schedule-report-confirm {
+	padding: 13px 38px;
+	border: 0;
+	border-radius: 14px;
+	background: #6369d1;
+	color: #fff;
+	font: inherit;
+	font-size: 16px;
+	font-weight: 700;
+	cursor: pointer;
+}
+
+.schedule-report-modal button:focus-visible {
+	outline: 2px solid #6369d1;
+	outline-offset: 3px;
 }

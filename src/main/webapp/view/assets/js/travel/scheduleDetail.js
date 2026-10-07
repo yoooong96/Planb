@@ -739,3 +739,222 @@
 	});
 
 })();
+
+/* 일정 신고 팝업 */
+(function() {
+
+	const openButton =
+		document.getElementById("scheduleReportButton");
+
+	const modal =
+		document.getElementById("scheduleReportModal");
+
+	const form =
+		document.getElementById("scheduleReportForm");
+
+	const detail =
+		document.getElementById("scheduleReportDetail");
+
+	const length =
+		document.getElementById("scheduleReportLength");
+
+	const submit =
+		document.getElementById("scheduleReportSubmit");
+
+	const errorText =
+		document.getElementById("scheduleReportError");
+
+	const success =
+		document.getElementById("scheduleReportSuccess");
+
+	if (!openButton || !modal || !form || !detail
+		|| !length || !submit || !errorText || !success) {
+		return;
+	}
+
+	const closeButtons =
+		modal.querySelectorAll("[data-report-close]");
+
+	let processing = false;
+	let previousBodyOverflow = "";
+
+	function showError(message) {
+		errorText.textContent = message;
+		errorText.hidden = !message;
+	}
+
+	function updateFormState() {
+		const size = Array.from(detail.value).length;
+
+		const selected =
+			form.querySelector('input[name="reasonId"]:checked');
+
+		length.textContent = size.toLocaleString("ko-KR");
+		length.style.color = size > 300 ? "#ef4444" : "";
+
+		submit.disabled =
+			processing || !selected || size > 300;
+	}
+
+	function setProcessing(value) {
+		processing = value;
+
+		form.querySelectorAll("input, textarea")
+			.forEach(function(element) {
+				element.disabled = value;
+			});
+
+		closeButtons.forEach(function(button) {
+			button.disabled = value;
+		});
+
+		submit.textContent = value ? "접수 중..." : "신고하기";
+		form.setAttribute("aria-busy", String(value));
+
+		updateFormState();
+	}
+
+	openButton.addEventListener("click", function(event) {
+		event.preventDefault();
+
+		if (openButton.dataset.loggedIn !== "true") {
+			window.location.href = openButton.dataset.loginUrl;
+			return;
+		}
+
+		if (openButton.dataset.isOwner === "true") {
+			window.tripilyToast(
+				"본인이 작성한 일정은 신고할 수 없습니다."
+			);
+			return;
+		}
+
+		if (modal.open) {
+			return;
+		}
+
+		form.reset();
+		form.hidden = false;
+		success.hidden = true;
+
+		showError("");
+		setProcessing(false);
+
+		previousBodyOverflow = document.body.style.overflow;
+
+		modal.showModal();
+		document.body.style.overflow = "hidden";
+	});
+
+	function closeModal() {
+		if (!processing && modal.open) {
+			modal.close();
+		}
+	}
+
+	closeButtons.forEach(function(button) {
+		button.addEventListener("click", closeModal);
+	});
+
+	// Escape 키로 닫기, 제출 중에는 닫기 차단
+	modal.addEventListener("cancel", function(event) {
+		if (processing) {
+			event.preventDefault();
+		}
+	});
+
+	modal.addEventListener("close", function() {
+		document.body.style.overflow = previousBodyOverflow;
+		openButton.focus();
+	});
+
+	form.addEventListener("change", function() {
+		showError("");
+		updateFormState();
+	});
+
+	detail.addEventListener("input", function() {
+		showError("");
+		updateFormState();
+	});
+
+	form.addEventListener("submit", async function(event) {
+		event.preventDefault();
+
+		if (processing) {
+			return;
+		}
+
+		const selected =
+			form.querySelector('input[name="reasonId"]:checked');
+
+		if (!selected) {
+			showError("신고 사유를 선택해주세요.");
+			return;
+		}
+
+		if (Array.from(detail.value).length > 300) {
+			showError("상세 내용은 최대 300자까지 입력할 수 있습니다.");
+			detail.focus();
+			return;
+		}
+
+		// 입력을 비활성화하기 전에 요청 데이터 구성
+		const params = new URLSearchParams();
+
+		params.set(
+			"itineraryId",
+			form.elements.namedItem("itineraryId").value
+		);
+
+		params.set("reasonId", selected.value);
+		params.set("detail", detail.value.trim());
+
+		showError("");
+		setProcessing(true);
+
+		try {
+			const response = await fetch(form.action, {
+				method: "POST",
+				credentials: "same-origin",
+				headers: {
+					"Content-Type":
+						"application/x-www-form-urlencoded;charset=UTF-8",
+					"Accept": "application/json"
+				},
+				body: params.toString()
+			});
+
+			const result = await response.json();
+
+			if (!response.ok || result.success !== true) {
+				throw new Error(
+					result.message || "신고 접수에 실패했습니다."
+				);
+			}
+
+			// DB 저장 성공 후 완료 화면 표시
+			form.hidden = true;
+			success.hidden = false;
+
+			success.querySelector("button").focus();
+
+		} catch (error) {
+			console.error(error);
+
+			showError(
+				error.message || "신고 접수 중 오류가 발생했습니다."
+			);
+
+		} finally {
+			setProcessing(false);
+
+			if (!success.hidden) {
+				success.querySelector("button").focus();
+			}
+		}
+	});
+
+	updateFormState();
+
+})();
