@@ -21,4 +21,7 @@ public interface UserService {
 	void updateUser(UserDto user) throws Exception;
 	UserDto selectUser(String loginId) throws Exception;
 	UserDto getUserById(long userId) throws Exception;
+	void updateProfileVisibility(long userId, String profileVisibility) throws Exception;
+	void updateShowLikedItinerary(long userId, boolean show) throws Exception;
+	void updateShowBookmarkedItinerary(long userId, boolean show) throws Exception;
 }

@@ -190,49 +190,33 @@ boolean showBookmarkedItinerary =
                 showBookmarkedAttr
         );
 
+Boolean privateProfileAttr = (Boolean) request.getAttribute("privateProfile");
 
+boolean privateProfile = Boolean.TRUE.equals(privateProfileAttr);
 
 /* =========================================================
    8. 프로필 상단 통계
 ========================================================= */
 
-Integer postCount =
-        (Integer)
-        request.getAttribute(
-                "postCount"
-        );
+Integer postCount = (Integer) request.getAttribute("postCount");
 
+Integer likeCount = (Integer) request.getAttribute("likeCount");
 
-Integer likeCount =
-        (Integer)
-        request.getAttribute(
-                "likeCount"
-        );
-
-
-Integer bookmarkCount =
-        (Integer)
-        request.getAttribute(
-                "bookmarkCount"
-        );
-
+Integer bookmarkCount = (Integer) request.getAttribute("bookmarkCount");
 
 if (postCount == null) {
 
-    postCount =
-            itineraries.size();
+	postCount = itineraries.size();
 }
-
 
 if (likeCount == null) {
 
-    likeCount = 0;
+	likeCount = 0;
 }
-
 
 if (bookmarkCount == null) {
 
-    bookmarkCount = 0;
+	bookmarkCount = 0;
 }
 %>
 
@@ -409,16 +393,16 @@ if (bookmarkCount == null) {
 							<!-- 실명 -->
 
 							<%
-                        if (!name.isEmpty()) {
-                        %>
+							if (!privateProfile && !name.isEmpty()) {
+							%>
 
 							<p class="profile-name">
 								<%=name%>
 							</p>
 
 							<%
-                        }
-                        %>
+}
+%>
 
 
 							<!-- 로그인 아이디 -->
@@ -473,7 +457,9 @@ if (bookmarkCount == null) {
 
 					</div>
 
-
+					<%
+					if (!privateProfile) {
+					%>
 
 					<!-- =========================
                      통계
@@ -553,7 +539,9 @@ if (bookmarkCount == null) {
 
 
 					</div>
-
+				<%
+                }
+                %>
 
 				</div>
 
@@ -562,8 +550,46 @@ if (bookmarkCount == null) {
 
 
 		</section>
+		
+		<%
+		if (privateProfile) {
+		%>
+
+		<section class="private-profile-state">
 
 
+			<div class="private-profile-icon">
+
+				<svg width="28" height="28" viewBox="0 0 24 24" fill="none"
+					stroke="currentColor" stroke-width="1.6" stroke-linecap="round"
+					stroke-linejoin="round">
+	
+	            <rect x="5" y="10" width="14" height="10" rx="2">
+	            </rect>
+	
+	            <path d="M8 10V7a4 4 0 0 1 8 0v3">
+	            </path>
+	
+	        </svg>
+
+			</div>
+
+
+			<h2>비공개 프로필입니다.</h2>
+
+
+			<p>이 사용자는 프로필을 비공개로 설정했습니다.</p>
+
+
+			<span> 여행 일정 및 활동 정보를 확인할 수 없습니다. </span>
+
+
+		</section>
+
+
+			<%
+		} else {
+		%>
 
 		<!-- ==========================================
          프로필 탭
@@ -1025,7 +1051,9 @@ if (bookmarkCount == null) {
 
 		</main>
 
-
+		<%
+		}
+		%>
 	</div>
 
 

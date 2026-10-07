@@ -16,4 +16,7 @@ public interface UserDao {
 	UserDto findSocialUser(String provider,String providerUserId) throws Exception;
 	int insertGoogleUser(UserDto user) throws Exception;
 	UserDto selectUserById(long userId) throws Exception;
+	int updateProfileVisibility(long userId, String profileVisibility) throws Exception;
+	int updateShowLikedItinerary(long userId,boolean show) throws Exception;
+	int updateShowBookmarkedItinerary(long userId, boolean show)throws Exception;
 }

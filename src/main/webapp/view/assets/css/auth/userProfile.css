@@ -801,3 +801,71 @@
     padding-right: 15px;
   }
 }
+
+/* =========================================================
+   비공개 프로필
+========================================================= */
+
+.private-profile-state {
+    min-height: 280px;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+
+    padding: 70px 20px;
+}
+
+
+.private-profile-icon {
+    width: 58px;
+    height: 58px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom: 18px;
+
+    border: 1px solid #e3e4ea;
+
+    border-radius: 50%;
+
+    background: #f7f7fa;
+
+    color: #6369D1;
+}
+
+
+.private-profile-state h2 {
+    margin: 0 0 8px;
+
+    color: #2b2c33;
+
+    font-size: 17px;
+    font-weight: 750;
+}
+
+
+.private-profile-state p {
+    margin: 0;
+
+    color: #777985;
+
+    font-size: 12.5px;
+    line-height: 1.6;
+}
+
+
+.private-profile-state > span {
+    margin-top: 4px;
+
+    color: #a0a2ab;
+
+    font-size: 11.5px;
+}

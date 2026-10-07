@@ -192,4 +192,25 @@ public class UserServiceImpl implements UserService {
 		return userDao.selectUserById(userId);
 	}
 
+	@Override
+	public void updateProfileVisibility(long userId, String profileVisibility) throws Exception {
+		if(!"PUBLIC".equals(profileVisibility) && !"PRIVATE".equals(profileVisibility)) {
+			throw new IllegalArgumentException("잘못된 공개 범위입니다.");
+		}
+		
+		userDao.updateProfileVisibility(userId, profileVisibility);
+		
+	}
+
+	@Override
+	public void updateShowLikedItinerary(long userId, boolean show) throws Exception {
+		userDao.updateShowLikedItinerary(userId, show);
+		
+	}
+
+	@Override
+	public void updateShowBookmarkedItinerary(long userId, boolean show) throws Exception {
+		userDao.updateShowBookmarkedItinerary(userId, show);
+	}
+
 }

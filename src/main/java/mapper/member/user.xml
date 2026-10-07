@@ -344,6 +344,49 @@
 	
 	</select>
 	
+	<!-- =========================================
+     프로필 공개 범위
+	========================================== -->
+	<update id="updateProfileVisibility" parameterType = "map">
+		update TB_USER
+		set profile_visibility = #{profileVisibility},
+			updated_at = CURRENT_TIMESTAMP
+		where user_id=#{userId}
+	
+	</update>
+	
+	<!-- =========================================
+	     좋아요한 일정 공개 여부
+	========================================== -->
+	
+	<update id="updateShowLikedItinerary"
+	        parameterType="map">
+	
+	    UPDATE TB_USER
+	
+	    SET show_liked_itinerary = #{show},
+	        updated_at = CURRENT_TIMESTAMP
+	
+	    WHERE user_id = #{userId}
+	
+	</update>
+	
+	
+	<!-- =========================================
+	     북마크한 일정 공개 여부
+	========================================== -->
+	
+	<update id="updateShowBookmarkedItinerary"
+	        parameterType="map">
+	
+	    UPDATE TB_USER
+	
+	    SET show_bookmarked_itinerary = #{show},
+	        updated_at = CURRENT_TIMESTAMP
+	
+	    WHERE user_id = #{userId}
+	
+	</update>
 	
 
 </mapper>

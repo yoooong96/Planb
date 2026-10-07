@@ -385,4 +385,40 @@ public class UserDaoImpl implements UserDao {
 		}
 	}
 
+	@Override
+	public int updateProfileVisibility(long userId, String profileVisibility) throws Exception {
+		try(SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+			Map<String, Object> param = new HashMap<String, Object>();
+			param.put("userId", userId);
+			param.put("profileVisibility", profileVisibility);
+			int result = sqlSession.update("mapper.member.user.updateProfileVisibility", param);
+			sqlSession.commit();
+			return result;
+		}
+	}
+
+	@Override
+	public int updateShowLikedItinerary(long userId, boolean show) throws Exception {
+		try(SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+			Map<String, Object> param = new HashMap<String, Object>();
+			param.put("userId", userId);
+			param.put("show", show ? 1: 0);
+			int result = sqlSession.update("mapper.member.user.updateShowLikedItinerary", param);
+			sqlSession.commit();
+			return result;
+		}
+	}
+
+	@Override
+	public int updateShowBookmarkedItinerary(long userId, boolean show) throws Exception {
+		try(SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+			Map<String, Object> param = new HashMap<String, Object>();
+			param.put("userId", userId);
+			param.put("show", show ? 1:0);
+			int result = sqlSession.update("mapper.member.user.updateShowBookmarkedItinerary", param);
+			sqlSession.commit();
+			return result;
+		}
+	}
+
 }

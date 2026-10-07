@@ -57,15 +57,12 @@ public class userProfile extends HttpServlet {
 		try {
 
 			/*
-			 * ================================================= 1. URL에서 조회할 회원번호 받기
+			 * ================================================= 1. 조회할 회원 번호
 			 * =================================================
 			 */
 
 			String userIdParam = request.getParameter("userId");
 
-			/*
-			 * userId 자체가 없는 경우
-			 */
 			if (userIdParam == null || userIdParam.trim().isEmpty()) {
 
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, "회원 번호가 없습니다.");
@@ -81,15 +78,12 @@ public class userProfile extends HttpServlet {
 			long targetUserId = Long.parseLong(userIdParam);
 
 			/*
-			 * ================================================= 3. 상대방 회원 정보 조회
+			 * ================================================= 3. 상대방 회원정보 조회
 			 * =================================================
 			 */
 
 			UserDto targetUser = userService.getUserById(targetUserId);
 
-			/*
-			 * 존재하지 않는 회원
-			 */
 			if (targetUser == null) {
 
 				response.sendError(HttpServletResponse.SC_NOT_FOUND, "존재하지 않는 회원입니다.");
@@ -98,7 +92,82 @@ public class userProfile extends HttpServlet {
 			}
 
 			/*
-			 * ================================================= 4. 상대방이 작성한 PUBLIC 일정 조회
+			 * ================================================= 4. 프로필 비공개 여부
+			 * =================================================
+			 *
+			 * profile_visibility
+			 *
+			 * PUBLIC PRIVATE
+			 */
+
+			boolean privateProfile = "PRIVATE".equalsIgnoreCase(targetUser.getProfileVisibility());
+
+			/*
+			 * ================================================= 5. 상대방 회원정보는 항상 JSP에 전달
+			 * =================================================
+			 *
+			 * 비공개 계정이어도
+			 *
+			 * 프로필 이미지 닉네임 로그인 아이디 신고 버튼
+			 *
+			 * 정도는 표시하기 위해 필요
+			 */
+
+			request.setAttribute("targetUser", targetUser);
+
+			request.setAttribute("privateProfile", privateProfile);
+
+			/*
+			 * ================================================= 6. 비공개 프로필
+			 * =================================================
+			 *
+			 * 중요한 부분:
+			 *
+			 * 비공개라면 일정/좋아요/북마크를 DB에서 아예 조회하지 않는다.
+			 */
+
+			if (privateProfile) {
+
+				request.setAttribute("itineraries", new ArrayList<ProfileFeedDto>());
+
+				request.setAttribute("likedItineraries", new ArrayList<ProfileFeedDto>());
+
+				request.setAttribute("bookmarkedItineraries", new ArrayList<ProfileFeedDto>());
+
+				/*
+				 * 프로필 자체가 비공개이면 좋아요/북마크 개별 공개설정보다 비공개 설정이 우선한다.
+				 */
+
+				request.setAttribute("showLikedItinerary", false);
+
+				request.setAttribute("showBookmarkedItinerary", false);
+
+				/*
+				 * 통계도 노출하지 않는다.
+				 */
+
+				request.setAttribute("postCount", 0);
+
+				request.setAttribute("likeCount", 0);
+
+				request.setAttribute("bookmarkCount", 0);
+
+				/*
+				 * JSP 이동 후 종료
+				 */
+
+				request.getRequestDispatcher("/view/profile/userProfile.jsp").forward(request, response);
+
+				return;
+			}
+
+			/*
+			 * ================================================= 여기부터는 PUBLIC 프로필만 실행
+			 * =================================================
+			 */
+
+			/*
+			 * ================================================= 7. 상대방이 작성한 PUBLIC 일정
 			 * =================================================
 			 */
 
@@ -110,18 +179,18 @@ public class userProfile extends HttpServlet {
 			}
 
 			/*
-			 * ================================================= 5. 좋아요 / 북마크 공개 설정
+			 * ================================================= 8. 좋아요 / 북마크 공개 설정
 			 * =================================================
 			 *
-			 * UserDto에 boolean으로 되어 있다는 기준
+			 * Boolean이 null일 수도 있으므로 Boolean.TRUE.equals() 사용
 			 */
 
-			boolean showLikedItinerary = targetUser.getShowLikedItinerary();
+			boolean showLikedItinerary = Boolean.TRUE.equals(targetUser.getShowLikedItinerary());
 
-			boolean showBookmarkedItinerary = targetUser.getShowBookmarkedItinerary();
+			boolean showBookmarkedItinerary = Boolean.TRUE.equals(targetUser.getShowBookmarkedItinerary());
 
 			/*
-			 * ================================================= 6. 좋아요한 PUBLIC 일정
+			 * ================================================= 9. 좋아요한 PUBLIC 일정
 			 * =================================================
 			 */
 
@@ -138,7 +207,7 @@ public class userProfile extends HttpServlet {
 			}
 
 			/*
-			 * ================================================= 7. 북마크한 PUBLIC 일정
+			 * ================================================= 10. 북마크한 PUBLIC 일정
 			 * =================================================
 			 */
 
@@ -155,16 +224,15 @@ public class userProfile extends HttpServlet {
 			}
 
 			/*
-			 * ================================================= 8. 게시물 수
+			 * ================================================= 11. 게시물 수
 			 * =================================================
 			 */
 
 			int postCount = itineraries.size();
 
 			/*
-			 * ================================================= 9. 받은 좋아요 총합
-			 *
-			 * 각 공개 일정의 likeCount를 모두 합침 =================================================
+			 * ================================================= 12. 받은 좋아요 총합
+			 * =================================================
 			 */
 
 			int likeCount = 0;
@@ -175,9 +243,7 @@ public class userProfile extends HttpServlet {
 			}
 
 			/*
-			 * ================================================= 10. 받은 북마크 총합
-			 *
-			 * 각 공개 일정의 bookmarkCount를 모두 합침
+			 * ================================================= 13. 받은 북마크 총합
 			 * =================================================
 			 */
 
@@ -189,33 +255,19 @@ public class userProfile extends HttpServlet {
 			}
 
 			/*
-			 * ================================================= 11. JSP에 데이터 전달
+			 * ================================================= 14. JSP에 데이터 전달
 			 * =================================================
 			 */
 
-			// 상대방 회원정보
-			request.setAttribute("targetUser", targetUser);
-
-			// 상대방 작성 공개 일정
 			request.setAttribute("itineraries", itineraries);
 
-			// 상대방이 좋아요한 공개 일정
 			request.setAttribute("likedItineraries", likedItineraries);
 
-			// 상대방이 북마크한 공개 일정
 			request.setAttribute("bookmarkedItineraries", bookmarkedItineraries);
-
-			/*
-			 * 좋아요 / 북마크 공개 여부
-			 */
 
 			request.setAttribute("showLikedItinerary", showLikedItinerary);
 
 			request.setAttribute("showBookmarkedItinerary", showBookmarkedItinerary);
-
-			/*
-			 * 프로필 상단 통계
-			 */
 
 			request.setAttribute("postCount", postCount);
 
@@ -224,22 +276,26 @@ public class userProfile extends HttpServlet {
 			request.setAttribute("bookmarkCount", bookmarkCount);
 
 			/*
-			 * ================================================= 12. userProfile.jsp로 이동
+			 * ================================================= 15. JSP 이동
 			 * =================================================
 			 */
 
 			request.getRequestDispatcher("/view/profile/userProfile.jsp").forward(request, response);
 
 			/*
-			 * userId=abc 같은 잘못된 값이 들어온 경우
+			 * ===================================================== userId=abc
+			 * =====================================================
 			 */
+
 		} catch (NumberFormatException e) {
 
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "잘못된 회원 번호입니다.");
 
 			/*
-			 * DB / Service 등의 오류
+			 * ===================================================== DB / Service 오류
+			 * =====================================================
 			 */
+
 		} catch (Exception e) {
 
 			e.printStackTrace();
