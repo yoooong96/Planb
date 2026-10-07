@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="mapper.member.notification">
+
+
+    <!-- =====================================================
+         현재 설정 조회
+    ====================================================== -->
+
+    <select
+        id="selectNotificationSetting"
+        parameterType="long"
+        resultType="map">
+
+        SELECT
+
+            notify_like
+                AS notifyLike,
+
+            notify_comment
+                AS notifyComment
+
+        FROM TB_USER
+
+        WHERE user_id =
+            #{userId}
+
+    </select>
+
+
+
+    <!-- =====================================================
+         좋아요 알림
+    ====================================================== -->
+
+    <update
+        id="updateLikeNotification"
+        parameterType="map">
+
+        UPDATE TB_USER
+
+        SET
+            notify_like =
+                #{enabled},
+
+            updated_at =
+                CURRENT_TIMESTAMP
+
+        WHERE user_id =
+            #{userId}
+
+    </update>
+
+
+
+    <!-- =====================================================
+         댓글 알림
+    ====================================================== -->
+
+    <update
+        id="updateCommentNotification"
+        parameterType="map">
+
+        UPDATE TB_USER
+
+        SET
+            notify_comment =
+                #{enabled},
+
+            updated_at =
+                CURRENT_TIMESTAMP
+
+        WHERE user_id =
+            #{userId}
+
+    </update>
+
+
+</mapper>

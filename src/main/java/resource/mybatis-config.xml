@@ -124,6 +124,7 @@
 	    <!-- 회원 -->
 	    <mapper resource="mapper/member/userConsent.xml"/>
 	    <mapper resource="mapper/member/user.xml"/>
+	    <mapper resource="mapper/member/notification.xml"/>
 	
 		<!-- 피드 -->
 		<mapper resource="mapper/profile/profileFeed.xml"/>
