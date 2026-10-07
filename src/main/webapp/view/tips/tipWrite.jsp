@@ -58,7 +58,7 @@ request.setAttribute("activePage", "tips");
 						<div class="relative">
 							<input type="text" name="title" maxlength="100" data-char-input
 								class="jsp-focus w-full rounded-xl px-4 py-3 text-sm text-gray-800 outline-none"
-								style="border: 1.5px solid #D1D2F9" placeholder="제목을 입력해주세요." equired>
+								style="border: 1.5px solid #D1D2F9" placeholder="제목을 입력해주세요." required>
 							<span class="absolute right-4 top-1/2 -translate-y-1/2 text-xs text-gray-300">
 								<span data-char-count>0</span>/100
 							</span>

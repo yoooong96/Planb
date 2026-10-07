@@ -4,9 +4,9 @@
 
 <mapper namespace="mapper.community.mateMedia">
 
-	<insert id="insertMateMedia" parameterType="mateMedia"
-			useGeneratedKeys="true" keyProperty="mediaId">
-
+	<insert id="insertMateMedia" parameterType="mateMedia" useGeneratedKeys="true" keyProperty="mediaId">
+		INSERT INTO TB_MATE_MEDIA (mate_id, media_type, media_url, sort_order)
+		VALUES (#{mateId}, #{mediaType}, #{mediaUrl}, #{sortOrder})
 	</insert>
 
 	<select id="selectMateMedia" parameterType="Long" resultType="mateMedia">

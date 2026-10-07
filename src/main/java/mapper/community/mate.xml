@@ -4,8 +4,10 @@
 
 <mapper namespace="mapper.community.mate">
 
-	<insert id="insertMate" parameterType="mate" useGeneratedKeys="true" keyProperty="mateId">
-
+	<!-- 여행 메이트 등록 -->
+	<insert id="insertMate" parameterType="dto.community.MateDto" useGeneratedKeys="true" keyProperty="mateId">
+		INSERT INTO TB_MATE (user_id, title, content, img, visibility, status, country, recruit_count, recruit_status)
+		VALUES (#{userId}, #{title}, #{content}, #{img}, #{visibility}, #{status}, #{country}, #{recruitCount}, #{recruitStatus})
 	</insert>
 
 	<select id="selectMate" parameterType="Long" resultType="mate">
@@ -19,5 +21,74 @@
 	<delete id="deleteMate" parameterType="Long">
 
 	</delete>
+	
+		<!-- 여행메이트 전체 조회 -->
+	<select id="selectMateList" resultType="dto.community.MateDto">
+		SELECT mate_id AS mateId, user_id AS userId, title, content, img, visibility, 
+		       view_count AS viewCount, status, deleted_by_user_id AS deletedByUserId, 
+		       deleted_at AS deletedAt, created_at AS createdAt, updated_at AS updatedAt, 
+		       country, recruit_count AS recruitCount, recruit_status AS recruitStatus
+		FROM TB_MATE
+		WHERE status = 'ACTIVE' AND visibility = 'PUBLIC'
+		ORDER BY created_at DESC
+	</select>
+	
+	<!-- 국가 + 검색 + 정렬 + 페이지 처리 -->
+	<select id="selectMateListByFilter" parameterType="map" resultType="dto.community.MateDto">
+		SELECT mate_id AS mateId, user_id AS userId, title, content, img, visibility, 
+		       view_count AS viewCount, status, deleted_by_user_id AS deletedByUserId, 
+		       deleted_at AS deletedAt, created_at AS createdAt, updated_at AS updatedAt, 
+		       country, recruit_count AS recruitCount, recruit_status AS recruitStatus
+		FROM TB_MATE
+		WHERE status = 'ACTIVE' AND visibility = 'PUBLIC'
+		<if test="countryKeywords != null and countryKeywords.size() > 0">
+			AND country IN
+			<foreach collection="countryKeywords" item="countryKeyword" open="(" separator="," close=")">
+				#{countryKeyword}
+			</foreach>
+		</if>
+		<if test="keyword != null and keyword != ''">
+			AND (title LIKE CONCAT('%', #{keyword}, '%') OR 
+			    content LIKE CONCAT('%', #{keyword}, '%') OR 
+			    country LIKE CONCAT('%', #{keyword}, '%'))
+		</if>
+		<choose>
+			<when test="sort == 'views'">
+				ORDER BY view_count DESC, created_at DESC
+			</when>
+		
+			<when test="sort == 'comments'">
+				ORDER BY (
+					SELECT COUNT(*)
+					FROM TB_MATE_COMMENT c
+					WHERE c.mate_id = TB_MATE.mate_id
+					AND c.status = 'ACTIVE'
+				) DESC, created_at DESC
+			</when>
+		
+			<otherwise>
+				ORDER BY created_at DESC
+			</otherwise>
+		</choose>
+		LIMIT #{pageSize} OFFSET #{offset}
+	</select>
+	
+	<!-- 검색 + 국가 조건에 맞는 전체 게시글 수 -->
+	<select id="countMateListByFilter" parameterType="map" resultType="int">
+		SELECT COUNT(*)
+		FROM TB_MATE
+		WHERE status = 'ACTIVE' AND visibility = 'PUBLIC'
+		<if test="countryKeywords != null and countryKeywords.size() > 0">
+			AND country IN
+			<foreach collection="countryKeywords" item="countryKeyword" open="(" separator="," close=")">
+				#{countryKeyword}
+			</foreach>
+		</if>
+		<if test="keyword != null and keyword != ''">
+			AND (title LIKE CONCAT('%', #{keyword}, '%') OR
+			    content LIKE CONCAT('%', #{keyword}, '%') OR 
+			    country LIKE CONCAT('%', #{keyword}, '%'))
+		</if>
+	</select>
 
 </mapper>

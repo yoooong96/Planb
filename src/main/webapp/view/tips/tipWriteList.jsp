@@ -58,7 +58,7 @@
 				<div class="tip-my-empty">
 					<div class="tip-my-empty-icon">✏️</div>
 					<h2>아직 작성한 여행 꿀팁이 없습니다.</h2>
-					<p>여행에서 알게 된 유용한 정보를 공유해보세요.
+					<p>여행에서 알게 된 유용한 정보를 공유해보세요.</p>
 					<a href="${pageContext.request.contextPath}/tipWrite">첫 여행 꿀팁 작성하기</a>
 				</div>
 			</c:if>
