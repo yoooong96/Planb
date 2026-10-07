@@ -51,5 +51,66 @@
           AND target_type IN ('ALL', 'CONTENT')
 
     </select>
+    
+        <!-- =====================================================
+         사용자 프로필 신고 사유 목록
+    ====================================================== -->
+
+    <select id="selectUserReportReasons"
+            resultType="dto.report.ReportReasonDto">
+
+        SELECT
+            reason_id AS reasonId,
+            reason_code AS reasonCode,
+            reason_name AS reasonName,
+            target_type AS targetType,
+            is_active AS isActive,
+            created_at AS createdAt
+
+        FROM TB_REPORT_REASON
+
+        WHERE is_active = 1
+
+          AND target_type IN (
+              'USER',
+              'ALL'
+          )
+
+        ORDER BY reason_id ASC
+
+    </select>
+
+
+
+    <!-- =====================================================
+         사용자 프로필 신고 사유 코드로 조회
+    ====================================================== -->
+
+    <select id="selectUserReportReasonByCode"
+            parameterType="string"
+            resultType="dto.report.ReportReasonDto">
+
+        SELECT
+            reason_id AS reasonId,
+            reason_code AS reasonCode,
+            reason_name AS reasonName,
+            target_type AS targetType,
+            is_active AS isActive,
+            created_at AS createdAt
+
+        FROM TB_REPORT_REASON
+
+        WHERE reason_code = #{value}
+
+          AND is_active = 1
+
+          AND target_type IN (
+              'USER',
+              'ALL'
+          )
+
+        LIMIT 1
+
+    </select>
 
 </mapper>

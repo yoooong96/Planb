@@ -1,36 +1,66 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
 
 <mapper namespace="mapper.itinerary.report">
 
-    <insert id="insertReport"
-        parameterType="dto.report.ReportDto"
-        useGeneratedKeys="true"
-        keyProperty="reportId"
-        keyColumn="report_id">
 
-        INSERT INTO TB_REPORT (
-            reporter_user_id,
-            target_type,
-            target_id,
-            target_user_id,
-            reason_id,
-            detail,
-            status,
-            action_type
-        )
-        VALUES (
-            #{reporterUserId},
-            'ITINERARY',
-            #{targetId},
-            #{targetUserId},
-            #{reasonId},
-            #{detail, jdbcType=VARCHAR},
-            'PENDING',
-            'NONE'
-        )
+	<!-- ===================================================== 신고 등록 targetType 
+		값에 따라 USER / ITINERARY / POST / COMMENT 저장 ====================================================== -->
 
-    </insert>
+	<insert id="insertReport" parameterType="dto.report.ReportDto"
+		useGeneratedKeys="true" keyProperty="reportId" keyColumn="report_id">
+
+		INSERT INTO TB_REPORT
+		(
+		reporter_user_id,
+		target_type,
+		target_id,
+		target_user_id,
+		target_field,
+		reason_id,
+		detail,
+		status,
+		action_type
+		)
+
+		VALUES
+		(
+		#{reporterUserId},
+		#{targetType},
+		#{targetId},
+		#{targetUserId},
+		#{targetField, jdbcType=VARCHAR},
+		#{reasonId},
+		#{detail, jdbcType=VARCHAR},
+		'PENDING',
+		'NONE'
+		)
+
+	</insert>
+
+
+
+	<!-- ===================================================== 같은 사용자를 이미 신고했는지 
+		확인 ====================================================== -->
+
+	<select id="countUserReport" parameterType="map"
+		resultType="int">
+
+		SELECT COUNT(*)
+
+		FROM TB_REPORT
+
+		WHERE reporter_user_id = #{reporterUserId}
+
+		AND target_type = 'USER'
+
+		AND target_id = #{targetUserId}
+
+	</select>
+
 
 </mapper>

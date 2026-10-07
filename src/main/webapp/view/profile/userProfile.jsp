@@ -8,14 +8,11 @@ request.setAttribute("activePage", "profile");
 
 String ctx = request.getContextPath();
 
-
 /* =========================================================
    1. 조회 대상 사용자
 ========================================================= */
 
-UserDto targetUser =
-        (UserDto) request.getAttribute("targetUser");
-
+UserDto targetUser = (UserDto) request.getAttribute("targetUser");
 
 /*
  * Servlet을 거치지 않고
@@ -23,172 +20,88 @@ UserDto targetUser =
  */
 if (targetUser == null) {
 
-    response.sendRedirect(
-            ctx + "/schedules"
-    );
+	response.sendRedirect(ctx + "/schedules");
 
-    return;
+	return;
 }
 
-
-long targetUserId =
-        targetUser.getUserId();
-
-
+long targetUserId = targetUser.getUserId();
 
 /* =========================================================
    2. 회원 정보
 ========================================================= */
 
-String loginId =
-        targetUser.getLoginId() == null
-        ? ""
-        : targetUser.getLoginId();
+String loginId = targetUser.getLoginId() == null ? "" : targetUser.getLoginId();
 
+String nickname = targetUser.getNickName() == null ? "" : targetUser.getNickName();
 
-String nickname =
-        targetUser.getNickName() == null
-        ? ""
-        : targetUser.getNickName();
+String name = targetUser.getName() == null ? "" : targetUser.getName();
 
+String bio = targetUser.getBio() == null ? "" : targetUser.getBio();
 
-String name =
-        targetUser.getName() == null
-        ? ""
-        : targetUser.getName();
+String region = targetUser.getRegion() == null ? "" : targetUser.getRegion();
 
-
-String bio =
-        targetUser.getBio() == null
-        ? ""
-        : targetUser.getBio();
-
-
-String region =
-        targetUser.getRegion() == null
-        ? ""
-        : targetUser.getRegion();
-
-
-String profileImg =
-        targetUser.getProfileImg() == null
-        ? ""
-        : targetUser.getProfileImg();
-
-
+String profileImg = targetUser.getProfileImg() == null ? "" : targetUser.getProfileImg();
 
 /* 화면 표시 이름 */
 
-String displayName =
-        nickname.isEmpty()
-        ? loginId
-        : nickname;
-
-
+String displayName = nickname.isEmpty() ? loginId : nickname;
 
 /* =========================================================
    3. 프로필 이미지 경로
 ========================================================= */
 
-String profilePath =
-        (String) application.getAttribute(
-                "profilePath"
-        );
+String profilePath = (String) application.getAttribute("profilePath");
 
+if (profilePath == null || profilePath.trim().isEmpty()) {
 
-if (profilePath == null
-        || profilePath.trim().isEmpty()) {
-
-    profilePath = "/profiles";
+	profilePath = "/profiles";
 }
-
-
 
 /* =========================================================
    4. 상대방이 작성한 공개 일정
 ========================================================= */
 
-List<ProfileFeedDto> itineraries =
-        (List<ProfileFeedDto>)
-        request.getAttribute(
-                "itineraries"
-        );
-
+List<ProfileFeedDto> itineraries = (List<ProfileFeedDto>) request.getAttribute("itineraries");
 
 if (itineraries == null) {
 
-    itineraries =
-            new ArrayList<ProfileFeedDto>();
+	itineraries = new ArrayList<ProfileFeedDto>();
 }
-
-
 
 /* =========================================================
    5. 상대방이 북마크한 공개 일정
 ========================================================= */
 
-List<ProfileFeedDto> bookmarkedItineraries =
-        (List<ProfileFeedDto>)
-        request.getAttribute(
-                "bookmarkedItineraries"
-        );
-
+List<ProfileFeedDto> bookmarkedItineraries = (List<ProfileFeedDto>) request.getAttribute("bookmarkedItineraries");
 
 if (bookmarkedItineraries == null) {
 
-    bookmarkedItineraries =
-            new ArrayList<ProfileFeedDto>();
+	bookmarkedItineraries = new ArrayList<ProfileFeedDto>();
 }
-
-
 
 /* =========================================================
    6. 상대방이 좋아요한 공개 일정
 ========================================================= */
 
-List<ProfileFeedDto> likedItineraries =
-        (List<ProfileFeedDto>)
-        request.getAttribute(
-                "likedItineraries"
-        );
-
+List<ProfileFeedDto> likedItineraries = (List<ProfileFeedDto>) request.getAttribute("likedItineraries");
 
 if (likedItineraries == null) {
 
-    likedItineraries =
-            new ArrayList<ProfileFeedDto>();
+	likedItineraries = new ArrayList<ProfileFeedDto>();
 }
-
-
 
 /* =========================================================
    7. 공개 설정
 ========================================================= */
 
-Boolean showLikedAttr =
-        (Boolean)
-        request.getAttribute(
-                "showLikedItinerary"
-        );
+Boolean showLikedAttr = (Boolean) request.getAttribute("showLikedItinerary");
 
+Boolean showBookmarkedAttr = (Boolean) request.getAttribute("showBookmarkedItinerary");
 
-Boolean showBookmarkedAttr =
-        (Boolean)
-        request.getAttribute(
-                "showBookmarkedItinerary"
-        );
+boolean showLikedItinerary = Boolean.TRUE.equals(showLikedAttr);
 
-
-boolean showLikedItinerary =
-        Boolean.TRUE.equals(
-                showLikedAttr
-        );
-
-
-boolean showBookmarkedItinerary =
-        Boolean.TRUE.equals(
-                showBookmarkedAttr
-        );
+boolean showBookmarkedItinerary = Boolean.TRUE.equals(showBookmarkedAttr);
 
 Boolean privateProfileAttr = (Boolean) request.getAttribute("privateProfile");
 
@@ -241,7 +154,8 @@ if (bookmarkCount == null) {
 
 <!-- 프로필 CSS -->
 
-<link rel="stylesheet" href="<%=ctx%>/view/assets/css/auth/userProfile.css">
+<link rel="stylesheet"
+	href="<%=ctx%>/view/assets/css/auth/userProfile.css">
 
 
 </head>
@@ -306,8 +220,8 @@ if (bookmarkCount == null) {
 
 
 						<%
-                    if (!profileImg.isEmpty()) {
-                    %>
+						if (!profileImg.isEmpty()) {
+						%>
 
 
 						<img src="<%=ctx%><%=profilePath%>/<%=profileImg%>"
@@ -335,8 +249,8 @@ if (bookmarkCount == null) {
 
 
 						<%
-                    } else {
-                    %>
+						} else {
+						%>
 
 
 						<!-- 프로필 이미지가 없는 경우 -->
@@ -355,8 +269,8 @@ if (bookmarkCount == null) {
 
 
 						<%
-                    }
-                    %>
+						}
+						%>
 
 
 					</div>
@@ -401,23 +315,23 @@ if (bookmarkCount == null) {
 							</p>
 
 							<%
-}
-%>
+							}
+							%>
 
 
 							<!-- 로그인 아이디 -->
 
 							<%
-                        if (!loginId.isEmpty()) {
-                        %>
+							if (!loginId.isEmpty()) {
+							%>
 
 							<p class="profile-login-id">
 								@<%=loginId%>
 							</p>
 
 							<%
-                        }
-                        %>
+							}
+							%>
 
 
 						</div>
@@ -506,42 +420,42 @@ if (bookmarkCount == null) {
 
 
 						<%
-                    if (!bio.isEmpty()) {
-                    %>
+						if (!bio.isEmpty()) {
+						%>
 
 						<p style="font-weight: 400;">
 							<%=bio%>
 						</p>
 
 						<%
-                    } else {
-                    %>
+						} else {
+						%>
 
 						<p class="profile-empty-bio" style="font-weight: 400;">등록된
 							소개글이 없습니다.</p>
 
 						<%
-                    }
-                    %>
+						}
+						%>
 
 
 
 						<%
-                    if (!region.isEmpty()) {
-                    %>
+						if (!region.isEmpty()) {
+						%>
 
 						<span class="profile-location"> <%=region%>
 						</span>
 
 						<%
-                    }
-                    %>
+						}
+						%>
 
 
 					</div>
-				<%
-                }
-                %>
+					<%
+					}
+					%>
 
 				</div>
 
@@ -550,7 +464,7 @@ if (bookmarkCount == null) {
 
 
 		</section>
-		
+
 		<%
 		if (privateProfile) {
 		%>
@@ -587,7 +501,7 @@ if (bookmarkCount == null) {
 		</section>
 
 
-			<%
+		<%
 		} else {
 		%>
 
@@ -611,8 +525,8 @@ if (bookmarkCount == null) {
 			<!-- 북마크 공개 설정 ON -->
 
 			<%
-        if (showBookmarkedItinerary) {
-        %>
+			if (showBookmarkedItinerary) {
+			%>
 
 			<button type="button" data-profile-tab="saved">
 
@@ -621,16 +535,16 @@ if (bookmarkCount == null) {
 			</button>
 
 			<%
-        }
-        %>
+			}
+			%>
 
 
 
 			<!-- 좋아요 공개 설정 ON -->
 
 			<%
-        if (showLikedItinerary) {
-        %>
+			if (showLikedItinerary) {
+			%>
 
 			<button type="button" data-profile-tab="liked">
 
@@ -639,8 +553,8 @@ if (bookmarkCount == null) {
 			</button>
 
 			<%
-        }
-        %>
+			}
+			%>
 
 
 		</div>
@@ -666,52 +580,31 @@ if (bookmarkCount == null) {
 
 
 					<%
-                if (!itineraries.isEmpty()) {
+					if (!itineraries.isEmpty()) {
 
+						for (ProfileFeedDto item : itineraries) {
 
-                    for (ProfileFeedDto item : itineraries) {
+							String country = item.getCountry() == null ? "" : item.getCountry();
 
+							String city = item.getCity() == null ? "" : item.getCity();
 
-                        String country =
-                                item.getCountry() == null
-                                ? ""
-                                : item.getCountry();
+							String locationText = "";
 
+							if (!country.isEmpty() && !city.isEmpty()) {
 
-                        String city =
-                                item.getCity() == null
-                                ? ""
-                                : item.getCity();
+						locationText = country + " · " + city;
 
+							} else if (!country.isEmpty()) {
 
-                        String locationText = "";
+						locationText = country;
 
+							} else if (!city.isEmpty()) {
 
-                        if (!country.isEmpty()
-                                && !city.isEmpty()) {
+						locationText = city;
+							}
 
-                            locationText =
-                                    country
-                                    + " · "
-                                    + city;
-
-                        } else if (!country.isEmpty()) {
-
-                            locationText =
-                                    country;
-
-                        } else if (!city.isEmpty()) {
-
-                            locationText =
-                                    city;
-                        }
-
-
-                        String thumbnail =
-                                item.getThumbnailImg() == null
-                                ? ""
-                                : item.getThumbnailImg();
-                %>
+							String thumbnail = item.getThumbnailImg() == null ? "" : item.getThumbnailImg();
+					%>
 
 
 					<div class="feed-admin-shell">
@@ -722,20 +615,20 @@ if (bookmarkCount == null) {
 
 
 							<%
-                        if (!thumbnail.isEmpty()) {
-                        %> <img src="<%=ctx%><%=thumbnail%>"
-							alt="<%=item.getTitle()%>" loading="lazy"> <%
-                        } else {
-                        %> <span class="feed-fallback"></span> <%
-                        }
-                        %> <span class="feed-hover"> <span
-								class="feed-hover-copy"> <strong> <%=item.getTitle()%>
+							if (!thumbnail.isEmpty()) {
+							%> <img src="<%=ctx%><%=thumbnail%>" alt="<%=item.getTitle()%>"
+							loading="lazy"> <%
+ } else {
+ %> <span class="feed-fallback"></span> <%
+ }
+ %> <span class="feed-hover"> <span class="feed-hover-copy">
+									<strong> <%=item.getTitle()%>
 								</strong> <%
-                                if (!locationText.isEmpty()) {
-                                %> <small> <%=locationText%>
+ if (!locationText.isEmpty()) {
+ %> <small> <%=locationText%>
 								</small> <%
-                                }
-                                %>
+ }
+ %>
 
 
 							</span> <span class="feed-hover-stats"> <span> ♥ <%=item.getLikeCount()%>
@@ -757,18 +650,18 @@ if (bookmarkCount == null) {
 
 
 					<%
-                    }
+					}
 
-                } else {
-                %>
+					} else {
+					%>
 
 
 					<div class="empty-state">공개된 여행 일정이 없습니다.</div>
 
 
 					<%
-                }
-                %>
+					}
+					%>
 
 
 				</div>
@@ -783,8 +676,8 @@ if (bookmarkCount == null) {
         ======================================= -->
 
 			<%
-        if (showBookmarkedItinerary) {
-        %>
+			if (showBookmarkedItinerary) {
+			%>
 
 
 			<div data-profile-panel="saved" class="jsp-hidden">
@@ -794,55 +687,31 @@ if (bookmarkCount == null) {
 
 
 					<%
-                if (!bookmarkedItineraries.isEmpty()) {
+					if (!bookmarkedItineraries.isEmpty()) {
 
+						for (ProfileFeedDto item : bookmarkedItineraries) {
 
-                    for (
-                        ProfileFeedDto item
-                        : bookmarkedItineraries
-                    ) {
+							String country = item.getCountry() == null ? "" : item.getCountry();
 
+							String city = item.getCity() == null ? "" : item.getCity();
 
-                        String country =
-                                item.getCountry() == null
-                                ? ""
-                                : item.getCountry();
+							String locationText = "";
 
+							if (!country.isEmpty() && !city.isEmpty()) {
 
-                        String city =
-                                item.getCity() == null
-                                ? ""
-                                : item.getCity();
+						locationText = country + " · " + city;
 
+							} else if (!country.isEmpty()) {
 
-                        String locationText = "";
+						locationText = country;
 
+							} else if (!city.isEmpty()) {
 
-                        if (!country.isEmpty()
-                                && !city.isEmpty()) {
+						locationText = city;
+							}
 
-                            locationText =
-                                    country
-                                    + " · "
-                                    + city;
-
-                        } else if (!country.isEmpty()) {
-
-                            locationText =
-                                    country;
-
-                        } else if (!city.isEmpty()) {
-
-                            locationText =
-                                    city;
-                        }
-
-
-                        String thumbnail =
-                                item.getThumbnailImg() == null
-                                ? ""
-                                : item.getThumbnailImg();
-                %>
+							String thumbnail = item.getThumbnailImg() == null ? "" : item.getThumbnailImg();
+					%>
 
 
 					<div class="feed-admin-shell">
@@ -853,20 +722,20 @@ if (bookmarkCount == null) {
 
 
 							<%
-                        if (!thumbnail.isEmpty()) {
-                        %> <img src="<%=ctx%><%=thumbnail%>"
-							alt="<%=item.getTitle()%>" loading="lazy"> <%
-                        } else {
-                        %> <span class="feed-fallback"></span> <%
-                        }
-                        %> <span class="feed-hover"> <span
-								class="feed-hover-copy"> <strong> <%=item.getTitle()%>
+							if (!thumbnail.isEmpty()) {
+							%> <img src="<%=ctx%><%=thumbnail%>" alt="<%=item.getTitle()%>"
+							loading="lazy"> <%
+ } else {
+ %> <span class="feed-fallback"></span> <%
+ }
+ %> <span class="feed-hover"> <span class="feed-hover-copy">
+									<strong> <%=item.getTitle()%>
 								</strong> <%
-                                if (!locationText.isEmpty()) {
-                                %> <small> <%=locationText%>
+ if (!locationText.isEmpty()) {
+ %> <small> <%=locationText%>
 								</small> <%
-                                }
-                                %>
+ }
+ %>
 
 
 							</span> <span class="feed-hover-stats"> <span> ♥ <%=item.getLikeCount()%>
@@ -888,18 +757,18 @@ if (bookmarkCount == null) {
 
 
 					<%
-                    }
+					}
 
-                } else {
-                %>
+					} else {
+					%>
 
 
 					<div class="empty-state">공개된 북마크 일정이 없습니다.</div>
 
 
 					<%
-                }
-                %>
+					}
+					%>
 
 
 				</div>
@@ -909,8 +778,8 @@ if (bookmarkCount == null) {
 
 
 			<%
-        }
-        %>
+			}
+			%>
 
 
 
@@ -919,8 +788,8 @@ if (bookmarkCount == null) {
         ======================================= -->
 
 			<%
-        if (showLikedItinerary) {
-        %>
+			if (showLikedItinerary) {
+			%>
 
 
 			<div data-profile-panel="liked" class="jsp-hidden">
@@ -930,55 +799,31 @@ if (bookmarkCount == null) {
 
 
 					<%
-                if (!likedItineraries.isEmpty()) {
+					if (!likedItineraries.isEmpty()) {
 
+						for (ProfileFeedDto item : likedItineraries) {
 
-                    for (
-                        ProfileFeedDto item
-                        : likedItineraries
-                    ) {
+							String country = item.getCountry() == null ? "" : item.getCountry();
 
+							String city = item.getCity() == null ? "" : item.getCity();
 
-                        String country =
-                                item.getCountry() == null
-                                ? ""
-                                : item.getCountry();
+							String locationText = "";
 
+							if (!country.isEmpty() && !city.isEmpty()) {
 
-                        String city =
-                                item.getCity() == null
-                                ? ""
-                                : item.getCity();
+						locationText = country + " · " + city;
 
+							} else if (!country.isEmpty()) {
 
-                        String locationText = "";
+						locationText = country;
 
+							} else if (!city.isEmpty()) {
 
-                        if (!country.isEmpty()
-                                && !city.isEmpty()) {
+						locationText = city;
+							}
 
-                            locationText =
-                                    country
-                                    + " · "
-                                    + city;
-
-                        } else if (!country.isEmpty()) {
-
-                            locationText =
-                                    country;
-
-                        } else if (!city.isEmpty()) {
-
-                            locationText =
-                                    city;
-                        }
-
-
-                        String thumbnail =
-                                item.getThumbnailImg() == null
-                                ? ""
-                                : item.getThumbnailImg();
-                %>
+							String thumbnail = item.getThumbnailImg() == null ? "" : item.getThumbnailImg();
+					%>
 
 
 					<div class="feed-admin-shell">
@@ -989,20 +834,20 @@ if (bookmarkCount == null) {
 
 
 							<%
-                        if (!thumbnail.isEmpty()) {
-                        %> <img src="<%=ctx%><%=thumbnail%>"
-							alt="<%=item.getTitle()%>" loading="lazy"> <%
-                        } else {
-                        %> <span class="feed-fallback"></span> <%
-                        }
-                        %> <span class="feed-hover"> <span
-								class="feed-hover-copy"> <strong> <%=item.getTitle()%>
+							if (!thumbnail.isEmpty()) {
+							%> <img src="<%=ctx%><%=thumbnail%>" alt="<%=item.getTitle()%>"
+							loading="lazy"> <%
+ } else {
+ %> <span class="feed-fallback"></span> <%
+ }
+ %> <span class="feed-hover"> <span class="feed-hover-copy">
+									<strong> <%=item.getTitle()%>
 								</strong> <%
-                                if (!locationText.isEmpty()) {
-                                %> <small> <%=locationText%>
+ if (!locationText.isEmpty()) {
+ %> <small> <%=locationText%>
 								</small> <%
-                                }
-                                %>
+ }
+ %>
 
 
 							</span> <span class="feed-hover-stats"> <span> ♥ <%=item.getLikeCount()%>
@@ -1024,18 +869,18 @@ if (bookmarkCount == null) {
 
 
 					<%
-                    }
+					}
 
-                } else {
-                %>
+					} else {
+					%>
 
 
 					<div class="empty-state">공개된 좋아요 일정이 없습니다.</div>
 
 
 					<%
-                }
-                %>
+					}
+					%>
 
 
 				</div>
@@ -1045,8 +890,8 @@ if (bookmarkCount == null) {
 
 
 			<%
-        }
-        %>
+			}
+			%>
 
 
 		</main>
@@ -1251,7 +1096,6 @@ if (bookmarkCount == null) {
 	<!-- =========================================================
      JS
 ========================================================= -->
-
 	<script>
 
 document.addEventListener(
@@ -1260,7 +1104,6 @@ document.addEventListener(
 
 
         const ctx = "<%=ctx%>";
-
 
 
         /* =====================================
@@ -1280,18 +1123,12 @@ document.addEventListener(
                 function() {
 
 
-                    /*
-                     * 이전 페이지가 있는 경우
-                     */
                     if (window.history.length > 1) {
 
                         window.history.back();
 
                     } else {
 
-                        /*
-                         * 주소창으로 직접 들어온 경우
-                         */
                         window.location.href =
                             ctx + "/schedules";
                     }
@@ -1347,7 +1184,7 @@ document.addEventListener(
 
 
                         /*
-                         * 현재 탭 활성화
+                         * 선택한 탭 활성화
                          */
                         tab.classList.add(
                             "active"
@@ -1420,6 +1257,7 @@ document.addEventListener(
 
         function openModal() {
 
+
             if (!reportModal) {
                 return;
             }
@@ -1437,6 +1275,7 @@ document.addEventListener(
 
 
         function closeModal() {
+
 
             if (!reportModal) {
                 return;
@@ -1509,7 +1348,7 @@ document.addEventListener(
 
 
         /*
-         * ESC
+         * ESC 키
          */
         document.addEventListener(
             "keydown",
@@ -1533,7 +1372,7 @@ document.addEventListener(
 
 
         /* =====================================
-           신고 상세 글자 수
+           신고 상세내용 글자 수
         ====================================== */
 
         const detail =
@@ -1567,9 +1406,6 @@ document.addEventListener(
 
         /* =====================================
            신고 Form
-
-           현재는 UI 동작만 처리.
-           나중에 /report Servlet과 연결.
         ====================================== */
 
         const reportForm =
@@ -1580,6 +1416,7 @@ document.addEventListener(
 
         if (reportForm) {
 
+
             reportForm.addEventListener(
                 "submit",
                 function(event) {
@@ -1587,6 +1424,11 @@ document.addEventListener(
 
                     event.preventDefault();
 
+
+
+                    /* =================================
+                       신고 사유
+                    ================================== */
 
                     const checked =
                         reportForm.querySelector(
@@ -1604,32 +1446,393 @@ document.addEventListener(
                     }
 
 
+
+                    /* =================================
+                       전송 데이터
+
+                       FormData 사용하지 않음.
+
+                       Servlet의 request.getParameter()
+                       로 바로 받을 수 있도록
+                       x-www-form-urlencoded 방식 사용
+                    ================================== */
+
+                    const params =
+                        new URLSearchParams();
+
+
                     /*
-                     * 현재 임시 처리
-                     *
-                     * 신고 DB 연동 시
-                     * 이 부분을 fetch 또는
-                     * form submit으로 변경
+                     * 신고 대상 종류
                      */
-                    alert(
-                        "신고가 접수되었습니다."
+                    params.set(
+                        "targetType",
+                        "USER"
                     );
 
 
-                    reportForm.reset();
+                    /*
+                     * 현재 보고 있는 사용자 번호
+                     *
+                     * 예:
+                     * userProfile?userId=17
+                     *
+                     * targetId = 17
+                     */
+                    params.set(
+                        "targetId",
+                        "<%=targetUserId%>"
+                    );
 
 
-                    if (charCount) {
+                    /*
+                     * 신고 사유 코드
+                     *
+                     * NICKNAME
+                     * PROFILE_IMAGE
+                     * CONTENT
+                     * SPAM
+                     * IMPERSONATION
+                     * PRIVACY
+                     * ETC
+                     */
+                    params.set(
+                        "profileReportReason",
+                        checked.value
+                    );
 
-                        charCount.textContent =
-                            "0/300";
-                    }
+
+                    /*
+                     * 상세 내용
+                     */
+                    params.set(
+                        "detail",
+                        detail
+                            ? detail.value.trim()
+                            : ""
+                    );
 
 
-                    closeModal();
+
+                    /* =================================
+                       전송값 확인
+                    ================================== */
+
+                    console.log(
+                        "신고 대상 유형:",
+                        params.get(
+                            "targetType"
+                        )
+                    );
+
+
+                    console.log(
+                        "신고 대상 ID:",
+                        params.get(
+                            "targetId"
+                        )
+                    );
+
+
+                    console.log(
+                        "신고 사유:",
+                        params.get(
+                            "profileReportReason"
+                        )
+                    );
+
+
+                    console.log(
+                        "상세 내용:",
+                        params.get(
+                            "detail"
+                        )
+                    );
+
+
+
+                    /* =================================
+                       신고 요청
+                    ================================== */
+
+                    fetch(
+                        ctx + "/report/user",
+
+                        {
+
+                            method:
+                                "POST",
+
+                            headers: {
+
+                                "Content-Type":
+                                    "application/x-www-form-urlencoded; charset=UTF-8"
+
+                            },
+
+                            body:
+                                params.toString()
+
+                        }
+                    )
+
+
+                    /* =================================
+                       서버 응답
+                    ================================== */
+
+                    .then(
+                        function(response) {
+
+
+                            return response
+                                .text()
+                                .then(
+                                    function(text) {
+
+
+                                        console.log(
+                                            "신고 응답 status:",
+                                            response.status
+                                        );
+
+
+                                        console.log(
+                                            "신고 응답 body:",
+                                            text
+                                        );
+
+
+                                        let data;
+
+
+                                        try {
+
+
+                                            data =
+                                                JSON.parse(
+                                                    text
+                                                );
+
+
+                                        } catch (e) {
+
+
+                                            console.error(
+                                                "JSON이 아닌 응답:",
+                                                text
+                                            );
+
+
+                                            throw new Error(
+                                                "서버가 JSON 대신 오류 페이지를 반환했습니다."
+                                            );
+                                        }
+
+
+                                        return {
+
+                                            ok:
+                                                response.ok,
+
+                                            status:
+                                                response.status,
+
+                                            data:
+                                                data
+
+                                        };
+
+                                    }
+                                );
+
+                        }
+                    )
+
+
+                    /* =================================
+                       결과 처리
+                    ================================== */
+
+                    .then(
+                        function(result) {
+
+
+                            /*
+                             * =========================
+                             * 신고 성공
+                             * =========================
+                             */
+
+                            if (
+                                result.ok
+                                && result.data.success
+                            ) {
+
+
+                                alert(
+                                    result.data.message
+                                    || "신고가 접수되었습니다."
+                                );
+
+
+                                /*
+                                 * 신고 폼 초기화
+                                 */
+                                reportForm.reset();
+
+
+                                /*
+                                 * 글자수 초기화
+                                 */
+                                if (charCount) {
+
+                                    charCount.textContent =
+                                        "0/300";
+                                }
+
+
+                                /*
+                                 * 신고 모달 닫기
+                                 */
+                                closeModal();
+
+
+                                return;
+                            }
+
+
+
+                            /*
+                             * =========================
+                             * 로그인 필요
+                             * =========================
+                             */
+
+                            if (
+                                result.status === 401
+                            ) {
+
+
+                                alert(
+                                    result.data.message
+                                    || "로그인이 필요합니다."
+                                );
+
+
+                                return;
+                            }
+
+
+
+                            /*
+                             * =========================
+                             * 잘못된 요청
+                             * =========================
+                             */
+
+                            if (
+                                result.status === 400
+                            ) {
+
+
+                                alert(
+                                    result.data.message
+                                    || "신고 정보를 확인해 주세요."
+                                );
+
+
+                                return;
+                            }
+
+
+
+                            /*
+                             * =========================
+                             * 중복 신고
+                             * =========================
+                             */
+
+                            if (
+                                result.status === 409
+                            ) {
+
+
+                                alert(
+                                    result.data.message
+                                    || "이미 신고한 계정입니다."
+                                );
+
+
+                                closeModal();
+
+
+                                return;
+                            }
+
+
+
+                            /*
+                             * =========================
+                             * 서버 오류
+                             * =========================
+                             */
+
+                            if (
+                                result.status === 500
+                            ) {
+
+
+                                alert(
+                                    result.data.message
+                                    || "신고 처리 중 서버 오류가 발생했습니다."
+                                );
+
+
+                                return;
+                            }
+
+
+
+                            /*
+                             * =========================
+                             * 기타 오류
+                             * =========================
+                             */
+
+                            alert(
+                                result.data.message
+                                || "신고 처리에 실패했습니다."
+                            );
+
+                        }
+                    )
+
+
+                    /* =================================
+                       네트워크 / JS 오류
+                    ================================== */
+
+                    .catch(
+                        function(error) {
+
+
+                            console.error(
+                                "신고 요청 오류:",
+                                error
+                            );
+
+
+                            alert(
+                                error.message
+                                || "신고 처리 중 오류가 발생했습니다."
+                            );
+
+                        }
+                    );
 
                 }
             );
+
         }
 
 
@@ -1637,7 +1840,6 @@ document.addEventListener(
 );
 
 </script>
-
 
 </body>
 

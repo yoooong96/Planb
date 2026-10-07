@@ -19,4 +19,14 @@ public class ReportReasonDaoImpl implements ReportReasonDao {
 
 		return sqlSession.selectOne("mapper.itinerary.reportReason.selectContentReportReason", reasonId);
 	}
+
+	@Override
+	public List<ReportReasonDto> selectUserReportReasons(SqlSession sqlSession) throws Exception {
+		return sqlSession.selectList("mapper.itinerary.reportReason.selectUserReportReasons");
+	}
+
+	@Override
+	public ReportReasonDto selectUserReportReasonByCode(SqlSession sqlSession, String reasonCode) throws Exception {
+		return sqlSession.selectOne("mapper.itinerary.reportReason.selectUserReportReasonByCode", reasonCode);
+	}
 }
