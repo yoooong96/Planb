@@ -1,23 +1,91 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
-	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
 
 <mapper namespace="mapper.advertisement.advertisement">
 
-	<insert id="insertAdvertisement" parameterType="advertisement" useGeneratedKeys="true" keyProperty="adId">
 
-	</insert>
+    <!-- =====================================================
+         광고 문의 / 신청 등록
+    ====================================================== -->
 
-	<select id="selectAdvertisement" parameterType="Long" resultType="advertisement">
+    <insert id="insertAdvertisement"
+            parameterType="dto.advertisement.AdvertisementDto"
+            useGeneratedKeys="true"
+            keyProperty="adId"
+            keyColumn="ad_id">
 
-	</select>
+        INSERT INTO TB_ADVERTISEMENT
+        (
+            applicant_user_id,
+            business_name,
+            manager_name,
+            contact_phone,
+            contact_email,
+            ad_content,
+            image_url,
+            link_url,
+            ad_position,
+            start_date,
+            end_date,
+            status
+        )
 
-	<update id="updateAdvertisement" parameterType="advertisement">
+        VALUES
+        (
+            #{applicantUserId, jdbcType=BIGINT},
+            #{businessName},
+            #{managerName},
+            #{contactPhone},
+            #{contactEmail},
+            #{adContent},
+            #{imageUrl},
+            #{linkUrl, jdbcType=VARCHAR},
+            #{adPosition},
+            #{startDate},
+            #{endDate},
+            'PENDING_APPROVAL'
+        )
 
-	</update>
+    </insert>
 
-	<delete id="deleteAdvertisement" parameterType="Long">
 
-	</delete>
+
+    <!-- =====================================================
+         광고 문의 접수 이력
+
+         관리자 처리 전이므로 admin_user_id는 NULL
+    ====================================================== -->
+
+    <insert id="insertSubmittedHistory"
+            parameterType="map">
+
+        INSERT INTO TB_ADVERTISEMENT_HISTORY
+        (
+            ad_id,
+            admin_user_id,
+            action_type,
+            from_status,
+            to_status,
+            recipient_email,
+            mail_status
+        )
+
+        VALUES
+        (
+            #{adId},
+            NULL,
+            'SUBMITTED',
+            NULL,
+            'PENDING_APPROVAL',
+            #{recipientEmail},
+            NULL
+        )
+
+    </insert>
+
 
 </mapper>

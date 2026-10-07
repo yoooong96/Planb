@@ -1,14 +1,10 @@
 package dao.advertisement;
 
+import org.apache.ibatis.session.SqlSession;
+
 import dto.advertisement.AdvertisementDto;
 
 public interface AdvertisementDao {
-
-	int insertAdvertisement(AdvertisementDto advertisementDto);
-
-	AdvertisementDto selectAdvertisement(long adId);
-
-	int updateAdvertisement(AdvertisementDto advertisementDto);
-
-	int deleteAdvertisement(long adId);
+	int insertAdvertisement(SqlSession sqlSession, AdvertisementDto advertisement) throws Exception;
+	int insertSubmittedHistory(SqlSession sqlSession, long adId, String recipientEmail) throws Exception;
 }

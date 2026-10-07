@@ -39,7 +39,7 @@ request.setAttribute("activePage", "profile");
 					</section>
 					<section class="settings-panel support-links support-legal-links">
 						<a
-							href="${pageContext.request.contextPath}/support/adInquiry"><span
+							href="${pageContext.request.contextPath}/support/adGuide"><span
 							style="display: inline-flex; align-items: center; gap: 8px">📣
 								광고 문의하기</span><span>›</span></a>
 						<button type="button">

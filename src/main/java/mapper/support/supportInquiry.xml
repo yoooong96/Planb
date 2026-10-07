@@ -1,16 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatix.org//DTD mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="mapper.itinerary.supportInquiry">
-	<insert id="insertSupportInquiry" parameterType="supportInquiry">
+<mapper namespace="mapper.support.inquiry">
+	<insert id="insertInquiry" parameterType="dto.support.SupportInquiryDto"
+			useGeneratedKeys="true" keyProperty="inquiryId"
+			keyColumn="inquiry_id">
+			
+			insert into TB_SUPPORT_INQUIRY (
+				user_id,
+				category,
+				title,
+				content,
+				contact_email,
+				status
+			)
+			
+			values (
+				#{userId},
+				#{category},
+				#{title},
+				#{content},
+				#{contactEmail},
+				'RECEIVED'
+			)
+	
 	</insert>
 
-	<select id="selectSupportInquiry" parameterType="Integer">
-	</select>
 	
-	<update id="updateSupportInquiry" parameterType="supportInquiry">
-	</update>
-	
-	<delete id="deleteSupportInquiry" parameterType="supportInquiry">
-	</delete>
 </mapper>
