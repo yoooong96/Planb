@@ -17,4 +17,6 @@ public interface MateService {
 	
 	List<MateDto> selectMateWriteList(Long userId, int pageSize, int offset);
 	int countMateWriteList(Long userId);
+	
+	int updateMateViewCount(Long mateId);
 }

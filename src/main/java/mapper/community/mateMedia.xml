@@ -20,5 +20,12 @@
 	<delete id="deleteMateMedia" parameterType="Long">
 
 	</delete>
+	
+	<!-- 여행 메이트 이미지 목록 조회 -->
+	<select id="selectMateMediaList" parameterType="long" resultType="dto.community.MateMediaDto">
+		SELECT media_id AS mediaId, mate_id AS mateId, media_type AS mediaType, media_url AS mediaUrl, sort_order AS sortOrder, created_at AS createdAt
+		FROM TB_MATE_MEDIA
+		WHERE mate_id = #{mateId} ORDER BY sort_order ASC
+	</select>
 
 </mapper>

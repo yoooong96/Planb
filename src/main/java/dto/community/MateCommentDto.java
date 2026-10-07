@@ -1,6 +1,7 @@
 package dto.community;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 public class MateCommentDto {
 	private Long commentId;				// 댓글 번호
@@ -10,6 +11,8 @@ public class MateCommentDto {
 	private String status;				// 댓글 상태
 	private LocalDateTime createdAt;	// 작성 일시
 	private LocalDateTime updatedAt;	// 수정 일시
+	// TB_USER JOIN용
+	private String nickname;
 	
 	public MateCommentDto() {
 		super();
@@ -17,7 +20,7 @@ public class MateCommentDto {
 	}
 	
 	public MateCommentDto(Long commentId, Long mateId, Long userId, String content, String status,
-			LocalDateTime createdAt, LocalDateTime updatedAt) {
+			LocalDateTime createdAt, LocalDateTime updatedAt, String nickname) {
 		super();
 		this.commentId = commentId;
 		this.mateId = mateId;
@@ -26,6 +29,33 @@ public class MateCommentDto {
 		this.status = status;
 		this.createdAt = createdAt;
 		this.updatedAt = updatedAt;
+		this.nickname = nickname;
+	}
+	
+	public String getTimeAgo() {
+		if (createdAt == null) return "";
+
+		long seconds = ChronoUnit.SECONDS.between(createdAt, LocalDateTime.now());
+
+		if (seconds < 60) return Math.max(seconds, 0) + "초 전";
+
+		long minutes = ChronoUnit.MINUTES.between(createdAt, LocalDateTime.now());
+
+		if (minutes < 60) return minutes + "분 전";
+
+		long hours = ChronoUnit.HOURS.between(createdAt, LocalDateTime.now());
+
+		if (hours < 24) return hours + "시간 전";
+
+		long days = ChronoUnit.DAYS.between(createdAt, LocalDateTime.now());
+
+		return days + "일 전";
+	}
+	
+	public boolean isEdited() {
+		if (createdAt == null || updatedAt == null) return false;
+
+		return updatedAt.isAfter(createdAt);
 	}
 	
 	public Long getCommentId() {
@@ -70,12 +100,20 @@ public class MateCommentDto {
 	public void setUpdatedAt(LocalDateTime updatedAt) {
 		this.updatedAt = updatedAt;
 	}
+	
+	public String getNickname() {
+		return nickname;
+	}
+
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
+	}
+
 	@Override
 	public String toString() {
 		return "MateCommentDto [commentId=" + commentId + ", mateId=" + mateId + ", userId=" + userId + ", content="
-				+ content + ", status=" + status + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + "]";
+				+ content + ", status=" + status + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt
+				+ ", nickname=" + nickname + "]";
 	}
-	
-	
 	
 }

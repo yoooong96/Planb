@@ -1,16 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
+<link rel="stylesheet" href="${pageContext.request.contextPath}/view/assets/css/mates/mateList.css">
+
 <c:forEach var="mate" items="${mateList}">
-	<a
-		href="${pageContext.request.contextPath}/mateDetail?mateId=${mate.mateId}"
+	<a href="${pageContext.request.contextPath}/mateDetail?mateId=${mate.mateId}"
 		class="relative bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all cursor-pointer group p-5 hover:border-[#D1D2F9]">
 
 		<div class="flex items-center gap-2 mb-3">
-			<span
-				class="flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full"
-				style="background: var(--brand-soft); color: var(--brand)">
-
+			<span class="flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full"
+				  style="background: var(--brand-soft); color: var(--brand)">
 				<svg
 					width="10"
 					height="10"
@@ -38,17 +37,19 @@
 				👥 ${mate.recruitCount}명 모집
 			</span>
 
-			<span class="text-[11px] text-gray-400 flex items-center gap-1">
-				▣ ${mate.createdAt}
-			</span>
+			
 		</div>
+		
+		<hr class="line">
 
-		<div
-			class="flex items-center justify-between text-xs text-gray-400 border-t border-gray-50 pt-3">
+		<div class="flex items-center justify-between text-xs text-gray-400 border-t border-gray-50 pt-3">
 
 			<div class="flex items-center gap-1.5">
 				<span class="text-gray-600 font-medium">
-					작성자 #${mate.userId}
+					${mate.nickname}
+				</span>
+				<span class="text-[11px] text-gray-400 flex items-center gap-1">
+				  · ${mate.timeAgo}
 				</span>
 			</div>
 

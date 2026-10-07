@@ -2,9 +2,9 @@ package service.community;
 
 import java.util.List;
 
-import dto.community.MateDto;
 import dao.community.MateDao;
 import dao.community.MateDaoImpl;
+import dto.community.MateDto;
 
 public class MateServiceImpl implements MateService {
 	private MateDao mateDao = new MateDaoImpl();
@@ -20,8 +20,7 @@ public class MateServiceImpl implements MateService {
 
 	@Override
 	public MateDto selectMate(Long mateId) {
-		// TODO Auto-generated method stub
-		return null;
+		return mateDao.selectMate(mateId);
 	}
 
 	@Override
@@ -59,6 +58,11 @@ public class MateServiceImpl implements MateService {
 	@Override
 	public int countMateWriteList(Long userId) {
 		return mateDao.countMateWriteList(userId);
+	}
+	
+	@Override
+	public int updateMateViewCount(Long mateId) {
+		return mateDao.updateMateViewCount(mateId);
 	}
 
 }

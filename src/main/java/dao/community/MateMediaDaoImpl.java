@@ -1,5 +1,7 @@
 package dao.community;
 
+import java.util.List;
+
 import org.apache.ibatis.session.SqlSession;
 
 import config.MybatisSqlSessionFactory;
@@ -37,6 +39,16 @@ public class MateMediaDaoImpl implements MateMediaDao {
 	public int deleteMateMedia(Long mediaId) {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+	
+	@Override
+	public List<MateMediaDto> selectMateMediaList(Long mateId) {
+		try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+			return sqlSession.selectList("mapper.community.mateMedia.selectMateMediaList", mateId);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
 	}
 
 }

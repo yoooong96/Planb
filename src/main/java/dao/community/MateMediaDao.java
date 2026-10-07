@@ -1,5 +1,7 @@
 package dao.community;
 
+import java.util.List;
+
 import dto.community.MateMediaDto;
 
 public interface MateMediaDao {
@@ -11,4 +13,6 @@ public interface MateMediaDao {
 	int updateMateMedia(MateMediaDto mateMediaDto);
 
 	int deleteMateMedia(Long mediaId);
+	
+	List<MateMediaDto> selectMateMediaList(Long mateId);
 }

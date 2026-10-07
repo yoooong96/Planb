@@ -27,8 +27,12 @@ public class MateDaoImpl implements MateDao {
 
 	@Override
 	public MateDto selectMate(Long mateId) {
-		// TODO 상세페이지 구현할 때 연결
-		return null;
+		try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+			return sqlSession.selectOne("mapper.community.mate.selectMate", mateId);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
 	}
 
 	@Override
@@ -112,6 +116,20 @@ public class MateDaoImpl implements MateDao {
 		param.put("userId", userId);
 		try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
 			return sqlSession.selectOne("mapper.community.mate.countMateWriteList", param);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+	
+	@Override
+	public int updateMateViewCount(Long mateId) {
+		try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+			int result = sqlSession.update("mapper.community.mate.updateMateViewCount", mateId);
+			if (result > 0) {
+				sqlSession.commit();
+			}
+			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;

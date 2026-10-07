@@ -1,0 +1,657 @@
+/* ========================================
+   내가 작성한 여행꿀팁
+======================================== */
+
+.mate-my-banner {
+	width: 100%;
+	margin: 0;
+	background: linear-gradient(
+		120deg,
+		#6268d8 0%,
+		#747be2 55%,
+		#9298eb 100%
+	);
+}
+
+.mate-my-banner-inner {
+	width: min(100% - 40px, 1120px);
+	min-height: 150px;
+	margin: 0 auto;
+
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 32px;
+}
+
+.mate-my-breadcrumb {
+	margin: 0 0 12px;
+
+	font-size: 13px;
+	font-weight: 500;
+
+	color: rgba(255, 255, 255, 0.72);
+}
+
+.mate-my-breadcrumb span {
+	margin: 0 7px;
+}
+
+.mate-my-banner h1 {
+	margin: 0;
+
+	font-size: clamp(25px, 2.3vw, 32px);
+	font-weight: 800;
+
+	color: #ffffff;
+}
+
+.mate-my-description {
+	margin: 9px 0 0;
+
+	font-size: 13px;
+
+	color: rgba(255, 255, 255, 0.76);
+}
+
+.mate-my-description strong {
+	color: #ffffff;
+}
+
+
+/* 배너 버튼 */
+
+.mate-my-banner-actions {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	flex-shrink: 0;
+}
+
+.mate-my-banner-actions a {
+	min-height: 44px;
+	padding: 0 20px;
+
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+
+	border-radius: 999px;
+
+	font-size: 13px;
+	font-weight: 700;
+
+	text-decoration: none;
+
+	transition:
+		transform 0.2s ease,
+		box-shadow 0.2s ease;
+}
+
+.mate-my-banner-actions svg {
+	width: 17px;
+	height: 17px;
+}
+
+
+/* 여행꿀팁 목록 */
+
+.mate-list-btn {
+	background: #ffffff;
+	color: #555cc9;
+
+	border: 2px solid rgba(255, 255, 255, 0.8);
+
+	box-shadow: 0 5px 16px rgba(47, 53, 130, 0.2);
+}
+
+.mate-list-btn:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 8px 22px rgba(47, 53, 130, 0.28);
+}
+
+
+/* 새 글 쓰기 */
+
+.mate-write-btn {
+	background: #ffd447;
+	color: #252525;
+
+	border: 2px solid #ffd447;
+
+	box-shadow: 0 5px 16px rgba(55, 50, 30, 0.18);
+}
+
+.mate-write-btn:hover {
+	transform: translateY(-2px);
+}
+
+/* ========================================
+   목록
+======================================== */
+.mate-my-main {
+	min-height: 520px;
+	padding:
+		clamp(30px, 4vw, 48px)
+		clamp(18px, 4vw, 40px)
+		clamp(60px, 7vw, 90px);
+
+	background: #f7f7ff;
+}
+.mate-my-list {
+	width: min(100%, 1060px);
+	margin: 0 auto;
+
+	display: flex;
+	flex-direction: column;
+	gap: 18px;
+}
+/* ========================================
+   카드
+======================================== */
+.mate-my-card {
+	position: relative;
+
+	width: 100%;
+	min-height: 150px;
+
+	padding: 24px 26px;
+
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 24px;
+
+	box-sizing: border-box;
+
+	background: #ffffff;
+
+	border: 1px solid #d9dafb;
+	border-left: 5px solid #6369d1;
+
+	border-radius: 18px;
+
+	box-shadow: 0 3px 10px rgba(31, 41, 55, 0.05);
+
+	transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.mate-my-card:hover {
+	transform: translateY(-2px);
+
+	box-shadow:
+		0 8px 22px rgba(99, 105, 209, 0.11);
+}
+
+.mate-my-card-content {
+	min-width: 0;
+	flex: 1;
+}
+/* 해시태그 */
+.mate-my-tags {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px;
+
+	margin-bottom: 13px;
+}
+
+.mate-my-tags span {
+	display: inline-flex;
+	align-items: center;
+
+	padding: 5px 10px;
+
+	border-radius: 999px;
+
+	background: #FFD447;
+	color: #6369d1;
+
+	font-size: 11px;
+	font-weight: 700;
+}
+
+
+/* 제목 */
+
+.mate-my-title {
+	margin: 0;
+
+	font-size: clamp(15px, 1.3vw, 18px);
+	font-weight: 800;
+
+	color: #171b2c;
+
+	overflow-wrap: anywhere;
+}
+
+
+/* 메타 */
+
+.mate-my-meta {
+	margin-top: 13px;
+
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 12px;
+
+	font-size: 12px;
+	color: #98a1b2;
+}
+
+.mate-my-meta-item {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+}
+
+.mate-my-meta svg {
+	width: 14px;
+	height: 14px;
+}
+
+
+/* ========================================
+   수정 / 삭제
+======================================== */
+
+.mate-my-card-actions {
+	flex-shrink: 0;
+
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.mate-edit-btn,
+.mate-delete-btn {
+	min-height: 40px;
+
+	padding: 0 15px;
+
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 6px;
+
+	box-sizing: border-box;
+
+	border-radius: 999px;
+
+	font-size: 12px;
+	font-weight: 700;
+
+	cursor: pointer;
+
+	transition:
+		background 0.2s ease,
+		transform 0.2s ease;
+
+	text-decoration: none;
+}
+
+.mate-edit-btn {
+	border: 1px solid #7379df;
+
+	background: #eef0ff;
+	color: #6369d1;
+}
+
+.mate-edit-btn:hover {
+	background: #e1e4ff;
+	transform: translateY(-1px);
+}
+
+.mate-delete-btn {
+	border: 1px solid #f2a7ad;
+
+	background: #fff5f5;
+	color: #dc5964;
+}
+
+.mate-delete-btn:hover {
+	background: #ffe8ea;
+	transform: translateY(-1px);
+}
+
+.mate-edit-btn svg,
+.mate-delete-btn svg {
+	width: 14px;
+	height: 14px;
+}
+
+/* 내가 작성한 글 - 삭제 버튼 */
+.mate-write-list-delete-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 2.75rem;
+    padding: 0.65rem 1.25rem;
+
+    /* 기본부터 삭제 버튼임을 표시 */
+    border: 1px solid #fecaca;
+    border-radius: 9999px;
+
+    background: #fff5f5;
+    color: #ef4444;
+
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1;
+
+    white-space: nowrap;
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease,
+        transform 0.15s ease;
+}
+
+/* 마우스 오버 */
+.mate-write-list-delete-btn:hover {
+    border-color: #ef4444;
+    background: #ef4444;
+    color: #ffffff;
+}
+
+/* 클릭 */
+.mate-write-list-delete-btn:active {
+    background: #dc2626;
+    border-color: #dc2626;
+    color: #ffffff;
+    transform: scale(0.97);
+}
+
+/* 모바일 */
+@media (max-width: 640px) {
+    .mate-write-list-delete-btn {
+        min-height: 2.5rem;
+        padding: 0.55rem 0.9rem;
+        font-size: 0.8125rem;
+    }
+}
+
+/* 모바일 */
+@media (max-width: 640px) {
+    .mate-write-list-delete-btn {
+        min-height: 2.5rem;
+        padding: 0.55rem 0.9rem;
+        font-size: 0.8125rem;
+    }
+}
+
+
+/* ========================================
+   게시글 없음
+======================================== */
+
+.mate-my-empty {
+	padding: 80px 20px;
+
+	text-align: center;
+
+	background: #ffffff;
+	border: 1px solid #e1e2f5;
+	border-radius: 18px;
+}
+
+.mate-my-empty-icon {
+	margin-bottom: 14px;
+	font-size: 32px;
+}
+
+.mate-my-empty h2 {
+	margin: 0;
+
+	font-size: 18px;
+	color: #202438;
+}
+
+.mate-my-empty p {
+	margin: 8px 0 20px;
+
+	font-size: 13px;
+	color: #8b94a5;
+}
+
+.mate-my-empty a {
+	display: inline-flex;
+
+	padding: 11px 18px;
+
+	border-radius: 999px;
+
+	background: #6369d1;
+	color: #ffffff;
+
+	font-size: 12px;
+	font-weight: 700;
+
+	text-decoration: none;
+}
+
+
+/* ========================================
+   반응형
+======================================== */
+
+@media (max-width: 768px) {
+
+	.mate-my-banner-inner {
+		width: min(100% - 32px, 1120px);
+
+		padding: 28px 0;
+
+		flex-direction: column;
+		align-items: flex-start;
+
+		gap: 20px;
+	}
+
+	.mate-my-banner-actions {
+		width: 100%;
+	}
+
+	.mate-my-banner-actions a {
+		flex: 1;
+		padding: 0 12px;
+	}
+
+	.mate-my-card {
+		padding: 21px 18px;
+
+		flex-direction: column;
+		align-items: stretch;
+
+		gap: 20px;
+	}
+
+	.mate-my-card-actions {
+		width: 100%;
+	}
+
+	.mate-edit-btn,
+	.mate-delete-btn {
+		flex: 1;
+	}
+}
+
+
+@media (max-width: 480px) {
+
+	.mate-my-banner-actions {
+		flex-direction: column;
+	}
+
+	.mate-my-banner-actions a {
+		width: 100%;
+	}
+
+	.mate-my-meta {
+		gap: 8px;
+	}
+}
+/* ========================================
+   내가 작성한 글 - 페이지네이션
+======================================== */
+
+.mate-write-pagination {
+    width: 100%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+
+    gap: 8px;
+
+    margin: 36px auto 48px;
+    padding: 0 16px;
+
+    box-sizing: border-box;
+}
+
+
+/* 기본 페이지 버튼 */
+.mate-write-pagination .mate-page-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 42px;
+    height: 42px;
+    min-width: 42px;
+
+    padding: 0;
+
+    background: #ffffff;
+
+    border: 1px solid #e2e4f0;
+    border-radius: 50%;
+
+    color: #676b7c;
+
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1;
+
+    text-decoration: none;
+
+    box-shadow: 0 2px 8px rgba(40, 45, 80, 0.05);
+
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+/* 마우스 오버 */
+.mate-write-pagination a.mate-page-btn:hover {
+    background: #f4f3ff;
+    border-color: #7778e8;
+
+    color: #6369d1;
+
+    transform: translateY(-2px);
+
+    box-shadow: 0 5px 14px rgba(99, 105, 209, 0.15);
+}
+
+
+/* 현재 페이지 */
+.mate-write-pagination .mate-page-btn.active {
+    background: #6369d1;
+    border-color: #6369d1;
+
+    color: #ffffff;
+
+    box-shadow: 0 5px 14px rgba(99, 105, 209, 0.28);
+}
+
+
+/* 이전 / 다음 */
+.mate-write-pagination .mate-page-arrow {
+    font-size: 21px;
+    font-weight: 500;
+}
+
+
+/* 비활성 이전 / 다음 */
+.mate-write-pagination .mate-page-btn.disabled {
+    background: #f1f2f7;
+    border-color: #e7e8ef;
+
+    color: #c2c5d0;
+
+    box-shadow: none;
+
+    cursor: default;
+}
+
+
+/* ========================================
+   반응형
+======================================== */
+
+@media (max-width: 768px) {
+
+    .mate-write-pagination {
+        gap: 6px;
+
+        margin-top: 28px;
+        margin-bottom: 36px;
+
+        padding: 0 12px;
+    }
+
+    .mate-write-pagination .mate-page-btn {
+        width: 38px;
+        height: 38px;
+        min-width: 38px;
+
+        font-size: 13px;
+    }
+
+    .mate-write-pagination .mate-page-arrow {
+        font-size: 19px;
+    }
+}
+
+
+@media (max-width: 480px) {
+
+    .mate-write-pagination {
+        gap: 5px;
+    }
+
+    .mate-write-pagination .mate-page-btn {
+        width: 36px;
+        height: 36px;
+        min-width: 36px;
+    }
+}
+
+.mate-recruit-open {
+	background: #eef0ff;
+	color: #6369D1;
+}
+
+.mate-recruit-closed {
+	background: #f3f4f6;
+	color: #9ca3af;
+}
+
+.mate-my-recruit-count {
+	display: inline-flex;
+	align-items: center;
+	font-weight: 600;
+	color: #6369D1;
+}

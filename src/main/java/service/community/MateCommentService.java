@@ -1,10 +1,10 @@
-package dao.community;
+package service.community;
 
 import java.util.List;
 
 import dto.community.MateCommentDto;
 
-public interface MateCommentDao {
+public interface MateCommentService {
 
 	int insertMateComment(MateCommentDto mateCommentDto);
 

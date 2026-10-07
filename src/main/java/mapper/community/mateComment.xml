@@ -1,23 +1,70 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
+
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="mapper.community.mateComment">
 
-	<insert id="insertMateComment" parameterType="mateComment" useGeneratedKeys="true" keyProperty="commentId">
-
+	<!-- 댓글 작성 -->
+	<insert
+		id="insertMateComment"
+		parameterType="dto.community.MateCommentDto"
+		useGeneratedKeys="true"
+		keyProperty="commentId">
+	
+		INSERT INTO TB_MATE_COMMENT (
+			mate_id,
+			user_id,
+			content,
+			status
+		)
+		VALUES (
+			#{mateId},
+			#{userId},
+			#{content},
+			'ACTIVE'
+		)
+	
 	</insert>
 
-	<select id="selectMateComment" parameterType="Long" resultType="mateComment">
 
+	<!-- 댓글 목록 -->
+	<select
+		id="selectMateCommentList"
+		parameterType="long"
+		resultType="dto.community.MateCommentDto">
+	
+		SELECT
+			c.comment_id AS commentId,
+			c.mate_id AS mateId,
+			c.user_id AS userId,
+			c.content AS content,
+			c.status AS status,
+			c.created_at AS createdAt,
+			c.updated_at AS updatedAt,
+			u.nickname AS nickname
+		FROM TB_MATE_COMMENT c
+		JOIN TB_USER u
+			ON c.user_id = u.user_id
+		WHERE c.mate_id = #{mateId}
+			AND c.status = 'ACTIVE'
+		ORDER BY c.created_at ASC
+	
 	</select>
 
-	<update id="updateMateComment" parameterType="mateComment">
 
-	</update>
+	<!-- 댓글 개수 -->
+	<select
+		id="countMateComment"
+		parameterType="long"
+		resultType="int">
 
-	<delete id="deleteMateComment" parameterType="Long">
+		SELECT COUNT(*)
+		FROM TB_MATE_COMMENT
+		WHERE mate_id = #{mateId}
+			AND status = 'ACTIVE'
 
-	</delete>
+	</select>
 
 </mapper>

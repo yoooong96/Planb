@@ -28,7 +28,6 @@ public class MateWriteList extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
 		// ========================================
 		// 1. 로그인 사용자 확인
 		// ========================================
@@ -41,7 +40,6 @@ public class MateWriteList extends HttpServlet {
 
 		UserDto user = (UserDto) session.getAttribute("user");
 
-
 		// ========================================
 		// 2. 페이지 정보
 		// ========================================
@@ -50,46 +48,29 @@ public class MateWriteList extends HttpServlet {
 
 		try {
 			String pageParam = request.getParameter("page");
-
 			if (pageParam != null && !pageParam.trim().isEmpty()) {
 				page = Integer.parseInt(pageParam);
 			}
-
 		} catch (NumberFormatException e) {
 			page = 1;
 		}
-
 		if (page < 1) {
 			page = 1;
 		}
 
 		int offset = (page - 1) * pageSize;
 
-
 		// ========================================
 		// 3. 내가 작성한 여행 메이트 조회
 		// ========================================
-		List<MateDto> mateList =
-			mateService.selectMateWriteList(
-				user.getUserId(),
-				pageSize,
-				offset
-			);
+		List<MateDto> mateList = mateService.selectMateWriteList(user.getUserId(), pageSize, offset);
 
-		int totalCount =
-			mateService.countMateWriteList(
-				user.getUserId()
-			);
-
+		int totalCount = mateService.countMateWriteList(user.getUserId());
 
 		// ========================================
 		// 4. 전체 페이지 수
 		// ========================================
-		int totalPages =
-			(int) Math.ceil(
-				(double) totalCount / pageSize
-			);
-
+		int totalPages = (int) Math.ceil((double) totalCount / pageSize);
 
 		// ========================================
 		// 5. JSP 전달
@@ -100,11 +81,7 @@ public class MateWriteList extends HttpServlet {
 		request.setAttribute("pageSize", pageSize);
 		request.setAttribute("totalPages", totalPages);
 
-		RequestDispatcher dispatcher =
-			request.getRequestDispatcher(
-				"/view/mate/mateWriteList.jsp"
-			);
-
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/view/mates/mateWriteList.jsp");
 		dispatcher.forward(request, response);
 	}
 }

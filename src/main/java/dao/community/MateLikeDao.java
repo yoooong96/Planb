@@ -6,7 +6,9 @@ public interface MateLikeDao {
 
 	int insertMateLike(MateLikeDto mateLikeDto);
 
-	MateLikeDto selectMateLike(MateLikeDto mateLikeDto);
+	MateLikeDto selectMateLike(Long mateId, Long userId);
 
-	int deleteMateLike(MateLikeDto mateLikeDto);
+	int deleteMateLike(Long mateId, Long userId);
+
+	int countMateLike(Long mateId);
 }

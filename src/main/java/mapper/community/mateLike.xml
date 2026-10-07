@@ -1,19 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
+
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="mapper.community.mateLike">
 
-	<insert id="insertMateLike" parameterType="mateLike">
+	<!-- 좋아요 등록 -->
+	<insert id="insertMateLike"
+		parameterType="dto.community.MateLikeDto">
+
+		INSERT INTO TB_MATE_LIKE (
+			mate_id,
+			user_id
+		)
+		VALUES (
+			#{mateId},
+			#{userId}
+		)
 
 	</insert>
 
-	<select id="selectMateLike" parameterType="mateLike" resultType="mateLike">
+
+	<!-- 사용자의 좋아요 여부 조회 -->
+	<select id="selectMateLike"
+		parameterType="dto.community.MateLikeDto"
+		resultType="dto.community.MateLikeDto">
+
+		SELECT
+			mate_id AS mateId,
+			user_id AS userId,
+			created_at AS createdAt
+		FROM TB_MATE_LIKE
+		WHERE mate_id = #{mateId}
+			AND user_id = #{userId}
 
 	</select>
 
-	<delete id="deleteMateLike" parameterType="mateLike">
+
+	<!-- 좋아요 취소 -->
+	<delete id="deleteMateLike"
+		parameterType="dto.community.MateLikeDto">
+
+		DELETE FROM TB_MATE_LIKE
+		WHERE mate_id = #{mateId}
+			AND user_id = #{userId}
 
 	</delete>
+
+
+	<!-- 게시글 좋아요 개수 -->
+	<select id="countMateLike"
+		parameterType="long"
+		resultType="int">
+
+		SELECT COUNT(*)
+		FROM TB_MATE_LIKE
+		WHERE mate_id = #{mateId}
+
+	</select>
 
 </mapper>

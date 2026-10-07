@@ -1,6 +1,7 @@
 package dto.community;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 public class MateDto {
 	private Long mateId;				// 메이트 게시글 번호
@@ -18,13 +19,15 @@ public class MateDto {
 	private String country;				// 나라
 	private int recruitCount;			// 모집 인원
 	private String recruitStatus;		// 모집 상태
+	private String nickname;
+	
 	public MateDto() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 	public MateDto(Long mateId, Long userId, String title, String content, String img, String visibility, int viewCount,
 			String status, Long deletedByUserId, LocalDateTime deletedAt, LocalDateTime createdAt,
-			LocalDateTime updatedAt, String country, int recruitCount, String recruitStatus) {
+			LocalDateTime updatedAt, String country, int recruitCount, String recruitStatus, String nickname) {
 		super();
 		this.mateId = mateId;
 		this.userId = userId;
@@ -41,7 +44,42 @@ public class MateDto {
 		this.country = country;
 		this.recruitCount = recruitCount;
 		this.recruitStatus = recruitStatus;
+		this.nickname = nickname;
 	}
+	
+	public String getTimeAgo() {
+		if (createdAt == null) {
+			return "";
+		}
+
+		long seconds = ChronoUnit.SECONDS.between(createdAt, LocalDateTime.now());
+
+		if (seconds < 0) seconds = 0;
+		if (seconds < 60) return seconds + "초 전";
+
+		long minutes = seconds / 60;
+		if (minutes < 60) return minutes + "분 전";
+
+		long hours = minutes / 60;
+		if (hours < 24) return hours + "시간 전";
+
+		long days = hours / 24;
+		if (days < 30) return days + "일 전";
+
+		long months = days / 30;
+		if (months < 12) return months + "개월 전";
+
+		return (months / 12) + "년 전";
+	}
+	
+	public String getFormattedCreatedAt() {
+		if (createdAt == null) {
+			return "";
+		}
+
+		return createdAt.format(java.time.format.DateTimeFormatter.ofPattern("yyyy.MM.dd"));
+	}
+	
 	public Long getMateId() {
 		return mateId;
 	}
@@ -132,12 +170,18 @@ public class MateDto {
 	public void setRecruitStatus(String recruitStatus) {
 		this.recruitStatus = recruitStatus;
 	}
+	public String getNickname() {
+		return nickname;
+	}
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
+	}
 	@Override
 	public String toString() {
 		return "MateDto [mateId=" + mateId + ", userId=" + userId + ", title=" + title + ", content=" + content
 				+ ", img=" + img + ", visibility=" + visibility + ", viewCount=" + viewCount + ", status=" + status
 				+ ", deletedByUserId=" + deletedByUserId + ", deletedAt=" + deletedAt + ", createdAt=" + createdAt
 				+ ", updatedAt=" + updatedAt + ", country=" + country + ", recruitCount=" + recruitCount
-				+ ", recruitStatus=" + recruitStatus + "]";
+				+ ", recruitStatus=" + recruitStatus + ", nickname=" + nickname + "]";
 	}
 }

@@ -1,261 +1,552 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%
-request.setAttribute("activePage", "mate");
-%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+<% request.setAttribute("activePage", "mate");%>
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>여행 메이트 상세 · Tripily</title><jsp:include
-	page="/common/headStyles.jsp" /></head>
-<body class="site-shell"><jsp:include page="/common/header.jsp" />
-	<div class="pt-16 min-h-screen" style="background-color: #f5f5fb">
-		<div class="max-w-5xl mx-auto px-4 py-8">
-			<a href="${pageContext.request.contextPath}/view/mate/mateList.jsp"
-				class="flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-gray-200 text-sm font-semibold text-gray-600 hover:border-gray-400 hover:text-gray-800 transition-colors shadow-sm mb-6"><svg
-					width="14" height="14" viewBox="0 0 24 24" fill="none"
-					stroke="currentColor" stroke-width="2">
-					<path d="M15 18l-6-6 6-6" /></svg>목록으로</a>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>여행 메이트 상세 | Planb</title>
+	<jsp:include page="/common/headStyles.jsp" />
+	<link rel="stylesheet" href="${pageContext.request.contextPath}/view/assets/css/mates/mateDetail.css">
+	<script defer src="${pageContext.request.contextPath}/view/assets/js/mates/mateDetail.js?v=3"></script>
+	
+</head>
+<body class="site-shell">
+	<jsp:include page="/common/header.jsp" />
+	<div class="min-h-screen" style="background-color: #f5f5fb;">
+		<div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+			<!-- 목록으로 -->
+			<a href="${pageContext.request.contextPath}/mates"
+				class="flex items-center gap-2 px-4 py-2 rounded-full 
+				       bg-white border border-gray-200 text-sm font-semibold 
+				       text-gray-600 hover:border-gray-400 hover:text-gray-800 
+				       transition-colors shadow-sm mb-6">
+				<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+					<path d="M15 18l-6-6 6-6" />
+				</svg>
+				목록으로
+			</a>
 			<div class="flex gap-6 items-start">
-				<div
-					class="hidden lg:flex flex-col items-center justify-center gap-3 rounded-2xl shrink-0"
-					style="width: 160px; min-height: 600px; background-color: var(- -brand-light); color: var(- -brand)">
-					<div
-						class="w-12 h-12 rounded-full flex items-center justify-center font-extrabold text-sm text-white"
-						style="background-color: var(- -brand)">AD</div>
-					<p class="text-xs font-semibold text-center px-3"
-						style="color: var(- -brand)">
-						좌측 광고 영역<br>
-						<span class="text-[10px] font-normal opacity-60">(예:
-							160x600)</span>
+				<!-- ================================
+				     좌측 광고
+				================================ -->
+				<div class="hidden lg:flex flex-col items-center justify-center gap-3 rounded-2xl shrink-0"
+					 style="width: 160px; min-height: 600px; background-color: var(--brand-light); color: var(--brand);">
+					<div class="w-12 h-12 rounded-full flex items-center justify-center font-extrabold text-sm text-white"
+						 style="background-color: var(--brand);">
+						AD
+					</div>
+					<p class="text-xs font-semibold text-center px-3" style="color: var(--brand);">
+						좌측 광고 영역
+						<br>
+						<span class="text-[10px] font-normal opacity-60">
+							(예: 160x600)
+						</span>
 					</p>
 				</div>
+				<!-- ================================
+				     중앙 콘텐츠
+				================================ -->
 				<div class="flex-1 min-w-0">
-					<div
-						class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
-						<div class="relative overflow-hidden" style="height: 280px">
-							<img
-								src="https://images.unsplash.com/photo-1539635278303-d4002c07eae3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx0cmF2ZWwlMjBjb3VwbGUlMjBhZHZlbnR1cmUlMjBmcmllbmRzfGVufDF8fHx8MTc4OTEwNzA3NHww&ixlib=rb-4.1.0&q=80&w=600"
-								alt="🗼 11/10-14 도쿄 4박 · 맛집+카페+쇼핑 동행 1명"
-								class="absolute inset-0 w-full h-full object-cover">
+					<div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+						<!-- ================================
+						     대표 이미지 + 제목
+						================================ -->
+						<div class="relative overflow-hidden mate-detail-hero">
+							<c:choose>
+								<c:when test="${not empty mate.img}">
+									<img src="${pageContext.request.contextPath}${mate.img}"
+										 alt="${mate.title}"
+										 class="absolute inset-0 w-full h-full object-cover">
+								</c:when>
+								<c:otherwise>
+									<div class="absolute inset-0 flex items-center justify-center bg-gray-100 text-gray-400">
+										이미지 없음
+									</div>
+								</c:otherwise>
+							</c:choose>
 							<div class="absolute inset-0"
-								style="background: linear-gradient(to top, rgba(20, 12, 60, .8) 0%, rgba(99, 105, 209, .2) 55%, transparent 100%)"></div>
+								style="background: linear-gradient(to top, rgba(20, 12, 60, .8) 0%, 
+								                   rgba(99, 105, 209, .2) 55%, transparent 100%);">
+							</div>
 							<div class="absolute bottom-6 left-7 right-7">
-								<div class="flex items-center gap-2 mb-2">
+								<div class="flex items-center gap-2 mb-2 flex-wrap">
 									<span class="text-xs font-bold px-3 py-1 rounded-full"
-										style="color: #6369D1; background-color: #eeeffe">여행동행</span><span
-										class="text-white/80 text-xs flex items-center gap-1"><svg
-											width="11" height="11" viewBox="0 0 24 24" fill="none"
-											stroke="currentColor" stroke-width="2">
+										  style="color: #6369D1; background-color: #eeeffe;">
+										여행 메이트
+									</span>
+									<span class="text-white/80 text-xs flex items-center gap-1">
+										<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 											<path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-											<circle cx="12" cy="10" r="3" /></svg>일본 · 도쿄</span>
+											<circle cx="12" cy="10" r="3" />
+										</svg>
+										<c:out value="${mate.country}" />
+									</span>
 								</div>
-								<h1
-									class="text-white text-xl md:text-2xl font-extrabold leading-snug">🗼
-									11/10-14 도쿄 4박 · 맛집+카페+쇼핑 동행 1명</h1>
+								<h1 class="text-white text-xl md:text-2xl font-extrabold leading-snug">
+									<c:out value="${mate.title}" />
+								</h1>
 							</div>
 						</div>
-						<div class="p-7">
+						<div class="p-5 sm:p-6 md:p-7">
+							<!-- ================================
+							     작성자
+							================================ -->
+							<div class="flex items-center justify-between gap-4 mb-7 pb-6 border-b border-gray-100">
+								<div class="flex items-center gap-3 min-w-0">
+									<div class="w-10 h-10 rounded-full shrink-0 flex items-center justify-center text-white font-bold text-sm"
+										 style="background: linear-gradient(135deg, #6369D1, #8B5CF6);">
+										<c:choose>
+											<c:when test="${not empty mate.nickname}">
+												<c:out value="${mate.nickname.substring(0, 1)}" />
+											</c:when>
+											<c:otherwise>
+												U
+											</c:otherwise>
+										</c:choose>
+									</div>
+									<div class="min-w-0">
+										<p class="font-bold text-sm text-gray-900 truncate">
+											<c:choose>
+												<c:when test="${not empty mate.nickname}">
+													<c:out value="${mate.nickname}" />
+												</c:when>
+												<c:otherwise>
+													사용자
+												</c:otherwise>
+											</c:choose>
+										</p>
+										<p class="text-xs text-gray-400">
+											<c:out value="${mate.timeAgo}" />
+										</p>
+									</div>
+								</div>
+								<div class="flex items-center gap-4 text-sm text-gray-400">
+									<span class="flex items-center gap-1.5">
+										<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+											<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z" />
+											<circle cx="12" cy="12" r="3" />
+										</svg>
+										<c:out value="${mate.viewCount}" />
+									</span>
+								</div>
+							</div>
+							<!-- ================================
+							     여행 메이트 정보
+							================================ -->
+							<div class="mate-detail-info-grid">
+								<!-- 여행지 -->
+								<div class="mate-detail-info-item">
+									<div class="mate-detail-info-icon">
+										📍
+									</div>
+									<span class="mate-detail-info-label">
+										여행지
+									</span>
+									<strong class="mate-detail-info-value">
+										<c:out value="${mate.country}" />
+									</strong>
+								</div>
+								<!-- 작성일 -->
+								<div class="mate-detail-info-item">
+									<div class="mate-detail-info-icon">
+										📅
+									</div>
+									<span class="mate-detail-info-label">
+										작성일
+									</span>
+									<strong class="mate-detail-info-value">
+										<c:out value="${mate.formattedCreatedAt}" />
+									</strong>
+								</div>
+								<!-- 모집 인원 -->
+								<div class="mate-detail-info-item">
+									<div class="mate-detail-info-icon">
+										👥
+									</div>
+									<span class="mate-detail-info-label">
+										모집 인원
+									</span>
+									<strong class="mate-detail-info-value">
+										<c:out value="${mate.recruitCount}" />명
+									</strong>
+								</div>
+								<!-- 조회수 -->
+								<div class="mate-detail-info-item">
+									<div class="mate-detail-info-icon">
+										👁
+									</div>
+									<span class="mate-detail-info-label">
+										조회수
+									</span>
+									<strong class="mate-detail-info-value">
+										<c:out value="${mate.viewCount}" />
+									</strong>
+								</div>
+							</div>
+							<!-- ================================
+							     본문
+							================================ -->
+							<div class="mate-detail-content">
+								<p class="text-gray-700 text-base leading-relaxed whitespace-pre-wrap"><c:out value="${mate.content}" /></p>
+							</div>
+							<!-- ================================
+							     추가 이미지
+							     첫 번째 이미지는 대표 이미지이므로 제외
+							================================ -->
+							<c:if test="${not empty mateMediaList}">
+								<div class="mate-detail-images">
+									<c:forEach var="media" items="${mateMediaList}" varStatus="status">
+										<c:if test="${status.index > 0 && media.mediaType eq 'IMAGE'}">
+											<img src="${pageContext.request.contextPath}${media.mediaUrl}"
+												 alt="여행 메이트 추가 이미지"
+												 class="mate-detail-image">
+										</c:if>
+									</c:forEach>
+								</div>
+							</c:if>
+							<!-- ================================
+							     모집 상태
+							================================ -->
+							<div class="mate-detail-recruit-status">
+							
+								<c:choose>
+							
+									<c:when test="${mate.recruitStatus eq 'OPEN'}">
+							
+										<span class="mate-recruit-badge open">
+											모집중
+										</span>
+							
+									</c:when>
+							
+									<c:otherwise>
+							
+										<span class="mate-recruit-badge closed">
+											모집완료
+										</span>
+							
+									</c:otherwise>
+							
+								</c:choose>
+							
+							</div>
+							
+							
+							<!-- ================================
+							     좋아요 / 작성자 관리
+							================================ -->
+							<div class="mate-detail-actions">
+							
+								<!-- 좋아요 -->
+								<div class="mate-detail-like-area">
+							
+									<c:choose>
+							
+										<c:when test="${not empty sessionScope.user}">
+							
+											<form
+												id="mateLikeForm"
+												class="mate-like-form">
+											
+												<input
+													type="hidden"
+													id="mateLikeMateId"
+													name="mateId"
+													value="${mate.mateId}">
+											
+												<button
+													type="button"
+													id="mateLikeButton"
+													class="mate-like-btn ${liked ? 'active' : ''}">
+											
+													<svg
+														class="mate-like-icon"
+														viewBox="0 0 24 24"
+														fill="${liked ? 'currentColor' : 'none'}"
+														stroke="currentColor"
+														stroke-width="2">
+											
+														<path
+															d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+											
+													</svg>
+											
+													<span>좋아요</span>
+											
+													<strong id="mateLikeCount">
+														<c:out value="${mateLikeCount}" />
+													</strong>
+											
+												</button>
+											
+											</form>
+							
+										</c:when>
+							
+										<c:otherwise>
+							
+											<div class="mate-like-btn disabled">
+							
+												<svg
+													viewBox="0 0 24 24"
+													fill="none"
+													stroke="currentColor"
+													stroke-width="2">
+							
+													<path
+														d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+							
+												</svg>
+							
+												<span>좋아요</span>
+							
+												<strong>
+													<c:out value="${mateLikeCount}" />
+												</strong>
+							
+											</div>
+							
+										</c:otherwise>
+							
+									</c:choose>
+							
+								</div>
+							
+							
+								<!-- 작성자만 수정 / 삭제 -->
+								<c:if test="${not empty sessionScope.user && sessionScope.user.userId eq mate.userId}">
+							
+									<div class="mate-detail-owner-actions">
+							
+										<a
+											href="${pageContext.request.contextPath}/mateModify?mateId=${mate.mateId}"
+											class="mate-detail-edit-btn">
+							
+											<svg
+												viewBox="0 0 24 24"
+												fill="none"
+												stroke="currentColor"
+												stroke-width="2">
+							
+												<path d="M12 20h9" />
+												<path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z" />
+							
+											</svg>
+							
+											수정하기
+							
+										</a>
+							
+										<button
+											type="button"
+											id="mateDeleteButton"
+											class="mate-detail-delete-btn"
+											data-mate-id="${mate.mateId}">
+							
+											<svg
+												viewBox="0 0 24 24"
+												fill="none"
+												stroke="currentColor"
+												stroke-width="2">
+							
+												<path d="M3 6h18" />
+												<path d="M8 6V4h8v2" />
+												<path d="M19 6l-1 14H6L5 6" />
+							
+											</svg>
+							
+											삭제하기
+							
+										</button>
+							
+									</div>
+							
+								</c:if>
+							
+							</div>
+						</div>
+					</div>
+					<!-- ================================
+						     댓글
+						================================ -->
+						<div class="mate-comment-section">
+						
+							<!-- 댓글 제목 -->
+							<div class="mate-comment-header">
+						
+								<h3>
+									댓글
+									<span id="mateCommentCount">
+										<c:out value="${mateCommentList.size()}" />
+									</span>
+								</h3>
+						
+							</div>
+						
+							<!-- 댓글 목록 -->
 							<div
-								class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-7 pb-7 border-b border-gray-100">
-								<div
-									class="flex flex-col items-center text-center p-3 rounded-2xl"
-									style="background-color: rgba(209, 210, 249, .2)">
-									<span class="text-lg mb-1">📍</span><span
-										class="text-[10px] text-gray-400 font-medium">여행지</span><span
-										class="text-xs font-bold text-gray-800 mt-0.5">일본 · 도쿄</span>
-								</div>
-								<div
-									class="flex flex-col items-center text-center p-3 rounded-2xl"
-									style="background-color: rgba(209, 210, 249, .2)">
-									<span class="text-lg mb-1">📅</span><span
-										class="text-[10px] text-gray-400 font-medium">작성일</span><span
-										class="text-xs font-bold text-gray-800 mt-0.5">2026.09.10</span>
-								</div>
-								<div
-									class="flex flex-col items-center text-center p-3 rounded-2xl"
-									style="background-color: rgba(209, 210, 249, .2)">
-									<span class="text-lg mb-1">👥</span><span
-										class="text-[10px] text-gray-400 font-medium">모집 인원</span><span
-										class="text-xs font-bold text-gray-800 mt-0.5">1명</span>
-								</div>
-								<div
-									class="flex flex-col items-center text-center p-3 rounded-2xl"
-									style="background-color: rgba(209, 210, 249, .2)">
-									<span class="text-lg mb-1">👁</span><span
-										class="text-[10px] text-gray-400 font-medium">조회수</span><span
-										class="text-xs font-bold text-gray-800 mt-0.5">124</span>
-								</div>
-							</div>
-							<div class="flex items-center gap-3 mb-7">
-								<div
-									class="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm"
-									style="background-color: #8B5CF6">지</div>
-								<div>
-									<p class="font-bold text-sm text-gray-900">지민</p>
-									<p class="text-xs text-gray-400">2026.09.10 작성</p>
-								</div>
-							</div>
-							<div class="text-gray-700 text-base leading-relaxed mb-8">
-								<p>11월 10일~14일 도쿄 여행 계획 중입니다. 맛집, 카페, 쇼핑 같이 다니면서 즐겁게 여행하실 분
-									구해요!</p>
-								<br>
-								<p class="text-sm text-gray-600">관심 있으신 분들은 댓글 또는 메시지로 연락
-									주세요. 연령대, 여행 스타일 등 간단히 소개해 주시면 함께 여행할 메이트를 찾는 데 도움이 됩니다.</p>
-								<br>
-								<p class="text-sm text-gray-600">즐거운 여행 함께 만들어요! 😊</p>
-							</div>
-							<div class="flex justify-center">
-								<button type="button"
-									class="jsp-brand-hover flex items-center gap-2 px-12 py-4 rounded-2xl font-bold text-white text-base transition-all shadow-lg"
-									style="background-color: var(- -brand)">
-									<svg width="18" height="18" viewBox="0 0 24 24" fill="none"
-										stroke="currentColor" stroke-width="2.5">
-										<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-										<circle cx="9" cy="7" r="4" />
-										<path d="M23 21v-2a4 4 0 0 0-3-3.87" />
-										<path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg>
-									함께 여행 신청하기
-								</button>
-							</div>
-						</div>
-					</div>
-					<div
-						class="bg-white rounded-3xl shadow-sm border border-gray-100 p-7 mt-4">
-						<h3
-							class="flex items-center gap-2 text-base font-extrabold text-gray-900 mb-6">
-							<svg width="18" height="18" viewBox="0 0 24 24" fill="none"
-								stroke="currentColor" stroke-width="2.2"
-								style="color: var(- -brand)">
-								<path
-									d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg>
-							댓글 3
-						</h3>
-						<div class="flex flex-col gap-5 mb-8">
-							<div class="flex gap-3">
-								<div
-									class="w-9 h-9 rounded-full shrink-0 flex items-center justify-center text-white text-sm font-bold"
-									style="background-color: #6369D1">지</div>
-								<div class="flex-1 min-w-0">
-									<div class="flex items-center gap-2 mb-1">
-										<span class="text-sm font-bold text-gray-900">지수</span><span
-											class="text-xs text-gray-400">2026.09.14</span>
+								class="mate-comment-list"
+								id="mateCommentList">
+						
+								<!-- 댓글 없음 -->
+								<c:if test="${empty mateCommentList}">
+									<div class="mate-comment-empty">
+										아직 작성된 댓글이 없습니다.
 									</div>
-									<p class="text-sm text-gray-700 leading-relaxed">여행 일정이 딱 제
-										취향이에요! 혹시 아직 모집 중이신가요? 꼭 함께 가고 싶어요 😊</p>
-									<button type="button"
-										class="flex items-center gap-1 mt-2 text-xs transition-colors"
-										style="color: #9ca3af">
-										<svg width="13" height="13" viewBox="0 0 24 24" fill="none"
-											stroke="currentColor" stroke-width="2">
-											<path
-												d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" /></svg>
-										좋아요 7
-									</button>
-								</div>
-							</div>
-							<div class="flex gap-3">
-								<div
-									class="w-9 h-9 rounded-full shrink-0 flex items-center justify-center text-white text-sm font-bold"
-									style="background-color: #10B981">민</div>
-								<div class="flex-1 min-w-0">
-									<div class="flex items-center gap-2 mb-1">
-										<span class="text-sm font-bold text-gray-900">민준</span><span
-											class="text-xs text-gray-400">2026.09.15</span>
+								</c:if>
+						
+								<!-- 댓글 -->
+								<c:forEach
+									var="comment"
+									items="${mateCommentList}">
+						
+									<div
+										class="mate-comment-item"
+										data-comment-id="${comment.commentId}">
+						
+										<!-- 프로필 -->
+										<div class="mate-comment-avatar">
+											<c:out value="${comment.nickname.substring(0, 1)}" />
+										</div>
+						
+										<!-- 댓글 정보 -->
+										<div class="mate-comment-body">
+						
+											<div class="mate-comment-top">
+						
+												<div class="mate-comment-user">
+						
+													<strong>
+														<c:out value="${comment.nickname}" />
+													</strong>
+						
+													<span class="mate-comment-time">
+														<c:out value="${comment.timeAgo}" />
+						
+														<c:if test="${comment.edited}">
+															<span class="mate-comment-edited">
+																(수정됨)
+															</span>
+														</c:if>
+													</span>
+						
+												</div>
+						
+												<!-- 본인 댓글 수정 / 삭제 -->
+												<c:if test="${not empty sessionScope.user && sessionScope.user.userId eq comment.userId}">
+						
+													<div class="mate-comment-actions">
+						
+														<button
+															type="button"
+															class="mate-comment-edit">
+															수정
+														</button>
+						
+														<button
+															type="button"
+															class="mate-comment-delete">
+															삭제
+														</button>
+						
+													</div>
+						
+												</c:if>
+						
+											</div>
+						
+											<!-- 댓글 내용 -->
+											<p class="mate-comment-content">
+												<c:out value="${comment.content}" />
+											</p>
+						
+										</div>
+						
 									</div>
-									<p class="text-sm text-gray-700 leading-relaxed">저도 같은 시기에
-										여행 계획 중이었는데 정말 반갑네요. 연락 드려도 될까요?</p>
-									<button type="button"
-										class="flex items-center gap-1 mt-2 text-xs transition-colors"
-										style="color: #9ca3af">
-										<svg width="13" height="13" viewBox="0 0 24 24" fill="none"
-											stroke="currentColor" stroke-width="2">
-											<path
-												d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" /></svg>
-										좋아요 5
-									</button>
-								</div>
+						
+								</c:forEach>
+						
 							</div>
-							<div class="flex gap-3">
-								<div
-									class="w-9 h-9 rounded-full shrink-0 flex items-center justify-center text-white text-sm font-bold"
-									style="background-color: #F59E0B">하</div>
-								<div class="flex-1 min-w-0">
-									<div class="flex items-center gap-2 mb-1">
-										<span class="text-sm font-bold text-gray-900">하영</span><span
-											class="text-xs text-gray-400">2026.09.16</span>
+						
+							<!-- ================================
+							     댓글 작성
+							================================ -->
+							<c:choose>
+						
+								<c:when test="${not empty sessionScope.user}">
+						
+									<form
+										id="mateCommentForm"
+										class="mate-comment-form"
+										action="${pageContext.request.contextPath}/mateCommentWrite"
+										method="post">
+						
+										<input
+											type="hidden"
+											name="mateId"
+											value="${mate.mateId}">
+						
+										<textarea
+											id="mateCommentContent"
+											name="content"
+											maxlength="1000"
+											placeholder="댓글을 입력해주세요..."></textarea>
+						
+										<div class="mate-comment-form-bottom">
+						
+											<span class="mate-comment-length">
+												<span id="mateCommentLength">0</span>/1000
+											</span>
+						
+											<button
+												type="submit"
+												class="mate-comment-submit">
+												댓글 등록
+											</button>
+						
+										</div>
+						
+									</form>
+						
+								</c:when>
+						
+								<c:otherwise>
+						
+									<div class="mate-comment-empty">
+										댓글을 작성하려면 로그인이 필요합니다.
 									</div>
-									<p class="text-sm text-gray-700 leading-relaxed">사진 보고 반했어요
-										✈️ 메시지 드릴게요!</p>
-									<button type="button"
-										class="flex items-center gap-1 mt-2 text-xs transition-colors"
-										style="color: #9ca3af">
-										<svg width="13" height="13" viewBox="0 0 24 24" fill="none"
-											stroke="currentColor" stroke-width="2">
-											<path
-												d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" /></svg>
-										좋아요 3
-									</button>
-								</div>
-							</div>
+						
+								</c:otherwise>
+						
+							</c:choose>
+						
 						</div>
-						<div class="flex items-center gap-3 pt-5 border-t border-gray-100">
-							<div
-								class="w-9 h-9 rounded-full shrink-0 flex items-center justify-center text-white text-sm font-bold"
-								style="background-color: var(- -brand)">나</div>
-							<input type="text" placeholder="댓글을 입력해주세요..."
-								class="jsp-focus flex-1 text-sm text-gray-700 placeholder-gray-400 outline-none border border-gray-200 rounded-full px-4 py-2.5 transition-all">
-							<button type="button"
-								class="jsp-brand-hover shrink-0 px-5 py-2.5 rounded-full text-white text-sm font-semibold transition-colors"
-								style="background-color: var(- -brand)">등록</button>
-						</div>
-					</div>
-					<div class="mt-6 mb-10">
-						<h3 class="text-lg font-extrabold text-gray-900 mb-4">비슷한 메이트
-							모집</h3>
-						<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-							<a
-								href="${pageContext.request.contextPath}/view/mate/mateDetail.jsp?id=6"
-								class="flex flex-col p-4 bg-white rounded-2xl border border-gray-100 shadow-sm text-left w-full group hover:border-[#D1D2F9] transition-all"><div
-									class="flex items-center gap-2 mb-2">
-									<span class="text-[10px] font-bold px-2 py-0.5 rounded-full"
-										style="color: #6369D1; background-color: #eeeffe">여행동행</span><span
-										class="text-[10px] text-gray-400">📍 한국 · 제주도</span>
-								</div>
-								<h4
-									class="font-bold text-sm text-gray-900 line-clamp-1 group-hover:text-[#6369D1] transition-colors">🌿
-									10/28-30 제주 2박3일 렌터카 여행 · 동행 1명</h4>
-								<p class="text-[10px] text-gray-400 mt-1">수빈 · 2026.09.07</p></a><a
-								href="${pageContext.request.contextPath}/view/mate/mateDetail.jsp?id=7"
-								class="flex flex-col p-4 bg-white rounded-2xl border border-gray-100 shadow-sm text-left w-full group hover:border-[#D1D2F9] transition-all"><div
-									class="flex items-center gap-2 mb-2">
-									<span class="text-[10px] font-bold px-2 py-0.5 rounded-full"
-										style="color: #6369D1; background-color: #eeeffe">여행동행</span><span
-										class="text-[10px] text-gray-400">📍 스페인 · 바르셀로나</span>
-								</div>
-								<h4
-									class="font-bold text-sm text-gray-900 line-clamp-1 group-hover:text-[#6369D1] transition-colors">🏰
-									11/28-12/5 바르셀로나+마드리드 · 동행 2명</h4>
-								<p class="text-[10px] text-gray-400 mt-1">나연 · 2026.09.07</p></a>
-						</div>
-					</div>
 				</div>
-				<div
-					class="hidden lg:flex flex-col items-center justify-center gap-3 rounded-2xl shrink-0"
-					style="width: 160px; min-height: 600px; background-color: var(- -brand-light); color: var(- -brand)">
-					<div
-						class="w-12 h-12 rounded-full flex items-center justify-center font-extrabold text-sm text-white"
-						style="background-color: var(- -brand)">AD</div>
-					<p class="text-xs font-semibold text-center px-3"
-						style="color: var(- -brand)">
-						우측 광고 영역<br>
-						<span class="text-[10px] font-normal opacity-60">(예:
-							160x600)</span>
+				<!-- ================================
+				     우측 광고
+				================================ -->
+				<div class="hidden lg:flex flex-col items-center justify-center gap-3 rounded-2xl shrink-0"
+					style="width: 160px; min-height: 600px; background-color: var(--brand-light); color: var(--brand);">
+					<div class="w-12 h-12 rounded-full flex items-center justify-center font-extrabold text-sm text-white"
+						style="background-color: var(--brand);">
+						AD
+					</div>
+					<p class="text-xs font-semibold text-center px-3" style="color: var(--brand);">
+						우측 광고 영역
+						<br>
+						<span class="text-[10px] font-normal opacity-60">
+							(예: 160x600)
+						</span>
 					</p>
 				</div>
 			</div>
 		</div>
-	</div><jsp:include page="/common/footer.jsp" /></body>
+	</div>
+	<jsp:include page="/common/footer.jsp" />
+</body>
 </html>

@@ -10,8 +10,28 @@
 		VALUES (#{userId}, #{title}, #{content}, #{img}, #{visibility}, #{status}, #{country}, #{recruitCount}, #{recruitStatus})
 	</insert>
 
-	<select id="selectMate" parameterType="Long" resultType="mate">
-
+	<!-- 여행 메이트 상세 조회 -->
+	<select id="selectMate" parameterType="long" resultType="dto.community.MateDto">
+		SELECT
+			m.mate_id AS mateId,
+			m.user_id AS userId,
+			m.title,
+			m.content,
+			m.img,
+			m.visibility,
+			m.view_count AS viewCount,
+			m.status,
+			m.deleted_by_user_id AS deletedByUserId,
+			m.deleted_at AS deletedAt,
+			m.created_at AS createdAt,
+			m.updated_at AS updatedAt,
+			m.country,
+			m.recruit_count AS recruitCount,
+			m.recruit_status AS recruitStatus,
+			u.nickname AS nickname
+		FROM TB_MATE m
+		JOIN TB_USER u ON m.user_id = u.user_id
+		WHERE m.mate_id = #{mateId} AND m.status = 'ACTIVE'
 	</select>
 
 	<update id="updateMate" parameterType="mate">
@@ -35,42 +55,63 @@
 	
 	<!-- 국가 + 검색 + 정렬 + 페이지 처리 -->
 	<select id="selectMateListByFilter" parameterType="map" resultType="dto.community.MateDto">
-		SELECT mate_id AS mateId, user_id AS userId, title, content, img, visibility, 
-		       view_count AS viewCount, status, deleted_by_user_id AS deletedByUserId, 
-		       deleted_at AS deletedAt, created_at AS createdAt, updated_at AS updatedAt, 
-		       country, recruit_count AS recruitCount, recruit_status AS recruitStatus
-		FROM TB_MATE
-		WHERE status = 'ACTIVE' AND visibility = 'PUBLIC'
+		SELECT
+			m.mate_id AS mateId,
+			m.user_id AS userId,
+			m.title,
+			m.content,
+			m.img,
+			m.visibility,
+			m.view_count AS viewCount,
+			m.status,
+			m.deleted_by_user_id AS deletedByUserId,
+			m.deleted_at AS deletedAt,
+			m.created_at AS createdAt,
+			m.updated_at AS updatedAt,
+			m.country,
+			m.recruit_count AS recruitCount,
+			m.recruit_status AS recruitStatus,
+			u.nickname AS nickname
+		FROM TB_MATE m
+		JOIN TB_USER u ON m.user_id = u.user_id
+		WHERE m.status = 'ACTIVE' AND m.visibility = 'PUBLIC'
 		<if test="countryKeywords != null and countryKeywords.size() > 0">
-			AND country IN
+			AND m.country IN
 			<foreach collection="countryKeywords" item="countryKeyword" open="(" separator="," close=")">
 				#{countryKeyword}
 			</foreach>
 		</if>
 		<if test="keyword != null and keyword != ''">
-			AND (title LIKE CONCAT('%', #{keyword}, '%') OR 
-			    content LIKE CONCAT('%', #{keyword}, '%') OR 
-			    country LIKE CONCAT('%', #{keyword}, '%'))
+			AND (
+				m.title LIKE CONCAT('%', #{keyword}, '%')
+				OR m.content LIKE CONCAT('%', #{keyword}, '%')
+				OR m.country LIKE CONCAT('%', #{keyword}, '%')
+			)
 		</if>
 		<choose>
+			<!-- 조회수순 -->
 			<when test="sort == 'views'">
-				ORDER BY view_count DESC, created_at DESC
+				ORDER BY
+					m.view_count DESC,
+					m.created_at DESC
 			</when>
-		
+			<!-- 댓글순 -->
 			<when test="sort == 'comments'">
 				ORDER BY (
 					SELECT COUNT(*)
 					FROM TB_MATE_COMMENT c
-					WHERE c.mate_id = TB_MATE.mate_id
-					AND c.status = 'ACTIVE'
-				) DESC, created_at DESC
+					WHERE c.mate_id = m.mate_id
+						AND c.status = 'ACTIVE'
+				) DESC,
+				m.created_at DESC
 			</when>
-		
+			<!-- 최신순 -->
 			<otherwise>
-				ORDER BY created_at DESC
+				ORDER BY m.created_at DESC
 			</otherwise>
 		</choose>
-		LIMIT #{pageSize} OFFSET #{offset}
+		LIMIT #{pageSize}
+		OFFSET #{offset}
 	</select>
 	
 	<!-- 검색 + 국가 조건에 맞는 전체 게시글 수 -->
@@ -96,24 +137,26 @@
 	<!-- ======================================== -->
 	<select id="selectMateWriteList" parameterType="map" resultType="dto.community.MateDto">
 		SELECT
-			mate_id AS mateId,
-			user_id AS userId,
-			title,
-			content,
-			img,
-			visibility,
-			view_count AS viewCount,
-			status,
-			deleted_by_user_id AS deletedByUserId,
-			deleted_at AS deletedAt,
-			created_at AS createdAt,
-			updated_at AS updatedAt,
-			country,
-			recruit_count AS recruitCount,
-			recruit_status AS recruitStatus
-		FROM TB_MATE
-		WHERE user_id = #{userId} AND status = 'ACTIVE'
-		ORDER BY created_at DESC
+			m.mate_id AS mateId,
+			m.user_id AS userId,
+			m.title,
+			m.content,
+			m.img,
+			m.visibility,
+			m.view_count AS viewCount,
+			m.status,
+			m.deleted_by_user_id AS deletedByUserId,
+			m.deleted_at AS deletedAt,
+			m.created_at AS createdAt,
+			m.updated_at AS updatedAt,
+			m.country,
+			m.recruit_count AS recruitCount,
+			m.recruit_status AS recruitStatus,
+			u.nickname AS nickname
+		FROM TB_MATE m
+		JOIN TB_USER u ON m.user_id = u.user_id
+		WHERE m.user_id = #{userId} AND m.status = 'ACTIVE'
+		ORDER BY m.created_at DESC
 		LIMIT #{pageSize}
 		OFFSET #{offset}
 	</select>
@@ -126,5 +169,12 @@
 		FROM TB_MATE
 		WHERE user_id = #{userId} AND status = 'ACTIVE'
 	</select>
+	
+	<!-- 여행 메이트 조회수 증가 -->
+	<update id="updateMateViewCount" parameterType="long">
+		UPDATE TB_MATE
+		SET view_count = view_count + 1
+		WHERE mate_id = #{mateId} AND status = 'ACTIVE'
+	</update>
 
 </mapper>

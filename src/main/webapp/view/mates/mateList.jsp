@@ -20,7 +20,7 @@ request.setAttribute("activePage", "mate");
 		<div class="flex" style="min-height: calc(100vh - 68px)">
 			<aside class="mate-list-sidebar shrink-0 w-48 flex-col gap-1 bg-white py-5 px-2 border-r overflow-y-auto" style="border-color: #ebebf5">
 			<div class="text-xs font-bold text-gray-400 uppercase tracking-widest px-3 mb-1">여행 메이트</div>
-				<a href="${pageContext.request.contextPath}/view/mates/mateList.jsp?mine=1"
+				<a href="${pageContext.request.contextPath}/mateWriteList"
 					class="flex items-center justify-between px-3 py-2.5 rounded-lg transition-colors group">
 					<span class="flex items-center gap-2 text-sm font-semibold text-gray-700">
 						<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -436,7 +436,7 @@ request.setAttribute("activePage", "mate");
 						</a>
 					</div>
 				</div>
-				<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+				<div class="mate-card-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
 					<jsp:include page="/view/mates/mateCardFragment.jsp" />
 				</div>
 				<!-- 무한 스크롤 로딩 영역 -->
