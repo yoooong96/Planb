@@ -9,11 +9,10 @@ request.setAttribute("activePage", "profile");
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>고객지원 · Planb</title><jsp:include page="/common/headStyles.jsp" />
-<link
-	rel="stylesheet"
+<link rel="stylesheet"
 	href="${pageContext.request.contextPath}/view/assets/css/support/support.css">
 <link rel="stylesheet"
-      href="${pageContext.request.contextPath}/view/assets/css/setting/settings.css">
+	href="${pageContext.request.contextPath}/view/assets/css/setting/settings.css">
 </head>
 <body class="site-shell"><jsp:include page="/common/header.jsp" /><div
 		class="settings-page">
@@ -38,16 +37,15 @@ request.setAttribute("activePage", "profile");
 									유형과 내용을 작성해 접수하는 화면입니다.</small></span><span>›</span></a>
 					</section>
 					<section class="settings-panel support-links support-legal-links">
-						<a
-							href="${pageContext.request.contextPath}/support/adGuide"><span
+						<a href="${pageContext.request.contextPath}/support/adGuide"><span
 							style="display: inline-flex; align-items: center; gap: 8px">📣
-								광고 문의하기</span><span>›</span></a>
-						<button type="button">
-							이용약관 <span>›</span>
-						</button>
-						<button type="button">
-							개인정보처리방침 <span>›</span>
-						</button>
+								광고 문의하기</span><span>›</span></a> <a
+							href="${pageContext.request.contextPath}/view/support/term.jsp">
+							<span>이용약관</span> <span>›</span>
+						</a> <a
+							href="${pageContext.request.contextPath}/view/support/privacyPolicy.jsp">
+							<span>개인정보처리방침</span> <span>›</span>
+						</a>
 					</section>
 				</div>
 			</main>
