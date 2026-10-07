@@ -45,6 +45,72 @@ public class ItineraryModify extends HttpServlet {
         itineraryService = new ItineraryServiceImpl();
         gson = createGson();
     }
+    
+	@Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		HttpSession session = request.getSession(false);
+
+		/*
+		 * 로그인 확인
+		 */
+		if (session == null || session.getAttribute("user") == null) {
+			response.sendRedirect(request.getContextPath() + "/auth/login");
+			return;
+		}
+
+		UserDto loginUser = (UserDto) session.getAttribute("user");
+
+		try {
+
+			/*
+			 * 수정할 일정 번호
+			 */
+			String itineraryIdParam = request.getParameter("id");
+			if (itineraryIdParam == null || itineraryIdParam.trim().isEmpty()) {
+				response.sendError(HttpServletResponse.SC_BAD_REQUEST, "수정할 일정 번호가 없습니다.");
+				return;
+			}
+
+			long itineraryId = Long.parseLong(itineraryIdParam);
+
+			/*
+			 * 기존 일정 조회
+			 */
+			ItineraryDto itinerary = itineraryService.getItinerary(itineraryId);
+
+			if (itinerary == null) {
+				response.sendError(HttpServletResponse.SC_NOT_FOUND, "일정을 찾을 수 없습니다.");
+				return;
+			}
+
+			/*
+			 * 본인 일정인지 확인
+			 */
+			if (itinerary.getUserId() == null || itinerary.getUserId().longValue() != loginUser.getUserId()) {
+				response.sendError(HttpServletResponse.SC_FORBIDDEN, "수정 권한이 없습니다.");
+				return;
+			}
+
+			/*
+			 * 수정 화면에서 사용할 기존 일정 JSON
+			 */
+			String itineraryJson = gson.toJson(itinerary);
+			request.setAttribute("editItineraryJson", itineraryJson);
+			request.setAttribute("itinerary", itinerary);
+
+			/*
+			 * 수정 화면으로 이동
+			 */
+			request.getRequestDispatcher("/view/itinerary/planeditor.jsp").forward(request, response);
+
+		} catch (NumberFormatException e) {
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "잘못된 일정 번호입니다.");
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new ServletException("일정 수정 화면을 불러오는 중 오류가 발생했습니다.", e);
+		}
+	}
 
     @Override
     protected void doPost(

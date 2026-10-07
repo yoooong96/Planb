@@ -98,4 +98,11 @@ public class ProfileFeedServiceImpl
                 .selectReceivedBookmarkCount(userId);
     }
 
+
+	@Override
+	public void deleteItinerary(long itineraryId, long userId) throws Exception {
+		profileFeedDao.deleteItinerary(itineraryId, userId);
+		
+	}
+
 }

@@ -1,6 +1,8 @@
 package dao.profile;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 
@@ -138,6 +140,18 @@ public class ProfileFeedDaoImpl implements ProfileFeedDao {
 	            userId
 	        );
 	    }
+	}
+
+	@Override
+	public void deleteItinerary(long itineraryId, long userId) throws Exception {
+		try(SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+			Map<String, Object> param = new HashMap<String, Object>();
+			param.put("itineraryId", itineraryId);
+			param.put("userId", userId);
+			sqlSession.update("mapper.itinerary.itinerary.deleteItinerary", param);
+			sqlSession.commit();
+		}
+		
 	}
 
 }

@@ -78,23 +78,21 @@ if (profilePath == null || profilePath.trim().isEmpty()) {
 내 여행 일정
 ========================= */
 
-List<ProfileFeedDto> myItineraries =(List<ProfileFeedDto>) request.getAttribute("myItineraries");
+List<ProfileFeedDto> myItineraries = (List<ProfileFeedDto>) request.getAttribute("myItineraries");
 
 if (myItineraries == null) {
- myItineraries = new java.util.ArrayList<ProfileFeedDto>();
+	myItineraries = new java.util.ArrayList<ProfileFeedDto>();
 }
 
-List<ProfileFeedDto> bookmarkedItineraries =(List<ProfileFeedDto>) request.getAttribute("bookmarkedItineraries");
+List<ProfileFeedDto> bookmarkedItineraries = (List<ProfileFeedDto>) request.getAttribute("bookmarkedItineraries");
 if (bookmarkedItineraries == null) {
 	bookmarkedItineraries = new java.util.ArrayList<ProfileFeedDto>();
 }
 
-List<ProfileFeedDto> likedItineraries =(List<ProfileFeedDto>) request.getAttribute("likedItineraries");
+List<ProfileFeedDto> likedItineraries = (List<ProfileFeedDto>) request.getAttribute("likedItineraries");
 if (likedItineraries == null) {
 	likedItineraries = new java.util.ArrayList<ProfileFeedDto>();
 }
-
-
 
 Integer postCount = (Integer) request.getAttribute("postCount");
 
@@ -796,7 +794,8 @@ if (bookmarkCount == null) {
 
 							<%
 							if (!thumbnail.isEmpty()) {
-							%> <img src="<%=ctx %><%=thumbnail%>" alt="<%=item.getTitle()%>"> <%
+							%> <img src="<%=ctx%><%=thumbnail%>" alt="<%=item.getTitle()%>">
+							<%
 							} else {
 							%> <span class="feed-fallback"></span> <%
  }
@@ -839,12 +838,13 @@ if (bookmarkCount == null) {
 
 
 								<a
-									href="<%=ctx%>/view/itinerary/planner.jsp?id=<%=item.getItineraryId()%>">
+									href="<%=ctx%>/itinerary/modify?id=<%=item.getItineraryId()%>">
 
 									수정 </a>
 
 
-								<button type="button" class="danger">삭제</button>
+								<button type="button" class="danger"
+									data-delete-itinerary="<%=item.getItineraryId()%>">삭제</button>
 
 
 							</div>
@@ -927,13 +927,13 @@ if (bookmarkCount == null) {
 
 							<%
 							if (!thumbnail.isEmpty()) {
-							%> <img src="<%=ctx %><%=thumbnail%>"
-							alt="<%=item.getTitle()%>"> <%
- } else {
- %> <span class="feed-fallback"></span> <%
+							%> <img src="<%=ctx%><%=thumbnail%>" alt="<%=item.getTitle()%>">
+							<%
+							} else {
+							%> <span class="feed-fallback"></span> <%
  }
- %> <span class="feed-hover"> <span
-								class="feed-hover-copy"> <strong> <%=item.getTitle()%>
+ %> <span class="feed-hover"> <span class="feed-hover-copy">
+									<strong> <%=item.getTitle()%>
 								</strong> <%
  if (!locationText.isEmpty()) {
  %> <small> <%=locationText%>
@@ -1019,13 +1019,13 @@ if (bookmarkCount == null) {
 
 							<%
 							if (!thumbnail.isEmpty()) {
-							%> <img src="<%=ctx %><%=thumbnail%>"
-							alt="<%=item.getTitle()%>"> <%
- } else {
- %> <span class="feed-fallback"></span> <%
+							%> <img src="<%=ctx%><%=thumbnail%>" alt="<%=item.getTitle()%>">
+							<%
+							} else {
+							%> <span class="feed-fallback"></span> <%
  }
- %> <span class="feed-hover"> <span
-								class="feed-hover-copy"> <strong> <%=item.getTitle()%>
+ %> <span class="feed-hover"> <span class="feed-hover-copy">
+									<strong> <%=item.getTitle()%>
 								</strong> <%
  if (!locationText.isEmpty()) {
  %> <small> <%=locationText%>
@@ -1489,27 +1489,15 @@ if (bookmarkCount == null) {
 	</script>
 
 	<script>
-		document
-				.addEventListener(
-						"DOMContentLoaded",
-						function() {
-
-							var modal = document
-									.getElementById("profileEditModal");
-							var openBtn = document
-									.getElementById("openProfileEditModal");
-							var closeBtn = document
-									.getElementById("closeProfileEditModal");
-							var cancelBtn = document
-									.getElementById("cancelProfileEditModal");
-							var imageInput = document
-									.getElementById("profileEditImageInput");
-							var preview = document
-									.getElementById("profileEditPreviewImage");
-							var empty = document
-									.getElementById("profileEditPreviewEmpty");
-							var form = document
-									.getElementById("profileEditModalForm");
+		document.addEventListener("DOMContentLoaded",function() {
+							var modal = document.getElementById("profileEditModal");
+							var openBtn = document.getElementById("openProfileEditModal");
+							var closeBtn = document.getElementById("closeProfileEditModal");
+							var cancelBtn = document.getElementById("cancelProfileEditModal");
+							var imageInput = document.getElementById("profileEditImageInput");
+							var preview = document.getElementById("profileEditPreviewImage");
+							var empty = document.getElementById("profileEditPreviewEmpty");
+							var form = document.getElementById("profileEditModalForm");
 
 							if (!modal || !openBtn) {
 								return;
@@ -1664,6 +1652,51 @@ if (bookmarkCount == null) {
 												});
 							}
 						});
+		
+		
+		document.addEventListener("DOMContentLoaded", function () {
+
+		    var contextPath = "<%=ctx%>";
+
+			var deleteButtons = document
+					.querySelectorAll("[data-delete-itinerary]");
+
+			deleteButtons.forEach(function(button) {
+
+				button.addEventListener("click", function(event) {
+
+					event.preventDefault();
+					event.stopPropagation();
+
+					var itineraryId = button
+							.getAttribute("data-delete-itinerary");
+
+					if (!confirm("이 일정을 삭제하시겠습니까?")) {
+						return;
+					}
+
+					var form = document.createElement("form");
+
+					form.method = "post";
+
+					form.action = contextPath + "/profile/itinerary/delete";
+
+					var input = document.createElement("input");
+
+					input.type = "hidden";
+
+					input.name = "itineraryId";
+
+					input.value = itineraryId;
+
+					form.appendChild(input);
+
+					document.body.appendChild(form);
+
+					form.submit();
+				});
+			});
+		});
 	</script>
 
 

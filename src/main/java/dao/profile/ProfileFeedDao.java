@@ -11,8 +11,7 @@ public interface ProfileFeedDao {
 	List<ProfileFeedDto> selectPublicItineraries(long userId) throws Exception;
 	List<ProfileFeedDto> selectPublicLikedItineraries(long userId)throws Exception;
 	List<ProfileFeedDto> selectPublicBookmarkedItineraries(long userId)throws Exception;
-
 	int selectReceivedLikeCount(long userId) throws Exception;
-
 	int selectReceivedBookmarkCount(long userId) throws Exception;
+	void deleteItinerary(long itineraryId, long userId) throws Exception;
 	}
