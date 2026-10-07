@@ -3,77 +3,95 @@ package dto.itinerary;
 import java.sql.Timestamp;
 
 public class ItineraryCartDto {
-	private long cartItemId;	// 장바구니 항목 번호
-	private long userId;		// 회원 번호
-	private String itemType;	// 항목 유형
-	private long itineraryId;	// 일정 번호
-	private long dayId;			// DAY 번호
-	private long blockId;		// 블록 번호
-	private Timestamp createdAt;// 담기 일시	
-	public ItineraryCartDto() {
+
+    private Long cartId;
+    private Long userId;
+    private Long sourceItineraryId;
+
+    private String authorNickname;
+    private String title;
+    private String country;
+
+    private Timestamp addedAt;
+
+    public ItineraryCartDto() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public ItineraryCartDto(long cartItemId, long userId, String itemType, long itineraryId, long dayId, long blockId,
-			Timestamp createdAt) {
+    
+	public ItineraryCartDto(Long cartId, Long userId, Long sourceItineraryId, String authorNickname, String title,
+			String country, Timestamp addedAt) {
 		super();
-		this.cartItemId = cartItemId;
+		this.cartId = cartId;
 		this.userId = userId;
-		this.itemType = itemType;
-		this.itineraryId = itineraryId;
-		this.dayId = dayId;
-		this.blockId = blockId;
-		this.createdAt = createdAt;
+		this.sourceItineraryId = sourceItineraryId;
+		this.authorNickname = authorNickname;
+		this.title = title;
+		this.country = country;
+		this.addedAt = addedAt;
 	}
-	public long getCartItemId() {
-		return cartItemId;
-	}
-	public void setCartItemId(long cartItemId) {
-		this.cartItemId = cartItemId;
-	}
-	public long getUserId() {
-		return userId;
-	}
-	public void setUserId(long userId) {
-		this.userId = userId;
-	}
-	public String getItemType() {
-		return itemType;
-	}
-	public void setItemType(String itemType) {
-		this.itemType = itemType;
-	}
-	public long getItineraryId() {
-		return itineraryId;
-	}
-	public void setItineraryId(long itineraryId) {
-		this.itineraryId = itineraryId;
-	}
-	public long getDayId() {
-		return dayId;
-	}
-	public void setDayId(long dayId) {
-		this.dayId = dayId;
-	}
-	public long getBlockId() {
-		return blockId;
-	}
-	public void setBlockId(long blockId) {
-		this.blockId = blockId;
-	}
-	public Timestamp getCreatedAt() {
-		return createdAt;
-	}
-	public void setCreatedAt(Timestamp createdAt) {
-		this.createdAt = createdAt;
-	}
+
+	public Long getCartId() {
+        return cartId;
+    }
+
+    public void setCartId(Long cartId) {
+        this.cartId = cartId;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public Long getSourceItineraryId() {
+        return sourceItineraryId;
+    }
+
+    public void setSourceItineraryId(Long sourceItineraryId) {
+        this.sourceItineraryId = sourceItineraryId;
+    }
+
+    public String getAuthorNickname() {
+        return authorNickname;
+    }
+
+    public void setAuthorNickname(String authorNickname) {
+        this.authorNickname = authorNickname;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public Timestamp getAddedAt() {
+        return addedAt;
+    }
+
+    public void setAddedAt(Timestamp addedAt) {
+        this.addedAt = addedAt;
+    }
+
 	@Override
 	public String toString() {
-		return "CartItemDto [cartItemId=" + cartItemId + ", userId=" + userId + ", itemType=" + itemType
-				+ ", itineraryId=" + itineraryId + ", dayId=" + dayId + ", blockId=" + blockId + ", createdAt="
-				+ createdAt + "]";
+		return "ItineraryCartDto [cartId=" + cartId + ", userId=" + userId + ", sourceItineraryId=" + sourceItineraryId
+				+ ", authorNickname=" + authorNickname + ", title=" + title + ", country=" + country + ", addedAt="
+				+ addedAt + "]";
 	}
-	
-	
-	
+    
 }

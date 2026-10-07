@@ -958,3 +958,49 @@
 	updateFormState();
 
 })();
+
+/* 일정 링크 공유 */
+(function () {
+
+    const button =
+        document.getElementById("scheduleShareButton");
+
+    if (!button) {
+        return;
+    }
+
+    button.addEventListener("click", async function () {
+
+        if (button.disabled) {
+            return;
+        }
+
+        const url = new URL(
+            button.dataset.shareUrl,
+            window.location.origin
+        ).href;
+
+        button.disabled = true;
+
+        try {
+            if (!navigator.clipboard || !window.isSecureContext) {
+                throw new Error("클립보드 사용 불가");
+            }
+
+            await navigator.clipboard.writeText(url);
+
+            window.tripilyToast("링크를 복사했어요.");
+
+        } catch (error) {
+            // 자동 복사가 제한된 환경에서는 직접 복사 안내
+            window.prompt(
+                "아래 링크를 복사해서 공유해주세요.",
+                url
+            );
+
+        } finally {
+            button.disabled = false;
+        }
+    });
+
+})();

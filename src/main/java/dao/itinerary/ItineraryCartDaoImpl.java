@@ -12,171 +12,158 @@ import dto.itinerary.ItineraryDto;
 
 public class ItineraryCartDaoImpl implements ItineraryCartDao {
 
-    private static final String NAMESPACE =
-            "mapper.itinerary.itineraryCart.";
+	private static final String NAMESPACE = "mapper.itinerary.itineraryCart.";
 
+	@Override
+	public List<Map<String, Object>> selectCartItems(SqlSession sqlSession, Long userId) throws Exception {
 
-    @Override
-    public List<Map<String, Object>> selectCartItems(
-            SqlSession sqlSession,
-            Long userId) throws Exception {
+		return sqlSession.selectList(NAMESPACE + "selectCartItems", userId);
+	}
 
-        return sqlSession.selectList(
-                NAMESPACE + "selectCartItems",
-                userId
-        );
-    }
+	@Override
+	public ItineraryDto selectSourceItinerary(SqlSession sqlSession, Long itineraryId) throws Exception {
 
+		return sqlSession.selectOne(NAMESPACE + "selectSourceItinerary", itineraryId);
+	}
 
-    @Override
-    public ItineraryDto selectSourceItinerary(
-            SqlSession sqlSession,
-            Long itineraryId) throws Exception {
+	@Override
+	public ItineraryDayDto selectSourceDay(SqlSession sqlSession, Long dayId) throws Exception {
 
-        return sqlSession.selectOne(
-                NAMESPACE + "selectSourceItinerary",
-                itineraryId
-        );
-    }
+		return sqlSession.selectOne(NAMESPACE + "selectSourceDay", dayId);
+	}
 
+	@Override
+	public ItineraryBlockDto selectSourceBlock(SqlSession sqlSession, Long blockId) throws Exception {
 
-    @Override
-    public ItineraryDayDto selectSourceDay(
-            SqlSession sqlSession,
-            Long dayId) throws Exception {
+		return sqlSession.selectOne(NAMESPACE + "selectSourceBlock", blockId);
+	}
 
-        return sqlSession.selectOne(
-                NAMESPACE + "selectSourceDay",
-                dayId
-        );
-    }
+	@Override
+	public Long selectItineraryIdByDayId(SqlSession sqlSession, Long dayId) throws Exception {
 
+		return sqlSession.selectOne(NAMESPACE + "selectItineraryIdByDayId", dayId);
+	}
 
-    @Override
-    public ItineraryBlockDto selectSourceBlock(
-            SqlSession sqlSession,
-            Long blockId) throws Exception {
+	@Override
+	public Long selectItineraryIdByBlockId(SqlSession sqlSession, Long blockId) throws Exception {
 
-        return sqlSession.selectOne(
-                NAMESPACE + "selectSourceBlock",
-                blockId
-        );
-    }
+		return sqlSession.selectOne(NAMESPACE + "selectItineraryIdByBlockId", blockId);
+	}
 
+	@Override
+	public int insertItinerary(SqlSession sqlSession, Long userId, Long itineraryId) throws Exception {
 
-    @Override
-    public Long selectItineraryIdByDayId(
-            SqlSession sqlSession,
-            Long dayId) throws Exception {
+		return sqlSession.insert(NAMESPACE + "insertItinerary", param(userId, "itineraryId", itineraryId));
+	}
 
-        return sqlSession.selectOne(
-                NAMESPACE + "selectItineraryIdByDayId",
-                dayId
-        );
-    }
+	@Override
+	public int insertDay(SqlSession sqlSession, Long userId, Long dayId) throws Exception {
 
+		return sqlSession.insert(NAMESPACE + "insertDay", param(userId, "dayId", dayId));
+	}
 
-    @Override
-    public Long selectItineraryIdByBlockId(
-            SqlSession sqlSession,
-            Long blockId) throws Exception {
+	@Override
+	public int insertBlock(SqlSession sqlSession, Long userId, Long blockId) throws Exception {
 
-        return sqlSession.selectOne(
-                NAMESPACE + "selectItineraryIdByBlockId",
-                blockId
-        );
-    }
+		return sqlSession.insert(NAMESPACE + "insertBlock", param(userId, "blockId", blockId));
+	}
 
+	@Override
+	public int deleteItinerary(SqlSession sqlSession, Long userId, Long itineraryId) throws Exception {
 
-    @Override
-    public int insertItinerary(
-            SqlSession sqlSession,
-            Long userId,
-            Long itineraryId) throws Exception {
+		return sqlSession.delete(NAMESPACE + "deleteItinerary", param(userId, "itineraryId", itineraryId));
+	}
 
-        return sqlSession.insert(
-                NAMESPACE + "insertItinerary",
-                param(userId, "itineraryId", itineraryId)
-        );
-    }
+	@Override
+	public int deleteDay(SqlSession sqlSession, Long userId, Long dayId) throws Exception {
 
+		return sqlSession.delete(NAMESPACE + "deleteDay", param(userId, "dayId", dayId));
+	}
 
-    @Override
-    public int insertDay(
-            SqlSession sqlSession,
-            Long userId,
-            Long dayId) throws Exception {
+	@Override
+	public int deleteBlock(SqlSession sqlSession, Long userId, Long blockId) throws Exception {
 
-        return sqlSession.insert(
-                NAMESPACE + "insertDay",
-                param(userId, "dayId", dayId)
-        );
-    }
+		return sqlSession.delete(NAMESPACE + "deleteBlock", param(userId, "blockId", blockId));
+	}
 
+	private Map<String, Object> param(Long userId, String key, Long value) {
 
-    @Override
-    public int insertBlock(
-            SqlSession sqlSession,
-            Long userId,
-            Long blockId) throws Exception {
+		Map<String, Object> map = new HashMap<>();
 
-        return sqlSession.insert(
-                NAMESPACE + "insertBlock",
-                param(userId, "blockId", blockId)
-        );
-    }
+		map.put("userId", userId);
+		map.put(key, value);
 
+		return map;
+	}
+	
+	// 변경된 카트 daoimpl
+	///////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	@Override
+	public Long selectCartId(SqlSession sqlSession, Long userId, Long itineraryId) throws Exception {
 
-    @Override
-    public int deleteItinerary(
-            SqlSession sqlSession,
-            Long userId,
-            Long itineraryId) throws Exception {
+		Map<String, Object> params = new HashMap<>();
 
-        return sqlSession.delete(
-                NAMESPACE + "deleteItinerary",
-                param(userId, "itineraryId", itineraryId)
-        );
-    }
+		params.put("userId", userId);
+		params.put("itineraryId", itineraryId);
 
+		return sqlSession.selectOne("mapper.itinerary.itineraryCart.selectCartId", params);
+	}
 
-    @Override
-    public int deleteDay(
-            SqlSession sqlSession,
-            Long userId,
-            Long dayId) throws Exception {
+	@Override
+	public int insertCartSnapshot(SqlSession sqlSession, Long userId, Long itineraryId) throws Exception {
 
-        return sqlSession.delete(
-                NAMESPACE + "deleteDay",
-                param(userId, "dayId", dayId)
-        );
-    }
+		Map<String, Object> params = new HashMap<>();
 
+		params.put("userId", userId);
+		params.put("itineraryId", itineraryId);
 
-    @Override
-    public int deleteBlock(
-            SqlSession sqlSession,
-            Long userId,
-            Long blockId) throws Exception {
+		return sqlSession.insert("mapper.itinerary.itineraryCart.insertCartSnapshot", params);
+	}
 
-        return sqlSession.delete(
-                NAMESPACE + "deleteBlock",
-                param(userId, "blockId", blockId)
-        );
-    }
+	@Override
+	public Long selectDayCartId(SqlSession sqlSession, Long cartId, Long dayId) throws Exception {
 
+		Map<String, Object> params = new HashMap<>();
 
-    private Map<String, Object> param(
-            Long userId,
-            String key,
-            Long value) {
+		params.put("cartId", cartId);
+		params.put("dayId", dayId);
 
-        Map<String, Object> map =
-                new HashMap<>();
+		return sqlSession.selectOne("mapper.itinerary.itineraryCart.selectDayCartId", params);
+	}
 
-        map.put("userId", userId);
-        map.put(key, value);
+	@Override
+	public int insertDaySnapshot(SqlSession sqlSession, Long userId, Long cartId, Long dayId) throws Exception {
 
-        return map;
-    }
+		Map<String, Object> params = new HashMap<>();
+
+		params.put("userId", userId);
+		params.put("cartId", cartId);
+		params.put("dayId", dayId);
+
+		return sqlSession.insert("mapper.itinerary.itineraryCart.insertDaySnapshot", params);
+	}
+
+	@Override
+	public Long selectBlockCartId(SqlSession sqlSession, Long dayCartId, Long blockId) throws Exception {
+
+		Map<String, Object> params = new HashMap<>();
+
+		params.put("dayCartId", dayCartId);
+		params.put("blockId", blockId);
+
+		return sqlSession.selectOne("mapper.itinerary.itineraryCart.selectBlockCartId", params);
+	}
+
+	@Override
+	public int insertBlockSnapshot(SqlSession sqlSession, Long userId, Long dayCartId, Long blockId) throws Exception {
+
+		Map<String, Object> params = new HashMap<>();
+
+		params.put("userId", userId);
+		params.put("dayCartId", dayCartId);
+		params.put("blockId", blockId);
+
+		return sqlSession.insert("mapper.itinerary.itineraryCart.insertBlockSnapshot", params);
+	}
 }

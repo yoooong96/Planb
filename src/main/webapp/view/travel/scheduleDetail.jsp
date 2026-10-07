@@ -38,6 +38,10 @@ request.setAttribute("activePage", "travel");
 				</nav>
 				<div class="ml-auto flex items-center gap-1.5 shrink-0">
 					<button
+						id="scheduleShareButton"
+						type="button"
+						aria-label="일정 링크 복사"
+						data-share-url="${pageContext.request.contextPath}/schedules/detail?id=${itinerary.itineraryId}"
 						class="w-8 h-8 rounded-full border flex items-center justify-center text-gray-400 hover:text-gray-700 hover:border-gray-300 transition-all"
 						style="border-color: #D1D2F9" title="공유">
 						<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor"
@@ -262,7 +266,9 @@ request.setAttribute("activePage", "travel");
 							data-is-owner="${not empty sessionScope.user and itinerary.userId eq sessionScope.user.userId}"
 							data-login-url="${pageContext.request.contextPath}/auth/login"
 							aria-haspopup="dialog" aria-controls="scheduleReportModal"
-							class="flex items-center gap-1 px-3 py-2.5 rounded-xl text-[12px] font-bold border transition-all hover:bg-[#FFE8DE] hover:border-[#FF8A5B] hover:text-[#D95B2B]">
+							class="flex items-center gap-1 px-3 py-2.5 rounded-xl text-[12px] font-bold border transition-all hover:bg-[#FFE8DE] hover:border-[#FF8A5B] hover:text-[#D95B2B]"
+							style="background: #FFF5F0; border-color: #FFB08A; color: #E76F3C">
+							
 							<!-- style="background: #FFF5F0; border-color: #FFB08A; color: #E76F3C" -->
 							<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor"
 								viewBox="0 0 24 24">
@@ -284,8 +290,7 @@ request.setAttribute("activePage", "travel");
 						class="flex items-center gap-2.5 flex-1 min-w-0
                hover:opacity-75 transition-opacity text-left">
 
-						<div
-							class="w-9 h-9 rounded-full overflow-hidden border-2 shrink-0 flex items-center justify-center"
+						<div class="w-9 h-9 rounded-full overflow-hidden border-2 shrink-0 flex items-center justify-center"
 							style="border-color: #D1D2F9; background: #F0F0FF; color: #6369D1">
 
 							<c:choose>
@@ -294,7 +299,7 @@ request.setAttribute("activePage", "travel");
 									<c:choose>
 										<c:when
 											test="${itinerary.profileImg.startsWith('https://')
-                            or itinerary.profileImg.startsWith('http://')}">
+                            					or itinerary.profileImg.startsWith('http://')}">
 											<c:set var="authorImageUrl" value="${itinerary.profileImg}" />
 										</c:when>
 
@@ -316,9 +321,9 @@ request.setAttribute("activePage", "travel");
 								<c:otherwise>
 									<svg width="20" height="20" viewBox="0 0 24 24" fill="none"
 										stroke="currentColor" stroke-width="2" aria-hidden="true">
-                        <circle cx="12" cy="8" r="4" />
-                        <path d="M4 21v-2a8 8 0 0 1 16 0v2" />
-                    </svg>
+                        				<circle cx="12" cy="8" r="4" />
+                        				<path d="M4 21v-2a8 8 0 0 1 16 0v2" />
+                    				</svg>
 								</c:otherwise>
 							</c:choose>
 
@@ -326,11 +331,10 @@ request.setAttribute("activePage", "travel");
 
 						<div class="min-w-0">
 							<p
-								class="text-[13px] font-bold text-gray-900
-                      hover:underline truncate">
+								class="text-[13px] font-bold text-gray-900 hover:underline truncate">
 								<c:out value="${itinerary.nickname}" />
 							</p>
-
+	
 							<p class="text-[11px] text-gray-400">
 								<fmt:formatDate value="${itinerary.createdAt}"
 									pattern="yyyy.MM.dd" />
@@ -848,6 +852,6 @@ request.setAttribute("activePage", "travel");
 		src="${pageContext.request.contextPath}/view/assets/js/auth/tripily.js"></script>
 
 	<script
-		src="${pageContext.request.contextPath}/view/assets/js/travel/scheduleDetail.js?v=7"></script>
+		src="${pageContext.request.contextPath}/view/assets/js/travel/scheduleDetail.js?v=8"></script>
 </body>
 </html>

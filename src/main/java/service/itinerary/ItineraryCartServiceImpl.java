@@ -3,6 +3,7 @@ package service.itinerary;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +15,8 @@ import dao.itinerary.ItineraryBlockDao;
 import dao.itinerary.ItineraryBlockDaoImpl;
 import dao.itinerary.ItineraryBlockImageDao;
 import dao.itinerary.ItineraryBlockImageDaoImpl;
+import dao.itinerary.ItineraryBookmarkDao;
+import dao.itinerary.ItineraryBookmarkDaoImpl;
 import dao.itinerary.ItineraryCartDao;
 import dao.itinerary.ItineraryCartDaoImpl;
 import dao.itinerary.ItineraryDayDao;
@@ -727,5 +730,285 @@ public class ItineraryCartServiceImpl
 
         int run(SqlSession sqlSession)
                 throws Exception;
+    }
+    
+    //private final ItineraryCartDao cartDao = new ItineraryCartDaoImpl();
+
+    private final ItineraryBookmarkDao bookmarkDao = new ItineraryBookmarkDaoImpl();
+
+    //private final ItineraryDayDao dayDao = new ItineraryDayDaoImpl();
+
+    //private final ItineraryBlockDao blockDao = new ItineraryBlockDaoImpl();
+
+    @Override
+    public Map<String, Object> addToCart(
+            Long loginUserId,
+            Long itineraryId,
+            String itemType,
+            Long targetId) throws Exception {
+
+        if (loginUserId == null || loginUserId <= 0) {
+            throw new SecurityException(
+                "로그인 후 이용할 수 있습니다."
+            );
+        }
+
+        if (itineraryId == null || itineraryId <= 0
+                || targetId == null || targetId <= 0) {
+
+            throw new IllegalArgumentException(
+                "올바른 담기 대상이 아닙니다."
+            );
+        }
+
+        if (!"ITINERARY".equals(itemType)
+                && !"DAY".equals(itemType)
+                && !"BLOCK".equals(itemType)) {
+
+            throw new IllegalArgumentException(
+                "올바른 담기 유형이 아닙니다."
+            );
+        }
+
+        if ("ITINERARY".equals(itemType)
+                && !itineraryId.equals(targetId)) {
+
+            throw new IllegalArgumentException(
+                "일정 번호가 일치하지 않습니다."
+            );
+        }
+
+        try (SqlSession sqlSession =
+                MybatisSqlSessionFactory
+                    .getSqlSessionFactory()
+                    .openSession(false)) {
+
+            try {
+                // 같은 일정의 담기 요청을 순서대로 처리
+                ItineraryDto itinerary =
+                    bookmarkDao.selectBookmarkTargetForUpdate(
+                        sqlSession,
+                        itineraryId
+                    );
+
+                if (itinerary == null
+                        || !"ACTIVE".equals(itinerary.getStatus())) {
+
+                    throw new IllegalArgumentException(
+                        "일정을 찾을 수 없습니다."
+                    );
+                }
+
+                boolean owner =
+                    loginUserId.equals(itinerary.getUserId());
+
+                if (!owner
+                        && !"PUBLIC".equals(itinerary.getVisibility())) {
+
+                    throw new SecurityException(
+                        "공개된 일정만 담을 수 있습니다."
+                    );
+                }
+
+                // 선택한 범위만 구성하고 실제 소속 확인
+                List<ItineraryDayDto> selectedDays =
+                    selectTargetDays(
+                        sqlSession,
+                        itineraryId,
+                        itemType,
+                        targetId
+                    );
+
+                Long cartId = cartDao.selectCartId(
+                    sqlSession,
+                    loginUserId,
+                    itineraryId
+                );
+
+                boolean addedItinerary = cartId == null;
+
+                if (addedItinerary) {
+                    cartDao.insertCartSnapshot(
+                        sqlSession,
+                        loginUserId,
+                        itineraryId
+                    );
+
+                    cartId = cartDao.selectCartId(
+                        sqlSession,
+                        loginUserId,
+                        itineraryId
+                    );
+
+                    if (cartId == null) {
+                        throw new IllegalStateException(
+                            "카트 일정 저장에 실패했습니다."
+                        );
+                    }
+                }
+
+                int addedDays = 0;
+                int addedBlocks = 0;
+
+                for (ItineraryDayDto day : selectedDays) {
+
+                    Long dayCartId = cartDao.selectDayCartId(
+                        sqlSession,
+                        cartId,
+                        day.getDayId()
+                    );
+
+                    if (dayCartId == null) {
+                        cartDao.insertDaySnapshot(
+                            sqlSession,
+                            loginUserId,
+                            cartId,
+                            day.getDayId()
+                        );
+
+                        dayCartId = cartDao.selectDayCartId(
+                            sqlSession,
+                            cartId,
+                            day.getDayId()
+                        );
+
+                        if (dayCartId == null) {
+                            throw new IllegalStateException(
+                                "카트 DAY 저장에 실패했습니다."
+                            );
+                        }
+
+                        addedDays++;
+                    }
+
+                    for (ItineraryBlockDto block : day.getBlocks()) {
+
+                        Long blockCartId =
+                            cartDao.selectBlockCartId(
+                                sqlSession,
+                                dayCartId,
+                                block.getBlockId()
+                            );
+
+                        if (blockCartId != null) {
+                            // 기존 복사본은 변경하지 않음
+                            continue;
+                        }
+
+                        cartDao.insertBlockSnapshot(
+                            sqlSession,
+                            loginUserId,
+                            dayCartId,
+                            block.getBlockId()
+                        );
+
+                        blockCartId = cartDao.selectBlockCartId(
+                            sqlSession,
+                            dayCartId,
+                            block.getBlockId()
+                        );
+
+                        if (blockCartId == null) {
+                            throw new IllegalStateException(
+                                "카트 블록 저장에 실패했습니다."
+                            );
+                        }
+
+                        addedBlocks++;
+                    }
+                }
+
+                boolean changed =
+                    addedItinerary || addedDays > 0 || addedBlocks > 0;
+
+                Map<String, Object> result = new HashMap<>();
+
+                result.put("cartId", cartId);
+                result.put("changed", changed);
+                result.put("addedDays", addedDays);
+                result.put("addedBlocks", addedBlocks);
+
+                result.put(
+                    "message",
+                    changed
+                        ? "장바구니에 담았어요."
+                        : "이미 장바구니에 담긴 내용입니다."
+                );
+
+                sqlSession.commit();
+
+                return result;
+
+            } catch (Exception e) {
+                sqlSession.rollback();
+                throw e;
+            }
+        }
+    }
+
+    private List<ItineraryDayDto> selectTargetDays(
+            SqlSession sqlSession,
+            Long itineraryId,
+            String itemType,
+            Long targetId) throws Exception {
+
+        List<ItineraryDayDto> days =
+            dayDao.selectItineraryDays(
+                sqlSession,
+                itineraryId
+            );
+
+        List<ItineraryDayDto> selectedDays =
+            new ArrayList<>();
+
+        for (ItineraryDayDto day : days) {
+
+            if ("DAY".equals(itemType)
+                    && !targetId.equals(day.getDayId())) {
+                continue;
+            }
+
+            List<ItineraryBlockDto> blocks =
+                blockDao.selectItineraryBlocks(
+                    sqlSession,
+                    day.getDayId()
+                );
+
+            if ("BLOCK".equals(itemType)) {
+
+                List<ItineraryBlockDto> selectedBlocks =
+                    new ArrayList<>();
+
+                for (ItineraryBlockDto block : blocks) {
+                    if (targetId.equals(block.getBlockId())) {
+                        selectedBlocks.add(block);
+                        break;
+                    }
+                }
+
+                if (selectedBlocks.isEmpty()) {
+                    continue;
+                }
+
+                day.setBlocks(selectedBlocks);
+                selectedDays.add(day);
+
+                break;
+
+            } else {
+                day.setBlocks(blocks);
+                selectedDays.add(day);
+            }
+        }
+
+        if (!"ITINERARY".equals(itemType)
+                && selectedDays.isEmpty()) {
+
+            throw new IllegalArgumentException(
+                "해당 일정에 속한 담기 대상을 찾을 수 없습니다."
+            );
+        }
+
+        return selectedDays;
     }
 }
