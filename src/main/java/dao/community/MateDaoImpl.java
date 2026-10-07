@@ -90,4 +90,31 @@ public class MateDaoImpl implements MateDao {
 			throw e;
 		}
 	}
+	
+	@Override
+	public List<MateDto> selectMateWriteList(Long userId, int pageSize, int offset) {
+		Map<String, Object> param = new HashMap<>();
+		param.put("userId", userId);
+		param.put("pageSize", pageSize);
+		param.put("offset", offset);
+
+		try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+			return sqlSession.selectList("mapper.community.mate.selectMateWriteList", param);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+
+	@Override
+	public int countMateWriteList(Long userId) {
+		Map<String, Object> param = new HashMap<>();
+		param.put("userId", userId);
+		try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+			return sqlSession.selectOne("mapper.community.mate.countMateWriteList", param);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
 }

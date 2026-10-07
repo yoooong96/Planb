@@ -18,17 +18,12 @@ public interface MateDao {
 	List<MateDto> selectMateList();
 
 	// 검색 + 국가 + 정렬 + 페이지 처리
-	List<MateDto> selectMateListByFilter(
-			List<String> countryKeywords,
-			String keyword,
-			String sort,
-			int pageSize,
-			int offset
-	);
+	List<MateDto> selectMateListByFilter(List<String> countryKeywords, String keyword, String sort, int pageSize, int offset);
 
 	// 검색 + 국가 조건에 맞는 전체 게시글 수
-	int countMateListByFilter(
-			List<String> countryKeywords,
-			String keyword
-	);
+	int countMateListByFilter(List<String> countryKeywords, String keyword);
+	
+	List<MateDto> selectMateWriteList(Long userId, int pageSize, int offset);
+
+	int countMateWriteList(Long userId);
 }

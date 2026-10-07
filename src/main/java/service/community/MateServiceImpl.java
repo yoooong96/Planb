@@ -50,5 +50,15 @@ public class MateServiceImpl implements MateService {
 	public int countMateListByFilter(List<String> countryKeywords, String keyword) {
 		return mateDao.countMateListByFilter(countryKeywords, keyword);
 	}
+	
+	@Override
+	public List<MateDto> selectMateWriteList(Long userId, int pageSize, int offset) {
+		return mateDao.selectMateWriteList(userId, pageSize, offset);
+	}
+
+	@Override
+	public int countMateWriteList(Long userId) {
+		return mateDao.countMateWriteList(userId);
+	}
 
 }

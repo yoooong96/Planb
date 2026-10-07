@@ -14,4 +14,7 @@ public interface MateService {
 	List<MateDto> selectMateList();
 	List<MateDto> selectMateListByFilter(List<String> countryKeywords, String keyword, String sort, int pageSize, int offset);
 	int countMateListByFilter(List<String> countryKeywords, String keyword);
+	
+	List<MateDto> selectMateWriteList(Long userId, int pageSize, int offset);
+	int countMateWriteList(Long userId);
 }

@@ -90,5 +90,41 @@
 			    country LIKE CONCAT('%', #{keyword}, '%'))
 		</if>
 	</select>
+	
+	<!-- ======================================== -->
+	<!-- 내가 작성한 여행 메이트 목록 -->
+	<!-- ======================================== -->
+	<select id="selectMateWriteList" parameterType="map" resultType="dto.community.MateDto">
+		SELECT
+			mate_id AS mateId,
+			user_id AS userId,
+			title,
+			content,
+			img,
+			visibility,
+			view_count AS viewCount,
+			status,
+			deleted_by_user_id AS deletedByUserId,
+			deleted_at AS deletedAt,
+			created_at AS createdAt,
+			updated_at AS updatedAt,
+			country,
+			recruit_count AS recruitCount,
+			recruit_status AS recruitStatus
+		FROM TB_MATE
+		WHERE user_id = #{userId} AND status = 'ACTIVE'
+		ORDER BY created_at DESC
+		LIMIT #{pageSize}
+		OFFSET #{offset}
+	</select>
+
+	<!-- ======================================== -->
+	<!-- 내가 작성한 여행 메이트 게시글 수 -->
+	<!-- ======================================== -->
+	<select id="countMateWriteList" parameterType="map" resultType="int">
+		SELECT COUNT(*)
+		FROM TB_MATE
+		WHERE user_id = #{userId} AND status = 'ACTIVE'
+	</select>
 
 </mapper>
