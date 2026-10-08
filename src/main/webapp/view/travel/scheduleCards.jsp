@@ -150,7 +150,7 @@
                 <path d="M4 21c0-4.3 3.6-7 8-7s8 2.7 8 7" />
             </svg> <c:if test="${not empty schedule.profileImg}">
 							<c:url var="authorImageUrl"
-								value="/profiles/${schedule.profileImg}" />
+								value="uploads/profile/${schedule.profileImg}" />
 
 							<img src="<c:out value='${authorImageUrl}'/>" alt=""
 								loading="lazy"

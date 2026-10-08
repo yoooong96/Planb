@@ -71,11 +71,11 @@
 
 			button.setAttribute(
 				"aria-label",
-				result.liked ? "좋아요 취소" : "좋아요"
+				button.title = result.liked ? "좋아요 취소" : "좋아요"
 			);
 
 			button.style.color =
-				result.liked ? "#ef4444" : "#94a3b8";
+				result.liked ? "#ef4444" : "#64748b";
 
 			const icon = button.querySelector("svg");
 
@@ -960,162 +960,162 @@
 })();
 
 /* 일정 링크 공유 */
-(function () {
+(function() {
 
-    const button =
-        document.getElementById("scheduleShareButton");
+	const button =
+		document.getElementById("scheduleShareButton");
 
-    if (!button) {
-        return;
-    }
+	if (!button) {
+		return;
+	}
 
-    button.addEventListener("click", async function () {
+	button.addEventListener("click", async function() {
 
-        if (button.disabled) {
-            return;
-        }
+		if (button.disabled) {
+			return;
+		}
 
-        const url = new URL(
-            button.dataset.shareUrl,
-            window.location.origin
-        ).href;
+		const url = new URL(
+			button.dataset.shareUrl,
+			window.location.origin
+		).href;
 
-        button.disabled = true;
+		button.disabled = true;
 
-        try {
-            if (!navigator.clipboard || !window.isSecureContext) {
-                throw new Error("클립보드 사용 불가");
-            }
+		try {
+			if (!navigator.clipboard || !window.isSecureContext) {
+				throw new Error("클립보드 사용 불가");
+			}
 
-            await navigator.clipboard.writeText(url);
+			await navigator.clipboard.writeText(url);
 
-            window.tripilyToast("링크를 복사했어요.");
+			window.tripilyToast("링크를 복사했어요.");
 
-        } catch (error) {
-            // 자동 복사가 제한된 환경에서는 직접 복사 안내
-            window.prompt(
-                "아래 링크를 복사해서 공유해주세요.",
-                url
-            );
+		} catch (error) {
+			// 자동 복사가 제한된 환경에서는 직접 복사 안내
+			window.prompt(
+				"아래 링크를 복사해서 공유해주세요.",
+				url
+			);
 
-        } finally {
-            button.disabled = false;
-        }
-    });
+		} finally {
+			button.disabled = false;
+		}
+	});
 
 })();
 
 /* 전체 일정·DAY·BLOCK 담기 */
-(function () {
+(function() {
 
-    const root = document.getElementById("scheduleDetail");
+	const root = document.getElementById("scheduleDetail");
 
-    if (!root) {
-        return;
-    }
+	if (!root) {
+		return;
+	}
 
-    let processing = false;
+	let processing = false;
 
-    root.addEventListener("click", async function (event) {
+	root.addEventListener("click", async function(event) {
 
-        const button = event.target.closest("[data-cart-add]");
+		const button = event.target.closest("[data-cart-add]");
 
-        if (!button || !root.contains(button)) {
-            return;
-        }
+		if (!button || !root.contains(button)) {
+			return;
+		}
 
-        event.preventDefault();
+		event.preventDefault();
 
-        if (root.dataset.loggedIn !== "true") {
-            window.location.href = root.dataset.loginUrl;
-            return;
-        }
+		if (root.dataset.loggedIn !== "true") {
+			window.location.href = root.dataset.loginUrl;
+			return;
+		}
 
-        if (processing) {
-            return;
-        }
+		if (processing) {
+			return;
+		}
 
-        const itemType = button.dataset.cartAdd;
-        const targetId = button.dataset.targetId;
+		const itemType = button.dataset.cartAdd;
+		const targetId = button.dataset.targetId;
 
-        if (!targetId || !root.dataset.itineraryId
-                || !root.dataset.cartUrl) {
-            window.tripilyToast("담기 요청 정보를 확인해주세요.");
-            return;
-        }
+		if (!targetId || !root.dataset.itineraryId
+			|| !root.dataset.cartUrl) {
+			window.tripilyToast("담기 요청 정보를 확인해주세요.");
+			return;
+		}
 
-        processing = true;
+		processing = true;
 
-        // 서로 다른 담기 버튼을 동시에 누르는 것도 방지
-        const buttons = Array.from(
-            root.querySelectorAll("[data-cart-add]")
-        );
+		// 서로 다른 담기 버튼을 동시에 누르는 것도 방지
+		const buttons = Array.from(
+			root.querySelectorAll("[data-cart-add]")
+		);
 
-        const previousDisabled = buttons.map(function (item) {
-            return item.disabled;
-        });
+		const previousDisabled = buttons.map(function(item) {
+			return item.disabled;
+		});
 
-        buttons.forEach(function (item) {
-            item.disabled = true;
-        });
+		buttons.forEach(function(item) {
+			item.disabled = true;
+		});
 
-        button.setAttribute("aria-busy", "true");
+		button.setAttribute("aria-busy", "true");
 
-        try {
-            const params = new URLSearchParams();
+		try {
+			const params = new URLSearchParams();
 
-            params.set("itineraryId", root.dataset.itineraryId);
-            params.set("itemType", itemType);
-            params.set("targetId", targetId);
+			params.set("itineraryId", root.dataset.itineraryId);
+			params.set("itemType", itemType);
+			params.set("targetId", targetId);
 
-            const response = await fetch(root.dataset.cartUrl, {
-                method: "POST",
-                credentials: "same-origin",
-                headers: {
-                    "Content-Type":
-                        "application/x-www-form-urlencoded;charset=UTF-8",
-                    "Accept": "application/json"
-                },
-                body: params.toString()
-            });
+			const response = await fetch(root.dataset.cartUrl, {
+				method: "POST",
+				credentials: "same-origin",
+				headers: {
+					"Content-Type":
+						"application/x-www-form-urlencoded;charset=UTF-8",
+					"Accept": "application/json"
+				},
+				body: params.toString()
+			});
 
-            const result = await response.json();
+			const result = await response.json();
 
-            if (!response.ok || result.success !== true) {
-                throw new Error(
-                    result.message || "장바구니 담기에 실패했습니다."
-                );
-            }
+			if (!response.ok || result.success !== true) {
+				throw new Error(
+					result.message || "장바구니 담기에 실패했습니다."
+				);
+			}
 
-            if (typeof result.changed !== "boolean") {
-                throw new Error("담기 응답을 확인해주세요.");
-            }
+			if (typeof result.changed !== "boolean") {
+				throw new Error("담기 응답을 확인해주세요.");
+			}
 
-            window.tripilyToast(result.message);
+			window.tripilyToast(result.message);
 
-            // 헤더 등에서 필요할 때 이 이벤트를 받아 갱신 가능
-            window.dispatchEvent(
-                new CustomEvent("itinerary-cart-updated", {
-                    detail: result
-                })
-            );
+			// 헤더 등에서 필요할 때 이 이벤트를 받아 갱신 가능
+			window.dispatchEvent(
+				new CustomEvent("itinerary-cart-updated", {
+					detail: result
+				})
+			);
 
-        } catch (error) {
-            console.error(error);
+		} catch (error) {
+			console.error(error);
 
-            window.tripilyToast(
-                error.message || "장바구니 담기 중 오류가 발생했습니다."
-            );
+			window.tripilyToast(
+				error.message || "장바구니 담기 중 오류가 발생했습니다."
+			);
 
-        } finally {
-            processing = false;
+		} finally {
+			processing = false;
 
-            buttons.forEach(function (item, index) {
-                item.disabled = previousDisabled[index];
-            });
+			buttons.forEach(function(item, index) {
+				item.disabled = previousDisabled[index];
+			});
 
-            button.removeAttribute("aria-busy");
-        }
-    });
+			button.removeAttribute("aria-busy");
+		}
+	});
 
 })();

@@ -564,3 +564,38 @@
     outline: 2px solid #6369d1;
     outline-offset: 2px;
 }
+
+.detail-thumbnail-like {
+    position: absolute;
+    right: 14px;
+    bottom: 14px;
+    z-index: 2;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 44px;
+    height: 44px;
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.96);
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.22);
+
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.detail-thumbnail-like:hover {
+    transform: scale(1.08);
+    box-shadow: 0 5px 16px rgba(0, 0, 0, 0.26);
+}
+
+.detail-thumbnail-like:disabled {
+    opacity: 0.65;
+    cursor: wait;
+}
+
+.detail-thumbnail-like svg {
+    flex-shrink: 0;
+}
