@@ -45,7 +45,7 @@ if (user != null && user.getProfileImg() != null && !user.getProfileImg().trim()
 }
 %>
 <link rel="stylesheet"
-      href="<%=ctx%>/css/common/header.css?v=1">
+      href="<%=ctx%>/view/assets/css/common/header.css?v=2">
 <header class="site-header<%=homeHeader ? " site-header--home" : ""%>">
 	<div
 		class="site-header-inner<%=homeHeader ? " site-header-inner--home" : ""%>">
@@ -267,4 +267,4 @@ if (user != null && user.getProfileImg() != null && !user.getProfileImg().trim()
 		</div>
 	</div>
 </header>
-<script src="<%=ctx%>/js/common/headerCart.js?v=1" defer></script>
+<script src="<%=ctx%>/view/assets/js/common/headerCart.js?v=2" defer></script>
