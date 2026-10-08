@@ -23,7 +23,7 @@ request.setAttribute("activePage", "mate");
 
 	<script
 		defer
-		src="${pageContext.request.contextPath}/view/assets/js/mate/mateWriteList.js">
+		src="${pageContext.request.contextPath}/view/assets/js/mates/mateWriteList.js">
 	</script>
 </head>
 
@@ -189,40 +189,79 @@ request.setAttribute("activePage", "mate");
 						<h2 class="mate-my-title">
 							${mate.title}
 						</h2>
-
-
 						<!-- 게시글 정보 -->
 						<div class="mate-my-meta">
-
+						
+							<!-- 모집 인원 -->
 							<span class="mate-my-recruit-count">
 								👥 ${mate.recruitCount}명 모집
 							</span>
-
-
+						
+							<!-- 좋아요 -->
 							<span class="mate-my-meta-item">
-
+						
 								<svg
 									viewBox="0 0 24 24"
 									fill="none"
-									stroke="currentColor">
-
+									stroke="currentColor"
+									stroke-width="2">
+						
 									<path
 										stroke-linecap="round"
 										stroke-linejoin="round"
-										stroke-width="2"
+										d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z" />
+						
+								</svg>
+						
+								${mate.likeCount}
+						
+							</span>
+						
+							<!-- 댓글 -->
+							<span class="mate-my-meta-item">
+						
+								<svg
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="2">
+						
+									<path
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z" />
+						
+								</svg>
+						
+								${mate.commentCount}
+						
+							</span>
+						
+							<!-- 조회수 -->
+							<span class="mate-my-meta-item">
+						
+								<svg
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="2">
+						
+									<path
+										stroke-linecap="round"
+										stroke-linejoin="round"
 										d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z" />
-
+						
 									<circle
 										cx="12"
 										cy="12"
 										r="3" />
-
+						
 								</svg>
-
+						
 								${mate.viewCount}
-
+						
 							</span>
-
+						
 						</div>
 
 					</div>

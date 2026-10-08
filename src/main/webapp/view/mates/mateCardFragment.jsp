@@ -61,17 +61,17 @@
 
 					<span
 						class="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-1 rounded-full"
-						style="background: #f3f4f6; color: #6b7280">
-
+						style="background: #fef2f2; color: #dc2626">
+				
 						<span
 							class="inline-block w-1.5 h-1.5 rounded-full"
-							style="background: #9ca3af">
+							style="background: #ef4444">
 						</span>
-
+				
 						모집완료
-
+				
 					</span>
-
+				
 				</c:otherwise>
 
 			</c:choose>

@@ -114,26 +114,39 @@
 		</if>
 	</select>
 	
-	<select id="selectMyTipList" parameterType="long" resultType="dto.community.TipDto">
+	<!-- 내가 작성한 여행꿀팁 목록 -->
+	<select id="selectMyTipList" parameterType="map" resultType="tip">
+	
 		SELECT
-			t.tip_id AS tipId,
-			t.user_id AS userId,
-			t.title,
-			t.content,
-			t.thumbnail_img AS thumbnailImg,
-			t.visibility,
-			t.view_count AS viewCount,
-			t.status,
-			t.created_at AS createdAt,
-			t.updated_at AS updatedAt,
-			t.hashtag,
+			t.*,
+			u.nickname AS nickname,
+	
 			(
-				SELECT COUNT(*) FROM TB_TIP_LIKE tl WHERE tl.tip_id = t.tip_id
-			) AS likeCount,
+				SELECT COUNT(*)
+				FROM TB_TIP_LIKE tl
+				WHERE tl.tip_id = t.tip_id
+			) AS like_count,
+	
 			(
-				SELECT COUNT(*) FROM TB_TIP_COMMENT tc WHERE tc.tip_id = t.tip_id AND tc.status = 'ACTIVE'
-			) AS commentCount
-		FROM TB_TIP t WHERE t.user_id = #{userId} AND t.status = 'ACTIVE' ORDER BY t.created_at DESC
+				SELECT COUNT(*)
+				FROM TB_TIP_COMMENT tc
+				WHERE tc.tip_id = t.tip_id
+					AND tc.status = 'ACTIVE'
+			) AS comment_count
+	
+		FROM TB_TIP t
+	
+		LEFT JOIN TB_USER u
+			ON t.user_id = u.user_id
+	
+		WHERE t.user_id = #{userId}
+			AND t.status = 'ACTIVE'
+	
+		ORDER BY t.created_at DESC
+	
+		LIMIT #{pageSize}
+		OFFSET #{offset}
+	
 	</select>
 	
 	<select id="selectMyTipListPaging" parameterType="map" resultType="dto.community.TipDto">

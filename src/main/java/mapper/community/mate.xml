@@ -215,6 +215,7 @@
 	<!-- 내가 작성한 여행 메이트 목록 -->
 	<!-- ======================================== -->
 	<select id="selectMateWriteList" parameterType="map" resultType="dto.community.MateDto">
+	
 		SELECT
 			m.mate_id AS mateId,
 			m.user_id AS userId,
@@ -231,13 +232,34 @@
 			m.country,
 			m.recruit_count AS recruitCount,
 			m.recruit_status AS recruitStatus,
-			u.nickname AS nickname
+			u.nickname AS nickname,
+	
+			(
+				SELECT COUNT(*)
+				FROM TB_MATE_LIKE ml
+				WHERE ml.mate_id = m.mate_id
+			) AS likeCount,
+	
+			(
+				SELECT COUNT(*)
+				FROM TB_MATE_COMMENT mc
+				WHERE mc.mate_id = m.mate_id
+					AND mc.status = 'ACTIVE'
+			) AS commentCount
+	
 		FROM TB_MATE m
-		JOIN TB_USER u ON m.user_id = u.user_id
-		WHERE m.user_id = #{userId} AND m.status = 'ACTIVE'
+	
+		JOIN TB_USER u
+			ON m.user_id = u.user_id
+	
+		WHERE m.user_id = #{userId}
+			AND m.status = 'ACTIVE'
+	
 		ORDER BY m.created_at DESC
+	
 		LIMIT #{pageSize}
 		OFFSET #{offset}
+	
 	</select>
 
 	<!-- ======================================== -->
