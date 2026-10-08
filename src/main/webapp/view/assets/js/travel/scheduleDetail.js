@@ -1004,3 +1004,118 @@
     });
 
 })();
+
+/* 전체 일정·DAY·BLOCK 담기 */
+(function () {
+
+    const root = document.getElementById("scheduleDetail");
+
+    if (!root) {
+        return;
+    }
+
+    let processing = false;
+
+    root.addEventListener("click", async function (event) {
+
+        const button = event.target.closest("[data-cart-add]");
+
+        if (!button || !root.contains(button)) {
+            return;
+        }
+
+        event.preventDefault();
+
+        if (root.dataset.loggedIn !== "true") {
+            window.location.href = root.dataset.loginUrl;
+            return;
+        }
+
+        if (processing) {
+            return;
+        }
+
+        const itemType = button.dataset.cartAdd;
+        const targetId = button.dataset.targetId;
+
+        if (!targetId || !root.dataset.itineraryId
+                || !root.dataset.cartUrl) {
+            window.tripilyToast("담기 요청 정보를 확인해주세요.");
+            return;
+        }
+
+        processing = true;
+
+        // 서로 다른 담기 버튼을 동시에 누르는 것도 방지
+        const buttons = Array.from(
+            root.querySelectorAll("[data-cart-add]")
+        );
+
+        const previousDisabled = buttons.map(function (item) {
+            return item.disabled;
+        });
+
+        buttons.forEach(function (item) {
+            item.disabled = true;
+        });
+
+        button.setAttribute("aria-busy", "true");
+
+        try {
+            const params = new URLSearchParams();
+
+            params.set("itineraryId", root.dataset.itineraryId);
+            params.set("itemType", itemType);
+            params.set("targetId", targetId);
+
+            const response = await fetch(root.dataset.cartUrl, {
+                method: "POST",
+                credentials: "same-origin",
+                headers: {
+                    "Content-Type":
+                        "application/x-www-form-urlencoded;charset=UTF-8",
+                    "Accept": "application/json"
+                },
+                body: params.toString()
+            });
+
+            const result = await response.json();
+
+            if (!response.ok || result.success !== true) {
+                throw new Error(
+                    result.message || "장바구니 담기에 실패했습니다."
+                );
+            }
+
+            if (typeof result.changed !== "boolean") {
+                throw new Error("담기 응답을 확인해주세요.");
+            }
+
+            window.tripilyToast(result.message);
+
+            // 헤더 등에서 필요할 때 이 이벤트를 받아 갱신 가능
+            window.dispatchEvent(
+                new CustomEvent("itinerary-cart-updated", {
+                    detail: result
+                })
+            );
+
+        } catch (error) {
+            console.error(error);
+
+            window.tripilyToast(
+                error.message || "장바구니 담기 중 오류가 발생했습니다."
+            );
+
+        } finally {
+            processing = false;
+
+            buttons.forEach(function (item, index) {
+                item.disabled = previousDisabled[index];
+            });
+
+            button.removeAttribute("aria-busy");
+        }
+    });
+
+})();
