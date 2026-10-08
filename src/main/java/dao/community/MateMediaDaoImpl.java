@@ -50,5 +50,12 @@ public class MateMediaDaoImpl implements MateMediaDao {
 			throw e;
 		}
 	}
+	
+	@Override
+	public MateMediaDto selectFirstMateMedia(long mateId) {
+		try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+			return sqlSession.selectOne("mapper.community.mateMedia.selectFirstMateMedia", mateId);
+		}
+	}
 
 }

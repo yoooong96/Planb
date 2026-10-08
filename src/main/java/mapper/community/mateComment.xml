@@ -7,12 +7,7 @@
 <mapper namespace="mapper.community.mateComment">
 
 	<!-- 댓글 작성 -->
-	<insert
-		id="insertMateComment"
-		parameterType="dto.community.MateCommentDto"
-		useGeneratedKeys="true"
-		keyProperty="commentId">
-	
+	<insert id="insertMateComment" parameterType="dto.community.MateCommentDto" useGeneratedKeys="true" keyProperty="commentId">
 		INSERT INTO TB_MATE_COMMENT (
 			mate_id,
 			user_id,
@@ -25,16 +20,11 @@
 			#{content},
 			'ACTIVE'
 		)
-	
 	</insert>
 
 
 	<!-- 댓글 목록 -->
-	<select
-		id="selectMateCommentList"
-		parameterType="long"
-		resultType="dto.community.MateCommentDto">
-	
+	<select id="selectMateCommentList" parameterType="long" resultType="dto.community.MateCommentDto">
 		SELECT
 			c.comment_id AS commentId,
 			c.mate_id AS mateId,
@@ -50,21 +40,52 @@
 		WHERE c.mate_id = #{mateId}
 			AND c.status = 'ACTIVE'
 		ORDER BY c.created_at ASC
-	
 	</select>
 
 
 	<!-- 댓글 개수 -->
-	<select
-		id="countMateComment"
-		parameterType="long"
-		resultType="int">
-
+	<select id="countMateComment" parameterType="long" resultType="int">
 		SELECT COUNT(*)
 		FROM TB_MATE_COMMENT
 		WHERE mate_id = #{mateId}
 			AND status = 'ACTIVE'
-
 	</select>
+	
+	<!-- 댓글 1개 조회 -->
+	<select id="selectMateComment" parameterType="long" resultType="dto.community.MateCommentDto">
+		SELECT
+			comment_id AS commentId,
+			mate_id AS mateId,
+			user_id AS userId,
+			content,
+			status,
+			created_at AS createdAt,
+			updated_at AS updatedAt
+		FROM TB_MATE_COMMENT
+		WHERE comment_id = #{commentId}
+			AND status = 'ACTIVE'
+	</select>
+	
+	<!-- 댓글 수정 -->
+	<update id="updateMateComment" parameterType="dto.community.MateCommentDto">
+		UPDATE TB_MATE_COMMENT
+		SET
+			content = #{content},
+			updated_at = CURRENT_TIMESTAMP
+		WHERE comment_id = #{commentId}
+			AND user_id = #{userId}
+			AND status = 'ACTIVE'
+	</update>
+	
+	<!-- 댓글 삭제 -->
+	<update id="deleteMateComment" parameterType="dto.community.MateCommentDto">
+		UPDATE TB_MATE_COMMENT
+		SET
+			status = 'DELETED',
+			updated_at = CURRENT_TIMESTAMP
+		WHERE comment_id = #{commentId}
+			AND user_id = #{userId}
+			AND status = 'ACTIVE'
+	</update>
 
 </mapper>

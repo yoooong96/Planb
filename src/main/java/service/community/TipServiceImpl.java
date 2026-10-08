@@ -127,4 +127,9 @@ public class TipServiceImpl implements TipService {
 	    return tipDao.updateTipThumbnail(tipDto);
 	}
 	
+	@Override
+	public int updateTipViewCount(Long tipId) {
+		return tipDao.updateTipViewCount(tipId);
+	}
+	
 }

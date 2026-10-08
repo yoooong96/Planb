@@ -339,3 +339,23 @@ if (tipScrollTopBtn) {
 		});
 	});
 }
+
+// =========================
+// 뒤로가기로 목록 복원 시 새로고침
+// =========================
+
+window.addEventListener("pageshow", function(event) {
+
+	var navigationEntries = performance.getEntriesByType("navigation");
+
+	if (
+		event.persisted ||
+		(
+			navigationEntries.length > 0 &&
+			navigationEntries[0].type === "back_forward"
+		)
+	) {
+		window.location.reload();
+	}
+
+});

@@ -27,5 +27,20 @@
 		FROM TB_MATE_MEDIA
 		WHERE mate_id = #{mateId} ORDER BY sort_order ASC
 	</select>
-
+	
+	<select id="selectFirstMateMedia" parameterType="long" resultType="dto.community.MateMediaDto">
+		SELECT
+			media_id AS mediaId,
+			mate_id AS mateId,
+			media_type AS mediaType,
+			media_url AS mediaUrl,
+			sort_order AS sortOrder,
+			created_at AS createdAt
+		FROM TB_MATE_MEDIA
+		WHERE mate_id = #{mateId}
+			AND media_type = 'IMAGE'
+		ORDER BY sort_order ASC, media_id ASC
+		LIMIT 1
+	</select>
+		
 </mapper>

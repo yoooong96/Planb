@@ -25,14 +25,22 @@ public class MateServiceImpl implements MateService {
 
 	@Override
 	public int updateMate(MateDto mateDto) {
-		// TODO Auto-generated method stub
-		return 0;
+		return mateDao.updateMate(mateDto);
+	}
+	
+	@Override
+	public int updateMateImage(MateDto mateDto) {
+		return mateDao.updateMateImage(mateDto);
 	}
 
 	@Override
-	public int deleteMate(Long mateId) {
-		// TODO Auto-generated method stub
-		return 0;
+	public int deleteMate(long mateId, long userId) {
+		MateDto mateDto = new MateDto();
+
+		mateDto.setMateId(mateId);
+		mateDto.setUserId(userId);
+
+		return mateDao.deleteMate(mateDto);
 	}
 
 	@Override
@@ -63,6 +71,18 @@ public class MateServiceImpl implements MateService {
 	@Override
 	public int updateMateViewCount(Long mateId) {
 		return mateDao.updateMateViewCount(mateId);
+	}
+	
+	@Override
+	public int updateRecruitStatus(long mateId, long userId, String recruitStatus) {
+
+		MateDto mateDto = new MateDto();
+
+		mateDto.setMateId(mateId);
+		mateDto.setUserId(userId);
+		mateDto.setRecruitStatus(recruitStatus);
+
+		return mateDao.updateRecruitStatus(mateDto);
 	}
 
 }

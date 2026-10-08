@@ -16,6 +16,11 @@ public class MateCommentServiceImpl implements MateCommentService {
 	}
 
 	@Override
+	public MateCommentDto selectMateComment(Long commentId) {
+		return mateCommentDao.selectMateComment(commentId);
+	}
+
+	@Override
 	public List<MateCommentDto> selectMateCommentList(Long mateId) {
 		return mateCommentDao.selectMateCommentList(mateId);
 	}
@@ -23,5 +28,15 @@ public class MateCommentServiceImpl implements MateCommentService {
 	@Override
 	public int countMateComment(Long mateId) {
 		return mateCommentDao.countMateComment(mateId);
+	}
+
+	@Override
+	public int updateMateComment(MateCommentDto mateCommentDto) {
+		return mateCommentDao.updateMateComment(mateCommentDto);
+	}
+
+	@Override
+	public int deleteMateComment(MateCommentDto mateCommentDto) {
+		return mateCommentDao.deleteMateComment(mateCommentDto);
 	}
 }

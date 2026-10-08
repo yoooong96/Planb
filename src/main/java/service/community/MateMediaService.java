@@ -9,4 +9,6 @@ public interface MateMediaService {
 	int insertMateMedia(MateMediaDto mateMediaDto);
 	
 	List<MateMediaDto> selectMateMediaList(Long mateId);
+
+	MateMediaDto selectFirstMateMedia(long mateId);
 }

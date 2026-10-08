@@ -508,13 +508,44 @@ request.setAttribute("activePage", "tips");
 											${tip.timeAgo}
 										</span>
 									</div>
-									<div class="flex items-center gap-3 text-[10px] text-gray-400">
-										<span>
-											♡ ${tip.likeCount}
+									<!-- 카드 하단 정보 -->
+									<div class="flex items-center justify-between mt-2">
+									
+										<!-- 좋아요 / 댓글 -->
+										<div class="flex items-center gap-3 text-[11px] text-gray-400">
+									
+											<!-- 좋아요 -->
+											<span class="flex items-center gap-1">
+												♡ ${tip.likeCount}
+											</span>
+									
+											<!-- 댓글 -->
+											<span class="flex items-center gap-1">
+												▢ ${tip.commentCount}
+											</span>
+									
+										</div>
+									
+										<!-- 조회수 -->
+										<span class="flex items-center gap-1 text-[11px] text-gray-400">
+									
+											<svg
+												width="13"
+												height="13"
+												viewBox="0 0 24 24"
+												fill="none"
+												stroke="currentColor"
+												stroke-width="2">
+									
+												<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z" />
+												<circle cx="12" cy="12" r="3" />
+									
+											</svg>
+									
+											${tip.viewCount}
+									
 										</span>
-										<span>
-											▢ ${tip.commentCount}
-										</span>
+									
 									</div>
 								</div>
 							</div>

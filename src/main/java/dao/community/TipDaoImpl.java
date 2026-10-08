@@ -167,4 +167,27 @@ public class TipDaoImpl implements TipDao {
 	    }
 	}
 	
+	@Override
+	public int updateTipViewCount(Long tipId) {
+
+		SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession();
+
+		try {
+
+			int result = sqlSession.update(
+				"mapper.community.tip.updateTipViewCount",
+				tipId
+			);
+
+			if (result > 0) {
+				sqlSession.commit();
+			}
+
+			return result;
+
+		} finally {
+			sqlSession.close();
+		}
+	}
+	
 }

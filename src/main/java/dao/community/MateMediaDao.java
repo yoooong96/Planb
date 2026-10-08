@@ -15,4 +15,6 @@ public interface MateMediaDao {
 	int deleteMateMedia(Long mediaId);
 	
 	List<MateMediaDto> selectMateMediaList(Long mateId);
+	
+	MateMediaDto selectFirstMateMedia(long mateId);
 }

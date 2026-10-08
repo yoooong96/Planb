@@ -45,10 +45,6 @@ request.setAttribute("activePage", "tips");
 						<h2 class="text-lg font-bold text-white">여행꿀팁 수정하기</h2>
 						<p class="text-sm mt-0.5" style="color: #D1D2F9">여러분의 소중한 경험이 누군가에게 특별한 여행이 됩니다.</p>
 					</div>
-					<a href="${pageContext.request.contextPath}/tipWriteList"
-						class="flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-semibold text-white"
-						style="background: rgba(255, 255, 255, .15); border: 1px solid rgba(255, 255, 255, .3)">
-						‹ 목록으로</a>
 				</div>
 				<div class="px-8 py-8 flex flex-col gap-8">
 					<div>
@@ -178,8 +174,9 @@ request.setAttribute("activePage", "tips");
 						</div>
 					</div>
 					<div class="flex justify-end gap-3 pt-2">
-						<a href="${pageContext.request.contextPath}/tipWriteList" class="px-8 py-3 rounded-full text-sm font-semibold"
-							style="border: 2px solid #D1D2F9; color: #6369D1">취소
+						<a href="${pageContext.request.contextPath}/tipDetail?tipId=${tip.tipId}" class="px-8 py-3 rounded-full text-sm font-semibold"
+							style="border: 2px solid #D1D2F9; color: #6369D1">
+							취소
 						</a>
 						<button type="submit" class="px-8 py-3 rounded-full text-white text-sm font-bold shadow-md"
 						        style="background: linear-gradient(135deg, #6369D1 0%, #8b91e3 100%)">

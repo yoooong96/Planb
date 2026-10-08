@@ -50,4 +50,47 @@ public class MateCommentDaoImpl implements MateCommentDao {
 			sqlSession.close();
 		}
 	}
+	
+	@Override
+	public MateCommentDto selectMateComment(Long commentId) {
+		SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession();
+
+		try {
+			return sqlSession.selectOne("mapper.community.mateComment.selectMateComment", commentId);
+
+		} finally {
+			sqlSession.close();
+		}
+	}
+
+	@Override
+	public int updateMateComment(MateCommentDto mateCommentDto) {
+		SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession();
+		try {
+			int result = sqlSession.update("mapper.community.mateComment.updateMateComment", mateCommentDto);
+
+			if (result > 0) {
+				sqlSession.commit();
+			}
+
+			return result;
+
+		} finally {
+			sqlSession.close();
+		}
+	}
+
+	@Override
+	public int deleteMateComment(MateCommentDto mateCommentDto) {
+		SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession();
+		try {
+			int result = sqlSession.update("mapper.community.mateComment.deleteMateComment", mateCommentDto);
+			if (result > 0) {
+				sqlSession.commit();
+			}
+			return result;
+		} finally {
+			sqlSession.close();
+		}
+	}
 }

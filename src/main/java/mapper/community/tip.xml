@@ -187,5 +187,13 @@
 	
 	    WHERE t.tip_id = #{tipId} AND t.status = 'ACTIVE'
 	</select>
+	
+	<!-- 여행꿀팁 조회수 증가 -->
+	<update id="updateTipViewCount" parameterType="long">
+		UPDATE TB_TIP
+		SET view_count = view_count + 1
+		WHERE tip_id = #{tipId}
+			AND status = 'ACTIVE'
+	</update>
 
 </mapper>

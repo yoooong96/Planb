@@ -134,3 +134,55 @@
 		max-width: 100%;
 	}
 }
+
+/* =========================
+   메이트 카드 상단
+========================= */
+
+.mate-card-top {
+	width: 100%;
+
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 0.75rem;
+}
+
+
+/* =========================
+   모집 상태 배지
+========================= */
+
+.mate-card-recruit-status {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+
+	flex-shrink: 0;
+
+	padding: 0.35rem 0.7rem;
+
+	border-radius: 9999px;
+
+	font-size: 0.75rem;
+	font-weight: 700;
+	line-height: 1;
+
+	white-space: nowrap;
+}
+
+
+/* 모집중 */
+
+.mate-card-recruit-status.open {
+	background: #eeeeff;
+	color: var(--brand);
+}
+
+
+/* 모집완료 */
+
+.mate-card-recruit-status.closed {
+	background: #f3f4f6;
+	color: #6b7280;
+}

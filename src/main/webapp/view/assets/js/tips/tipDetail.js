@@ -505,3 +505,4 @@ if (tipDeleteButton) {
         });
     });
 }
+

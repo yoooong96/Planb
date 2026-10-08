@@ -34,4 +34,6 @@ public interface TipService {
 	int deleteTip(long tipId, long userId);
 	
 	int updateTipThumbnail(TipDto tipDto);
+	
+	int updateTipViewCount(Long tipId);
 }

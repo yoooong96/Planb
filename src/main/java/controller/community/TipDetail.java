@@ -45,6 +45,9 @@ public class TipDetail extends HttpServlet {
         try {
             long tipId = Long.parseLong(tipIdParam);
             TipService tipService = new TipServiceImpl();
+            
+            // 조회수 증가
+            tipService.updateTipViewCount(tipId);
 
 	        // 게시글 조회
 	        TipDto tip = tipService.selectTipDetail(tipId);

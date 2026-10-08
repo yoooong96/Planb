@@ -216,19 +216,55 @@
 							
 								<c:choose>
 							
-									<c:when test="${mate.recruitStatus eq 'OPEN'}">
+									<%-- 작성자 본인 --%>
+									<c:when test="${not empty sessionScope.user && sessionScope.user.userId eq mate.userId}">
 							
-										<span class="mate-recruit-badge open">
-											모집중
-										</span>
+										<button
+											type="button"
+											id="mateRecruitStatusButton"
+											class="mate-recruit-badge ${mate.recruitStatus eq 'OPEN' ? 'open' : 'closed'}"
+											data-mate-id="${mate.mateId}"
+											data-recruit-status="${mate.recruitStatus}">
+							
+											<c:choose>
+							
+												<c:when test="${mate.recruitStatus eq 'OPEN'}">
+													모집중
+												</c:when>
+							
+												<c:otherwise>
+													모집완료
+												</c:otherwise>
+							
+											</c:choose>
+							
+										</button>
 							
 									</c:when>
 							
+							
+									<%-- 작성자가 아닌 사용자 --%>
 									<c:otherwise>
 							
-										<span class="mate-recruit-badge closed">
-											모집완료
-										</span>
+										<c:choose>
+							
+											<c:when test="${mate.recruitStatus eq 'OPEN'}">
+							
+												<span class="mate-recruit-badge open">
+													모집중
+												</span>
+							
+											</c:when>
+							
+											<c:otherwise>
+							
+												<span class="mate-recruit-badge closed">
+													모집완료
+												</span>
+							
+											</c:otherwise>
+							
+										</c:choose>
 							
 									</c:otherwise>
 							
@@ -320,213 +356,217 @@
 							
 								<!-- 작성자만 수정 / 삭제 -->
 								<c:if test="${not empty sessionScope.user && sessionScope.user.userId eq mate.userId}">
-							
+								
 									<div class="mate-detail-owner-actions">
-							
+								
 										<a
 											href="${pageContext.request.contextPath}/mateModify?mateId=${mate.mateId}"
 											class="mate-detail-edit-btn">
-							
+								
 											<svg
 												viewBox="0 0 24 24"
 												fill="none"
 												stroke="currentColor"
 												stroke-width="2">
-							
+								
 												<path d="M12 20h9" />
 												<path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z" />
-							
+								
 											</svg>
-							
+								
 											수정하기
-							
+								
 										</a>
-							
+								
 										<button
 											type="button"
 											id="mateDeleteButton"
 											class="mate-detail-delete-btn"
 											data-mate-id="${mate.mateId}">
-							
+								
 											<svg
 												viewBox="0 0 24 24"
 												fill="none"
 												stroke="currentColor"
 												stroke-width="2">
-							
+								
 												<path d="M3 6h18" />
 												<path d="M8 6V4h8v2" />
 												<path d="M19 6l-1 14H6L5 6" />
-							
+								
 											</svg>
-							
+								
 											삭제하기
-							
+								
 										</button>
-							
+								
 									</div>
-							
+								
 								</c:if>
 							
 							</div>
 						</div>
 					</div>
-					<!-- ================================
-						     댓글
-						================================ -->
-						<div class="mate-comment-section">
-						
-							<!-- 댓글 제목 -->
-							<div class="mate-comment-header">
-						
-								<h3>
-									댓글
-									<span id="mateCommentCount">
-										<c:out value="${mateCommentList.size()}" />
-									</span>
-								</h3>
-						
-							</div>
-						
-							<!-- 댓글 목록 -->
-							<div
-								class="mate-comment-list"
-								id="mateCommentList">
-						
-								<!-- 댓글 없음 -->
-								<c:if test="${empty mateCommentList}">
-									<div class="mate-comment-empty">
-										아직 작성된 댓글이 없습니다.
-									</div>
-								</c:if>
-						
-								<!-- 댓글 -->
-								<c:forEach
-									var="comment"
-									items="${mateCommentList}">
-						
-									<div
-										class="mate-comment-item"
-										data-comment-id="${comment.commentId}">
-						
-										<!-- 프로필 -->
-										<div class="mate-comment-avatar">
-											<c:out value="${comment.nickname.substring(0, 1)}" />
-										</div>
-						
-										<!-- 댓글 정보 -->
-										<div class="mate-comment-body">
-						
-											<div class="mate-comment-top">
-						
-												<div class="mate-comment-user">
-						
-													<strong>
-														<c:out value="${comment.nickname}" />
-													</strong>
-						
-													<span class="mate-comment-time">
-														<c:out value="${comment.timeAgo}" />
-						
-														<c:if test="${comment.edited}">
-															<span class="mate-comment-edited">
-																(수정됨)
-															</span>
-														</c:if>
-													</span>
-						
-												</div>
-						
-												<!-- 본인 댓글 수정 / 삭제 -->
-												<c:if test="${not empty sessionScope.user && sessionScope.user.userId eq comment.userId}">
-						
-													<div class="mate-comment-actions">
-						
-														<button
-															type="button"
-															class="mate-comment-edit">
-															수정
-														</button>
-						
-														<button
-															type="button"
-															class="mate-comment-delete">
-															삭제
-														</button>
-						
-													</div>
-						
-												</c:if>
-						
-											</div>
-						
-											<!-- 댓글 내용 -->
-											<p class="mate-comment-content">
-												<c:out value="${comment.content}" />
-											</p>
-						
-										</div>
-						
-									</div>
-						
-								</c:forEach>
-						
-							</div>
-						
-							<!-- ================================
-							     댓글 작성
-							================================ -->
-							<c:choose>
-						
-								<c:when test="${not empty sessionScope.user}">
-						
-									<form
-										id="mateCommentForm"
-										class="mate-comment-form"
-										action="${pageContext.request.contextPath}/mateCommentWrite"
-										method="post">
-						
-										<input
-											type="hidden"
-											name="mateId"
-											value="${mate.mateId}">
-						
-										<textarea
-											id="mateCommentContent"
-											name="content"
-											maxlength="1000"
-											placeholder="댓글을 입력해주세요..."></textarea>
-						
-										<div class="mate-comment-form-bottom">
-						
-											<span class="mate-comment-length">
-												<span id="mateCommentLength">0</span>/1000
-											</span>
-						
-											<button
-												type="submit"
-												class="mate-comment-submit">
-												댓글 등록
-											</button>
-						
-										</div>
-						
-									</form>
-						
-								</c:when>
-						
-								<c:otherwise>
-						
-									<div class="mate-comment-empty">
-										댓글을 작성하려면 로그인이 필요합니다.
-									</div>
-						
-								</c:otherwise>
-						
-							</c:choose>
-						
-						</div>
-				</div>
+					<!-- 댓글 -->
+					<div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-7 mt-4">
+					
+					    <!-- 댓글 제목 -->
+					    <h3 class="flex items-center gap-2 text-base font-extrabold text-gray-900 mb-6">
+					        <svg
+					            width="18"
+					            height="18"
+					            viewBox="0 0 24 24"
+					            fill="none"
+					            stroke="currentColor"
+					            stroke-width="2.2"
+					            style="color: var(--brand);">
+					            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+					        </svg>
+					
+					        댓글
+					
+					        <span
+					            id="mateCommentCount"
+					            class="mate-comment-count">
+					            ${mateCommentList.size()}
+					        </span>
+					    </h3>
+					
+					    <!-- 댓글 목록 -->
+					    <div
+					        class="flex flex-col gap-5 mb-8"
+					        id="mateCommentList">
+					
+					        <!-- 댓글이 없는 경우 -->
+					        <c:if test="${empty mateCommentList}">
+					            <div class="py-6 text-center text-sm text-gray-400">
+					                아직 작성된 댓글이 없습니다.
+					            </div>
+					        </c:if>
+					
+					        <!-- 실제 DB 댓글 -->
+					        <c:forEach var="comment" items="${mateCommentList}">
+							    <div class="flex gap-3" data-comment-id="${comment.commentId}">
+							
+							        <!-- 프로필 -->
+							        <div
+							            class="w-9 h-9 rounded-full shrink-0 flex items-center justify-center text-white text-sm font-bold"
+							            style="background-color: var(--brand)">
+							
+							            <c:out value="${comment.nickname.substring(0, 1)}" />
+							
+							        </div>
+							
+							        <div class="flex-1 min-w-0">
+							
+							            <!-- 작성자 / 작성일 -->
+							            <div class="flex items-center gap-2 mb-1">
+							
+							                <span class="text-sm font-bold text-gray-900">
+							                    <c:out value="${comment.nickname}" />
+							                </span>
+							
+							                <span class="mate-comment-time text-xs text-gray-400">
+							                    ${comment.timeAgo}
+							
+							                    <c:if test="${comment.edited}">
+							                        <span class="mate-comment-edited ml-1">
+							                            (수정됨)
+							                        </span>
+							                    </c:if>
+							                </span>
+							
+							                <!-- 본인 댓글일 때만 수정 / 삭제 -->
+							                <c:if test="${not empty sessionScope.user && sessionScope.user.userId eq comment.userId}">
+							                    <div class="flex items-center gap-2 ml-auto">
+							
+							                        <button
+							                            type="button"
+							                            class="mate-comment-edit text-xs text-gray-400 hover:text-gray-700">
+							                            수정
+							                        </button>
+							
+							                        <button
+							                            type="button"
+							                            class="mate-comment-delete text-xs text-gray-400 hover:text-red-500">
+							                            삭제
+							                        </button>
+							
+							                    </div>
+							                </c:if>
+							
+							            </div>
+							
+							            <!-- 댓글 내용 -->
+							            <p class="mate-comment-content text-sm text-gray-700 leading-relaxed">
+							                <c:out value="${comment.content}" />
+							            </p>
+							
+							        </div>
+							
+							    </div>
+							</c:forEach>
+					
+					    </div>
+					
+					    <!-- 댓글 작성 -->
+					    <div class="flex items-center gap-3 pt-5 border-t border-gray-100">
+					
+					        <!-- 로그인 상태 -->
+					        <c:if test="${not empty sessionScope.user}">
+					
+					            <!-- 로그인 사용자 프로필 -->
+					            <div
+					                class="w-9 h-9 rounded-full shrink-0 flex items-center justify-center text-white text-sm font-bold"
+					                style="background-color: var(--brand);">
+					
+					                <c:out value="${sessionScope.user.nickName.substring(0, 1)}" />
+					
+					            </div>
+					
+					            <form
+					                id="mateCommentForm"
+					                action="${pageContext.request.contextPath}/mateCommentWrite"
+					                method="post"
+					                class="flex items-center gap-3 flex-1">
+					
+					                <input
+					                    type="hidden"
+					                    name="mateId"
+					                    value="${mate.mateId}">
+					
+					                <input
+					                    type="text"
+					                    name="content"
+					                    id="mateCommentContent"
+					                    maxlength="1000"
+					                    placeholder="댓글을 입력해주세요..."
+					                    autocomplete="off"
+					                    class="jsp-focus flex-1 min-w-0 text-sm text-gray-700 placeholder-gray-400 outline-none border border-gray-200 rounded-full px-4 py-2.5 transition-all">
+					
+					                <button
+					                    type="submit"
+					                    class="jsp-brand-hover shrink-0 px-5 py-2.5 rounded-full text-white text-sm font-semibold transition-colors"
+					                    style="background-color: var(--brand);">
+					                    등록
+					                </button>
+					
+					            </form>
+					
+					        </c:if>
+					
+					        <!-- 비로그인 상태 -->
+					        <c:if test="${empty sessionScope.user}">
+					
+					            <div class="w-full text-center text-sm text-gray-400 py-2">
+					                댓글을 작성하려면 로그인이 필요합니다.
+					            </div>
+					
+					        </c:if>
+					
+					    </div>
+					
+					</div>
 				<!-- ================================
 				     우측 광고
 				================================ -->

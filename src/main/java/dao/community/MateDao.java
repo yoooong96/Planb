@@ -11,8 +11,10 @@ public interface MateDao {
 	MateDto selectMate(Long mateId);
 
 	int updateMate(MateDto mateDto);
+	
+	int updateMateImage(MateDto mateDto);
 
-	int deleteMate(Long mateId);
+	int deleteMate(MateDto mateDto);
 
 	// 여행메이트 전체 조회
 	List<MateDto> selectMateList();
@@ -28,4 +30,6 @@ public interface MateDao {
 	int countMateWriteList(Long userId);
 	
 	int updateMateViewCount(Long mateId);
+	
+	int updateRecruitStatus(MateDto mateDto);
 }

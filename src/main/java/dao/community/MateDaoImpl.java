@@ -37,14 +37,54 @@ public class MateDaoImpl implements MateDao {
 
 	@Override
 	public int updateMate(MateDto mateDto) {
-		// TODO 수정 구현할 때 연결
-		return 0;
+		SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession();
+		try {
+			int result = sqlSession.update(
+				"mapper.community.mate.updateMate",
+				mateDto
+			);
+			if (result > 0) {
+				sqlSession.commit();
+			}
+			return result;
+		} finally {
+			sqlSession.close();
+		}
 	}
 
 	@Override
-	public int deleteMate(Long mateId) {
-		// TODO 삭제 구현할 때 연결
-		return 0;
+	public int updateMateImage(MateDto mateDto) {
+		SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession();
+		try {
+			int result = sqlSession.update(
+				"mapper.community.mate.updateMateImage",
+				mateDto
+			);
+			if (result > 0) {
+				sqlSession.commit();
+			}
+			return result;
+		} finally {
+			sqlSession.close();
+		}
+	}
+
+	@Override
+	public int deleteMate(MateDto mateDto) {
+		SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession();
+
+		try {
+			int result = sqlSession.delete("mapper.community.mate.deleteMate", mateDto);
+
+			if (result > 0) {
+				sqlSession.commit();
+			}
+
+			return result;
+
+		} finally {
+			sqlSession.close();
+		}
 	}
 
 	// 여행메이트 전체 조회
@@ -133,6 +173,23 @@ public class MateDaoImpl implements MateDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;
+		}
+	}
+	
+	@Override
+	public int updateRecruitStatus(MateDto mateDto) {
+		SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession();
+		try {
+			int result = sqlSession.update(
+				"mapper.community.mate.updateRecruitStatus",
+				mateDto
+			);
+			if (result > 0) {
+				sqlSession.commit();
+			}
+			return result;
+		} finally {
+			sqlSession.close();
 		}
 	}
 }

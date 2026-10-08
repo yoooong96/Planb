@@ -39,4 +39,6 @@ public interface TipDao {
 	int countMyTipList(long userId);
 
 	int updateTipThumbnail(TipDto tipDto);
+	
+	int updateTipViewCount(Long tipId);
 }

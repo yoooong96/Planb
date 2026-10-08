@@ -19,4 +19,9 @@ public class MateMediaServiceImpl implements MateMediaService {
 	public List<MateMediaDto> selectMateMediaList(Long mateId) {
 		return mateMediaDao.selectMateMediaList(mateId);
 	}
+	
+	@Override
+	public MateMediaDto selectFirstMateMedia(long mateId) {
+		return mateMediaDao.selectFirstMateMedia(mateId);
+	}
 }

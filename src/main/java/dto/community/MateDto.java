@@ -20,6 +20,8 @@ public class MateDto {
 	private int recruitCount;			// 모집 인원
 	private String recruitStatus;		// 모집 상태
 	private String nickname;
+	private int likeCount;
+	private int commentCount;
 	
 	public MateDto() {
 		super();
@@ -27,7 +29,7 @@ public class MateDto {
 	}
 	public MateDto(Long mateId, Long userId, String title, String content, String img, String visibility, int viewCount,
 			String status, Long deletedByUserId, LocalDateTime deletedAt, LocalDateTime createdAt,
-			LocalDateTime updatedAt, String country, int recruitCount, String recruitStatus, String nickname) {
+			LocalDateTime updatedAt, String country, int recruitCount, String recruitStatus, String nickname, int likeCount, int commentCount) {
 		super();
 		this.mateId = mateId;
 		this.userId = userId;
@@ -45,6 +47,8 @@ public class MateDto {
 		this.recruitCount = recruitCount;
 		this.recruitStatus = recruitStatus;
 		this.nickname = nickname;
+		this.likeCount = likeCount;
+		this.commentCount = commentCount;
 	}
 	
 	public String getTimeAgo() {
@@ -176,12 +180,27 @@ public class MateDto {
 	public void setNickname(String nickname) {
 		this.nickname = nickname;
 	}
+	
+	public int getLikeCount() {
+		return likeCount;
+	}
+	public void setLikeCount(int likeCount) {
+		this.likeCount = likeCount;
+	}
+	public int getCommentCount() {
+		return commentCount;
+	}
+	public void setCommentCount(int commentCount) {
+		this.commentCount = commentCount;
+	}
 	@Override
 	public String toString() {
 		return "MateDto [mateId=" + mateId + ", userId=" + userId + ", title=" + title + ", content=" + content
 				+ ", img=" + img + ", visibility=" + visibility + ", viewCount=" + viewCount + ", status=" + status
 				+ ", deletedByUserId=" + deletedByUserId + ", deletedAt=" + deletedAt + ", createdAt=" + createdAt
 				+ ", updatedAt=" + updatedAt + ", country=" + country + ", recruitCount=" + recruitCount
-				+ ", recruitStatus=" + recruitStatus + ", nickname=" + nickname + "]";
+				+ ", recruitStatus=" + recruitStatus + ", nickname=" + nickname + ", likeCount=" + likeCount
+				+ ", commentCount=" + commentCount + "]";
 	}
+	
 }
