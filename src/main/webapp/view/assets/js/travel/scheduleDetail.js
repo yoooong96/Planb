@@ -1014,7 +1014,166 @@
 		return;
 	}
 
+	const buttons = Array.from(
+		root.querySelectorAll("[data-cart-add]")
+	);
+
+	if (buttons.length === 0) {
+		return;
+	}
+
+	const loggedIn = root.dataset.loggedIn === "true";
+
 	let processing = false;
+	let stateReady = !loggedIn;
+
+	function updateDisabled() {
+		buttons.forEach(function(button) {
+			button.disabled = processing || !stateReady;
+		});
+	}
+
+	function applyState(result) {
+
+		const validStates = ["NONE", "PARTIAL", "FULL"];
+
+		if (!validStates.includes(result.itineraryState)
+			|| !result.dayStates
+			|| !result.blockStates) {
+
+			throw new Error("장바구니 상태 응답을 확인해주세요.");
+		}
+
+		// 모든 상태를 먼저 검사한 뒤 화면에 반영
+		const states = buttons.map(function(button) {
+
+			const type = button.dataset.cartAdd;
+			const targetId = button.dataset.targetId;
+
+			let state;
+
+			if (type === "ITINERARY") {
+				state = result.itineraryState;
+			} else if (type === "DAY") {
+				state = result.dayStates[targetId];
+			} else if (type === "BLOCK") {
+				state = result.blockStates[targetId];
+			}
+
+			if (!validStates.includes(state)) {
+				throw new Error(
+					"담기 대상의 상태를 확인해주세요."
+				);
+			}
+
+			return state;
+		});
+
+		buttons.forEach(function(button, index) {
+
+			const state = states[index];
+			const whole = button.dataset.cartAdd === "ITINERARY";
+			const label = button.querySelector("[data-cart-label]");
+
+			button.dataset.cartState = state;
+
+			button.setAttribute(
+				"aria-pressed",
+				state === "FULL"
+					? "true"
+					: state === "PARTIAL" ? "mixed" : "false"
+			);
+
+			let text;
+			let description;
+
+			if (state === "FULL") {
+
+				text = whole
+					? "전체 담김 · 해제"
+					: "담김 · 해제";
+
+				description =
+					"전체 담긴 상태입니다. 누르면 장바구니에서 뺍니다.";
+
+			} else if (state === "PARTIAL") {
+
+				text = "일부 담김 · 나머지 담기";
+
+				description =
+					"일부 담긴 상태입니다. 누르면 빠진 항목을 담습니다.";
+
+			} else {
+
+				text = whole ? "전체 일정 담기" : "담기";
+
+				description =
+					"안 담긴 상태입니다. 누르면 장바구니에 담습니다.";
+			}
+
+			if (label) {
+				label.textContent = text;
+			}
+
+			button.title = description;
+			button.setAttribute("aria-label", text);
+		});
+	}
+
+	async function readResponse(response) {
+
+		const result = await response.json();
+
+		if (!response.ok || result.success !== true) {
+			throw new Error(
+				result.message || "장바구니 처리에 실패했습니다."
+			);
+		}
+
+		return result;
+	}
+
+	async function loadInitialState() {
+
+		updateDisabled();
+
+		try {
+			const url = new URL(
+				root.dataset.cartStateUrl,
+				window.location.origin
+			);
+
+			url.searchParams.set(
+				"itineraryId",
+				root.dataset.itineraryId
+			);
+
+			const response = await fetch(url, {
+				method: "GET",
+				credentials: "same-origin",
+				cache: "no-store",
+				headers: {
+					"Accept": "application/json"
+				}
+			});
+
+			const result = await readResponse(response);
+
+			applyState(result);
+
+			stateReady = true;
+
+		} catch (error) {
+			console.error(error);
+
+			window.tripilyToast(
+				error.message + " 화면을 새로고침해주세요."
+			);
+
+		} finally {
+			updateDisabled();
+		}
+	}
 
 	root.addEventListener("click", async function(event) {
 
@@ -1026,38 +1185,17 @@
 
 		event.preventDefault();
 
-		if (root.dataset.loggedIn !== "true") {
+		if (!loggedIn) {
 			window.location.href = root.dataset.loginUrl;
 			return;
 		}
 
-		if (processing) {
-			return;
-		}
-
-		const itemType = button.dataset.cartAdd;
-		const targetId = button.dataset.targetId;
-
-		if (!targetId || !root.dataset.itineraryId
-			|| !root.dataset.cartUrl) {
-			window.tripilyToast("담기 요청 정보를 확인해주세요.");
+		if (processing || !stateReady) {
 			return;
 		}
 
 		processing = true;
-
-		// 서로 다른 담기 버튼을 동시에 누르는 것도 방지
-		const buttons = Array.from(
-			root.querySelectorAll("[data-cart-add]")
-		);
-
-		const previousDisabled = buttons.map(function(item) {
-			return item.disabled;
-		});
-
-		buttons.forEach(function(item) {
-			item.disabled = true;
-		});
+		updateDisabled();
 
 		button.setAttribute("aria-busy", "true");
 
@@ -1065,8 +1203,8 @@
 			const params = new URLSearchParams();
 
 			params.set("itineraryId", root.dataset.itineraryId);
-			params.set("itemType", itemType);
-			params.set("targetId", targetId);
+			params.set("itemType", button.dataset.cartAdd);
+			params.set("targetId", button.dataset.targetId);
 
 			const response = await fetch(root.dataset.cartUrl, {
 				method: "POST",
@@ -1079,21 +1217,14 @@
 				body: params.toString()
 			});
 
-			const result = await response.json();
+			const result = await readResponse(response);
 
-			if (!response.ok || result.success !== true) {
-				throw new Error(
-					result.message || "장바구니 담기에 실패했습니다."
-				);
-			}
-
-			if (typeof result.changed !== "boolean") {
-				throw new Error("담기 응답을 확인해주세요.");
-			}
+			// 관련 전체 일정·DAY·BLOCK 버튼을 함께 갱신
+			applyState(result);
 
 			window.tripilyToast(result.message);
 
-			// 헤더 등에서 필요할 때 이 이벤트를 받아 갱신 가능
+			// 헤더 장바구니 배지도 다시 조회
 			window.dispatchEvent(
 				new CustomEvent("itinerary-cart-updated", {
 					detail: result
@@ -1103,19 +1234,23 @@
 		} catch (error) {
 			console.error(error);
 
+			// 요청이 실제 반영됐을 수도 있으므로
+			// 상태 확인 없이 다시 토글하는 것을 방지
+			stateReady = false;
+
 			window.tripilyToast(
-				error.message || "장바구니 담기 중 오류가 발생했습니다."
+				error.message + " 화면을 새로고침해주세요."
 			);
 
 		} finally {
 			processing = false;
-
-			buttons.forEach(function(item, index) {
-				item.disabled = previousDisabled[index];
-			});
-
 			button.removeAttribute("aria-busy");
+			updateDisabled();
 		}
 	});
+
+	if (loggedIn) {
+		loadInitialState();
+	}
 
 })();

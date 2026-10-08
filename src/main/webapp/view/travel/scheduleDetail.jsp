@@ -13,14 +13,16 @@ request.setAttribute("activePage", "travel");
 <title><c:out value="${itinerary.title}" /> | Planb</title>
 <jsp:include page="/common/headStyles.jsp" />
 <link rel="stylesheet"
-	href="${pageContext.request.contextPath}/view/assets/css/travel/scheduleDetail.css?v=3">
+	href="${pageContext.request.contextPath}/view/assets/css/travel/scheduleDetail.css?v=4">
 </head>
 <body class="site-shell"><jsp:include page="/common/header.jsp" />
-	<main id="scheduleDetail" class="detail-layout"
-		data-cart-url="${pageContext.request.contextPath}/itinerary/cart/add"
-		data-itinerary-id="${itinerary.itineraryId}"
-		data-logged-in="${not empty sessionScope.user}"
-		data-login-url="${pageContext.request.contextPath}/auth/login">
+	<main id="scheduleDetail"
+      class="detail-layout"
+      data-cart-url="${pageContext.request.contextPath}/itinerary/cart/toggle"
+      data-cart-state-url="${pageContext.request.contextPath}/itinerary/cart/state"
+      data-itinerary-id="${itinerary.itineraryId}"
+      data-logged-in="${not empty sessionScope.user}"
+      data-login-url="${pageContext.request.contextPath}/auth/login">
 		<!-- 좌측: 일정 정보 -->
 		<aside id="detailInfoPanel" class="detail-info-panel">
 			<div class="detail-panel-header detail-info-header">
@@ -119,6 +121,27 @@ request.setAttribute("activePage", "travel");
 						class="absolute bottom-4 left-4 text-white text-xs font-bold bg-black/50 rounded-full px-2.5 py-1">
 						<c:out value="${itinerary.durationText}" />
 					</span>
+
+					<!-- 썸네일 우측 하단: 좋아요 토글 -->
+					<button type="button" id="scheduleLikeButton"
+						class="detail-thumbnail-like"
+						data-login-url="${pageContext.request.contextPath}/auth/login"
+						data-like-url="${pageContext.request.contextPath}/itinerary/like"
+						data-itinerary-id="${itinerary.itineraryId}"
+						data-logged-in="${not empty sessionScope.user}"
+						aria-pressed="${itinerary.liked}"
+						aria-label="${itinerary.liked ? '좋아요 취소' : '좋아요'}"
+						title="${itinerary.liked ? '좋아요 취소' : '좋아요'}"
+						style="color: ${itinerary.liked ? '#ef4444' : '#64748b'}">
+
+						<svg width="23" height="23" viewBox="0 0 24 24"
+							fill="${itinerary.liked ? 'currentColor' : 'none'}"
+							stroke="currentColor" stroke-width="2" stroke-linecap="round"
+							stroke-linejoin="round" aria-hidden="true">
+        					<path
+								d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78Z" />
+    					</svg>
+					</button>
 				</div>
 				<div class="px-5 pt-4 pb-3 border-b" style="border-color: #D1D2F9">
 					<!-- 제목 -->
@@ -132,30 +155,21 @@ request.setAttribute("activePage", "travel");
 					<div class="flex items-center gap-4 mb-3">
 						<div class="flex items-center gap-3 text-[12px] text-gray-500">
 
-							<!-- 좋아요 버튼 -->
-							<button type="button" id="scheduleLikeButton"
-								class="flex items-center gap-1 transition-colors"
-								data-login-url="${pageContext.request.contextPath}/auth/login"
-								data-like-url="${pageContext.request.contextPath}/itinerary/like"
-								data-itinerary-id="${itinerary.itineraryId}"
-								data-logged-in="${not empty sessionScope.user}"
-								aria-pressed="${itinerary.liked}"
-								aria-label="${itinerary.liked ? '좋아요 취소' : '좋아요'}"
-								style="color: ${itinerary.liked ? '#ef4444' : '#94a3b8'}">
+							<!-- 좋아요 수: 항상 빨간 하트로 표시 -->
+							<span class="inline-flex items-center gap-1" title="좋아요 수">
 
-								<svg class="w-3.5 h-3.5"
-									fill="${itinerary.liked ? 'currentColor' : 'none'}"
-									stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+								<svg width="14" height="14" viewBox="0 0 24 24" fill="#ef4444"
+									stroke="#ef4444" stroke-width="2" stroke-linecap="round"
+									stroke-linejoin="round" aria-hidden="true">
 
-        							<path stroke-linecap="round" stroke-linejoin="round"
-										stroke-width="2"
-										d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-    							</svg>
-
-								<span id="scheduleLikeCount" class="font-semibold"> <fmt:formatNumber
+        							<path
+										d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78Z" />
+    							</svg> <span id="scheduleLikeCount" class="font-semibold"> <fmt:formatNumber
 										value="${itinerary.likeCount}" pattern="#,##0" />
-								</span>
-							</button>
+							</span>
+							</span>
+
+							<!-- 조회수 아이콘 및 표시 -->
 							<span class="flex items-center gap-1"> <svg
 									class="w-3.5 h-3.5" fill="none" stroke="currentColor"
 									viewBox="0 0 24 24">
@@ -225,16 +239,18 @@ request.setAttribute("activePage", "travel");
 					<div class="flex gap-2">
 						<button type="button" data-cart-add="ITINERARY"
 							data-target-id="${itinerary.itineraryId}"
+							data-cart-state="NONE"
+							aria-pressed="false"
 							class="flex-1 py-2.5 rounded-xl text-[10px] font-semibold
            						flex items-center justify-center gap-1.5
-           						transition-all hover:opacity-90"
+           						transition-all hover:opacity-90"	
 							style="background: #6369D1; color: white">
 							<svg class="w-3.5 h-3.5 shrink-0" fill="none"
 								stroke="currentColor" viewBox="0 0 24 24">
 								<path stroke-linecap="round" stroke-linejoin="round"
 									stroke-width="2"
 									d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13 5.4 5M7 13l-2.3 2.3c-.6.6-.2 1.7.7 1.7H17m0 0a2 2 0 100 4 2 2 0 000-4Zm-8 2a2 2 0 11-4 0 2 2 0 014 0Z" /></svg>
-							전체 일정 장바구니에 담기
+							<span data-cart-label>전체 일정 담기</span>
 						</button>
 						<button type="button" id="scheduleReportButton"
 							data-logged-in="${not empty sessionScope.user}"
@@ -272,22 +288,8 @@ request.setAttribute("activePage", "travel");
 							<c:choose>
 								<c:when test="${not empty itinerary.profileImg}">
 
-									<c:choose>
-										<c:when
-											test="${itinerary.profileImg.startsWith('https://')
-                            					or itinerary.profileImg.startsWith('http://')}">
-											<c:set var="authorImageUrl" value="${itinerary.profileImg}" />
-										</c:when>
-
-										<c:when test="${itinerary.profileImg.startsWith('/')}">
-											<c:url var="authorImageUrl" value="${itinerary.profileImg}" />
-										</c:when>
-
-										<c:otherwise>
-											<c:url var="authorImageUrl"
-												value="/profiles/${itinerary.profileImg}" />
-										</c:otherwise>
-									</c:choose>
+									<c:url var="authorImageUrl"
+										value="/uploads/profile/${itinerary.profileImg}" />
 
 									<img src="<c:out value='${authorImageUrl}'/>" alt="작성자 프로필"
 										class="w-full h-full object-cover">
@@ -415,7 +417,7 @@ request.setAttribute("activePage", "travel");
 
 												<c:otherwise>
 													<c:url var="commentProfileUrl"
-														value="/profiles/${comment.profileImg}" />
+														value="/uploads/profile/${comment.profileImg}" />
 												</c:otherwise>
 											</c:choose>
 
@@ -452,9 +454,8 @@ request.setAttribute("activePage", "travel");
 										</c:if>
 									</div>
 
-									<p class="mt-1 text-[13px] text-gray-600"
-										style="white-space: pre-wrap; overflow-wrap: anywhere;">
-										<c:out value="${comment.content}" />
+									<p class="mt-1 text-[13px] text-gray-600" style="white-space: no-wrap; overflow-wrap: anywhere;">
+									<c:out value="${comment.content}" />
 									</p>
 								</div>
 							</article>
@@ -506,12 +507,27 @@ request.setAttribute("activePage", "travel");
 
 								</div>
 								<button type="button" data-cart-add="DAY"
-									data-target-id="${day.dayId}" class="detail-cart-small"
+									data-target-id="${day.dayId}"
+									data-cart-state="NONE"
+									aria-pressed="false"
+									class="detail-cart-small"
 									title="이 일차의 모든 블록 담기" aria-label="${dayStatus.count}일차 전체 담기">
-										
-									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shopping-cart-plus preview-icon"><path d="M16 5h6"/><path d="M19 2v6"/><path d="m2.05 2.05 1.099-.028a1 1 0 011.008.815l2.69 14.347A1 1 0 007.83 18H18"/><path d="M4.564 5H12"/><path d="M6.25 14h12.712a2 2 0 001.991-1.57l.172-1.041"/><circle cx="18" cy="20" r="2"/><circle cx="8" cy="20" r="2"/></svg>
 
-									<span>담기</span>
+									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+										viewBox="0 0 24 24" fill="none" stroke="currentColor"
+										stroke-width="2" stroke-linecap="round"
+										stroke-linejoin="round"
+										class="lucide lucide-shopping-cart-plus preview-icon">
+										<path d="M16 5h6" />
+										<path d="M19 2v6" />
+										<path
+											d="m2.05 2.05 1.099-.028a1 1 0 011.008.815l2.69 14.347A1 1 0 007.83 18H18" />
+										<path d="M4.564 5H12" />
+										<path d="M6.25 14h12.712a2 2 0 001.991-1.57l.172-1.041" />
+										<circle cx="18" cy="20" r="2" />
+										<circle cx="8" cy="20" r="2" /></svg>
+
+									<span data-cart-label>담기</span>
 								</button>
 
 							</div>
@@ -586,10 +602,25 @@ request.setAttribute("activePage", "travel");
 
 												<button type="button" data-cart-add="BLOCK"
 													data-target-id="${block.blockId}"
-													class="detail-cart-small detail-cart-icon" title="블록 담기"
+													data-cart-state="NONE"
+													aria-pressed="false"
+													class="detail-cart-small" title="블록 담기"
 													aria-label="블록 담기">
 
-													<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shopping-cart-plus preview-icon"><path d="M16 5h6"/><path d="M19 2v6"/><path d="m2.05 2.05 1.099-.028a1 1 0 011.008.815l2.69 14.347A1 1 0 007.83 18H18"/><path d="M4.564 5H12"/><path d="M6.25 14h12.712a2 2 0 001.991-1.57l.172-1.041"/><circle cx="18" cy="20" r="2"/><circle cx="8" cy="20" r="2"/></svg>
+													<svg xmlns="http://www.w3.org/2000/svg" width="12"
+														height="12" viewBox="0 0 24 24" fill="none"
+														stroke="currentColor" stroke-width="1"
+														stroke-linecap="round" stroke-linejoin="round"
+														class="lucide lucide-shopping-cart-plus preview-icon">
+														<path d="M16 5h6" />
+														<path d="M19 2v6" />
+														<path
+															d="m2.05 2.05 1.099-.028a1 1 0 011.008.815l2.69 14.347A1 1 0 007.83 18H18" />
+														<path d="M4.564 5H12" />
+														<path d="M6.25 14h12.712a2 2 0 001.991-1.57l.172-1.041" />
+														<circle cx="18" cy="20" r="2" />
+														<circle cx="8" cy="20" r="2" /></svg>
+													<span data-cart-label>담기</span>
 												</button>
 
 											</div>
@@ -597,8 +628,8 @@ request.setAttribute("activePage", "travel");
 											<!-- 블록 종류 -->
 											<c:if test="${not empty block.blockType}">
 												<span
-													class="inline-block mt-1 text-[10px]
-                                             text-gray-400">
+													class="inline-block mt-1 text-[15px]
+                                             text-gray-500">
 													<c:choose>
 														<c:when test="${block.blockType eq 'MEAL'}">
                                             식사
@@ -637,13 +668,11 @@ request.setAttribute("activePage", "travel");
 													<c:out value="${block.placeAddress}" />
 												</p>
 											</c:if>
-
+													<br>
 											<!-- 메모: 태그 안쪽의 불필요한 공백 제거 -->
 											<c:if test="${not empty block.memo}">
-												<p class="mt-2 text-[12px] text-gray-600 leading-relaxed"
-													style="white-space: pre-wrap; overflow-wrap: anywhere;">
-													<c:out value="${block.memo}" />
-												</p>
+												<p class="mt-2 text-[20px] text-gray-600 leading-relaxed"
+													style="white-space: pre-wrap; overflow-wrap: anywhere;"><c:out value="${block.memo}" /></p>
 											</c:if>
 
 											<!-- 비용: 0원도 표시 -->
@@ -848,6 +877,6 @@ request.setAttribute("activePage", "travel");
 		src="${pageContext.request.contextPath}/view/assets/js/auth/tripily.js"></script>
 
 	<script
-		src="${pageContext.request.contextPath}/view/assets/js/travel/scheduleDetail.js?v=9"></script>
+		src="${pageContext.request.contextPath}/view/assets/js/travel/scheduleDetail.js?v=11"></script>
 </body>
 </html>
