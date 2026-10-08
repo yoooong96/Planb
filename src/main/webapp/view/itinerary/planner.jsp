@@ -2567,16 +2567,33 @@ request.setAttribute("activePage", "planner");
                     btn.addEventListener('click',function(){ addBlockToDay(day,{type:'sightseeing'}); });
                     body.appendChild(btn);
                 }
-                body.addEventListener('dragover',function(e){
-                    if(!e.dataTransfer.types.includes('application/x-tripily-import')) return;
-                    e.preventDefault(); e.dataTransfer.dropEffect='copy'; body.classList.add('is-drop-target');
-                });
-                body.addEventListener('dragleave',function(e){ if(!body.contains(e.relatedTarget)) body.classList.remove('is-drop-target'); });
-                updateDayDeleteButtons();
-                body.addEventListener('drop',function(e){
-                    var raw=e.dataTransfer.getData('application/x-tripily-import');
-                    if(!raw)return; e.preventDefault(); body.classList.remove('is-drop-target');
-                    try{
+                /*
+                 * ensureDayControls()는 DAY 초기화 외에도 다시 호출될 수 있다.
+                 * 이때 drop 리스너가 중복 등록되면 한 번 드롭했는데 같은 블록이
+                 * 2번씩 추가될 수 있으므로 DAY body당 한 번만 등록한다.
+                 */
+                if(body.dataset.importDropReady!=='1'){
+                    body.dataset.importDropReady='1';
+
+                    body.addEventListener('dragover',function(e){
+                        if(!e.dataTransfer.types.includes('application/x-tripily-import')) return;
+                        e.preventDefault();
+                        e.dataTransfer.dropEffect='copy';
+                        body.classList.add('is-drop-target');
+                    });
+
+                    body.addEventListener('dragleave',function(e){
+                        if(!body.contains(e.relatedTarget)) body.classList.remove('is-drop-target');
+                    });
+
+                    body.addEventListener('drop',function(e){
+                        var raw=e.dataTransfer.getData('application/x-tripily-import');
+                        if(!raw)return;
+
+                        e.preventDefault();
+                        e.stopImmediatePropagation();
+                        body.classList.remove('is-drop-target');
+                        try{
                         var d=JSON.parse(raw);
 
                         /*
@@ -2602,10 +2619,13 @@ request.setAttribute("activePage", "planner");
                         }
                     }catch(err){
                         console.error(err);
-                    }finally{
-                        finishImportDrag();
-                    }
-                });
+                        }finally{
+                            finishImportDrag();
+                        }
+                    });
+                }
+
+                updateDayDeleteButtons();
             }
 
 

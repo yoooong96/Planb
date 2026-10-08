@@ -11,6 +11,8 @@ public class ItineraryCartDto {
     private String authorNickname;
     private String title;
     private String country;
+    private String city;
+    private Integer travelerCount;
 
     private Timestamp addedAt;
 
@@ -21,6 +23,11 @@ public class ItineraryCartDto {
     
 	public ItineraryCartDto(Long cartId, Long userId, Long sourceItineraryId, String authorNickname, String title,
 			String country, Timestamp addedAt) {
+		this(cartId, userId, sourceItineraryId, authorNickname, title, country, null, 1, addedAt);
+	}
+
+	public ItineraryCartDto(Long cartId, Long userId, Long sourceItineraryId, String authorNickname, String title,
+			String country, String city, Integer travelerCount, Timestamp addedAt) {
 		super();
 		this.cartId = cartId;
 		this.userId = userId;
@@ -28,6 +35,8 @@ public class ItineraryCartDto {
 		this.authorNickname = authorNickname;
 		this.title = title;
 		this.country = country;
+		this.city = city;
+		this.travelerCount = travelerCount;
 		this.addedAt = addedAt;
 	}
 
@@ -79,6 +88,22 @@ public class ItineraryCartDto {
         this.country = country;
     }
 
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public Integer getTravelerCount() {
+        return travelerCount;
+    }
+
+    public void setTravelerCount(Integer travelerCount) {
+        this.travelerCount = travelerCount;
+    }
+
     public Timestamp getAddedAt() {
         return addedAt;
     }
@@ -90,8 +115,8 @@ public class ItineraryCartDto {
 	@Override
 	public String toString() {
 		return "ItineraryCartDto [cartId=" + cartId + ", userId=" + userId + ", sourceItineraryId=" + sourceItineraryId
-				+ ", authorNickname=" + authorNickname + ", title=" + title + ", country=" + country + ", addedAt="
-				+ addedAt + "]";
+				+ ", authorNickname=" + authorNickname + ", title=" + title + ", country=" + country + ", city=" + city
+				+ ", travelerCount=" + travelerCount + ", addedAt=" + addedAt + "]";
 	}
     
 }
