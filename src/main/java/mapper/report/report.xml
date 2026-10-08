@@ -14,7 +14,8 @@
 	<insert id="insertReport" parameterType="dto.report.ReportDto"
 		useGeneratedKeys="true" keyProperty="reportId" keyColumn="report_id">
 
-		INSERT INTO TB_REPORT
+		INSERT INTO
+		TB_REPORT
 		(
 		reporter_user_id,
 		target_type,
@@ -35,7 +36,8 @@
 		#{targetUserId},
 		#{targetField, jdbcType=VARCHAR},
 		#{reasonId},
-		#{detail, jdbcType=VARCHAR},
+		#{detail,
+		jdbcType=VARCHAR},
 		'PENDING',
 		'NONE'
 		)
@@ -54,13 +56,401 @@
 
 		FROM TB_REPORT
 
-		WHERE reporter_user_id = #{reporterUserId}
+		WHERE reporter_user_id =
+		#{reporterUserId}
 
 		AND target_type = 'USER'
 
-		AND target_id = #{targetUserId}
+		AND target_id =
+		#{targetUserId}
 
 	</select>
+
+	<!-- ===================================================== 관리자 신고 전체 조회 
+		====================================================== -->
+
+	<select id="selectAllReports" resultType="dto.report.ReportDto">
+
+		SELECT
+		r.report_id AS reportId,
+		r.reporter_user_id AS reporterUserId,
+		reporter.login_id AS reporterLoginId,
+
+		r.target_type AS targetType,
+		r.target_id AS targetId,
+		r.target_user_id AS targetUserId,
+
+		target_user.login_id AS targetLoginId,
+		target_user.nickname AS targetNickname,
+
+		r.target_field AS targetField,
+		r.reason_id AS reasonId,
+		reason.reason_name AS reasonName,
+
+		r.detail AS detail,
+		r.status AS status,
+		r.action_type AS actionType,
+
+		r.processed_by_user_id AS processedByUserId,
+		r.processed_at AS processedAt,
+		r.created_at AS createdAt,
+		r.updated_at AS updatedAt,
+
+
+		CASE
+
+		WHEN r.target_type = 'ITINERARY'
+		THEN (
+		SELECT i.title
+		FROM tb_itinerary i
+		WHERE i.itinerary_id = r.target_id
+		)
+
+		WHEN r.target_type = 'TIP'
+		THEN (
+		SELECT t.title
+		FROM tb_tip t
+		WHERE t.tip_id = r.target_id
+		)
+
+		WHEN r.target_type = 'MATE'
+		THEN (
+		SELECT m.title
+		FROM tb_mate m
+		WHERE m.mate_id = r.target_id
+		)
+
+		WHEN r.target_type = 'TIP_COMMENT'
+		THEN (
+		SELECT t.title
+		FROM tb_tip_comment c
+		INNER JOIN tb_tip t
+		ON t.tip_id = c.tip_id
+		WHERE c.comment_id = r.target_id
+		)
+
+		WHEN r.target_type = 'MATE_COMMENT'
+		THEN (
+		SELECT m.title
+		FROM tb_mate_comment c
+		INNER JOIN tb_mate m
+		ON m.mate_id = c.mate_id
+		WHERE c.comment_id = r.target_id
+		)
+
+		WHEN r.target_type = 'ITINERARY_COMMENT'
+		THEN (
+		SELECT i.title
+		FROM tb_itinerary_comment c
+		INNER JOIN tb_itinerary i
+		ON i.itinerary_id = c.itinerary_id
+		WHERE c.comment_id = r.target_id
+		)
+
+		WHEN r.target_type = 'USER'
+		THEN COALESCE(
+		target_user.nickname,
+		target_user.login_id
+		)
+
+		ELSE CONCAT(
+		'신고 대상 #',
+		r.target_id
+		)
+
+		END AS targetTitle,
+
+
+		CASE
+
+		WHEN r.target_type = 'TIP_COMMENT'
+		THEN COALESCE(
+		(
+		SELECT c.tip_id
+		FROM tb_tip_comment c
+		WHERE c.comment_id = r.target_id
+		),
+		0
+		)
+
+		WHEN r.target_type = 'MATE_COMMENT'
+		THEN COALESCE(
+		(
+		SELECT c.mate_id
+		FROM tb_mate_comment c
+		WHERE c.comment_id = r.target_id
+		),
+		0
+		)
+
+		WHEN r.target_type = 'ITINERARY_COMMENT'
+		THEN COALESCE(
+		(
+		SELECT c.itinerary_id
+		FROM tb_itinerary_comment c
+		WHERE c.comment_id = r.target_id
+		),
+		0
+		)
+
+		WHEN r.target_type = 'USER'
+		THEN COALESCE(
+		r.target_user_id,
+		r.target_id
+		)
+
+		ELSE r.target_id
+
+		END AS viewTargetId
+
+
+		FROM tb_report r
+
+		LEFT JOIN tb_report_reason reason
+		ON reason.reason_id = r.reason_id
+
+		LEFT JOIN tb_user reporter
+		ON reporter.user_id =
+		r.reporter_user_id
+
+		LEFT JOIN tb_user target_user
+		ON target_user.user_id =
+		r.target_user_id
+
+		ORDER BY r.created_at DESC
+
+	</select>
+
+
+
+	<!-- ===================================================== 신고 1건 조회 ====================================================== -->
+
+	<select id="selectReportById" parameterType="long"
+		resultType="dto.report.ReportDto">
+
+		SELECT
+		report_id AS reportId,
+		reporter_user_id AS reporterUserId,
+		target_type AS targetType,
+		target_id AS targetId,
+		target_user_id AS targetUserId,
+		target_field AS targetField,
+		reason_id AS reasonId,
+		detail,
+		status,
+		action_type AS actionType,
+		processed_by_user_id AS processedByUserId,
+		processed_at AS processedAt,
+		created_at AS createdAt,
+		updated_at AS updatedAt
+
+		FROM tb_report
+
+		WHERE report_id = #{value}
+
+	</select>
+
+
+
+	<!-- ===================================================== 문제 없음 ====================================================== -->
+
+	<update id="rejectReport">
+
+		UPDATE tb_report
+
+		SET
+		status = 'REJECTED',
+		action_type = 'NONE',
+		processed_by_user_id = #{adminUserId},
+		processed_at = NOW()
+
+		WHERE report_id = #{reportId}
+		AND status = 'PENDING'
+
+	</update>
+
+
+
+	<!-- ===================================================== 여행 일정 삭제 ====================================================== -->
+
+	<update id="deleteItinerary">
+
+		UPDATE tb_itinerary
+
+		SET
+		status = 'DELETED',
+		deleted_by_user_id = #{adminUserId},
+		deleted_at = NOW()
+
+		WHERE itinerary_id = #{targetId}
+		AND status = 'ACTIVE'
+
+	</update>
+
+
+
+	<!-- ===================================================== 여행 꿀팁 삭제 ====================================================== -->
+
+	<update id="deleteTip">
+
+		UPDATE tb_tip
+
+		SET
+		status = 'DELETED',
+		deleted_by_user_id = #{adminUserId},
+		deleted_at = NOW()
+
+		WHERE tip_id = #{targetId}
+		AND status = 'ACTIVE'
+
+	</update>
+
+
+
+	<!-- ===================================================== 여행 메이트 삭제 ====================================================== -->
+
+	<update id="deleteMate">
+
+		UPDATE tb_mate
+
+		SET
+		status = 'DELETED',
+		deleted_by_user_id = #{adminUserId},
+		deleted_at = NOW()
+
+		WHERE mate_id = #{targetId}
+		AND status = 'ACTIVE'
+
+	</update>
+
+
+
+	<!-- ===================================================== 꿀팁 댓글 삭제 ====================================================== -->
+
+	<update id="deleteTipComment">
+
+		UPDATE tb_tip_comment
+
+		SET status = 'DELETED'
+
+		WHERE comment_id = #{value}
+		AND status = 'ACTIVE'
+
+	</update>
+
+
+
+	<!-- ===================================================== 메이트 댓글 삭제 ====================================================== -->
+
+	<update id="deleteMateComment">
+
+		UPDATE tb_mate_comment
+
+		SET status = 'DELETED'
+
+		WHERE comment_id = #{value}
+		AND status = 'ACTIVE'
+
+	</update>
+
+
+
+	<!-- ===================================================== 일정 댓글 삭제 ====================================================== -->
+
+	<update id="deleteItineraryComment">
+
+		UPDATE tb_itinerary_comment
+
+		SET status = 'DELETED'
+
+		WHERE comment_id = #{value}
+		AND status = 'ACTIVE'
+
+	</update>
+
+
+
+	<!-- ===================================================== 삭제 신고 처리 완료 ====================================================== -->
+
+	<update id="resolveDeleteReport">
+
+		UPDATE tb_report
+
+		SET
+		status = 'RESOLVED',
+		action_type = 'CONTENT_DELETE',
+		processed_by_user_id = #{adminUserId},
+		processed_at = NOW()
+
+		WHERE report_id = #{reportId}
+		AND status = 'PENDING'
+
+	</update>
+
+
+
+	<!-- ===================================================== 회원 정지 ====================================================== -->
+
+	<update id="suspendUser">
+
+		UPDATE tb_user
+
+		SET
+		status = 'SUSPENDED',
+		updated_at = NOW()
+
+		WHERE user_id = #{value}
+		AND role != 'ADMIN'
+		AND status = 'ACTIVE'
+
+	</update>
+
+
+
+	<!-- ===================================================== 회원 정지 신고 완료 ====================================================== -->
+
+	<update id="resolveSuspendReport">
+
+		UPDATE tb_report
+
+		SET
+		status = 'RESOLVED',
+		action_type = 'USER_SUSPEND',
+		processed_by_user_id = #{adminUserId},
+		processed_at = NOW()
+
+		WHERE report_id = #{reportId}
+		AND status = 'PENDING'
+
+	</update>
+
+
+
+	<!-- ===================================================== 관리자 처리 로그 ====================================================== -->
+
+	<insert id="insertAdminActionLog">
+
+		INSERT INTO tb_admin_action_log
+		(
+		admin_user_id,
+		action_type,
+		target_type,
+		target_id,
+		report_id,
+		memo
+		)
+
+		VALUES
+		(
+		#{adminUserId},
+		#{actionType},
+		#{targetType},
+		#{targetId},
+		#{reportId},
+		#{memo}
+		)
+
+	</insert>
 
 
 </mapper>

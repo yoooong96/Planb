@@ -129,7 +129,7 @@ if (user != null && user.getProfileImg() != null && !user.getProfileImg().trim()
 			%>
 			<span class="site-badge-wrap"> <a
 				class="site-icon-btn site-admin-direct-btn <%="reports".equals(activePage) ? "active" : ""%>"
-				href="<%=ctx%>/view/admin/reports/adminReports.jsp" title="신고 관리"
+				href="<%=request.getContextPath()%>/admin/reports" title="신고 관리"
 				aria-label="신고 관리"> <svg width="19" height="19"
 						viewBox="0 0 24 24" fill="none" stroke="currentColor"
 						stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
