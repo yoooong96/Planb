@@ -4,31 +4,92 @@
 
 <mapper namespace="mapper.community.mateMedia">
 
-	<insert id="insertMateMedia" parameterType="mateMedia" useGeneratedKeys="true" keyProperty="mediaId">
-		INSERT INTO TB_MATE_MEDIA (mate_id, media_type, media_url, sort_order)
-		VALUES (#{mateId}, #{mediaType}, #{mediaUrl}, #{sortOrder})
+	<!-- 여행 메이트 이미지 등록 -->
+	<insert
+		id="insertMateMedia"
+		parameterType="dto.community.MateMediaDto"
+		useGeneratedKeys="true"
+		keyProperty="mediaId">
+
+		INSERT INTO TB_MATE_MEDIA (
+			mate_id,
+			media_type,
+			media_url,
+			sort_order
+		)
+		VALUES (
+			#{mateId},
+			#{mediaType},
+			#{mediaUrl},
+			#{sortOrder}
+		)
+
 	</insert>
 
-	<select id="selectMateMedia" parameterType="Long" resultType="mateMedia">
+	<!-- 이미지 단건 조회 -->
+	<select
+		id="selectMateMedia"
+		parameterType="long"
+		resultType="dto.community.MateMediaDto">
+
+		SELECT
+			media_id AS mediaId,
+			mate_id AS mateId,
+			media_type AS mediaType,
+			media_url AS mediaUrl,
+			sort_order AS sortOrder,
+			created_at AS createdAt
+		FROM TB_MATE_MEDIA
+		WHERE media_id = #{mediaId}
 
 	</select>
 
-	<update id="updateMateMedia" parameterType="mateMedia">
+	<!-- 이미지 1개 삭제 -->
+	<delete
+		id="deleteMateMedia"
+		parameterType="map">
 
-	</update>
-
-	<delete id="deleteMateMedia" parameterType="Long">
+		DELETE FROM TB_MATE_MEDIA
+		WHERE media_id = #{mediaId}
+			AND mate_id = #{mateId}
 
 	</delete>
-	
+
+	<!-- 게시글의 이미지 전체 삭제 -->
+	<delete
+		id="deleteMateMediaByMateId"
+		parameterType="long">
+
+		DELETE FROM TB_MATE_MEDIA
+		WHERE mate_id = #{mateId}
+
+	</delete>
+
 	<!-- 여행 메이트 이미지 목록 조회 -->
-	<select id="selectMateMediaList" parameterType="long" resultType="dto.community.MateMediaDto">
-		SELECT media_id AS mediaId, mate_id AS mateId, media_type AS mediaType, media_url AS mediaUrl, sort_order AS sortOrder, created_at AS createdAt
+	<select
+		id="selectMateMediaList"
+		parameterType="long"
+		resultType="dto.community.MateMediaDto">
+
+		SELECT
+			media_id AS mediaId,
+			mate_id AS mateId,
+			media_type AS mediaType,
+			media_url AS mediaUrl,
+			sort_order AS sortOrder,
+			created_at AS createdAt
 		FROM TB_MATE_MEDIA
-		WHERE mate_id = #{mateId} ORDER BY sort_order ASC
+		WHERE mate_id = #{mateId}
+		ORDER BY sort_order ASC
+
 	</select>
-	
-	<select id="selectFirstMateMedia" parameterType="long" resultType="dto.community.MateMediaDto">
+
+	<!-- 첫 번째 이미지 조회 -->
+	<select
+		id="selectFirstMateMedia"
+		parameterType="long"
+		resultType="dto.community.MateMediaDto">
+
 		SELECT
 			media_id AS mediaId,
 			mate_id AS mateId,
@@ -41,6 +102,7 @@
 			AND media_type = 'IMAGE'
 		ORDER BY sort_order ASC, media_id ASC
 		LIMIT 1
+
 	</select>
-		
+
 </mapper>

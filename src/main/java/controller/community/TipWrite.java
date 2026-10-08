@@ -1,35 +1,27 @@
 package controller.community;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
-import dto.community.TipDto;
-import dto.member.UserDto;
-import service.community.TipService;
-import service.community.TipServiceImpl;
-import javax.servlet.annotation.MultipartConfig;
-
-import java.io.File;
-import java.util.UUID;
-
 import javax.servlet.http.Part;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import dto.community.TipDto;
 import dto.community.TipMediaDto;
+import dto.member.UserDto;
 import service.community.TipMediaService;
 import service.community.TipMediaServiceImpl;
+import service.community.TipService;
+import service.community.TipServiceImpl;
+import util.image.SharedImageStorage;
 
-/**
- * Servlet implementation class TipWrite
- */
 @WebServlet("/tipWrite")
 @MultipartConfig(
 	fileSizeThreshold = 1024 * 1024,
@@ -37,157 +29,156 @@ import service.community.TipMediaServiceImpl;
 	maxRequestSize = 50 * 1024 * 1024
 )
 public class TipWrite extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public TipWrite() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
+	private static final long serialVersionUID = 1L;
+
+	public TipWrite() {
+		super();
+	}
+
+	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.getRequestDispatcher("/view/tips/tipWrite.jsp").forward(request, response);
 	}
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	    request.setCharacterEncoding("UTF-8");
-	    // ========================================
-	    // 1. 로그인 사용자 확인
-	    // ========================================
-	    HttpSession session = request.getSession(false);
 
-	    if (session == null || session.getAttribute("user") == null) {
-	        response.sendRedirect(request.getContextPath() + "/auth/login");
-	        return;
-	    }
-	    UserDto user = (UserDto) session.getAttribute("user");
-	    // ========================================
-	    // 2. 작성한 값 받기
-	    // ========================================
-	    String title = request.getParameter("title");
-	    String hashtag = request.getParameter("hashtag");
-	    String content = request.getParameter("content");
-	    // ========================================
-	    // 3. 이미지 저장 폴더 준비
-	    // ========================================
-	    String uploadPath = request.getServletContext().getRealPath("/view/assets/images/tips/upload");
+		request.setCharacterEncoding("UTF-8");
 
-	    File uploadDir = new File(uploadPath);
+		// ========================================
+		// 1. 로그인 사용자 확인
+		// ========================================
+		HttpSession session = request.getSession(false);
 
-	    if (!uploadDir.exists()) {
-	        uploadDir.mkdirs();
-	    }
-	    // 저장된 이미지 URL들을 담을 리스트
-	    List<String> imageUrls = new ArrayList<>();
+		if (session == null || session.getAttribute("user") == null) {
+			response.sendRedirect(request.getContextPath() + "/auth/login");
+			return;
+		}
 
-	    // ========================================
-	    // 4. 첨부 이미지 최대 5장 저장
-	    // ========================================
-	    for (Part part : request.getParts()) {
+		UserDto user = (UserDto) session.getAttribute("user");
 
-	        if (!"images".equals(part.getName())) {
-	            continue;
-	        }
+		// ========================================
+		// 2. 작성한 값 받기
+		// ========================================
+		String title = request.getParameter("title");
+		String hashtag = request.getParameter("hashtag");
+		String content = request.getParameter("content");
 
-	        System.out.println("파일명 = " + part.getSubmittedFileName());
-	        System.out.println("파일크기 = " + part.getSize());
+		// ========================================
+		// 3. 저장된 이미지 URL 리스트
+		// ========================================
+		List<String> imageUrls = new ArrayList<>();
 
-	        if (part.getSize() == 0) {
-	            continue;
-	        }
+		// ========================================
+		// 4. 첨부 이미지 최대 5장 저장
+		// ========================================
+		for (Part part : request.getParts()) {
 
-	        if (imageUrls.size() >= 5) {
-	            break;
-	        }
+			if (!"images".equals(part.getName())) {
+				continue;
+			}
 
-	        String originalName = part.getSubmittedFileName();
+			System.out.println("파일명 = " + part.getSubmittedFileName());
+			System.out.println("파일크기 = " + part.getSize());
 
-	        if (originalName == null || originalName.trim().isEmpty()) {
-	            continue;
-	        }
+			if (part.getSize() == 0) {
+				continue;
+			}
 
-	        String contentType = part.getContentType();
+			if (imageUrls.size() >= 5) {
+				break;
+			}
 
-	        if (contentType == null || !contentType.startsWith("image/")) {
-	            continue;
-	        }
+			String originalName = part.getSubmittedFileName();
 
-	        String extension = "";
+			if (originalName == null || originalName.trim().isEmpty()) {
+				continue;
+			}
 
-	        int dotIndex = originalName.lastIndexOf(".");
+			String contentType = part.getContentType();
 
-	        if (dotIndex != -1) {
-	            extension = originalName.substring(dotIndex);
-	        }
+			if (contentType == null || !contentType.startsWith("image/")) {
+				continue;
+			}
 
-	        String savedName = UUID.randomUUID().toString() + extension;
+			String imageUrl =
+				SharedImageStorage.saveImage(
+					part,
+					SharedImageStorage.Category.TIP
+				);
 
-	        part.write(uploadPath + File.separator + savedName);
+			imageUrls.add(imageUrl);
+		}
 
-	        String imageUrl =
-	                "/view/assets/images/tips/upload/" + savedName;
+		// ========================================
+		// 5. 첫 번째 사진을 대표 이미지로 지정
+		// ========================================
+		String thumbnailImg = null;
 
-	        imageUrls.add(imageUrl);
-	    }
-	    // ========================================
-	    // 5. 첫 번째 사진을 대표 이미지로 지정
-	    // ========================================
-	    String thumbnailImg = null;
+		if (!imageUrls.isEmpty()) {
+			thumbnailImg = imageUrls.get(0);
+		}
 
-	    if (!imageUrls.isEmpty()) {
-	        thumbnailImg = imageUrls.get(0);
-	    }
-	    // ========================================
-	    // 6. 게시글 DTO 생성
-	    // ========================================
-	    TipDto tipDto = new TipDto();
+		// ========================================
+		// 6. 게시글 DTO 생성
+		// ========================================
+		TipDto tipDto = new TipDto();
 
-	    tipDto.setUserId(user.getUserId());
-	    tipDto.setTitle(title);
-	    tipDto.setHashtag(hashtag);
-	    tipDto.setContent(content);
-	    tipDto.setThumbnailImg(thumbnailImg);
+		tipDto.setUserId(user.getUserId());
+		tipDto.setTitle(title);
+		tipDto.setHashtag(hashtag);
+		tipDto.setContent(content);
+		tipDto.setThumbnailImg(thumbnailImg);
 
-	    // ========================================
-	    // 7. TB_TIP에 게시글 등록
-	    // ========================================
-	    TipService tipService = new TipServiceImpl();
+		// ========================================
+		// 7. TB_TIP에 게시글 등록
+		// ========================================
+		TipService tipService = new TipServiceImpl();
 
-	    int result = tipService.insertTip(tipDto);
+		int result = tipService.insertTip(tipDto);
 
-	    // ========================================
-	    // 8. 게시글 등록 성공
-	    // ========================================
-	    if (result > 0) {
-	        // TB_TIP_MEDIA 등록용 Service
-	        TipMediaService tipMediaService = new TipMediaServiceImpl();
+		// ========================================
+		// 8. 게시글 등록 성공
+		// ========================================
+		if (result > 0) {
 
-	        int sortOrder = 1;
+			TipMediaService tipMediaService =
+				new TipMediaServiceImpl();
 
-	        // 선택한 이미지 모두 TB_TIP_MEDIA에 저장
-	        for (String imageUrl : imageUrls) {
+			int sortOrder = 1;
 
-	            TipMediaDto mediaDto = new TipMediaDto();
+			// 선택한 이미지 모두 TB_TIP_MEDIA에 저장
+			for (String imageUrl : imageUrls) {
 
-	            // 방금 생성된 게시글 번호
-	            mediaDto.setTipId(tipDto.getTipId());
-	            mediaDto.setMediaType("IMAGE");
-	            mediaDto.setMediaUrl(imageUrl);
-	            mediaDto.setSortOrder(sortOrder);
-	            tipMediaService.insertTipMedia(mediaDto);
-	            sortOrder++;
-	        }
-	        // 등록 완료 → 여행꿀팁 목록
-	        response.sendRedirect(request.getContextPath() + "/tips");
-	    } else {
-	        request.setAttribute("errorMessage", "여행꿀팁 등록에 실패했습니다.");
-	        request.getRequestDispatcher("/view/tips/tipWrite.jsp").forward(request, response);
-	    }
+				TipMediaDto mediaDto =
+					new TipMediaDto();
+
+				mediaDto.setTipId(tipDto.getTipId());
+				mediaDto.setMediaType("IMAGE");
+				mediaDto.setMediaUrl(imageUrl);
+				mediaDto.setSortOrder(sortOrder);
+
+				tipMediaService.insertTipMedia(mediaDto);
+
+				sortOrder++;
+			}
+
+			// 등록 완료 → 여행꿀팁 목록
+			response.sendRedirect(
+				request.getContextPath() + "/tips"
+			);
+
+		} else {
+
+			request.setAttribute(
+				"errorMessage",
+				"여행꿀팁 등록에 실패했습니다."
+			);
+
+			request.getRequestDispatcher(
+				"/view/tips/tipWrite.jsp"
+			).forward(request, response);
+		}
 	}
 }

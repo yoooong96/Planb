@@ -26,8 +26,12 @@ public class TipMediaDaoImpl implements TipMediaDao {
 
 	@Override
 	public TipMediaDto selectTipMedia(Long mediaId) {
-		// TODO Auto-generated method stub
-		return null;
+		try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+			return sqlSession.selectOne("mapper.community.tipMedia.selectTipMedia", mediaId);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
 	}
 
 	@Override

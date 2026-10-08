@@ -1,10 +1,8 @@
 package controller.community;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -22,6 +20,7 @@ import service.community.MateMediaService;
 import service.community.MateMediaServiceImpl;
 import service.community.MateService;
 import service.community.MateServiceImpl;
+import util.image.SharedImageStorage;
 
 @WebServlet("/mateWrite")
 @MultipartConfig(
@@ -29,6 +28,7 @@ import service.community.MateServiceImpl;
 	maxRequestSize = 1024 * 1024 * 50
 )
 public class MateWrite extends HttpServlet {
+
 	private static final long serialVersionUID = 1L;
 
 	private MateService mateService = new MateServiceImpl();
@@ -45,6 +45,7 @@ public class MateWrite extends HttpServlet {
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
 		request.setCharacterEncoding("UTF-8");
 
 		// ========================================
@@ -56,6 +57,7 @@ public class MateWrite extends HttpServlet {
 			response.sendRedirect(request.getContextPath() + "/auth/login");
 			return;
 		}
+
 		UserDto user = (UserDto) session.getAttribute("user");
 
 		// ========================================
@@ -72,19 +74,10 @@ public class MateWrite extends HttpServlet {
 		} catch (NumberFormatException e) {
 			recruitCount = 1;
 		}
-		
+
 		// ========================================
-		// 3. 이미지 저장 폴더 준비
+		// 3. 저장된 이미지 URL 리스트
 		// ========================================
-		String uploadPath = request.getServletContext().getRealPath("/view/assets/images/mate/upload");
-
-		File uploadDir = new File(uploadPath);
-
-		if (!uploadDir.exists()) {
-			uploadDir.mkdirs();
-		}
-
-		// 저장된 이미지 URL들을 담을 리스트
 		List<String> imageUrls = new ArrayList<>();
 
 		// ========================================
@@ -119,20 +112,11 @@ public class MateWrite extends HttpServlet {
 				continue;
 			}
 
-			String extension = "";
-
-			int dotIndex = originalName.lastIndexOf(".");
-
-			if (dotIndex != -1) {
-				extension = originalName.substring(dotIndex);
-			}
-
-			String savedName = UUID.randomUUID().toString() + extension;
-
-			part.write(uploadPath + File.separator + savedName);
-
 			String imageUrl =
-				"/view/assets/images/mate/upload/" + savedName;
+				SharedImageStorage.saveImage(
+					part,
+					SharedImageStorage.Category.MATE
+				);
 
 			imageUrls.add(imageUrl);
 		}
@@ -165,7 +149,7 @@ public class MateWrite extends HttpServlet {
 		// 7. TB_MATE에 게시글 등록
 		// ========================================
 		int result = mateService.insertMate(mateDto);
-		
+
 		System.out.println("Mate 등록 결과 result = " + result);
 
 		// ========================================
@@ -190,9 +174,12 @@ public class MateWrite extends HttpServlet {
 
 				sortOrder++;
 			}
+
 			// 등록 완료 → 여행 메이트 목록
 			response.sendRedirect(request.getContextPath() + "/mates");
+
 		} else {
+
 			request.setAttribute("errorMessage", "여행 메이트 등록에 실패했습니다.");
 			request.getRequestDispatcher("/view/mates/mateWrite.jsp").forward(request, response);
 		}

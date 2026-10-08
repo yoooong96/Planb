@@ -8,13 +8,20 @@ public interface MateMediaDao {
 
 	int insertMateMedia(MateMediaDto mateMediaDto);
 
+	// 이미지 단건 조회
 	MateMediaDto selectMateMedia(Long mediaId);
 
 	int updateMateMedia(MateMediaDto mateMediaDto);
 
-	int deleteMateMedia(Long mediaId);
-	
+	// 이미지 1개 삭제
+	int deleteMateMedia(long mediaId, long mateId);
+
+	// 게시글의 이미지 전체 삭제
+	int deleteMateMediaByMateId(long mateId);
+
+	// 게시글 이미지 목록 조회
 	List<MateMediaDto> selectMateMediaList(Long mateId);
-	
+
+	// 첫 번째 이미지 조회
 	MateMediaDto selectFirstMateMedia(long mateId);
 }

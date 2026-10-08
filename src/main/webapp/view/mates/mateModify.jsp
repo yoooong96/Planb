@@ -14,7 +14,7 @@ request.setAttribute("activePage", "mate");
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>여행 메이트 수정 · Tripily</title>
 	<jsp:include page="/common/headStyles.jsp" />
-	<script defer src="${pageContext.request.contextPath}/view/assets/js/mates/mateWrite.js">
+	<script defer src="${pageContext.request.contextPath}/view/assets/js/mates/mateModify.js">
 	</script>
 </head>
 
@@ -208,13 +208,28 @@ request.setAttribute("activePage", "mate");
 									style="grid-template-columns: repeat(auto-fit, minmax(min(120px, 100%), 1fr));">
 									<c:forEach var="media" items="${mateMediaList}">
 										<c:if test="${media.mediaType eq 'IMAGE'}">
+									
 											<div
 												class="existing-image-item relative overflow-hidden rounded-xl border bg-gray-50"
 												data-media-id="${media.mediaId}"
 												style="border-color: #D1D2F9; aspect-ratio: 4/3;">
-												<img src="${pageContext.request.contextPath}${media.mediaUrl}"
-													 alt="현재 등록된 이미지" class="w-full h-full object-cover">
+									
+												<img
+													src="${pageContext.request.contextPath}${media.mediaUrl}"
+													alt="현재 등록된 이미지"
+													class="w-full h-full object-cover">
+									
+												<button
+													type="button"
+													class="existing-image-delete absolute top-2 right-2 w-8 h-8 rounded-full flex items-center justify-center text-white font-bold"
+													data-media-id="${media.mediaId}"
+													style="background: rgba(0, 0, 0, 0.65);"
+													aria-label="이미지 삭제">
+													×
+												</button>
+									
 											</div>
+									
 										</c:if>
 									</c:forEach>
 								</div>

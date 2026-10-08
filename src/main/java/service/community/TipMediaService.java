@@ -11,6 +11,9 @@ public interface TipMediaService {
     
     List<TipMediaDto> selectTipMediaList(long tipId);
     
+    // 이미지 단건 조회
+ 	TipMediaDto selectTipMedia(Long mediaId);
+    
     int deleteTipMediaByTipId(long tipId);
     
     int deleteTipMedia(long mediaId, long tipId);

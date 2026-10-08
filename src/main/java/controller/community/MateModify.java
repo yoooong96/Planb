@@ -1,10 +1,8 @@
 package controller.community;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -22,6 +20,7 @@ import service.community.MateMediaService;
 import service.community.MateMediaServiceImpl;
 import service.community.MateService;
 import service.community.MateServiceImpl;
+import util.image.SharedImageStorage;
 
 @WebServlet("/mateModify")
 @MultipartConfig(
@@ -47,7 +46,9 @@ public class MateModify extends HttpServlet {
 
 		request.setCharacterEncoding("UTF-8");
 
-		// 로그인 확인
+		// ========================================
+		// 1. 로그인 확인
+		// ========================================
 		HttpSession session = request.getSession(false);
 
 		if (session == null || session.getAttribute("user") == null) {
@@ -58,7 +59,9 @@ public class MateModify extends HttpServlet {
 		UserDto user = (UserDto) session.getAttribute("user");
 		long userId = user.getUserId();
 
-		// mateId 받기
+		// ========================================
+		// 2. mateId 받기
+		// ========================================
 		String mateIdParam = request.getParameter("mateId");
 
 		if (mateIdParam == null || mateIdParam.trim().isEmpty()) {
@@ -70,7 +73,9 @@ public class MateModify extends HttpServlet {
 
 			long mateId = Long.parseLong(mateIdParam);
 
-			// 게시글 조회
+			// ========================================
+			// 3. 게시글 조회
+			// ========================================
 			MateDto mate = mateService.selectMate(mateId);
 
 			if (mate == null) {
@@ -78,7 +83,9 @@ public class MateModify extends HttpServlet {
 				return;
 			}
 
-			// 본인이 작성한 글인지 확인
+			// ========================================
+			// 4. 작성자 확인
+			// ========================================
 			if (mate.getUserId() != userId) {
 				response.sendError(
 					HttpServletResponse.SC_FORBIDDEN,
@@ -87,18 +94,27 @@ public class MateModify extends HttpServlet {
 				return;
 			}
 
-			// 현재 등록된 이미지 전체 조회
-			List<MateMediaDto> mateMediaList = mateMediaService.selectMateMediaList(mateId);
+			// ========================================
+			// 5. 현재 등록된 이미지 전체 조회
+			// ========================================
+			List<MateMediaDto> mateMediaList =
+				mateMediaService.selectMateMediaList(mateId);
 
-			// 수정 JSP로 전달
+			// ========================================
+			// 6. 수정 JSP로 전달
+			// ========================================
 			request.setAttribute("mate", mate);
 			request.setAttribute("mateMediaList", mateMediaList);
 
-			request.getRequestDispatcher("/view/mates/mateModify.jsp").forward(request, response);
+			request.getRequestDispatcher(
+				"/view/mates/mateModify.jsp"
+			).forward(request, response);
 
 		} catch (NumberFormatException e) {
 
-			response.sendRedirect(request.getContextPath() + "/mates");
+			response.sendRedirect(
+				request.getContextPath() + "/mates"
+			);
 
 		} catch (Exception e) {
 
@@ -129,63 +145,91 @@ public class MateModify extends HttpServlet {
 			// ========================================
 			// 2. 수정 값 받기
 			// ========================================
-			long mateId = Long.parseLong(request.getParameter("mateId"));
+			long mateId =
+				Long.parseLong(request.getParameter("mateId"));
 
-			String title = request.getParameter("title");
-			String country = request.getParameter("country");
-			String recruitCountParam = request.getParameter("recruitCount");
-			String content = request.getParameter("content");
+			String title =
+				request.getParameter("title");
+
+			String country =
+				request.getParameter("country");
+
+			String recruitCountParam =
+				request.getParameter("recruitCount");
+
+			String content =
+				request.getParameter("content");
+
+			String[] deletedMediaIds =
+				request.getParameterValues("deletedMediaIds");
 
 			// ========================================
 			// 3. 기본 입력값 검사
 			// ========================================
-			if (title == null || title.trim().isEmpty()
-					|| country == null || country.trim().isEmpty()
-					|| recruitCountParam == null || recruitCountParam.trim().isEmpty()
-					|| content == null || content.trim().isEmpty()) {
+			if (
+				title == null
+				|| title.trim().isEmpty()
+				|| country == null
+				|| country.trim().isEmpty()
+				|| recruitCountParam == null
+				|| recruitCountParam.trim().isEmpty()
+				|| content == null
+				|| content.trim().isEmpty()
+			) {
 
 				response.sendRedirect(
 					request.getContextPath()
-					+ "/mateModify?mateId="
-					+ mateId
+						+ "/mateModify?mateId="
+						+ mateId
 				);
 
 				return;
 			}
 
-			int recruitCount = Integer.parseInt(recruitCountParam);
+			int recruitCount =
+				Integer.parseInt(recruitCountParam);
 
 			if (recruitCount < 1 || recruitCount > 99) {
+
 				response.sendRedirect(
 					request.getContextPath()
-					+ "/mateModify?mateId="
-					+ mateId
+						+ "/mateModify?mateId="
+						+ mateId
 				);
+
 				return;
 			}
 
 			// ========================================
 			// 4. 기존 게시글 + 작성자 확인
 			// ========================================
-			MateDto oldMate = mateService.selectMate(mateId);
+			MateDto oldMate =
+				mateService.selectMate(mateId);
 
 			if (oldMate == null) {
-				response.sendRedirect(request.getContextPath() + "/mates");
+
+				response.sendRedirect(
+					request.getContextPath() + "/mates"
+				);
+
 				return;
 			}
 
 			if (oldMate.getUserId() != user.getUserId()) {
+
 				response.sendError(
 					HttpServletResponse.SC_FORBIDDEN,
 					"본인이 작성한 글만 수정할 수 있습니다."
 				);
+
 				return;
 			}
 
 			// ========================================
 			// 5. 새 이미지 파일 확인
 			// ========================================
-			List<Part> newImageParts = new ArrayList<>();
+			List<Part> newImageParts =
+				new ArrayList<>();
 
 			for (Part part : request.getParts()) {
 
@@ -197,15 +241,23 @@ public class MateModify extends HttpServlet {
 					continue;
 				}
 
-				String originalName = part.getSubmittedFileName();
+				String originalName =
+					part.getSubmittedFileName();
 
-				if (originalName == null || originalName.trim().isEmpty()) {
+				if (
+					originalName == null
+					|| originalName.trim().isEmpty()
+				) {
 					continue;
 				}
 
-				String contentType = part.getContentType();
+				String contentType =
+					part.getContentType();
 
-				if (contentType == null || !contentType.startsWith("image/")) {
+				if (
+					contentType == null
+					|| !contentType.startsWith("image/")
+				) {
 					continue;
 				}
 
@@ -213,9 +265,64 @@ public class MateModify extends HttpServlet {
 			}
 
 			// ========================================
-			// 6. 현재 등록된 이미지 조회
+			// 6. 사용자가 X 누른 기존 이미지 삭제
 			// ========================================
-			List<MateMediaDto> existingMediaList = mateMediaService.selectMateMediaList(mateId);
+			if (deletedMediaIds != null) {
+
+				for (String mediaIdValue : deletedMediaIds) {
+
+					if (
+						mediaIdValue == null
+						|| mediaIdValue.trim().isEmpty()
+					) {
+						continue;
+					}
+
+					long mediaId =
+						Long.parseLong(mediaIdValue);
+
+					// 삭제할 이미지 정보 조회
+					MateMediaDto deleteMedia =
+						mateMediaService.selectMateMedia(
+							mediaId
+						);
+
+					if (deleteMedia == null) {
+						continue;
+					}
+
+					// 현재 게시글의 이미지인지 확인
+					if (deleteMedia.getMateId() != mateId) {
+						continue;
+					}
+
+					String deleteImageUrl =
+						deleteMedia.getMediaUrl();
+
+					// TB_MATE_MEDIA 삭제
+					int deleteResult =
+						mateMediaService.deleteMateMedia(
+							mediaId,
+							mateId
+						);
+
+					// DB 삭제 성공 시 실제 파일 삭제
+					if (deleteResult > 0) {
+
+						SharedImageStorage.deleteByWebUrl(
+							deleteImageUrl
+						);
+					}
+				}
+			}
+
+			// ========================================
+			// 7. 삭제 처리 후 현재 이미지 다시 조회
+			// ========================================
+			List<MateMediaDto> existingMediaList =
+				mateMediaService.selectMateMediaList(
+					mateId
+				);
 
 			int existingImageCount = 0;
 			int maxSortOrder = 0;
@@ -233,9 +340,13 @@ public class MateModify extends HttpServlet {
 			}
 
 			// ========================================
-			// 7. 기존 + 신규 이미지 최대 5장 검사
+			// 8. 기존 + 신규 이미지 최대 5장 검사
 			// ========================================
-			if (existingImageCount + newImageParts.size() > 5) {
+			if (
+				existingImageCount
+					+ newImageParts.size()
+					> 5
+			) {
 
 				response.sendError(
 					HttpServletResponse.SC_BAD_REQUEST,
@@ -246,51 +357,27 @@ public class MateModify extends HttpServlet {
 			}
 
 			// ========================================
-			// 8. 새 이미지 실제 파일 저장
+			// 9. 새 이미지 공유폴더에 저장
 			// ========================================
-			String uploadPath = request.getServletContext().getRealPath(
-				"/view/assets/images/mates/upload"
-			);
-
-			File uploadDir = new File(uploadPath);
-
-			if (!uploadDir.exists()) {
-				uploadDir.mkdirs();
-			}
-
-			List<String> imageUrls = new ArrayList<>();
+			List<String> imageUrls =
+				new ArrayList<>();
 
 			for (Part part : newImageParts) {
 
-				String originalName = part.getSubmittedFileName();
-
-				String extension = "";
-
-				int dotIndex = originalName.lastIndexOf(".");
-
-				if (dotIndex != -1) {
-					extension = originalName.substring(dotIndex);
-				}
-
-				String savedName = UUID.randomUUID().toString() + extension;
-
-				part.write(
-					uploadPath
-					+ File.separator
-					+ savedName
-				);
-
 				String imageUrl =
-					"/view/assets/images/mates/upload/"
-					+ savedName;
+					SharedImageStorage.saveImage(
+						part,
+						SharedImageStorage.Category.MATE
+					);
 
 				imageUrls.add(imageUrl);
 			}
 
 			// ========================================
-			// 9. 게시글 기본 정보 수정
+			// 10. 게시글 기본 정보 수정
 			// ========================================
-			MateDto mate = new MateDto();
+			MateDto mate =
+				new MateDto();
 
 			mate.setMateId(mateId);
 			mate.setUserId(user.getUserId());
@@ -299,7 +386,8 @@ public class MateModify extends HttpServlet {
 			mate.setRecruitCount(recruitCount);
 			mate.setContent(content.trim());
 
-			int result = mateService.updateMate(mate);
+			int result =
+				mateService.updateMate(mate);
 
 			if (result == 0) {
 
@@ -312,56 +400,71 @@ public class MateModify extends HttpServlet {
 			}
 
 			// ========================================
-			// 10. 새 이미지 DB 등록
+			// 11. 새 이미지 DB 등록
 			// ========================================
-			int sortOrder = maxSortOrder + 1;
+			int sortOrder =
+				maxSortOrder + 1;
 
 			for (String imageUrl : imageUrls) {
 
-				MateMediaDto mediaDto = new MateMediaDto();
+				MateMediaDto mediaDto =
+					new MateMediaDto();
 
 				mediaDto.setMateId(mateId);
 				mediaDto.setMediaType("IMAGE");
 				mediaDto.setMediaUrl(imageUrl);
 				mediaDto.setSortOrder(sortOrder);
 
-				mateMediaService.insertMateMedia(mediaDto);
+				mateMediaService.insertMateMedia(
+					mediaDto
+				);
 
 				sortOrder++;
 			}
 
 			// ========================================
-			// 11. 대표 이미지 다시 설정
+			// 12. 대표 이미지 다시 설정
 			// ========================================
-			MateMediaDto firstMedia = mateMediaService.selectFirstMateMedia(mateId);
+			MateMediaDto firstMedia =
+				mateMediaService.selectFirstMateMedia(
+					mateId
+				);
 
-			MateDto imageMate = new MateDto();
+			MateDto imageMate =
+				new MateDto();
 
 			imageMate.setMateId(mateId);
 			imageMate.setUserId(user.getUserId());
 
 			if (firstMedia != null) {
-				imageMate.setImg(firstMedia.getMediaUrl());
+
+				imageMate.setImg(
+					firstMedia.getMediaUrl()
+				);
+
 			} else {
+
 				imageMate.setImg(null);
 			}
 
-			mateService.updateMateImage(imageMate);
+			mateService.updateMateImage(
+				imageMate
+			);
 
 			// ========================================
-			// 12. 수정 완료 → 상세페이지
+			// 13. 수정 완료 → 상세페이지
 			// ========================================
 			response.sendRedirect(
 				request.getContextPath()
-				+ "/mateDetail?mateId="
-				+ mateId
+					+ "/mateDetail?mateId="
+					+ mateId
 			);
 
 		} catch (NumberFormatException e) {
 
 			response.sendRedirect(
 				request.getContextPath()
-				+ "/mates"
+					+ "/mates"
 			);
 
 		} catch (Exception e) {
