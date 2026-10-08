@@ -1,17 +1,13 @@
 package controller.itinerary;
 
 import java.io.File;
-import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.Part;
 
@@ -19,6 +15,8 @@ import dto.itinerary.ItineraryBlockDto;
 import dto.itinerary.ItineraryBlockImageDto;
 import dto.itinerary.ItineraryDayDto;
 import dto.itinerary.ItineraryDto;
+import util.image.SharedImageStorage;
+import util.image.SharedImageStorage.Category;
 
 public final class ItineraryImageUploadUtil {
 
@@ -50,10 +48,6 @@ public final class ItineraryImageUploadUtil {
 
             return createdFiles;
         }
-
-        Path uploadDir =
-                ItineraryImageStorage
-                    .ensureRootDirectory();
 
         List<ItineraryDayDto> days =
                 itineraryDto.getDays();
@@ -130,53 +124,27 @@ public final class ItineraryImageUploadUtil {
                         );
                     }
 
-                    validateImagePart(part);
-
-                    String extension =
-                            extensionByContentType(
-                                    part.getContentType()
+                    /*
+                     * 실제 파일은 공용 공유폴더에 저장하고,
+                     * DB에는 /uploads/itinerary/{파일명} 웹 경로만 저장한다.
+                     */
+                    String imageUrl =
+                            SharedImageStorage.saveImage(
+                                    part,
+                                    Category.ITINERARY
                             );
-
-                    String fileName =
-                            UUID.randomUUID().toString()
-                            + extension;
 
                     Path targetPath =
-                            uploadDir.resolve(
-                                    fileName
+                            SharedImageStorage.resolveWebUrl(
+                                    imageUrl,
+                                    Category.ITINERARY
                             );
 
-                    /*
-                     * Part.write()는 Servlet Container의 임시 업로드
-                     * 위치 영향을 받을 수 있으므로 공유폴더에는
-                     * InputStream -> Files.copy()로 직접 저장한다.
-                     */
-                    try (InputStream input =
-                            part.getInputStream()) {
-
-                        Files.copy(
-                                input,
-                                targetPath,
-                                StandardCopyOption.REPLACE_EXISTING
-                        );
+                    if (targetPath != null) {
+                        createdFiles.add(targetPath.toFile());
                     }
 
-                    File targetFile =
-                            targetPath.toFile();
-
-                    createdFiles.add(targetFile);
-
-                    /*
-                     * DB에는 공유폴더 UNC 경로가 아니라
-                     * 웹에서 접근할 상대 URL만 저장한다.
-                     *
-                     * 예:
-                     * /uploads/itinerary/uuid.jpg
-                     */
-                    image.setImageUrl(
-                            ItineraryImageStorage
-                                .toWebUrl(fileName)
-                    );
+                    image.setImageUrl(imageUrl);
                 }
             }
         }
@@ -291,12 +259,10 @@ public final class ItineraryImageUploadUtil {
      * 기존 DB에는 있었지만 현재 DTO에는 없는 이미지 파일을 삭제한다.
      */
     public static void deleteRemovedImages(
-            ServletContext context,
             ItineraryDto oldItinerary,
             ItineraryDto newItinerary) {
 
-        if (context == null
-                || oldItinerary == null) {
+        if (oldItinerary == null) {
             return;
         }
 
@@ -317,8 +283,11 @@ public final class ItineraryImageUploadUtil {
 
             try {
                 imagePath =
-                        ItineraryImageStorage
-                            .resolveWebUrl(imageUrl);
+                        SharedImageStorage
+                            .resolveWebUrl(
+                                    imageUrl,
+                                    Category.ITINERARY
+                            );
             } catch (IllegalArgumentException e) {
                 continue;
             }
@@ -379,57 +348,6 @@ public final class ItineraryImageUploadUtil {
         }
 
         return result;
-    }
-
-
-    private static void validateImagePart(
-            Part part) {
-
-        String contentType =
-                part.getContentType();
-
-        if (contentType == null
-                || !contentType.startsWith(
-                        "image/"
-                )) {
-
-            throw new IllegalArgumentException(
-                    "이미지 파일만 업로드할 수 있습니다."
-            );
-        }
-
-        /*
-         * 브라우저 accept=image/* 외에도
-         * 서버에서 허용 형식을 한 번 더 제한.
-         */
-        if (!"image/jpeg".equals(contentType)
-                && !"image/png".equals(contentType)
-                && !"image/gif".equals(contentType)
-                && !"image/webp".equals(contentType)) {
-
-            throw new IllegalArgumentException(
-                    "JPG, PNG, GIF, WEBP 이미지만 업로드할 수 있습니다."
-            );
-        }
-    }
-
-
-    private static String extensionByContentType(
-            String contentType) {
-
-        if ("image/png".equals(contentType)) {
-            return ".png";
-        }
-
-        if ("image/gif".equals(contentType)) {
-            return ".gif";
-        }
-
-        if ("image/webp".equals(contentType)) {
-            return ".webp";
-        }
-
-        return ".jpg";
     }
 
 

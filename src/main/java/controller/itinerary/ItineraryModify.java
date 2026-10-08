@@ -230,7 +230,6 @@ public class ItineraryModify extends HttpServlet {
              */
             ItineraryImageUploadUtil
                     .deleteRemovedImages(
-                            request.getServletContext(),
                             savedItinerary,
                             itineraryDto
                     );
