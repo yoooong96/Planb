@@ -657,6 +657,7 @@ public class ItineraryCartServiceImpl implements ItineraryCartService {
 		}
 
 		try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+
 			return cartDao.selectCartCount(sqlSession, loginUserId);
 		}
 	}

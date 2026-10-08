@@ -7,6 +7,68 @@
 <mapper namespace="mapper.itinerary.itineraryCart">
 
 
+	<!-- ===================================================== 카트 스냅샷 조회 ===================================================== -->
+	<!-- 원본 테이블을 다시 조회하지 않는다. 원본 수정 후에도 카트 내용은 담은 시점 그대로 유지된다. -->
+	<select id="selectCartSnapshots" parameterType="long"
+		resultType="dto.itinerary.ItineraryCartDto">
+
+		SELECT
+			cart_id,
+			user_id,
+			source_itinerary_id,
+			author_nickname,
+			title,
+			country,
+			added_at
+		FROM TB_ITINERARY_CART
+		WHERE user_id = #{value}
+		ORDER BY added_at DESC, cart_id DESC
+
+	</select>
+
+	<select id="selectDaySnapshots" parameterType="long"
+		resultType="dto.itinerary.ItineraryDayCartDto">
+
+		SELECT
+			day_cart_id,
+			cart_id,
+			source_day_id,
+			day_order,
+			day_date,
+			title
+		FROM TB_ITINERARY_DAY_CART
+		WHERE cart_id = #{value}
+		ORDER BY day_order ASC, day_cart_id ASC
+
+	</select>
+
+	<select id="selectBlockSnapshots" parameterType="long"
+		resultType="dto.itinerary.ItineraryBlockCartDto">
+
+		SELECT
+			block_cart_id,
+			day_cart_id,
+			source_block_id,
+			google_place_id,
+			place_name,
+			place_address,
+			place_lat,
+			place_lng,
+			block_type,
+			block_order,
+			title,
+			memo,
+			cost,
+			cost_type,
+			start_time,
+			end_time
+		FROM TB_ITINERARY_BLOCK_CART
+		WHERE day_cart_id = #{value}
+		ORDER BY block_order ASC, block_cart_id ASC
+
+	</select>
+
+
 	<!-- ===================================================== 카트 전체 조회 ===================================================== -->
 	<select id="selectCartItems" parameterType="long"
 		resultType="map">

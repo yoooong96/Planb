@@ -1620,7 +1620,7 @@ request.setAttribute("activePage", "planner");
 
                 return {
                     id:'cart-itinerary-'+(itinerary.itineraryId||index),
-                    sourceItineraryId:itinerary.itineraryId||null,
+                    sourceItineraryId:itinerary.sourceItineraryId||itinerary.itineraryId||null,
                     title:itinerary.title||'제목 없는 일정',
                     country:itinerary.country||'',
                     countryCode:'',
@@ -1640,7 +1640,7 @@ request.setAttribute("activePage", "planner");
                             : [];
 
                         return {
-                            sourceDayId:day.dayId||null,
+                            sourceDayId:day.sourceDayId||day.dayId||null,
                             dayNum:day.dayOrder||dayIndex+1,
                             theme:day.title||('Day '+(day.dayOrder||dayIndex+1)),
 
@@ -1648,7 +1648,7 @@ request.setAttribute("activePage", "planner");
                                 block=block||{};
 
                                 return {
-                                    sourceBlockId:block.blockId||null,
+                                    sourceBlockId:block.sourceBlockId||block.blockId||null,
                                     type:dbBlockTypeToPlanner(block.blockType),
                                     name:block.title||'새 일정',
                                     time:shortTime(block.startTime),

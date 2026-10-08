@@ -6,13 +6,31 @@ import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 
+import dto.itinerary.ItineraryBlockCartDto;
 import dto.itinerary.ItineraryBlockDto;
+import dto.itinerary.ItineraryCartDto;
+import dto.itinerary.ItineraryDayCartDto;
 import dto.itinerary.ItineraryDayDto;
 import dto.itinerary.ItineraryDto;
 
 public class ItineraryCartDaoImpl implements ItineraryCartDao {
 
 	private static final String NAMESPACE = "mapper.itinerary.itineraryCart.";
+
+	@Override
+	public List<ItineraryCartDto> selectCartSnapshots(SqlSession sqlSession, Long userId) throws Exception {
+		return sqlSession.selectList(NAMESPACE + "selectCartSnapshots", userId);
+	}
+
+	@Override
+	public List<ItineraryDayCartDto> selectDaySnapshots(SqlSession sqlSession, Long cartId) throws Exception {
+		return sqlSession.selectList(NAMESPACE + "selectDaySnapshots", cartId);
+	}
+
+	@Override
+	public List<ItineraryBlockCartDto> selectBlockSnapshots(SqlSession sqlSession, Long dayCartId) throws Exception {
+		return sqlSession.selectList(NAMESPACE + "selectBlockSnapshots", dayCartId);
+	}
 
 	@Override
 	public List<Map<String, Object>> selectCartItems(SqlSession sqlSession, Long userId) throws Exception {
