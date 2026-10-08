@@ -1537,7 +1537,14 @@ request.setAttribute("activePage", "planner");
 
     <script>
         (function () {
-            var DRAFT_KEY = 'tripily_planner_draft_jsp_v3';
+            var DRAFT_KEY = 'tripily_planner_draft_write_v4';
+            var PLANNER_CONTEXT_PATH='${pageContext.request.contextPath}';
+            var restoringDraft=false;
+            var draftSaveTimer=null;
+            var lastPlannerActivityAt=Date.now();
+            var lastKeepAliveAt=Date.now();
+            var keepAliveInFlight=false;
+            var sessionExpiredHandling=false;
             var TYPE_CONFIG = {
                 sightseeing:{label:'관광',color:'#6369D1',bg:'#EEF2FF'},
                 meal:{label:'식사',color:'#F97316',bg:'#FFF7ED'},
@@ -1687,8 +1694,82 @@ request.setAttribute("activePage", "planner");
                 var el=document.createElement('div'); el.className='planner-save-message'; el.textContent=msg; document.body.appendChild(el);
                 setTimeout(function(){ el.remove(); },2200);
             }
-            function markDirty(){ dirty=true; }
-            window.addEventListener('beforeunload', function(e){ if(!dirty) return; e.preventDefault(); e.returnValue=''; });
+            function handlePlannerSessionExpired(){
+                if(sessionExpiredHandling) return;
+                sessionExpiredHandling=true;
+                Promise.resolve(saveDraftNow()).finally(function(){
+                    dirty=false;
+                    alert('로그인 세션이 만료되었습니다. 작성 내용은 브라우저에 임시저장했습니다. 다시 로그인한 뒤 일정 작성/수정 페이지로 돌아오면 복구됩니다.');
+                    window.location.href=PLANNER_CONTEXT_PATH + '/auth/login';
+                });
+            }
+
+            function keepPlannerSessionAlive(force){
+                var now=Date.now();
+                if(keepAliveInFlight) return Promise.resolve(true);
+                if(!force && now-lastKeepAliveAt < 4*60*1000) return Promise.resolve(true);
+
+                keepAliveInFlight=true;
+                return fetch(PLANNER_CONTEXT_PATH + '/itinerary/session/keepalive',{
+                    method:'POST',
+                    credentials:'same-origin',
+                    cache:'no-store',
+                    headers:{'X-Requested-With':'XMLHttpRequest'}
+                }).then(function(response){
+                    if(response.status===401){
+                        handlePlannerSessionExpired();
+                        return false;
+                    }
+                    if(!response.ok){
+                        throw new Error('keep-alive failed: '+response.status);
+                    }
+                    lastKeepAliveAt=Date.now();
+                    return true;
+                }).catch(function(error){
+                    console.warn('세션 연장 요청에 실패했습니다.',error);
+                    return false;
+                }).finally(function(){
+                    keepAliveInFlight=false;
+                });
+            }
+
+            function markDirty(){
+                if(restoringDraft) return;
+                dirty=true;
+                lastPlannerActivityAt=Date.now();
+                scheduleDraftSave();
+                keepPlannerSessionAlive(false);
+            }
+
+            document.addEventListener('input',function(e){
+                if(e.target.closest('#plannerCenterPanel') || e.target.closest('#plannerPublishBackdrop')){
+                    markDirty();
+                }
+            },true);
+            document.addEventListener('change',function(e){
+                if(e.target.closest('#plannerCenterPanel') || e.target.closest('#plannerPublishBackdrop')){
+                    markDirty();
+                }
+            },true);
+
+            window.setInterval(function(){
+                if(dirty && Date.now()-lastPlannerActivityAt < 5*60*1000){
+                    keepPlannerSessionAlive(false);
+                }
+            },60*1000);
+
+            document.addEventListener('visibilitychange',function(){
+                if(document.visibilityState==='hidden' && dirty){
+                    saveDraftNow();
+                }
+            });
+
+            window.addEventListener('beforeunload', function(e){
+                if(!dirty) return;
+                saveDraftToSessionStorage();
+                e.preventDefault();
+                e.returnValue='';
+            });
 
             var toggleBtn = $('#plannerPanelToggle'), panel = $('#plannerLeftPanel'), icon = $('#plannerPanelToggleIcon');
             if (toggleBtn && panel) toggleBtn.addEventListener('click', function () {
@@ -2032,7 +2113,7 @@ request.setAttribute("activePage", "planner");
                             t.insertBefore(img,t.firstChild);
                         }
 
-                        img.src=src;
+                        img.src=plannerDraftDisplayImageUrl(src);
 
                         if(label) label.textContent='이미지 변경하기';
                     }else{
@@ -2076,7 +2157,7 @@ request.setAttribute("activePage", "planner");
 
                     if(previewImg){
                         if(src){
-                            previewImg.src=src;
+                            previewImg.src=plannerDraftDisplayImageUrl(src);
                             previewImg.style.display='block';
                         }else{
                             previewImg.removeAttribute('src');
@@ -2555,6 +2636,7 @@ request.setAttribute("activePage", "planner");
                 syncCountryEditLock();
                 markDirty();
                 var ti=$('.planner-item-title',card); if(ti && !prefill?.title) ti.focus();
+                return card;
             }
 
             function ensureDayControls(day){
@@ -4387,25 +4469,369 @@ request.setAttribute("activePage", "planner");
             var plannerSaveLabel=$('#plannerSaveLabel');
             if(plannerSaveLabel) plannerSaveLabel.textContent='저장하기';
 
-            function collectDraft(){ return {tripTitle:$('#tripTitle')?.value||'',country:$('#plannerCountry')?.value||'',region:$('#plannerRegion')?.value||'',travelerCount:$('#plannerTravelerCount')?.value||'1',startDate:startDate?.value||'',endDate:endDate?.value||'',visibility:visibility?.dataset.visibility||'PUBLIC',savedAt:new Date().toISOString()}; }
-            function restoreDraft(){
-                try{
-                    var raw=sessionStorage.getItem(DRAFT_KEY); if(!raw)return; var d=JSON.parse(raw);
-                    if($('#tripTitle')&&d.tripTitle!=null)$('#tripTitle').value=d.tripTitle;
-                    if($('#plannerCountry')&&d.country!=null)$('#plannerCountry').value=d.country;
-                    if($('#plannerRegion')&&d.region!=null)$('#plannerRegion').value=d.region;
-                    if($('#plannerTravelerCount')&&d.travelerCount!=null)$('#plannerTravelerCount').value=d.travelerCount;
-                    if(startDate&&d.startDate!=null)startDate.value=d.startDate;
-                    if(endDate&&d.endDate!=null)endDate.value=d.endDate;
-                    syncDates();
-                    if(visibility && d.visibility){
-                        setPlannerVisibility(
-                            d.visibility,
-                            false
-                        );
+            function plannerDraftDisplayImageUrl(rawUrl){
+                var url=String(rawUrl || '').trim();
+                if(!url) return '';
+                if(/^https?:\/\//i.test(url) || url.indexOf('blob:')===0 || url.indexOf('data:')===0){
+                    return url;
+                }
+                var contextPath=(typeof PLANNER_CONTEXT_PATH!=='undefined') ? PLANNER_CONTEXT_PATH : '${pageContext.request.contextPath}';
+                if(contextPath && url.indexOf(contextPath + '/')===0){
+                    return url;
+                }
+                if(url.charAt(0)==='/'){
+                    return contextPath + url;
+                }
+                return contextPath + '/' + url;
+            }
+
+            function collectDraftFiles(){
+                var files=[];
+                $$('.planner-day').forEach(function(day,dayIndex){
+                    $$('.planner-block-card',day).forEach(function(card,blockIndex){
+                        var gallery=$('[data-photo-gallery]',card);
+                        if(!gallery) return;
+                        $$('.planner-photo-thumb',gallery).forEach(function(thumb,imageIndex){
+                            if(thumb._plannerFile){
+                                files.push({
+                                    dayIndex:dayIndex,
+                                    blockIndex:blockIndex,
+                                    imageIndex:imageIndex,
+                                    file:thumb._plannerFile
+                                });
+                            }
+                        });
+                    });
+                });
+                return files;
+            }
+
+            function openPlannerDraftDb(){
+                return new Promise(function(resolve,reject){
+                    if(!window.indexedDB){
+                        reject(new Error('IndexedDB unavailable'));
+                        return;
                     }
-                    dirty=false;
-                }catch(e){ sessionStorage.removeItem(DRAFT_KEY); }
+                    var request=indexedDB.open('tripily_planner_drafts',1);
+                    request.onupgradeneeded=function(){
+                        var db=request.result;
+                        if(!db.objectStoreNames.contains('draftFiles')){
+                            db.createObjectStore('draftFiles',{keyPath:'id'});
+                        }
+                    };
+                    request.onsuccess=function(){ resolve(request.result); };
+                    request.onerror=function(){ reject(request.error || new Error('IndexedDB open failed')); };
+                });
+            }
+
+            function savePlannerDraftFiles(files){
+                return openPlannerDraftDb().then(function(db){
+                    return new Promise(function(resolve,reject){
+                        var tx=db.transaction('draftFiles','readwrite');
+                        tx.objectStore('draftFiles').put({
+                            id:DRAFT_KEY,
+                            savedAt:new Date().toISOString(),
+                            files:files || []
+                        });
+                        tx.oncomplete=function(){ db.close(); resolve(); };
+                        tx.onerror=function(){ var err=tx.error; db.close(); reject(err); };
+                        tx.onabort=function(){ var err=tx.error; db.close(); reject(err); };
+                    });
+                });
+            }
+
+            function loadPlannerDraftFiles(){
+                return openPlannerDraftDb().then(function(db){
+                    return new Promise(function(resolve,reject){
+                        var tx=db.transaction('draftFiles','readonly');
+                        var req=tx.objectStore('draftFiles').get(DRAFT_KEY);
+                        req.onsuccess=function(){
+                            var value=req.result;
+                            resolve(value && Array.isArray(value.files) ? value.files : []);
+                        };
+                        req.onerror=function(){ reject(req.error); };
+                        tx.oncomplete=function(){ db.close(); };
+                        tx.onerror=function(){ db.close(); };
+                    });
+                }).catch(function(){ return []; });
+            }
+
+            function deletePlannerDraft(){
+                try{ sessionStorage.removeItem(DRAFT_KEY); }catch(e){}
+                return openPlannerDraftDb().then(function(db){
+                    return new Promise(function(resolve){
+                        var tx=db.transaction('draftFiles','readwrite');
+                        tx.objectStore('draftFiles').delete(DRAFT_KEY);
+                        tx.oncomplete=function(){ db.close(); resolve(); };
+                        tx.onerror=function(){ db.close(); resolve(); };
+                        tx.onabort=function(){ db.close(); resolve(); };
+                    });
+                }).catch(function(){});
+            }
+
+            function collectDraft(){
+                return {
+                    version:4,
+                    mode:'write',
+                    itineraryId:(typeof plannerItineraryId!=='undefined' && plannerItineraryId) ? Number(plannerItineraryId) : null,
+                    payload:collectPlannerPayload(),
+                    savedAt:new Date().toISOString()
+                };
+            }
+
+            function saveDraftToSessionStorage(){
+                if(restoringDraft) return null;
+                try{
+                    var draft=collectDraft();
+                    sessionStorage.setItem(DRAFT_KEY,JSON.stringify(draft));
+                    return draft;
+                }catch(e){
+                    console.warn('일정 임시저장에 실패했습니다.',e);
+                    return null;
+                }
+            }
+
+            function saveDraftNow(){
+                if(restoringDraft) return Promise.resolve();
+                saveDraftToSessionStorage();
+                return savePlannerDraftFiles(collectDraftFiles()).catch(function(e){
+                    console.warn('일정 사진 임시저장에 실패했습니다.',e);
+                });
+            }
+
+            function scheduleDraftSave(){
+                if(restoringDraft) return;
+                if(draftSaveTimer) clearTimeout(draftSaveTimer);
+                draftSaveTimer=setTimeout(function(){
+                    draftSaveTimer=null;
+                    saveDraftNow();
+                },700);
+            }
+
+            function refreshPlannerDraftGallery(gallery){
+                if(!gallery) return;
+                var thumbs=$$('.planner-photo-thumb',gallery);
+                thumbs.forEach(function(thumb,index){
+                    var src=String(thumb.dataset.src || '').trim();
+                    thumb.dataset.index=index;
+                    thumb.classList.toggle('has-image',!!src);
+                    thumb.classList.toggle('is-empty',!src);
+
+                    var img=$('img',thumb);
+                    if(src){
+                        if(!img){
+                            img=document.createElement('img');
+                            img.alt='블록 이미지';
+                            thumb.insertBefore(img,thumb.firstChild);
+                        }
+                        img.src=plannerDraftDisplayImageUrl(src);
+                    }else if(img){
+                        img.remove();
+                    }
+
+                    var label=$('.planner-photo-hover-label',thumb);
+                    if(label) label.textContent=src ? '이미지 변경하기' : '이미지 등록하기';
+
+                    var badge=$('.planner-photo-badge',thumb);
+                    if(index===0 && src){
+                        if(!badge){
+                            badge=document.createElement('span');
+                            badge.className='planner-photo-badge';
+                            badge.textContent='대표';
+                            thumb.appendChild(badge);
+                        }
+                    }else if(badge){
+                        badge.remove();
+                    }
+                });
+
+                var first=thumbs.find(function(t){ return !!String(t.dataset.src || '').trim(); });
+                var firstSrc=first ? String(first.dataset.src || '').trim() : '';
+                var previewImg=$('.planner-photo-preview-img',gallery);
+                var previewEmpty=$('.planner-photo-empty',gallery);
+                if(previewImg){
+                    if(firstSrc){
+                        previewImg.src=plannerDraftDisplayImageUrl(firstSrc);
+                        previewImg.style.display='block';
+                    }else{
+                        previewImg.removeAttribute('src');
+                        previewImg.style.display='none';
+                    }
+                }
+                if(previewEmpty) previewEmpty.style.display=firstSrc ? 'none' : 'flex';
+            }
+
+            function applyPlannerDraftImages(card,images,fileRecords,dayIndex,blockIndex){
+                var gallery=$('[data-photo-gallery]',card);
+                if(!gallery) return;
+                var thumbs=$$('.planner-photo-thumb',gallery);
+
+                thumbs.forEach(function(thumb){
+                    if(thumb.dataset.objectUrl){
+                        try{ URL.revokeObjectURL(thumb.dataset.objectUrl); }catch(e){}
+                    }
+                    thumb.dataset.objectUrl='';
+                    thumb.dataset.src='';
+                    thumb._plannerFile=null;
+                });
+
+                (Array.isArray(images) ? images : []).forEach(function(image,index){
+                    var slot=Math.max(0,Number(image.imageOrder || (index+1))-1);
+                    var thumb=thumbs[slot];
+                    if(thumb && image && image.imageUrl){
+                        thumb.dataset.src=String(image.imageUrl);
+                    }
+                });
+
+                (Array.isArray(fileRecords) ? fileRecords : []).forEach(function(record){
+                    if(Number(record.dayIndex)!==dayIndex || Number(record.blockIndex)!==blockIndex || !record.file) return;
+                    var thumb=thumbs[Number(record.imageIndex)];
+                    if(!thumb) return;
+                    var objectUrl=URL.createObjectURL(record.file);
+                    thumb.dataset.src=objectUrl;
+                    thumb.dataset.objectUrl=objectUrl;
+                    thumb._plannerFile=record.file;
+                });
+
+                refreshPlannerDraftGallery(gallery);
+            }
+
+            function applyPlannerDraftPayload(payload,fileRecords){
+                if(!payload) return;
+                restoringDraft=true;
+                try{
+                    var tripTitle=$('#tripTitle');
+                    var country=$('#plannerCountry');
+                    var region=$('#plannerRegion');
+                    var traveler=$('#plannerTravelerCount');
+                    if(tripTitle) tripTitle.value=payload.title || '';
+                    if(country) country.value=payload.country || '';
+                    refreshCountryStatus();
+                    refreshRegionOptions(false);
+                    if(region) region.value=payload.city || '';
+                    if(traveler) traveler.value=String(payload.travelerCount || 1);
+                    if(startDate) startDate.value=payload.startDate || '';
+                    if(endDate) endDate.value=payload.endDate || '';
+                    setPlannerVisibility(payload.visibility || 'PUBLIC',false);
+                    syncDates();
+
+                    if(typeof plannerPublishState!=='undefined'){
+                        plannerPublishState.summary=payload.summary || '';
+                        plannerPublishState.thumbnailUrl=payload.thumbnailImg || '';
+                        plannerPublishState.imageKey='';
+                    }
+                    var publishSummary=$('#plannerPublishSummary');
+                    if(publishSummary){
+                        publishSummary.value=payload.summary || '';
+                        var summaryCount=$('#plannerPublishSummaryCount');
+                        if(summaryCount) summaryCount.textContent=publishSummary.value.length+' / 500자';
+                    }
+
+                    var existingDays=$$('.planner-day');
+                    var firstDay=existingDays[0];
+                    existingDays.slice(1).forEach(function(day){ day.remove(); });
+                    if(firstDay){
+                        var firstBody=$('.planner-day-body',firstDay);
+                        if(firstBody){
+                            $$('.planner-block-card,.planner-block-summary,.planner-empty-day-hint',firstBody)
+                                .forEach(function(node){ node.remove(); });
+                        }
+                    }
+
+                    var days=Array.isArray(payload.days) ? payload.days.slice().sort(function(a,b){
+                        return Number(a.dayOrder||0)-Number(b.dayOrder||0);
+                    }) : [];
+                    if(!days.length) days=[{dayOrder:1,title:'Day 1',blocks:[]}];
+
+                    days.forEach(function(dayDto,index){
+                        var day;
+                        if(index===0){
+                            day=firstDay;
+                        }else{
+                            var beforeCount=$$('.planner-day').length;
+                            var addDayButton=$('#plannerAddDay');
+                            if(addDayButton) addDayButton.click();
+                            var dayList=$$('.planner-day');
+                            day=dayList[beforeCount] || dayList[dayList.length-1];
+                        }
+                        if(!day) return;
+
+                        day.dataset.dayNumber=String(index+1);
+                        day.dataset.dayOrder=String(index+1);
+                        var dayTitle=$('.planner-day-title',day);
+                        if(dayTitle) dayTitle.textContent=dayDto.title || ('Day '+(index+1));
+
+                        var body=$('.planner-day-body',day);
+                        if(body){
+                            $$('.planner-block-card,.planner-block-summary,.planner-empty-day-hint',body)
+                                .forEach(function(node){ node.remove(); });
+                        }
+
+                        var blocks=Array.isArray(dayDto.blocks) ? dayDto.blocks.slice().sort(function(a,b){
+                            return Number(a.blockOrder||0)-Number(b.blockOrder||0);
+                        }) : [];
+
+                        blocks.forEach(function(block,blockIndex){
+                            var card=addBlockToDay(day,{
+                                sourceBlockId:block.sourceBlockId || null,
+                                type:dbBlockTypeToPlanner(block.blockType),
+                                title:block.title || '',
+                                startTime:shortTime(block.startTime),
+                                endTime:shortTime(block.endTime),
+                                cost:block.cost==null ? '' : block.cost,
+                                costType:block.costType || 'PER_PERSON',
+                                googlePlaceId:block.googlePlaceId || '',
+                                placeName:block.placeName || '',
+                                placeAddress:block.placeAddress || '',
+                                placeLat:block.placeLat,
+                                placeLng:block.placeLng,
+                                note:block.memo || ''
+                            });
+                            if(card){
+                                applyPlannerDraftImages(card,block.images || [],fileRecords,index,blockIndex);
+                            }
+                        });
+
+                        ensureDayControls(day);
+                    });
+
+                    renumberDays();
+                    syncBudget();
+                    refreshCountryStatus();
+                    refreshRegionOptions(false);
+                    updateCountryClear();
+                    updateRegionClear();
+                    syncCountryLock();
+                    syncCountryEditLock();
+                    syncForeignCosts();
+                    if(typeof refreshMap==='function') refreshMap('all');
+                }finally{
+                    restoringDraft=false;
+                    dirty=true;
+                }
+            }
+
+            function restoreDraft(){
+                var raw=null;
+                try{ raw=sessionStorage.getItem(DRAFT_KEY); }catch(e){}
+                if(!raw) return Promise.resolve(false);
+
+                var draft;
+                try{
+                    draft=JSON.parse(raw);
+                }catch(e){
+                    sessionStorage.removeItem(DRAFT_KEY);
+                    return Promise.resolve(false);
+                }
+
+                if(!draft || !draft.payload) return Promise.resolve(false);
+                if(draft.mode && draft.mode!=='write') return Promise.resolve(false);
+
+                return loadPlannerDraftFiles().then(function(files){
+                    applyPlannerDraftPayload(draft.payload,files);
+                    toast('임시저장된 작성 내용을 복구했습니다.');
+                    return true;
+                });
             }
             function plannerBlockTypeToDb(type){
                 var map={
@@ -4799,9 +5225,13 @@ request.setAttribute("activePage", "planner");
 
                 form.action='${pageContext.request.contextPath}/itinerary/write';
 
-                dirty=false;
-                sessionStorage.removeItem(DRAFT_KEY);
-                form.submit();
+                saveDraftNow().then(function(){
+                    return keepPlannerSessionAlive(true);
+                }).then(function(sessionOk){
+                    if(!sessionOk || sessionExpiredHandling) return;
+                    dirty=false;
+                    form.submit();
+                });
             }
 
             function setupPublishPreviewModal(){
@@ -4994,13 +5424,14 @@ request.setAttribute("activePage", "planner");
             document.addEventListener('dragend',function(){
                 finishImportDrag();
             });
-            restoreDraft();
-            refreshCountryStatus();
-            refreshRegionOptions(false);
-            updateCountryClear();
-            updateRegionClear();
-            syncCountryLock();
-            syncCountryEditLock();
+            restoreDraft().finally(function(){
+                refreshCountryStatus();
+                refreshRegionOptions(false);
+                updateCountryClear();
+                updateRegionClear();
+                syncCountryLock();
+                syncCountryEditLock();
+            });
 
             /*
              * 블록/DAY 삭제 경로가 여러 곳이라 DOM 변화를 기준으로

@@ -6,9 +6,13 @@ import java.math.BigDecimal;
 
 import java.util.HashMap;
 
+import java.util.HashSet;
+
 import java.util.List;
 
 import java.util.Map;
+
+import java.util.Set;
 
 
 
@@ -994,6 +998,22 @@ public class ItineraryServiceImpl implements ItineraryService {
 
 
 
+			/*
+
+			 * 수정은 기존 DAY/BLOCK을 삭제한 뒤 다시 INSERT하므로,
+
+			 * 현재 일정 내부 PK를 source_* 값으로 들고 있으면 삭제 직후 FK가 깨진다.
+
+			 * 현재 일정 자체를 원본으로 가리키는 값만 미리 제거하고,
+
+			 * 다른 일정에서 가져온 정상적인 원본 참조는 그대로 유지한다.
+
+			 */
+
+			clearSourceIdsPointingToCurrentItinerary(sqlSession, itineraryDto);
+
+
+
 			int updateCount = itineraryDao.updateItinerary(sqlSession, itineraryDto);
 
 
@@ -1053,6 +1073,87 @@ public class ItineraryServiceImpl implements ItineraryService {
 		}
 
 	}
+
+
+
+	/*
+
+	 * 수정 시 삭제될 현재 일정의 PK를 source_*가 가리키지 않도록 정리한다.
+
+	 * 다른 일정에서 가져온 원본 참조는 유지한다.
+
+	 */
+
+	private void clearSourceIdsPointingToCurrentItinerary(
+			SqlSession sqlSession,
+			ItineraryDto itineraryDto) throws Exception {
+
+		Long itineraryId = itineraryDto.getItineraryId();
+
+		if (itineraryId == null) {
+			return;
+		}
+
+		if (itineraryId.equals(itineraryDto.getSourceItineraryId())) {
+			itineraryDto.setSourceItineraryId(null);
+		}
+
+		Set<Long> currentDayIds = new HashSet<>();
+		Set<Long> currentBlockIds = new HashSet<>();
+
+		List<ItineraryDayDto> existingDays =
+			itineraryDayDao.selectItineraryDays(sqlSession, itineraryId);
+
+		if (existingDays != null) {
+			for (ItineraryDayDto existingDay : existingDays) {
+				if (existingDay.getDayId() == null) {
+					continue;
+				}
+
+				currentDayIds.add(existingDay.getDayId());
+
+				List<ItineraryBlockDto> existingBlocks =
+					itineraryBlockDao.selectItineraryBlocks(sqlSession, existingDay.getDayId());
+
+				if (existingBlocks == null) {
+					continue;
+				}
+
+				for (ItineraryBlockDto existingBlock : existingBlocks) {
+					if (existingBlock.getBlockId() != null) {
+						currentBlockIds.add(existingBlock.getBlockId());
+					}
+				}
+			}
+		}
+
+		List<ItineraryDayDto> incomingDays = itineraryDto.getDays();
+
+		if (incomingDays == null) {
+			return;
+		}
+
+		for (ItineraryDayDto day : incomingDays) {
+			if (day.getSourceDayId() != null
+					&& currentDayIds.contains(day.getSourceDayId())) {
+				day.setSourceDayId(null);
+			}
+
+			List<ItineraryBlockDto> blocks = day.getBlocks();
+
+			if (blocks == null) {
+				continue;
+			}
+
+			for (ItineraryBlockDto block : blocks) {
+				if (block.getSourceBlockId() != null
+						&& currentBlockIds.contains(block.getSourceBlockId())) {
+					block.setSourceBlockId(null);
+				}
+			}
+		}
+	}
+
 
 
 
