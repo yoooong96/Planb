@@ -1699,8 +1699,7 @@ if (bookmarkCount == null) {
 		
 		document.addEventListener("DOMContentLoaded", function () {
 
-		    var contextPath = "<%=ctx%>
-		";
+		    var contextPath = "<%=ctx%>";
 
 			var deleteButtons = document
 					.querySelectorAll("[data-delete-itinerary]");
