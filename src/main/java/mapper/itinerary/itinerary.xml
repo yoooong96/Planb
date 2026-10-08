@@ -9,30 +9,37 @@
 		SELECT
 		i.*,
 		u.nickname,
+		u.profile_img AS profileImg,
 		(
 		SELECT COUNT(*)
 		FROM TB_ITINERARY_LIKE l
-		WHERE l.itinerary_id = i.itinerary_id
+		WHERE l.itinerary_id =
+		i.itinerary_id
 		) AS like_count,
 		(
 		SELECT COUNT(*)
-		FROM TB_ITINERARY_COMMENT c
+		FROM
+		TB_ITINERARY_COMMENT c
 		WHERE c.itinerary_id = i.itinerary_id
-		AND c.status = 'ACTIVE'
+		AND
+		c.status = 'ACTIVE'
 		) AS comment_count,
 
 		EXISTS (
 		SELECT 1
-		FROM TB_ITINERARY_LIKE my_like
+		FROM
+		TB_ITINERARY_LIKE my_like
 		WHERE my_like.itinerary_id = i.itinerary_id
 		AND my_like.user_id = #{loginUserId}
 		) AS liked,
 
 		EXISTS (
 		SELECT 1
-		FROM TB_ITINERARY_BOOKMARK b
+		FROM
+		TB_ITINERARY_BOOKMARK b
 		WHERE b.itinerary_id = i.itinerary_id
-		AND b.user_id = #{loginUserId, jdbcType=BIGINT}
+		AND
+		b.user_id = #{loginUserId, jdbcType=BIGINT}
 		) AS bookmarked
 
 		FROM
@@ -167,7 +174,8 @@
 		u.profile_img AS profileImg,
 		i.view_count
 		FROM TB_ITINERARY i
-		JOIN TB_USER u
+		JOIN
+		TB_USER u
 		ON u.user_id = i.user_id
 		WHERE i.itinerary_id = #{itineraryId}
 		AND i.status = 'ACTIVE'

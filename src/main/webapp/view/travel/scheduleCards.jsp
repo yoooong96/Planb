@@ -134,15 +134,40 @@
 			</div>
 
 			<!-- 작성자·작성일 -->
-			<div class="flex items-center justify-between border-t pt-2.5"
+			<div class="flex items-center justify-between gap-2 border-t pt-2.5"
 				style="border-color: #D1D2F9">
 
-				<span class="text-[11px] text-gray-500 font-medium"> <c:out
-						value="${schedule.nickname}" />
-				</span> <span class="text-[10px] text-gray-400"> <fmt:formatDate
+				<!-- 작성자 프로필 사진·닉네임 -->
+				<div class="flex items-center gap-1.5 min-w-0">
+
+					<span
+						style="position: relative; display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; flex-shrink: 0; border-radius: 50%; overflow: hidden; background: #F0F0FF; color: #6369D1;">
+
+						<!-- 사진이 없거나 로딩 실패 시 표시 --> <svg width="14" height="14"
+							viewBox="0 0 24 24" fill="none" stroke="currentColor"
+							stroke-width="1.8" aria-hidden="true">
+                <circle cx="12" cy="8" r="4" />
+                <path d="M4 21c0-4.3 3.6-7 8-7s8 2.7 8 7" />
+            </svg> <c:if test="${not empty schedule.profileImg}">
+							<c:url var="authorImageUrl"
+								value="/profiles/${schedule.profileImg}" />
+
+							<img src="<c:out value='${authorImageUrl}'/>" alt=""
+								loading="lazy"
+								style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;"
+								onerror="this.style.display='none';">
+						</c:if>
+					</span> <span class="text-[11px] text-gray-500 font-medium"
+						style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+						<c:out value="${schedule.nickname}" />
+					</span>
+				</div>
+
+				<!-- 작성일 -->
+				<span class="text-[10px] text-gray-400"
+					style="flex-shrink: 0; white-space: nowrap;"> <fmt:formatDate
 						value="${schedule.createdAt}" pattern="yyyy.MM.dd" />
 				</span>
-
 			</div>
 
 		</div>
