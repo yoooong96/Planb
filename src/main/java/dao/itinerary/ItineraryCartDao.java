@@ -5,11 +5,25 @@ import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 
+import dto.itinerary.ItineraryBlockCartDto;
 import dto.itinerary.ItineraryBlockDto;
+import dto.itinerary.ItineraryCartDto;
+import dto.itinerary.ItineraryDayCartDto;
 import dto.itinerary.ItineraryDayDto;
 import dto.itinerary.ItineraryDto;
 
 public interface ItineraryCartDao {
+
+	/*
+	 * 카트 스냅샷 조회.
+	 * 원본 TB_ITINERARY / DAY / BLOCK을 다시 읽지 않고
+	 * 카트에 담을 당시 복제된 값만 읽는다.
+	 */
+	List<ItineraryCartDto> selectCartSnapshots(SqlSession sqlSession, Long userId) throws Exception;
+
+	List<ItineraryDayCartDto> selectDaySnapshots(SqlSession sqlSession, Long cartId) throws Exception;
+
+	List<ItineraryBlockCartDto> selectBlockSnapshots(SqlSession sqlSession, Long dayCartId) throws Exception;
 
 	/*
 	 * TB_ITINERARY_CART의 원본 참조 목록 조회. 별도 Cart DTO를 만들지 않고 Map으로 내부 처리한다.

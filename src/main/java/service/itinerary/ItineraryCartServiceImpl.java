@@ -2,9 +2,7 @@ package service.itinerary;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -13,16 +11,17 @@ import org.apache.ibatis.session.SqlSession;
 import config.MybatisSqlSessionFactory;
 import dao.itinerary.ItineraryBlockDao;
 import dao.itinerary.ItineraryBlockDaoImpl;
-import dao.itinerary.ItineraryBlockImageDao;
-import dao.itinerary.ItineraryBlockImageDaoImpl;
 import dao.itinerary.ItineraryBookmarkDao;
 import dao.itinerary.ItineraryBookmarkDaoImpl;
 import dao.itinerary.ItineraryCartDao;
 import dao.itinerary.ItineraryCartDaoImpl;
 import dao.itinerary.ItineraryDayDao;
 import dao.itinerary.ItineraryDayDaoImpl;
+import dto.itinerary.ItineraryBlockCartDto;
 import dto.itinerary.ItineraryBlockDto;
 import dto.itinerary.ItineraryBlockImageDto;
+import dto.itinerary.ItineraryCartDto;
+import dto.itinerary.ItineraryDayCartDto;
 import dto.itinerary.ItineraryDayDto;
 import dto.itinerary.ItineraryDto;
 
@@ -32,13 +31,11 @@ public class ItineraryCartServiceImpl
     private ItineraryCartDao cartDao;
     private ItineraryDayDao dayDao;
     private ItineraryBlockDao blockDao;
-    private ItineraryBlockImageDao imageDao;
 
     public ItineraryCartServiceImpl() {
         cartDao = new ItineraryCartDaoImpl();
         dayDao = new ItineraryDayDaoImpl();
         blockDao = new ItineraryBlockDaoImpl();
-        imageDao = new ItineraryBlockImageDaoImpl();
     }
 
 
@@ -69,320 +66,135 @@ public class ItineraryCartServiceImpl
             return Collections.emptyList();
         }
 
-        SqlSession sqlSession = null;
+        /*
+         * 카트는 이제 원본 ID만 보관하는 참조형 구조가 아니라
+         * TB_ITINERARY_CART -> TB_ITINERARY_DAY_CART ->
+         * TB_ITINERARY_BLOCK_CART에 담은 시점의 값을 복제해 두는
+         * 스냅샷 구조다.
+         *
+         * 따라서 여기서는 TB_ITINERARY / DAY / BLOCK 원본 테이블을
+         * 다시 조회하지 않는다. 원본 일정이 나중에 수정돼도
+         * 카트에 들어 있는 내용은 변경되지 않는다.
+         */
+        try (SqlSession sqlSession = MybatisSqlSessionFactory
+                .getSqlSessionFactory()
+                .openSession()) {
 
-        try {
-            sqlSession = MybatisSqlSessionFactory
-                    .getSqlSessionFactory()
-                    .openSession();
-
-            List<Map<String, Object>> cartItems =
-                    cartDao.selectCartItems(
+            List<ItineraryCartDto> cartSnapshots =
+                    cartDao.selectCartSnapshots(
                             sqlSession,
                             userId
                     );
 
-            /*
-             * added_at DESC 순으로 조회하므로
-             * 최초 등장 일정의 순서를 유지한다.
-             */
-            LinkedHashMap<Long, ItineraryDto> itineraryMap =
-                    new LinkedHashMap<>();
+            if (cartSnapshots == null || cartSnapshots.isEmpty()) {
+                return Collections.emptyList();
+            }
 
-            /*
-             * 어떤 범위가 이미 전체로 담겼는지 기록.
-             * ITINERARY가 있으면 하위 DAY/BLOCK을 추가하지 않는다.
-             * DAY가 있으면 그 DAY의 개별 BLOCK을 추가하지 않는다.
-             */
-            Map<Long, Boolean> fullItinerary =
-                    new LinkedHashMap<>();
+            List<ItineraryDto> result = new ArrayList<>();
 
-            Map<Long, Boolean> fullDay =
-                    new LinkedHashMap<>();
+            for (ItineraryCartDto cart : cartSnapshots) {
 
-            for (Map<String, Object> row : cartItems) {
-
-                String itemType =
-                        String.valueOf(row.get("itemType"));
-
-                if ("ITINERARY".equals(itemType)) {
-
-                    Long itineraryId =
-                            toLong(row.get("sourceItineraryId"));
-
-                    if (itineraryId == null) {
-                        continue;
-                    }
-
-                    ItineraryDto itinerary =
-                            getOrCreateItinerary(
-                                    sqlSession,
-                                    itineraryMap,
-                                    itineraryId
-                            );
-
-                    if (itinerary == null) {
-                        continue;
-                    }
-
-                    /*
-                     * 이미 하위 일부가 먼저 조립돼 있더라도
-                     * 전체 일정이 담겨 있으면 전체로 교체.
-                     */
-                    List<ItineraryDayDto> days =
-                            dayDao.selectItineraryDays(
-                                    sqlSession,
-                                    itineraryId
-                            );
-
-                    for (ItineraryDayDto day : days) {
-
-                        List<ItineraryBlockDto> blocks =
-                                blockDao.selectItineraryBlocks(
-                                        sqlSession,
-                                        day.getDayId()
-                                );
-
-                        attachImages(
-                                sqlSession,
-                                blocks
-                        );
-
-                        day.setBlocks(blocks);
-
-                        fullDay.put(
-                                day.getDayId(),
-                                true
-                        );
-                    }
-
-                    itinerary.setDays(days);
-
-                    fullItinerary.put(
-                            itineraryId,
-                            true
-                    );
-
+                if (cart == null || cart.getCartId() == null) {
                     continue;
                 }
 
+                ItineraryDto itinerary = new ItineraryDto();
 
-                if ("DAY".equals(itemType)) {
+                // 화면 내부 식별자는 카트 PK, 원본 추적은 source 필드로 분리한다.
+                itinerary.setItineraryId(cart.getCartId());
+                itinerary.setSourceItineraryId(cart.getSourceItineraryId());
+                itinerary.setTitle(cart.getTitle());
+                itinerary.setCountry(cart.getCountry());
+                itinerary.setNickname(cart.getAuthorNickname());
 
-                    Long dayId =
-                            toLong(row.get("sourceDayId"));
-
-                    if (dayId == null
-                            || Boolean.TRUE.equals(
-                                    fullDay.get(dayId))) {
-                        continue;
-                    }
-
-                    Long itineraryId =
-                            cartDao.selectItineraryIdByDayId(
-                                    sqlSession,
-                                    dayId
-                            );
-
-                    if (itineraryId == null
-                            || Boolean.TRUE.equals(
-                                    fullItinerary.get(
-                                            itineraryId))) {
-                        continue;
-                    }
-
-                    ItineraryDto itinerary =
-                            getOrCreateItinerary(
-                                    sqlSession,
-                                    itineraryMap,
-                                    itineraryId
-                            );
-
-                    if (itinerary == null) {
-                        continue;
-                    }
-
-                    ItineraryDayDto day =
-                            cartDao.selectSourceDay(
-                                    sqlSession,
-                                    dayId
-                            );
-
-                    if (day == null) {
-                        continue;
-                    }
-
-                    List<ItineraryBlockDto> blocks =
-                            blockDao.selectItineraryBlocks(
-                                    sqlSession,
-                                    dayId
-                            );
-
-                    attachImages(
-                            sqlSession,
-                            blocks
-                    );
-
-                    day.setBlocks(blocks);
-
-                    replaceOrAddDay(
-                            itinerary,
-                            day
-                    );
-
-                    fullDay.put(
-                            dayId,
-                            true
-                    );
-
-                    continue;
-                }
-
-
-                if ("BLOCK".equals(itemType)) {
-
-                    Long blockId =
-                            toLong(row.get("sourceBlockId"));
-
-                    if (blockId == null) {
-                        continue;
-                    }
-
-                    ItineraryBlockDto block =
-                            cartDao.selectSourceBlock(
-                                    sqlSession,
-                                    blockId
-                            );
-
-                    if (block == null) {
-                        continue;
-                    }
-
-                    Long dayId =
-                            block.getDayId();
-
-                    Long itineraryId =
-                            cartDao.selectItineraryIdByBlockId(
-                                    sqlSession,
-                                    blockId
-                            );
-
-                    if (itineraryId == null
-                            || Boolean.TRUE.equals(
-                                    fullItinerary.get(
-                                            itineraryId))
-                            || Boolean.TRUE.equals(
-                                    fullDay.get(dayId))) {
-                        continue;
-                    }
-
-                    ItineraryDto itinerary =
-                            getOrCreateItinerary(
-                                    sqlSession,
-                                    itineraryMap,
-                                    itineraryId
-                            );
-
-                    if (itinerary == null) {
-                        continue;
-                    }
-
-                    ItineraryDayDto day =
-                            findDay(
-                                    itinerary,
-                                    dayId
-                            );
-
-                    if (day == null) {
-
-                        day = cartDao.selectSourceDay(
+                List<ItineraryDayCartDto> daySnapshots =
+                        cartDao.selectDaySnapshots(
                                 sqlSession,
-                                dayId
+                                cart.getCartId()
                         );
 
-                        if (day == null) {
+                List<ItineraryDayDto> days = new ArrayList<>();
+
+                if (daySnapshots != null) {
+                    for (ItineraryDayCartDto dayCart : daySnapshots) {
+
+                        if (dayCart == null || dayCart.getDayCartId() == null) {
                             continue;
                         }
 
-                        day.setBlocks(
-                                new ArrayList<ItineraryBlockDto>()
-                        );
+                        ItineraryDayDto day = new ItineraryDayDto();
 
-                        ensureDays(itinerary)
-                                .add(day);
-                    }
+                        day.setDayId(dayCart.getDayCartId());
+                        day.setItineraryId(cart.getCartId());
+                        day.setSourceDayId(dayCart.getSourceDayId());
+                        day.setDayOrder(dayCart.getDayOrder());
+                        day.setDayDate(dayCart.getDayDate());
+                        day.setTitle(dayCart.getTitle());
 
-                    /*
-                     * 같은 BLOCK이 중복으로 들어오는 상황을 방지.
-                     */
-                    if (!containsBlock(
-                            day,
-                            blockId)) {
-
-                        List<ItineraryBlockImageDto> images =
-                                imageDao.selectItineraryBlockImages(
+                        List<ItineraryBlockCartDto> blockSnapshots =
+                                cartDao.selectBlockSnapshots(
                                         sqlSession,
-                                        blockId
+                                        dayCart.getDayCartId()
                                 );
 
-                        block.setImages(images);
+                        List<ItineraryBlockDto> blocks = new ArrayList<>();
 
-                        ensureBlocks(day)
-                                .add(block);
+                        if (blockSnapshots != null) {
+                            for (ItineraryBlockCartDto blockCart : blockSnapshots) {
+
+                                if (blockCart == null
+                                        || blockCart.getBlockCartId() == null) {
+                                    continue;
+                                }
+
+                                ItineraryBlockDto block = new ItineraryBlockDto();
+
+                                block.setBlockId(blockCart.getBlockCartId());
+                                block.setDayId(dayCart.getDayCartId());
+                                block.setSourceBlockId(blockCart.getSourceBlockId());
+                                block.setGooglePlaceId(blockCart.getGooglePlaceId());
+                                block.setPlaceName(blockCart.getPlaceName());
+                                block.setPlaceAddress(blockCart.getPlaceAddress());
+                                block.setPlaceLat(
+                                        blockCart.getPlaceLat() == null
+                                                ? null
+                                                : blockCart.getPlaceLat().doubleValue()
+                                );
+                                block.setPlaceLng(
+                                        blockCart.getPlaceLng() == null
+                                                ? null
+                                                : blockCart.getPlaceLng().doubleValue()
+                                );
+                                block.setBlockType(blockCart.getBlockType());
+                                block.setBlockOrder(blockCart.getBlockOrder());
+                                block.setTitle(blockCart.getTitle());
+                                block.setMemo(blockCart.getMemo());
+                                block.setCost(blockCart.getCost());
+                                block.setCostType(blockCart.getCostType());
+                                block.setStartTime(blockCart.getStartTime());
+                                block.setEndTime(blockCart.getEndTime());
+
+                                /*
+                                 * 현재 카트 스냅샷 테이블에는 이미지 복제 테이블이 없다.
+                                 * 원본 이미지를 다시 읽으면 다시 원본 수정에 종속되므로
+                                 * 여기서는 의도적으로 원본 이미지 조회를 하지 않는다.
+                                 */
+                                block.setImages(Collections.<ItineraryBlockImageDto>emptyList());
+
+                                blocks.add(block);
+                            }
+                        }
+
+                        day.setBlocks(blocks);
+                        days.add(day);
                     }
                 }
+
+                itinerary.setDays(days);
+                result.add(itinerary);
             }
 
-
-            /*
-             * 부분 BLOCK 조회의 경우에도 원본 순서를 유지.
-             */
-            for (ItineraryDto itinerary
-                    : itineraryMap.values()) {
-
-                if (itinerary.getDays() == null) {
-                    continue;
-                }
-
-                Collections.sort(
-                        itinerary.getDays(),
-                        Comparator.comparing(
-                                ItineraryDayDto::getDayOrder,
-                                Comparator.nullsLast(
-                                        Integer::compareTo
-                                )
-                        )
-                );
-
-                for (ItineraryDayDto day
-                        : itinerary.getDays()) {
-
-                    if (day.getBlocks() == null) {
-                        continue;
-                    }
-
-                    Collections.sort(
-                            day.getBlocks(),
-                            Comparator.comparing(
-                                    ItineraryBlockDto::getBlockOrder,
-                                    Comparator.nullsLast(
-                                            Integer::compareTo
-                                    )
-                            )
-                    );
-                }
-            }
-
-
-            return new ArrayList<>(
-                    itineraryMap.values()
-            );
-
-        } finally {
-
-            if (sqlSession != null) {
-                sqlSession.close();
-            }
+            return result;
         }
     }
 
@@ -521,175 +333,6 @@ public class ItineraryCartServiceImpl
                         );
                     }
                 }
-        );
-    }
-
-
-    private ItineraryDto getOrCreateItinerary(
-            SqlSession sqlSession,
-            LinkedHashMap<Long, ItineraryDto> map,
-            Long itineraryId) throws Exception {
-
-        ItineraryDto itinerary =
-                map.get(itineraryId);
-
-        if (itinerary != null) {
-            return itinerary;
-        }
-
-        itinerary =
-                cartDao.selectSourceItinerary(
-                        sqlSession,
-                        itineraryId
-                );
-
-        if (itinerary != null) {
-            itinerary.setDays(
-                    new ArrayList<ItineraryDayDto>()
-            );
-
-            map.put(
-                    itineraryId,
-                    itinerary
-            );
-        }
-
-        return itinerary;
-    }
-
-
-    private void replaceOrAddDay(
-            ItineraryDto itinerary,
-            ItineraryDayDto newDay) {
-
-        List<ItineraryDayDto> days =
-                ensureDays(itinerary);
-
-        for (int i = 0; i < days.size(); i++) {
-
-            ItineraryDayDto old =
-                    days.get(i);
-
-            if (old.getDayId() != null
-                    && old.getDayId()
-                            .equals(newDay.getDayId())) {
-
-                days.set(
-                        i,
-                        newDay
-                );
-
-                return;
-            }
-        }
-
-        days.add(newDay);
-    }
-
-
-    private ItineraryDayDto findDay(
-            ItineraryDto itinerary,
-            Long dayId) {
-
-        if (itinerary.getDays() == null) {
-            return null;
-        }
-
-        for (ItineraryDayDto day
-                : itinerary.getDays()) {
-
-            if (day.getDayId() != null
-                    && day.getDayId().equals(dayId)) {
-                return day;
-            }
-        }
-
-        return null;
-    }
-
-
-    private boolean containsBlock(
-            ItineraryDayDto day,
-            Long blockId) {
-
-        if (day.getBlocks() == null) {
-            return false;
-        }
-
-        for (ItineraryBlockDto block
-                : day.getBlocks()) {
-
-            if (block.getBlockId() != null
-                    && block.getBlockId()
-                            .equals(blockId)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-
-    private List<ItineraryDayDto> ensureDays(
-            ItineraryDto itinerary) {
-
-        if (itinerary.getDays() == null) {
-            itinerary.setDays(
-                    new ArrayList<ItineraryDayDto>()
-            );
-        }
-
-        return itinerary.getDays();
-    }
-
-
-    private List<ItineraryBlockDto> ensureBlocks(
-            ItineraryDayDto day) {
-
-        if (day.getBlocks() == null) {
-            day.setBlocks(
-                    new ArrayList<ItineraryBlockDto>()
-            );
-        }
-
-        return day.getBlocks();
-    }
-
-
-    private void attachImages(
-            SqlSession sqlSession,
-            List<ItineraryBlockDto> blocks)
-            throws Exception {
-
-        if (blocks == null) {
-            return;
-        }
-
-        for (ItineraryBlockDto block : blocks) {
-
-            List<ItineraryBlockImageDto> images =
-                    imageDao.selectItineraryBlockImages(
-                            sqlSession,
-                            block.getBlockId()
-                    );
-
-            block.setImages(images);
-        }
-    }
-
-
-    private Long toLong(Object value) {
-
-        if (value == null) {
-            return null;
-        }
-
-        if (value instanceof Number) {
-            return ((Number) value).longValue();
-        }
-
-        return Long.valueOf(
-                String.valueOf(value)
         );
     }
 
