@@ -333,5 +333,134 @@
       AND b.user_id != i.user_id
 
 </select>
+
+
+<select id="selectProfileActivities" parameterType="long"
+	resultType="dto.profile.ProfileActivityDto">
+
+	SELECT
+	activityType,
+	activityGroup,
+	activityId,
+	targetId,
+	targetTitle,
+	content,
+	createdAt
+
+	FROM (
+
+	<!-- ======================================== 1. 내가 작성한 여행꿀팁 ========================================= -->
+
+	SELECT
+	'TIP_POST' AS activityType,
+	'POST' AS activityGroup,
+	t.tip_id AS activityId,
+	t.tip_id AS targetId,
+	t.title AS targetTitle,
+	t.content AS content,
+	t.created_at AS createdAt
+
+	FROM tb_tip t
+
+	WHERE t.user_id = #{value}
+	AND t.status = 'ACTIVE'
+
+
+	UNION ALL
+
+
+	<!-- ======================================== 2. 내가 작성한 여행메이트 글 ========================================= -->
+
+	SELECT
+	'MATE_POST' AS activityType,
+	'POST' AS activityGroup,
+	m.mate_id AS activityId,
+	m.mate_id AS targetId,
+	m.title AS targetTitle,
+	m.content AS content,
+	m.created_at AS createdAt
+
+	FROM tb_mate m
+
+	WHERE m.user_id = #{value}
+	AND m.status = 'ACTIVE'
+
+
+	UNION ALL
+
+
+	<!-- ======================================== 3. 내가 작성한 여행꿀팁 댓글 ========================================= -->
+
+	SELECT
+	'TIP_COMMENT' AS activityType,
+	'COMMENT' AS activityGroup,
+	c.comment_id AS activityId,
+	t.tip_id AS targetId,
+	t.title AS targetTitle,
+	c.content AS content,
+	c.created_at AS createdAt
+
+	FROM tb_tip_comment c
+
+	INNER JOIN tb_tip t
+	ON t.tip_id = c.tip_id
+
+	WHERE c.user_id = #{value}
+	AND c.status = 'ACTIVE'
+	AND t.status = 'ACTIVE'
+
+
+	UNION ALL
+
+
+	<!-- ======================================== 4. 내가 작성한 여행메이트 댓글 ========================================= -->
+
+	SELECT
+	'MATE_COMMENT' AS activityType,
+	'COMMENT' AS activityGroup,
+	c.comment_id AS activityId,
+	m.mate_id AS targetId,
+	m.title AS targetTitle,
+	c.content AS content,
+	c.created_at AS createdAt
+
+	FROM tb_mate_comment c
+
+	INNER JOIN tb_mate m
+	ON m.mate_id = c.mate_id
+
+	WHERE c.user_id = #{value}
+	AND c.status = 'ACTIVE'
+	AND m.status = 'ACTIVE'
+
+
+	UNION ALL
+
+
+	<!-- ======================================== 5. 내가 작성한 여행 일정 댓글 ========================================= -->
+
+	SELECT
+	'ITINERARY_COMMENT' AS activityType,
+	'COMMENT' AS activityGroup,
+	c.comment_id AS activityId,
+	i.itinerary_id AS targetId,
+	i.title AS targetTitle,
+	c.content AS content,
+	c.created_at AS createdAt
+
+	FROM tb_itinerary_comment c
+
+	INNER JOIN tb_itinerary i
+	ON i.itinerary_id = c.itinerary_id
+
+	WHERE c.user_id = #{value}
+	AND c.status = 'ACTIVE'
+	AND i.status = 'ACTIVE'
+
+	) activity
+
+	ORDER BY createdAt DESC
+
+</select>
 	
 </mapper>

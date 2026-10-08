@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 	urlPatterns = "/*",
 	initParams = {
 		@WebInitParam(name="uploadPath", value = "/uploads"),
-		@WebInitParam(name="profilePath", value = "/profiles")
+		@WebInitParam(name="profilePath", value = "/uploads/profile")
 	}
 )
 

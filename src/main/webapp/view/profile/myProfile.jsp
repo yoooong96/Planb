@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8" import="dto.member.UserDto"
-	import="dto.profile.ProfileFeedDto" import="java.util.List"%>
+	import="dto.profile.ProfileFeedDto" import="java.util.List"
+	import="dto.profile.ProfileActivityDto" import="java.util.List"%>
 
 
 <%
@@ -55,23 +56,17 @@ String addressDetail = user.getAddressDetail() == null ? "" : user.getAddressDet
 String birthDate = user.getBirthDate() == null ? "" : user.getBirthDate().toString();
 
 /* =========================
+프로필 이미지 경로
 
-   프로필 이미지 경로
-
-
-
-   CommonFilter:
-
-   profilePath = /profiles
-
+SharedImageView:
+/uploads/profile/*
 ========================= */
 
 String profilePath = (String) application.getAttribute("profilePath");
 
 if (profilePath == null || profilePath.trim().isEmpty()) {
 
-	profilePath = "/profiles";
-
+	profilePath = "/uploads/profile";
 }
 
 /* =========================
@@ -92,6 +87,11 @@ if (bookmarkedItineraries == null) {
 List<ProfileFeedDto> likedItineraries = (List<ProfileFeedDto>) request.getAttribute("likedItineraries");
 if (likedItineraries == null) {
 	likedItineraries = new java.util.ArrayList<ProfileFeedDto>();
+}
+
+List<ProfileActivityDto> activities = (List<ProfileActivityDto>) request.getAttribute("activities");
+if (activities == null) {
+	activities = new java.util.ArrayList<ProfileActivityDto>();
 }
 
 Integer postCount = (Integer) request.getAttribute("postCount");
@@ -1072,172 +1072,215 @@ if (bookmarkCount == null) {
              활동
 
         ======================================= -->
-
-
+			<!-- ======================================
+     활동
+======================================= -->
 
 			<div data-profile-panel="activity" class="jsp-hidden">
-
-
-
 
 
 				<div class="activity-panel">
 
 
-
-
+					<!-- =================================
+             활동 필터
+        ================================== -->
 
 					<div class="segmented-control">
 
+						<button type="button" class="active" data-activity-filter="ALL">
+
+							전체</button>
 
 
+						<button type="button" data-activity-filter="POST">글</button>
 
 
-						<button type="button" class="active">전체</button>
-
-
-
-
-
-						<button type="button">글</button>
-
-
-
-
-
-						<button type="button">댓글</button>
-
-
-
-
+						<button type="button" data-activity-filter="COMMENT">댓글</button>
 
 					</div>
 
 
 
-
-
-
+					<!-- =================================
+             활동 목록
+        ================================== -->
 
 					<div class="activity-list">
 
 
+						<%
+						if (!activities.isEmpty()) {
+
+							for (ProfileActivityDto activity : activities) {
+
+								String activityType = activity.getActivityType();
+
+								String activityGroup = activity.getActivityGroup();
+
+								String activityLabel = "";
+
+								String activitySection = "";
+
+								String activityUrl = "#";
+
+								/* =========================
+								   여행 꿀팁 게시글
+								========================== */
+
+								if ("TIP_POST".equals(activityType)) {
+
+							activityLabel = "글";
+
+							activitySection = "여행 꿀팁";
+
+							/*
+							 * TIP 상세 URL은
+							 * 실제 프로젝트 Servlet URL에
+							 * 맞춰야 함.
+							 */
+							activityUrl = ctx + "/tip/detail?id=" + activity.getTargetId();
+
+							/* =========================
+							   여행 메이트 게시글
+							========================== */
+
+								} else if ("MATE_POST".equals(activityType)) {
+
+							activityLabel = "글";
+
+							activitySection = "여행 메이트";
+
+							activityUrl = ctx + "/mate/detail?id=" + activity.getTargetId();
+
+							/* =========================
+							   여행 꿀팁 댓글
+							========================== */
+
+								} else if ("TIP_COMMENT".equals(activityType)) {
+
+							activityLabel = "댓글";
+
+							activitySection = "여행 꿀팁";
+
+							activityUrl = ctx + "/tip/detail?id=" + activity.getTargetId();
+
+							/* =========================
+							   여행 메이트 댓글
+							========================== */
+
+								} else if ("MATE_COMMENT".equals(activityType)) {
+
+							activityLabel = "댓글";
+
+							activitySection = "여행 메이트";
+
+							activityUrl = ctx + "/mate/detail?id=" + activity.getTargetId();
+
+							/* =========================
+							   여행 일정 댓글
+							========================== */
+
+								} else if ("ITINERARY_COMMENT".equals(activityType)) {
+
+							activityLabel = "댓글";
+
+							activitySection = "여행 일정";
+
+							activityUrl = ctx + "/schedules/detail?id=" + activity.getTargetId();
+								}
+
+								String activityContent = activity.getContent() == null ? "" : activity.getContent();
+
+								String targetTitle = activity.getTargetTitle() == null ? "" : activity.getTargetTitle();
+						%>
 
 
-
-						<button type="button" class="activity-item">
-
-
-
+						<a href="<%=activityUrl%>" class="activity-item"
+							data-activity-item data-activity-group="<%=activityGroup%>">
 
 
 							<div>
 
 
-
-
-
 								<div class="activity-kicker">
 
+									<span> <%=activityLabel%>
+									</span> ·
 
-
-									<span> 글 </span> · 여행 이야기
-
-
+									<%=activitySection%>
 
 								</div>
 
 
 
+								<p>
+
+									<%
+									if ("POST".equals(activityGroup)) {
+									%>
+
+									<strong> <%=targetTitle%>
+									</strong>
+
+									<%
+									} else {
+									%>
+
+									<strong> <%=targetTitle%>
+									</strong> <br>
+
+									<%=activityContent%>
+
+									<%
+									}
+									%>
+
+								</p>
 
 
-								<p>최근 작성한 여행 게시물이 여기에 표시됩니다.</p>
+							</div> <time>
+
+								<%
+								if (activity.getCreatedAt() != null) {
+								%>
+
+								<%=activity.getCreatedAt()%>
+
+								<%
+								}
+								%>
+
+							</time>
 
 
+						</a>
 
 
+						<%
+						}
 
-							</div>
-
-
-
-
-
-							<time> - </time>
+						} else {
+						%>
 
 
+						<div class="empty-state" id="activityEmptyState">아직 활동 내역이
+							없습니다.</div>
 
 
-
-						</button>
-
-
-
+						<%
+						}
+						%>
 
 
+						<div class="empty-state jsp-hidden" id="activityFilterEmpty">
 
-
-						<button type="button" class="activity-item">
-
-
-
-
-
-							<div>
-
-
-
-
-
-								<div class="activity-kicker">
-
-
-
-									<span> 댓글 </span> · 여행 질문
-
-
-
-								</div>
-
-
-
-
-
-								<p>최근 작성한 댓글이 여기에 표시됩니다.</p>
-
-
-
-
-
-							</div>
-
-
-
-
-
-							<time> - </time>
-
-
-
-
-
-						</button>
-
-
-
+							해당 활동 내역이 없습니다.</div>
 
 
 					</div>
 
-
-
-
-
 				</div>
-
-
-
-
 
 			</div>
 
@@ -1656,7 +1699,8 @@ if (bookmarkCount == null) {
 		
 		document.addEventListener("DOMContentLoaded", function () {
 
-		    var contextPath = "<%=ctx%>";
+		    var contextPath = "<%=ctx%>
+		";
 
 			var deleteButtons = document
 					.querySelectorAll("[data-delete-itinerary]");
@@ -1699,7 +1743,61 @@ if (bookmarkCount == null) {
 		});
 	</script>
 
+	<script>
+		document.addEventListener("DOMContentLoaded", function() {
 
+			var filterButtons = document
+					.querySelectorAll("[data-activity-filter]");
+
+			var activityItems = document
+					.querySelectorAll("[data-activity-item]");
+
+			var filterEmpty = document.getElementById("activityFilterEmpty");
+
+			filterButtons.forEach(function(button) {
+
+				button.addEventListener("click", function() {
+
+					var filter = button.getAttribute("data-activity-filter");
+
+					/* 버튼 활성화 */
+					filterButtons.forEach(function(item) {
+
+						item.classList.remove("active");
+					});
+
+					button.classList.add("active");
+
+					var visibleCount = 0;
+
+					/* 목록 필터 */
+					activityItems.forEach(function(item) {
+
+						var group = item.getAttribute("data-activity-group");
+
+						if (filter === "ALL" || filter === group) {
+
+							item.style.display = "";
+
+							visibleCount++;
+
+						} else {
+
+							item.style.display = "none";
+						}
+					});
+
+					/* 검색 결과 없음 */
+					if (filterEmpty) {
+
+						filterEmpty.classList.toggle("jsp-hidden",
+								visibleCount !== 0);
+					}
+
+				});
+			});
+		});
+	</script>
 
 </body>
 

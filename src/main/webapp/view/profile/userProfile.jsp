@@ -55,7 +55,7 @@ String profilePath = (String) application.getAttribute("profilePath");
 
 if (profilePath == null || profilePath.trim().isEmpty()) {
 
-	profilePath = "/profiles";
+	profilePath = "/uploads/profile";
 }
 
 /* =========================================================

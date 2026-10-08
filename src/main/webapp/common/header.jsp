@@ -235,7 +235,7 @@ if (user != null && user.getProfileImg() != null && !user.getProfileImg().trim()
 				<span class="site-profile-avatar site-profile-avatar--img"> <%
  if (!profileImg.isEmpty()) {
  %>
-					<img src="<%=ctx%>/profiles/<%=profileImg%>" alt="<%=nickname%>">
+					<img src="<%=ctx%>/uploads/profile/<%=profileImg%>" alt="<%=nickname%>">
 					<%
 					} else {
 					%> <!-- 프로필 이미지 없는 경우 --> <svg width="16" height="16"

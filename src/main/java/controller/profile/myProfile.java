@@ -11,7 +11,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import dto.member.UserDto;
+import dto.profile.ProfileActivityDto;
 import dto.profile.ProfileFeedDto;
+import service.profile.ProfileActivityService;
+import service.profile.ProfileActivityServiceImpl;
 import service.profile.ProfileFeedService;
 import service.profile.ProfileFeedServiceImpl;
 
@@ -21,6 +24,7 @@ import service.profile.ProfileFeedServiceImpl;
 @WebServlet("/profile/myProfile")
 public class myProfile extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private ProfileActivityService activityService = new ProfileActivityServiceImpl();
 
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -56,6 +60,9 @@ public class myProfile extends HttpServlet {
 			List<ProfileFeedDto> myItineraries = profileFeedService.getMyItineraries(userId);
 			List<ProfileFeedDto> bookmarkedItineraries = profileFeedService.getBookmarkedItineraries(userId);
 			List<ProfileFeedDto> likedItineraries = profileFeedService.getLikedItineraries(userId);
+			List<ProfileActivityDto> activities = activityService.getProfileActivities(user.getUserId());
+
+			
 			/*
 			 * ========================================= 프로필 상단 통계
 			 * =========================================
@@ -76,7 +83,7 @@ public class myProfile extends HttpServlet {
 			request.setAttribute("myItineraries", myItineraries);
 			request.setAttribute("bookmarkedItineraries", bookmarkedItineraries);
 			request.setAttribute("likedItineraries", likedItineraries);
-
+			request.setAttribute("activities", activities);
 
 			request.getRequestDispatcher("/view/profile/myProfile.jsp").forward(request, response);
 		} catch (Exception e) {

@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.sql.Date;
 import java.util.UUID;
@@ -22,6 +21,9 @@ import dto.member.UserDto;
 import service.member.UserService;
 import service.member.UserServiceImpl;
 
+import util.image.SharedImageStorage;
+import util.image.SharedImageStorage.Category;
+
 /**
  * 회원 프로필 수정
  */
@@ -38,10 +40,23 @@ public class ProfileEdit extends HttpServlet {
 	public ProfileEdit() {
 		super();
 	}
-	
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+	/*
+	 * ========================================================= 프로필 설정 페이지 이동
+	 * =========================================================
+	 */
+
+	@Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
 		request.getRequestDispatcher("/view/settings/settings.jsp").forward(request, response);
 	}
+
+	/*
+	 * ========================================================= 프로필 수정
+	 * =========================================================
+	 */
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -50,8 +65,8 @@ public class ProfileEdit extends HttpServlet {
 		request.setCharacterEncoding("UTF-8");
 
 		/*
-		 * ========================================================= 로그인 세션 확인
-		 * =========================================================
+		 * ===================================================== 1. 로그인 세션 확인
+		 * =====================================================
 		 */
 
 		HttpSession session = request.getSession(false);
@@ -73,8 +88,8 @@ public class ProfileEdit extends HttpServlet {
 		}
 
 		/*
-		 * ========================================================= 입력값
-		 * =========================================================
+		 * ===================================================== 2. 입력값
+		 * =====================================================
 		 */
 
 		String name = request.getParameter("name");
@@ -96,15 +111,15 @@ public class ProfileEdit extends HttpServlet {
 		String bio = request.getParameter("bio");
 
 		/*
-		 * DB 저장 실패 시 새로 저장된 파일을 지우기 위한 변수
+		 * DB UPDATE 실패 시 새로 저장한 이미지를 삭제하기 위한 변수
 		 */
 		Path newlySavedFile = null;
 
 		try {
 
 			/*
-			 * ===================================================== 기본 Validation
-			 * =====================================================
+			 * ================================================= 3. 기본 Validation
+			 * =================================================
 			 */
 
 			if (name == null || name.trim().isEmpty()) {
@@ -128,8 +143,8 @@ public class ProfileEdit extends HttpServlet {
 			}
 
 			/*
-			 * ===================================================== 닉네임 변경 시 중복 확인
-			 * =====================================================
+			 * ================================================= 4. 닉네임 변경 시 중복확인
+			 * =================================================
 			 */
 
 			String trimmedNickname = nickname.trim();
@@ -143,8 +158,8 @@ public class ProfileEdit extends HttpServlet {
 			}
 
 			/*
-			 * ===================================================== 수정할 UserDto
-			 * =====================================================
+			 * ================================================= 5. 수정할 UserDto
+			 * =================================================
 			 */
 
 			UserDto updateUser = new UserDto();
@@ -168,8 +183,8 @@ public class ProfileEdit extends HttpServlet {
 			updateUser.setBio(emptyToNull(bio));
 
 			/*
-			 * ===================================================== 생년월일
-			 * =====================================================
+			 * ================================================= 6. 생년월일
+			 * =================================================
 			 */
 
 			if (birthDate != null && !birthDate.trim().isEmpty()) {
@@ -182,9 +197,9 @@ public class ProfileEdit extends HttpServlet {
 			}
 
 			/*
-			 * ===================================================== 프로필 이미지
+			 * ================================================= 7. 프로필 이미지
 			 * 
-			 * 기본값: 기존 이미지 파일명 유지 =====================================================
+			 * 기본값: 기존 이미지 파일명 유지 =================================================
 			 */
 
 			String profileFileName = loginUser.getProfileImg();
@@ -192,96 +207,87 @@ public class ProfileEdit extends HttpServlet {
 			Part profileImage = request.getPart("profileImage");
 
 			/*
-			 * ===================================================== 새 사진을 선택한 경우에만 저장
-			 * =====================================================
+			 * ================================================= 8. 새 이미지를 선택한 경우
+			 * =================================================
 			 */
 
 			if (profileImage != null && profileImage.getSize() > 0) {
 
 				/*
-				 * ------------------------------------------------- 이미지 MIME 확인
-				 * -------------------------------------------------
+				 * --------------------------------------------- 이미지 크기
+				 * ---------------------------------------------
+				 */
+
+				if (profileImage.getSize() > 5 * 1024 * 1024) {
+
+					throw new Exception("프로필 이미지는 5MB 이하만 등록할 수 있습니다.");
+				}
+
+				/*
+				 * --------------------------------------------- MIME 타입
+				 * ---------------------------------------------
 				 */
 
 				String contentType = profileImage.getContentType();
 
-				if (contentType == null || !contentType.startsWith("image/")) {
+				if (contentType == null) {
 
-					throw new Exception("이미지 파일만 업로드할 수 있습니다.");
+					throw new Exception("이미지 형식을 확인할 수 없습니다.");
 				}
 
 				/*
-				 * ------------------------------------------------- 확장자
-				 * -------------------------------------------------
+				 * --------------------------------------------- 확장자 결정
+				 * ---------------------------------------------
 				 */
 
 				String extension = getImageExtension(contentType);
 
 				/*
-				 * ------------------------------------------------- 새 파일명
-				 * -------------------------------------------------
+				 * --------------------------------------------- UUID 파일명 생성
+				 * 
+				 * 예: profile_a8f93....jpg ---------------------------------------------
 				 */
 
 				profileFileName = "profile_" + UUID.randomUUID().toString().replace("-", "") + extension;
 
 				/*
-				 * ================================================= 중요
-				 * 
-				 * 회원가입과 동일한 profilePath 사용
-				 * 
-				 * signup.java:
-				 * 
-				 * String uploadPath = (String) request.getServletContext()
-				 * .getAttribute("profilePath");
-				 * 
-				 * String realPath = request.getServletContext() .getRealPath(uploadPath);
-				 * =================================================
+				 * --------------------------------------------- 공유폴더의 profile 카테고리
+				 * ---------------------------------------------
 				 */
 
-				String uploadPath = (String) request.getServletContext().getAttribute("profilePath");
+				Category profileCategory = Category.fromFolderName("profile");
 
-				/*
-				 * CommonFilter 등에서 profilePath를 지정하지 못한 경우
-				 */
-				if (uploadPath == null || uploadPath.trim().isEmpty()) {
+				if (profileCategory == null) {
 
-					uploadPath = "/profiles";
-				}
-
-				String realPath = request.getServletContext().getRealPath(uploadPath);
-
-				if (realPath == null || realPath.trim().isEmpty()) {
-
-					throw new Exception("프로필 이미지 실제 저장 경로를 찾지 못했습니다.");
+					throw new Exception("프로필 이미지 저장 카테고리를 찾을 수 없습니다.");
 				}
 
 				/*
-				 * ------------------------------------------------- 저장 폴더
-				 * -------------------------------------------------
+				 * --------------------------------------------- 실제 공유폴더 파일 경로
+				 * 
+				 * 여기서 더 이상 getServletContext().getRealPath() 를 사용하지 않음.
+				 * ---------------------------------------------
 				 */
 
-				Path directory = Paths.get(realPath).toAbsolutePath().normalize();
-
-				Files.createDirectories(directory);
+				Path savePath = SharedImageStorage.resolveFile(profileCategory, profileFileName);
 
 				/*
-				 * ------------------------------------------------- 실제 저장 파일
-				 * -------------------------------------------------
+				 * --------------------------------------------- 공유폴더 생성
+				 * ---------------------------------------------
 				 */
 
-				Path savePath = directory.resolve(profileFileName).normalize();
+				Path parentDirectory = savePath.getParent();
 
-				/*
-				 * 혹시 모를 경로 조작 방지
-				 */
-				if (!savePath.startsWith(directory)) {
+				if (parentDirectory == null) {
 
-					throw new Exception("잘못된 프로필 이미지 저장 경로입니다.");
+					throw new Exception("프로필 이미지 저장 위치를 찾을 수 없습니다.");
 				}
 
+				Files.createDirectories(parentDirectory);
+
 				/*
-				 * ------------------------------------------------- 이미지 파일 저장
-				 * -------------------------------------------------
+				 * --------------------------------------------- 실제 이미지 저장
+				 * ---------------------------------------------
 				 */
 
 				try (InputStream input = profileImage.getInputStream()) {
@@ -289,58 +295,57 @@ public class ProfileEdit extends HttpServlet {
 					Files.copy(input, savePath, StandardCopyOption.REPLACE_EXISTING);
 				}
 
+				/*
+				 * DB UPDATE 실패 시 새로 저장한 이미지 삭제용
+				 */
 				newlySavedFile = savePath;
 
 				/*
-				 * ------------------------------------------------- 디버깅
-				 * 
-				 * 여기 출력값 중요함. -------------------------------------------------
+				 * --------------------------------------------- 확인 로그
+				 * ---------------------------------------------
 				 */
 
 				System.out.println("======================================");
 
 				System.out.println("[프로필 이미지 수정]");
 
-				System.out.println("profilePath(URL) = " + uploadPath);
-
-				System.out.println("realPath = " + realPath);
-
 				System.out.println("fileName = " + profileFileName);
 
-				System.out.println("savePath = " + savePath.toAbsolutePath());
+				System.out.println("shared savePath = " + savePath.toAbsolutePath());
 
 				System.out.println("file exists = " + Files.exists(savePath));
 
 				System.out.println("file size = " + Files.size(savePath));
 
-				System.out.println("browser URL = " + request.getContextPath() + uploadPath + "/" + profileFileName);
+				System.out.println("browser URL = " + request.getContextPath() + "/uploads/profile/" + profileFileName);
 
 				System.out.println("======================================");
 			}
 
 			/*
-			 * ===================================================== DTO에 프로필 파일명 설정
+			 * ================================================= 9. DTO에 프로필 이미지 설정
 			 * 
-			 * 새 사진 있음 → profile_xxxxx.jpg
+			 * 새 사진 있음 → 새 profile_xxx.jpg
 			 * 
-			 * 새 사진 없음 → 기존 파일명 =====================================================
+			 * 새 사진 없음 → 기존 파일명 유지 =================================================
 			 */
 
 			updateUser.setProfileImg(profileFileName);
 
 			/*
-			 * ===================================================== DB UPDATE
-			 * =====================================================
+			 * ================================================= 10. DB UPDATE
+			 * =================================================
 			 */
 
 			service.updateUser(updateUser);
 
 			/*
-			 * ===================================================== DB에서 최신 사용자 다시 조회
-			 * =====================================================
+			 * ================================================= 11. DB에서 수정된 회원정보 다시 조회
+			 * 
+			 * loginId가 아니라 userId로 다시 조회 =================================================
 			 */
 
-			UserDto refreshedUser = service.selectUser(loginUser.getLoginId());
+			UserDto refreshedUser = service.getUserById(loginUser.getUserId());
 
 			if (refreshedUser == null) {
 
@@ -348,24 +353,28 @@ public class ProfileEdit extends HttpServlet {
 			}
 
 			/*
-			 * ===================================================== 확인용 로그
-			 * =====================================================
+			 * ================================================= 12. 확인 로그
+			 * =================================================
 			 */
 
 			System.out.println("수정 후 DB profileImg = " + refreshedUser.getProfileImg());
 
+			System.out.println("수정 후 nickname = " + refreshedUser.getNickName());
+
 			/*
-			 * ===================================================== 세션의 사용자 정보 갱신
+			 * ================================================= 13. 세션 회원정보 최신화
 			 * 
-			 * DB만 수정하고 세션을 갱신하지 않으면 header / myProfile 등이 이전 정보를 계속 사용할 수 있음.
-			 * =====================================================
+			 * 매우 중요
+			 * 
+			 * myProfile.jsp는 session의 user를 사용하므로 세션을 바꾸지 않으면 수정 전 정보가 계속 보임.
+			 * =================================================
 			 */
 
 			session.setAttribute("user", refreshedUser);
 
 			/*
-			 * ===================================================== 수정 완료 → 내 프로필
-			 * =====================================================
+			 * ================================================= 14. 수정 완료 → 내 프로필
+			 * =================================================
 			 */
 
 			response.sendRedirect(request.getContextPath() + "/profile/myProfile" + "?updated=success");
@@ -375,9 +384,11 @@ public class ProfileEdit extends HttpServlet {
 			e.printStackTrace();
 
 			/*
-			 * 파일 저장까지 성공했는데 DB UPDATE가 실패했다면 새 파일만 남지 않도록 삭제
+			 * ================================================= 새 이미지까지 저장했는데 DB UPDATE가
+			 * 실패한 경우 새 파일 삭제 =================================================
 			 */
-			if (newlySavedFile != null && Files.exists(newlySavedFile)) {
+
+			if (newlySavedFile != null) {
 
 				try {
 
@@ -396,19 +407,21 @@ public class ProfileEdit extends HttpServlet {
 	}
 
 	/*
-	 * ============================================================ 빈 문자열 → null
-	 * ============================================================
+	 * ========================================================= 빈 문자열 → null
+	 * =========================================================
 	 */
 
 	private String emptyToNull(String value) {
 
 		if (value == null) {
+
 			return null;
 		}
 
 		value = value.trim();
 
 		if (value.isEmpty()) {
+
 			return null;
 		}
 
@@ -416,8 +429,10 @@ public class ProfileEdit extends HttpServlet {
 	}
 
 	/*
-	 * ============================================================ 이미지 MIME 타입 →
-	 * 확장자 ============================================================
+	 * ========================================================= MIME 타입 → 확장자
+	 * 
+	 * 회원가입과 동일하게 JPG / PNG / WEBP만 허용
+	 * =========================================================
 	 */
 
 	private String getImageExtension(String contentType) throws Exception {
@@ -437,12 +452,6 @@ public class ProfileEdit extends HttpServlet {
 			return ".webp";
 		}
 
-		if ("image/gif".equalsIgnoreCase(contentType)) {
-
-			return ".gif";
-		}
-
-		throw new Exception("지원하지 않는 이미지 형식입니다.");
+		throw new Exception("JPG, PNG, WEBP 이미지만 등록할 수 있습니다.");
 	}
-
 }

@@ -23,6 +23,8 @@ import javax.servlet.http.HttpSession;
 import dto.member.UserDto;
 import service.member.UserService;
 import service.member.UserServiceImpl;
+import util.image.SharedImageStorage;
+import util.image.SharedImageStorage.Category;
 
 /**
  * Google 신규 회원 추가정보 입력 완료 처리
@@ -438,7 +440,7 @@ public class GoogleSignupComplete extends HttpServlet {
 		 * 경로 ========================================================
 		 */
 
-		String profilesRealPath = getServletContext().getRealPath("/profiles");
+		String profilesRealPath = getServletContext().getRealPath("/uploads/profile");
 
 		if (profilesRealPath == null) {
 
@@ -452,7 +454,8 @@ public class GoogleSignupComplete extends HttpServlet {
 		 */
 		Files.createDirectories(profileDirectory);
 
-		Path savePath = profileDirectory.resolve(fileName);
+		// GoogleSignupComplete
+		Path savePath = SharedImageStorage.resolveFile(Category.fromFolderName("profile"), fileName);
 
 		/*
 		 * ======================================================== 파일 저장
