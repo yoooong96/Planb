@@ -510,7 +510,7 @@
 		}
 
 		return panel.dataset.contextPath
-			+ "/profiles/" + encodeURIComponent(value);
+			+ "/uploads/profile/" + encodeURIComponent(value);
 	}
 
 	function createProfile(comment) {

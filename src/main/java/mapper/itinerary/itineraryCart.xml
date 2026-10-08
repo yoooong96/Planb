@@ -5,224 +5,253 @@
 
 <mapper namespace="mapper.itinerary.itineraryCart">
 
-    <!-- 카트 조회: 원본이 아니라 담을 당시 스냅샷만 읽는다. -->
-    <select id="selectCartSnapshots" parameterType="long"
-        resultType="dto.itinerary.ItineraryCartDto">
-        SELECT
-            cart_id,
-            user_id,
-            source_itinerary_id,
-            author_nickname,
-            title,
-            country,
-            city,
-            traveler_count,
-            added_at
-        FROM TB_ITINERARY_CART
-        WHERE user_id = #{value}
-        ORDER BY added_at DESC, cart_id DESC
-    </select>
+	<!-- 카트 조회: 원본이 아니라 담을 당시 스냅샷만 읽는다. -->
+	<select id="selectCartSnapshots" parameterType="long"
+		resultType="dto.itinerary.ItineraryCartDto">
+		SELECT
+		cart_id,
+		user_id,
+		source_itinerary_id,
+		author_nickname,
+		title,
+		country,
+		city,
+		traveler_count,
+		added_at
+		FROM TB_ITINERARY_CART
+		WHERE user_id = #{value}
+		ORDER BY added_at DESC, cart_id DESC
+	</select>
 
-    <select id="selectDaySnapshots" parameterType="long"
-        resultType="dto.itinerary.ItineraryDayCartDto">
-        SELECT
-            day_cart_id,
-            cart_id,
-            source_day_id,
-            day_order,
-            day_date,
-            title
-        FROM TB_ITINERARY_DAY_CART
-        WHERE cart_id = #{value}
-        ORDER BY day_order ASC, day_cart_id ASC
-    </select>
+	<select id="selectDaySnapshots" parameterType="long"
+		resultType="dto.itinerary.ItineraryDayCartDto">
+		SELECT
+		day_cart_id,
+		cart_id,
+		source_day_id,
+		day_order,
+		day_date,
+		title
+		FROM TB_ITINERARY_DAY_CART
+		WHERE cart_id = #{value}
+		ORDER BY day_order ASC, day_cart_id ASC
+	</select>
 
-    <select id="selectBlockSnapshots" parameterType="long"
-        resultType="dto.itinerary.ItineraryBlockCartDto">
-        SELECT
-            block_cart_id,
-            day_cart_id,
-            source_block_id,
-            google_place_id,
-            place_name,
-            place_address,
-            place_lat,
-            place_lng,
-            block_type,
-            block_order,
-            title,
-            memo,
-            cost,
-            cost_type,
-            start_time,
-            end_time
-        FROM TB_ITINERARY_BLOCK_CART
-        WHERE day_cart_id = #{value}
-        ORDER BY block_order ASC, block_cart_id ASC
-    </select>
+	<select id="selectBlockSnapshots" parameterType="long"
+		resultType="dto.itinerary.ItineraryBlockCartDto">
+		SELECT
+		block_cart_id,
+		day_cart_id,
+		source_block_id,
+		google_place_id,
+		place_name,
+		place_address,
+		place_lat,
+		place_lng,
+		block_type,
+		block_order,
+		title,
+		memo,
+		cost,
+		cost_type,
+		start_time,
+		end_time
+		FROM TB_ITINERARY_BLOCK_CART
+		WHERE day_cart_id = #{value}
+		ORDER BY block_order ASC, block_cart_id ASC
+	</select>
 
-    <!-- 같은 회원이 같은 원본 일정을 이미 담았는지 확인 -->
-    <select id="selectCartId" parameterType="map" resultType="java.lang.Long">
-        SELECT cart_id
-        FROM TB_ITINERARY_CART
-        WHERE user_id = #{userId}
-          AND source_itinerary_id = #{itineraryId}
-    </select>
+	<!-- 같은 회원이 같은 원본 일정을 이미 담았는지 확인 -->
+	<select id="selectCartId" parameterType="map"
+		resultType="java.lang.Long">
+		SELECT cart_id
+		FROM TB_ITINERARY_CART
+		WHERE user_id = #{userId}
+		AND source_itinerary_id = #{itineraryId}
+	</select>
 
-    <!-- 일정 기본정보를 담는 순간 스냅샷으로 복제 -->
-    <insert id="insertCartSnapshot" parameterType="map">
-        INSERT INTO TB_ITINERARY_CART (
-            user_id,
-            source_itinerary_id,
-            author_nickname,
-            title,
-            country,
-            city,
-            traveler_count
-        )
-        SELECT
-            #{userId},
-            i.itinerary_id,
-            u.nickname,
-            i.title,
-            i.country,
-            i.city,
-            i.traveler_count
-        FROM TB_ITINERARY i
-        JOIN TB_USER u
-          ON u.user_id = i.user_id
-        WHERE i.itinerary_id = #{itineraryId}
-          AND i.status = 'ACTIVE'
-          AND (
-              i.visibility = 'PUBLIC'
-              OR i.user_id = #{userId}
-          )
-        ON DUPLICATE KEY UPDATE
-            cart_id = cart_id
-    </insert>
+	<!-- 일정 기본정보를 담는 순간 스냅샷으로 복제 -->
+	<insert id="insertCartSnapshot" parameterType="map">
+		INSERT INTO TB_ITINERARY_CART (
+		user_id,
+		source_itinerary_id,
+		author_nickname,
+		title,
+		country,
+		city,
+		traveler_count
+		)
+		SELECT
+		#{userId},
+		i.itinerary_id,
+		u.nickname,
+		i.title,
+		i.country,
+		i.city,
+		i.traveler_count
+		FROM TB_ITINERARY i
+		JOIN TB_USER u
+		ON u.user_id = i.user_id
+		WHERE i.itinerary_id = #{itineraryId}
+		AND i.status = 'ACTIVE'
+		AND (
+		i.visibility = 'PUBLIC'
+		OR i.user_id = #{userId}
+		)
+		ON DUPLICATE KEY UPDATE
+		cart_id = cart_id
+	</insert>
 
-    <select id="selectDayCartId" parameterType="map" resultType="java.lang.Long">
-        SELECT day_cart_id
-        FROM TB_ITINERARY_DAY_CART
-        WHERE cart_id = #{cartId}
-          AND source_day_id = #{dayId}
-    </select>
+	<select id="selectDayCartId" parameterType="map"
+		resultType="java.lang.Long">
+		SELECT day_cart_id
+		FROM TB_ITINERARY_DAY_CART
+		WHERE cart_id = #{cartId}
+		AND source_day_id = #{dayId}
+	</select>
 
-    <!-- DAY 정보 스냅샷 -->
-    <insert id="insertDaySnapshot" parameterType="map">
-        INSERT INTO TB_ITINERARY_DAY_CART (
-            cart_id,
-            source_day_id,
-            day_order,
-            day_date,
-            title
-        )
-        SELECT
-            c.cart_id,
-            d.day_id,
-            d.day_order,
-            d.day_date,
-            d.title
-        FROM TB_ITINERARY_DAY d
-        JOIN TB_ITINERARY_CART c
-          ON c.source_itinerary_id = d.itinerary_id
-        WHERE c.cart_id = #{cartId}
-          AND c.user_id = #{userId}
-          AND d.day_id = #{dayId}
-        ON DUPLICATE KEY UPDATE
-            day_cart_id = day_cart_id
-    </insert>
+	<!-- DAY 정보 스냅샷 -->
+	<insert id="insertDaySnapshot" parameterType="map">
+		INSERT INTO TB_ITINERARY_DAY_CART (
+		cart_id,
+		source_day_id,
+		day_order,
+		day_date,
+		title
+		)
+		SELECT
+		c.cart_id,
+		d.day_id,
+		d.day_order,
+		d.day_date,
+		d.title
+		FROM TB_ITINERARY_DAY d
+		JOIN TB_ITINERARY_CART c
+		ON c.source_itinerary_id = d.itinerary_id
+		WHERE c.cart_id = #{cartId}
+		AND c.user_id = #{userId}
+		AND d.day_id = #{dayId}
+		ON DUPLICATE KEY UPDATE
+		day_cart_id = day_cart_id
+	</insert>
 
-    <select id="selectBlockCartId" parameterType="map" resultType="java.lang.Long">
-        SELECT block_cart_id
-        FROM TB_ITINERARY_BLOCK_CART
-        WHERE day_cart_id = #{dayCartId}
-          AND source_block_id = #{blockId}
-    </select>
+	<select id="selectBlockCartId" parameterType="map"
+		resultType="java.lang.Long">
+		SELECT block_cart_id
+		FROM TB_ITINERARY_BLOCK_CART
+		WHERE day_cart_id = #{dayCartId}
+		AND source_block_id = #{blockId}
+	</select>
 
-    <!-- 블록 정보 스냅샷. 현재 DB 설계상 블록 사진은 카트에 복제하지 않는다. -->
-    <insert id="insertBlockSnapshot" parameterType="map">
-        INSERT INTO TB_ITINERARY_BLOCK_CART (
-            day_cart_id,
-            source_block_id,
-            google_place_id,
-            place_name,
-            place_address,
-            place_lat,
-            place_lng,
-            block_type,
-            block_order,
-            title,
-            memo,
-            cost,
-            cost_type,
-            start_time,
-            end_time
-        )
-        SELECT
-            dc.day_cart_id,
-            b.block_id,
-            b.google_place_id,
-            b.place_name,
-            b.place_address,
-            b.place_lat,
-            b.place_lng,
-            b.block_type,
-            b.block_order,
-            b.title,
-            b.memo,
-            b.cost,
-            b.cost_type,
-            b.start_time,
-            b.end_time
-        FROM TB_ITINERARY_BLOCK b
-        JOIN TB_ITINERARY_DAY d
-          ON d.day_id = b.day_id
-        JOIN TB_ITINERARY_DAY_CART dc
-          ON dc.source_day_id = d.day_id
-        JOIN TB_ITINERARY_CART c
-          ON c.cart_id = dc.cart_id
-         AND c.source_itinerary_id = d.itinerary_id
-        WHERE dc.day_cart_id = #{dayCartId}
-          AND c.user_id = #{userId}
-          AND b.block_id = #{blockId}
-        ON DUPLICATE KEY UPDATE
-            block_cart_id = block_cart_id
-    </insert>
+	<!-- 블록 정보 스냅샷. 현재 DB 설계상 블록 사진은 카트에 복제하지 않는다. -->
+	<insert id="insertBlockSnapshot" parameterType="map">
+		INSERT INTO TB_ITINERARY_BLOCK_CART (
+		day_cart_id,
+		source_block_id,
+		google_place_id,
+		place_name,
+		place_address,
+		place_lat,
+		place_lng,
+		block_type,
+		block_order,
+		title,
+		memo,
+		cost,
+		cost_type,
+		start_time,
+		end_time
+		)
+		SELECT
+		dc.day_cart_id,
+		b.block_id,
+		b.google_place_id,
+		b.place_name,
+		b.place_address,
+		b.place_lat,
+		b.place_lng,
+		b.block_type,
+		b.block_order,
+		b.title,
+		b.memo,
+		b.cost,
+		b.cost_type,
+		b.start_time,
+		b.end_time
+		FROM TB_ITINERARY_BLOCK b
+		JOIN TB_ITINERARY_DAY d
+		ON d.day_id = b.day_id
+		JOIN TB_ITINERARY_DAY_CART dc
+		ON dc.source_day_id = d.day_id
+		JOIN TB_ITINERARY_CART c
+		ON c.cart_id = dc.cart_id
+		AND c.source_itinerary_id = d.itinerary_id
+		WHERE dc.day_cart_id = #{dayCartId}
+		AND c.user_id = #{userId}
+		AND b.block_id = #{blockId}
+		ON DUPLICATE KEY UPDATE
+		block_cart_id = block_cart_id
+	</insert>
 
-    <!-- 카트 일정 삭제. DAY/BLOCK은 FK ON DELETE CASCADE로 함께 삭제된다. -->
-    <delete id="deleteItinerary" parameterType="map">
-        DELETE FROM TB_ITINERARY_CART
-        WHERE user_id = #{userId}
-          AND source_itinerary_id = #{itineraryId}
-    </delete>
+	<!-- 카트 일정 삭제. DAY/BLOCK은 FK ON DELETE CASCADE로 함께 삭제된다. -->
+	<delete id="deleteItinerary" parameterType="map">
+		DELETE FROM TB_ITINERARY_CART
+		WHERE user_id = #{userId}
+		AND source_itinerary_id = #{itineraryId}
+	</delete>
 
-    <!-- 특정 DAY 스냅샷 삭제. 하위 BLOCK은 FK ON DELETE CASCADE로 함께 삭제된다. -->
-    <delete id="deleteDay" parameterType="map">
-        DELETE dc
-        FROM TB_ITINERARY_DAY_CART dc
-        JOIN TB_ITINERARY_CART c
-          ON c.cart_id = dc.cart_id
-        WHERE c.user_id = #{userId}
-          AND dc.source_day_id = #{dayId}
-    </delete>
+	<!-- 특정 DAY 스냅샷 삭제. 하위 BLOCK은 FK ON DELETE CASCADE로 함께 삭제된다. -->
+	<delete id="deleteDay" parameterType="map">
+		DELETE dc
+		FROM TB_ITINERARY_DAY_CART dc
+		JOIN TB_ITINERARY_CART c
+		ON c.cart_id = dc.cart_id
+		WHERE c.user_id = #{userId}
+		AND dc.source_day_id = #{dayId}
+	</delete>
 
-    <!-- 특정 BLOCK 스냅샷 삭제 -->
-    <delete id="deleteBlock" parameterType="map">
-        DELETE bc
-        FROM TB_ITINERARY_BLOCK_CART bc
-        JOIN TB_ITINERARY_DAY_CART dc
-          ON dc.day_cart_id = bc.day_cart_id
-        JOIN TB_ITINERARY_CART c
-          ON c.cart_id = dc.cart_id
-        WHERE c.user_id = #{userId}
-          AND bc.source_block_id = #{blockId}
-    </delete>
+	<!-- 특정 BLOCK 스냅샷 삭제 -->
+	<delete id="deleteBlock" parameterType="map">
+		DELETE bc
+		FROM TB_ITINERARY_BLOCK_CART bc
+		JOIN TB_ITINERARY_DAY_CART dc
+		ON dc.day_cart_id = bc.day_cart_id
+		JOIN TB_ITINERARY_CART c
+		ON c.cart_id = dc.cart_id
+		WHERE c.user_id = #{userId}
+		AND bc.source_block_id = #{blockId}
+	</delete>
 
-    <select id="selectCartCount" parameterType="long" resultType="int">
-        SELECT COUNT(*)
-        FROM TB_ITINERARY_CART
-        WHERE user_id = #{value}
-    </select>
+	<select id="selectCartCount" parameterType="long"
+		resultType="int">
+		SELECT COUNT(*)
+		FROM TB_ITINERARY_CART
+		WHERE user_id = #{value}
+	</select>
+
+	<!-- BLOCK 해제 후, 해당 DAY에 남은 BLOCK이 없으면 DAY 삭제 -->
+	<delete id="deleteEmptyDay" parameterType="map">
+		DELETE dc
+		FROM TB_ITINERARY_DAY_CART dc
+		JOIN TB_ITINERARY_CART c
+		ON c.cart_id = dc.cart_id
+		LEFT JOIN TB_ITINERARY_BLOCK_CART bc
+		ON bc.day_cart_id = dc.day_cart_id
+		WHERE c.user_id = #{userId}
+		AND c.cart_id = #{cartId}
+		AND dc.source_day_id = #{dayId}
+		AND bc.block_cart_id IS NULL
+	</delete>
+
+	<!-- DAY 해제 후, 남은 DAY가 없으면 일정 묶음 삭제 -->
+	<delete id="deleteEmptyCart" parameterType="map">
+		DELETE c
+		FROM TB_ITINERARY_CART c
+		LEFT JOIN TB_ITINERARY_DAY_CART dc
+		ON dc.cart_id = c.cart_id
+		WHERE c.user_id = #{userId}
+		AND c.cart_id = #{cartId}
+		AND dc.day_cart_id IS NULL
+	</delete>
 
 </mapper>
