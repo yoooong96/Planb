@@ -13,10 +13,14 @@ request.setAttribute("activePage", "travel");
 <title><c:out value="${itinerary.title}" /> | Planb</title>
 <jsp:include page="/common/headStyles.jsp" />
 <link rel="stylesheet"
-	href="${pageContext.request.contextPath}/view/assets/css/travel/scheduleDetail.css?v=2">
+	href="${pageContext.request.contextPath}/view/assets/css/travel/scheduleDetail.css?v=3">
 </head>
 <body class="site-shell"><jsp:include page="/common/header.jsp" />
-	<main class="detail-layout">
+	<main id="scheduleDetail" class="detail-layout"
+		data-cart-url="${pageContext.request.contextPath}/itinerary/cart/add"
+		data-itinerary-id="${itinerary.itineraryId}"
+		data-logged-in="${not empty sessionScope.user}"
+		data-login-url="${pageContext.request.contextPath}/auth/login">
 		<!-- 좌측: 일정 정보 -->
 		<aside id="detailInfoPanel" class="detail-info-panel">
 			<div class="detail-panel-header detail-info-header">
@@ -37,9 +41,7 @@ request.setAttribute("activePage", "travel");
 					</span>
 				</nav>
 				<div class="ml-auto flex items-center gap-1.5 shrink-0">
-					<button
-						id="scheduleShareButton"
-						type="button"
+					<button id="scheduleShareButton" type="button"
 						aria-label="일정 링크 복사"
 						data-share-url="${pageContext.request.contextPath}/schedules/detail?id=${itinerary.itineraryId}"
 						class="w-8 h-8 rounded-full border flex items-center justify-center text-gray-400 hover:text-gray-700 hover:border-gray-300 transition-all"
@@ -117,36 +119,6 @@ request.setAttribute("activePage", "travel");
 						class="absolute bottom-4 left-4 text-white text-xs font-bold bg-black/50 rounded-full px-2.5 py-1">
 						<c:out value="${itinerary.durationText}" />
 					</span>
-
-					<!-- <div class="absolute right-4 bottom-4 z-10">
-						<button type="button"
-							class="group flex items-center gap-2 rounded-2xl border border-white/70 bg-black/45 p-1.5 pr-2 backdrop-blur-md shadow-lg transition-all hover:bg-black/60">
-							<div class="flex -space-x-2">
-								<span
-									class="relative block h-9 w-9 overflow-hidden rounded-lg border-2 border-white shadow-sm"><img
-									src="https://images.unsplash.com/photo-1628411848698-e3b3249a272a?w=120&h=80&fit=crop"
-									alt="1일차" class="h-full w-full object-cover"><span
-									class="absolute bottom-0 right-0 rounded-tl-md px-1 text-[8px] font-black text-white"
-									style="background: #6369D1">1</span></span> <span
-									class="relative block h-9 w-9 overflow-hidden rounded-lg border-2 border-white shadow-sm"><img
-									src="https://images.unsplash.com/photo-1678284949334-5f9edb02e55e?w=120&h=80&fit=crop"
-									alt="2일차" class="h-full w-full object-cover"><span
-									class="absolute bottom-0 right-0 rounded-tl-md px-1 text-[8px] font-black text-white"
-									style="background: #ef4444">2</span></span> <span
-									class="relative block h-9 w-9 overflow-hidden rounded-lg border-2 border-white shadow-sm"><img
-									src="https://images.unsplash.com/photo-1616798249081-30877e213b16?w=120&h=80&fit=crop"
-									alt="3일차" class="h-full w-full object-cover"><span
-									class="absolute bottom-0 right-0 rounded-tl-md px-1 text-[8px] font-black text-white"
-									style="background: #10b981">3</span></span>
-							</div>
-							<span class="text-[10px] font-bold text-white">사진 10</span>
-							<svg class="h-3.5 w-3.5 text-white transition-transform"
-								viewBox="0 0 24 24" fill="none" stroke="currentColor"
-								stroke-width="2.5">
-								<path stroke-linecap="round" stroke-linejoin="round"
-									d="m6 9 6 6 6-6" /></svg>
-						</button>
-					</div> -->
 				</div>
 				<div class="px-5 pt-4 pb-3 border-b" style="border-color: #D1D2F9">
 					<!-- 제목 -->
@@ -251,8 +223,11 @@ request.setAttribute("activePage", "travel");
 
 					</div>
 					<div class="flex gap-2">
-						<button type="button" data-toast="전체 일정을 장바구니에 담았어요!"
-							class="flex-1 py-2.5 rounded-xl text-[10px] font-semibold flex items-center justify-center gap-1.5 transition-all hover:opacity-90"
+						<button type="button" data-cart-add="ITINERARY"
+							data-target-id="${itinerary.itineraryId}"
+							class="flex-1 py-2.5 rounded-xl text-[10px] font-semibold
+           						flex items-center justify-center gap-1.5
+           						transition-all hover:opacity-90"
 							style="background: #6369D1; color: white">
 							<svg class="w-3.5 h-3.5 shrink-0" fill="none"
 								stroke="currentColor" viewBox="0 0 24 24">
@@ -268,7 +243,7 @@ request.setAttribute("activePage", "travel");
 							aria-haspopup="dialog" aria-controls="scheduleReportModal"
 							class="flex items-center gap-1 px-3 py-2.5 rounded-xl text-[12px] font-bold border transition-all hover:bg-[#FFE8DE] hover:border-[#FF8A5B] hover:text-[#D95B2B]"
 							style="background: #FFF5F0; border-color: #FFB08A; color: #E76F3C">
-							
+
 							<!-- style="background: #FFF5F0; border-color: #FFB08A; color: #E76F3C" -->
 							<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor"
 								viewBox="0 0 24 24">
@@ -290,7 +265,8 @@ request.setAttribute("activePage", "travel");
 						class="flex items-center gap-2.5 flex-1 min-w-0
                hover:opacity-75 transition-opacity text-left">
 
-						<div class="w-9 h-9 rounded-full overflow-hidden border-2 shrink-0 flex items-center justify-center"
+						<div
+							class="w-9 h-9 rounded-full overflow-hidden border-2 shrink-0 flex items-center justify-center"
 							style="border-color: #D1D2F9; background: #F0F0FF; color: #6369D1">
 
 							<c:choose>
@@ -334,7 +310,7 @@ request.setAttribute("activePage", "travel");
 								class="text-[13px] font-bold text-gray-900 hover:underline truncate">
 								<c:out value="${itinerary.nickname}" />
 							</p>
-	
+
 							<p class="text-[11px] text-gray-400">
 								<fmt:formatDate value="${itinerary.createdAt}"
 									pattern="yyyy.MM.dd" />
@@ -529,6 +505,15 @@ request.setAttribute("activePage", "travel");
 									</c:if>
 
 								</div>
+								<button type="button" data-cart-add="DAY"
+									data-target-id="${day.dayId}" class="detail-cart-small"
+									title="이 일차의 모든 블록 담기" aria-label="${dayStatus.count}일차 전체 담기">
+										
+									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shopping-cart-plus preview-icon"><path d="M16 5h6"/><path d="M19 2v6"/><path d="m2.05 2.05 1.099-.028a1 1 0 011.008.815l2.69 14.347A1 1 0 007.83 18H18"/><path d="M4.564 5H12"/><path d="M6.25 14h12.712a2 2 0 001.991-1.57l.172-1.041"/><circle cx="18" cy="20" r="2"/><circle cx="8" cy="20" r="2"/></svg>
+
+									<span>담기</span>
+								</button>
+
 							</div>
 
 							<!-- 해당 일차의 블록 목록 -->
@@ -563,38 +548,49 @@ request.setAttribute("activePage", "travel");
 										<div class="flex-1 min-w-0 pb-3">
 
 											<!-- 시간과 제목 -->
-											<div class="flex items-center gap-2 flex-wrap">
+											<div class="flex items-start gap-2">
+												<div
+													class="flex flex-1 min-w-0 items-center gap-2 flex-wrap">
 
-												<c:if
-													test="${not empty block.startTime
+													<c:if
+														test="${not empty block.startTime
                                     or not empty block.endTime}">
 
-													<span
-														class="text-[10px] font-mono shrink-0
+														<span
+															class="text-[10px] font-mono shrink-0
                                                px-1.5 py-0.5 rounded-md font-bold"
-														style="background: #6369D115; color: #6369D1"> <c:if
-															test="${not empty block.startTime}">
-															<fmt:formatDate value="${block.startTime}"
-																pattern="HH:mm" />
-														</c:if> <c:if
-															test="${not empty block.startTime
+															style="background: #6369D115; color: #6369D1"> <c:if
+																test="${not empty block.startTime}">
+																<fmt:formatDate value="${block.startTime}"
+																	pattern="HH:mm" />
+															</c:if> <c:if
+																test="${not empty block.startTime
                                             and not empty block.endTime}">
                                             –
                                         </c:if> <c:if
-															test="${not empty block.endTime}">
-															<fmt:formatDate value="${block.endTime}" pattern="HH:mm" />
-														</c:if>
+																test="${not empty block.endTime}">
+																<fmt:formatDate value="${block.endTime}" pattern="HH:mm" />
+															</c:if>
 
-													</span>
-												</c:if>
+														</span>
+													</c:if>
 
-												<span
-													class="font-bold text-[13px]
+													<span
+														class="font-bold text-[13px]
                                              text-gray-900 leading-snug"
-													style="overflow-wrap: anywhere"> <c:out
-														value="${empty block.title
+														style="overflow-wrap: anywhere"> <c:out
+															value="${empty block.title
                                         ? block.placeName : block.title}" />
-												</span>
+													</span>
+												</div>
+
+												<button type="button" data-cart-add="BLOCK"
+													data-target-id="${block.blockId}"
+													class="detail-cart-small detail-cart-icon" title="블록 담기"
+													aria-label="블록 담기">
+
+													<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shopping-cart-plus preview-icon"><path d="M16 5h6"/><path d="M19 2v6"/><path d="m2.05 2.05 1.099-.028a1 1 0 011.008.815l2.69 14.347A1 1 0 007.83 18H18"/><path d="M4.564 5H12"/><path d="M6.25 14h12.712a2 2 0 001.991-1.57l.172-1.041"/><circle cx="18" cy="20" r="2"/><circle cx="8" cy="20" r="2"/></svg>
+												</button>
 
 											</div>
 
@@ -630,13 +626,13 @@ request.setAttribute("activePage", "travel");
 											<c:if
 												test="${not empty block.placeName
                                 and block.placeName ne block.title}">
-												<p class="mt-1 text-[11px] text-gray-500">
+												<p class="mt-1 text-[11px] text-black-600">
 													<c:out value="${block.placeName}" />
 												</p>
 											</c:if>
 
 											<c:if test="${not empty block.placeAddress}">
-												<p class="mt-1 text-[11px] text-gray-400"
+												<p class="mt-1 text-[11px] text-black-500"
 													style="overflow-wrap: anywhere">
 													<c:out value="${block.placeAddress}" />
 												</p>
@@ -852,6 +848,6 @@ request.setAttribute("activePage", "travel");
 		src="${pageContext.request.contextPath}/view/assets/js/auth/tripily.js"></script>
 
 	<script
-		src="${pageContext.request.contextPath}/view/assets/js/travel/scheduleDetail.js?v=8"></script>
+		src="${pageContext.request.contextPath}/view/assets/js/travel/scheduleDetail.js?v=9"></script>
 </body>
 </html>

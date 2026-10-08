@@ -28,4 +28,6 @@ public interface ItineraryCartService {
 	////////////////////////////////////////////////////////////////////////////
 	
 	Map<String, Object> addToCart(Long loginUserId, Long itineraryId, String itemType, Long targetId) throws Exception;
+	
+	int getCartCount(Long loginUserId) throws Exception;
 }

@@ -654,4 +654,11 @@ public class ItineraryCartServiceImpl
 
         return selectedDays;
     }
+
+
+	@Override
+	public int getCartCount(Long loginUserId) throws Exception {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }
