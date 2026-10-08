@@ -537,3 +537,19 @@ tipWriteForm.addEventListener("submit", function(event) {
 		return;
 	}
 });
+
+// ========================================
+// 본문이 비어있을 때 커서를 맨 앞으로 이동
+// ========================================
+const contentTextarea =
+	document.querySelector('textarea[name="content"]');
+
+if (contentTextarea) {
+
+	contentTextarea.addEventListener("click", function () {
+
+		if (this.value.length === 0) {
+			this.setSelectionRange(0, 0);
+		}
+	});
+}

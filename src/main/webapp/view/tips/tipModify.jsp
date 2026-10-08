@@ -144,10 +144,11 @@ request.setAttribute("activePage", "tips");
 								<button type="button" class="px-2 py-1 text-xs underline">U</button>
 								<button type="button" class="px-2 py-1 text-xs">🖼</button>
 							</div>
-							<textarea name="content" class="w-full min-h-[220px] p-4 outline-none resize-y text-sm text-gray-700"
-          							placeholder="여행에서 직접 경험한 소중한 팁을 자세히 적어주세요." required>
-          							${tip.content}
-          					</textarea>
+							<textarea
+							name="content"
+							class="w-full min-h-[220px] p-4 outline-none resize-y text-sm text-gray-700"
+							placeholder="여행에서 직접 경험한 소중한 팁을 자세히 적어주세요."
+							required>${tip.content}</textarea>
 						</div>
 					</div>
 					<div>
