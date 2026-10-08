@@ -838,7 +838,7 @@ if (bookmarkCount == null) {
 
 
 								<a
-									href="<%=ctx%>/itinerary/modify?id=<%=item.getItineraryId()%>">
+									href="<%=ctx%>/modifyplan?itineraryId=<%=item.getItineraryId()%>">
 
 									수정 </a>
 
@@ -1139,7 +1139,7 @@ if (bookmarkCount == null) {
 							 * 실제 프로젝트 Servlet URL에
 							 * 맞춰야 함.
 							 */
-							activityUrl = ctx + "/tip/detail?id=" + activity.getTargetId();
+							activityUrl = ctx + "/tipDetail?tipId=" + activity.getTargetId();
 
 							/* =========================
 							   여행 메이트 게시글
@@ -1151,7 +1151,7 @@ if (bookmarkCount == null) {
 
 							activitySection = "여행 메이트";
 
-							activityUrl = ctx + "/mate/detail?id=" + activity.getTargetId();
+							activityUrl = ctx + "/mateDetail?mateId=" + activity.getTargetId();
 
 							/* =========================
 							   여행 꿀팁 댓글
@@ -1163,7 +1163,7 @@ if (bookmarkCount == null) {
 
 							activitySection = "여행 꿀팁";
 
-							activityUrl = ctx + "/tip/detail?id=" + activity.getTargetId();
+							activityUrl = ctx + "/tipDetail?tipId=" + activity.getTargetId();
 
 							/* =========================
 							   여행 메이트 댓글
@@ -1175,7 +1175,7 @@ if (bookmarkCount == null) {
 
 							activitySection = "여행 메이트";
 
-							activityUrl = ctx + "/mate/detail?id=" + activity.getTargetId();
+							activityUrl = ctx + "/mateDetail?mateId=" + activity.getTargetId();
 
 							/* =========================
 							   여행 일정 댓글
