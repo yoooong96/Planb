@@ -50,8 +50,48 @@ request.setAttribute("activePage", "tips");
 								style="background: linear-gradient(to top, rgba(0, 0, 0, .72) 0%, rgba(0, 0, 0, .18) 55%, transparent 100%)"></div>
 							<div class="absolute bottom-6 left-7 right-7">
 								<h1 class="text-white text-2xl md:text-3xl font-extrabold leading-snug">
-								    <c:out value="${tip.title}" />
+									<c:out value="${tip.title}" />
 								</h1>
+							
+								<c:if test="${not empty tip.country || not empty tip.city}">
+							
+									<div
+										class="inline-flex items-center gap-1.5 mt-3 px-3 py-1.5 rounded-full text-sm font-semibold text-white"
+										style="background: rgba(0, 0, 0, .45); backdrop-filter: blur(6px);">
+							
+										<svg
+											width="14"
+											height="14"
+											viewBox="0 0 24 24"
+											fill="none"
+											stroke="currentColor"
+											stroke-width="2">
+							
+											<path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 1 1 18 0z" />
+											<circle cx="12" cy="10" r="3" />
+							
+										</svg>
+							
+										<c:if test="${not empty tip.country}">
+											<span>
+												<c:out value="${tip.country}" />
+											</span>
+										</c:if>
+							
+										<c:if test="${not empty tip.country && not empty tip.city}">
+											<span style="opacity: .65;">·</span>
+										</c:if>
+							
+										<c:if test="${not empty tip.city}">
+											<span>
+												<c:out value="${tip.city}" />
+											</span>
+										</c:if>
+							
+									</div>
+							
+								</c:if>
+							
 							</div>
 						</div>
 						<div class="p-7">

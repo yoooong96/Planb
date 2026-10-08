@@ -279,3 +279,433 @@ document.addEventListener("DOMContentLoaded", function () {
     );
 
 });
+
+// ========================================
+// 수정 페이지 - 여행지 나라 / 도시
+// ========================================
+document.addEventListener("DOMContentLoaded", function () {
+
+	const travelLocations = {
+
+		"대한민국": [
+			"서울",
+			"부산",
+			"제주",
+			"경주",
+			"강릉",
+			"인천",
+			"전주",
+			"여수"
+		],
+
+		"일본": [
+			"도쿄",
+			"오사카",
+			"교토",
+			"후쿠오카",
+			"삿포로",
+			"오키나와",
+			"나고야"
+		],
+
+		"중국": [
+			"베이징",
+			"상하이",
+			"칭다오",
+			"광저우"
+		],
+
+		"대만": [
+			"타이베이",
+			"타이중",
+			"가오슝"
+		],
+
+		"태국": [
+			"방콕",
+			"치앙마이",
+			"푸켓",
+			"파타야"
+		],
+
+		"베트남": [
+			"다낭",
+			"하노이",
+			"호치민",
+			"나트랑"
+		],
+
+		"싱가포르": [
+			"싱가포르"
+		],
+
+		"미국": [
+			"뉴욕",
+			"로스앤젤레스",
+			"샌프란시스코",
+			"라스베이거스",
+			"하와이"
+		],
+
+		"캐나다": [
+			"밴쿠버",
+			"토론토",
+			"몬트리올"
+		],
+
+		"프랑스": [
+			"파리",
+			"니스",
+			"리옹",
+			"마르세유"
+		],
+
+		"이탈리아": [
+			"로마",
+			"밀라노",
+			"베네치아",
+			"피렌체"
+		],
+
+		"스페인": [
+			"바르셀로나",
+			"마드리드",
+			"세비야"
+		],
+
+		"영국": [
+			"런던",
+			"맨체스터",
+			"에든버러"
+		],
+
+		"독일": [
+			"베를린",
+			"뮌헨",
+			"프랑크푸르트"
+		],
+
+		"호주": [
+			"시드니",
+			"멜버른",
+			"브리즈번",
+			"골드코스트"
+		]
+	};
+
+
+	const form =
+		document.querySelector('form[action$="/tipModify"]');
+
+	const countryInput =
+		document.getElementById("countryInput");
+
+	const countryValue =
+		document.getElementById("country");
+
+	const countrySuggestions =
+		document.getElementById("countrySuggestions");
+
+	const countryError =
+		document.getElementById("countryError");
+
+	const cityInput =
+		document.getElementById("cityInput");
+
+	const cityValue =
+		document.getElementById("city");
+
+	const citySuggestions =
+		document.getElementById("citySuggestions");
+
+	const cityError =
+		document.getElementById("cityError");
+
+
+	if (
+		!form
+		|| !countryInput
+		|| !countryValue
+		|| !cityInput
+		|| !cityValue
+	) {
+		return;
+	}
+
+
+	// ========================================
+	// 추천 태그 생성
+	// ========================================
+	function createSuggestionButton(text, clickHandler) {
+
+		const button =
+			document.createElement("button");
+
+		button.type = "button";
+		button.textContent = text;
+
+		button.style.padding = "6px 12px";
+		button.style.borderRadius = "9999px";
+		button.style.border = "1px solid #D1D2F9";
+		button.style.background = "#FAFAFF";
+		button.style.color = "#6369D1";
+		button.style.fontSize = "12px";
+		button.style.fontWeight = "600";
+		button.style.cursor = "pointer";
+
+		button.addEventListener(
+			"click",
+			clickHandler
+		);
+
+		return button;
+	}
+
+
+	// ========================================
+// 나라 추천
+// ========================================
+function renderCountrySuggestions() {
+
+	const keyword =
+		countryInput.value.trim();
+
+	countrySuggestions.innerHTML = "";
+
+	// 아무것도 입력하지 않았으면 태그 표시 안 함
+	if (keyword === "") {
+		return;
+	}
+
+	Object.keys(travelLocations).forEach(function (country) {
+
+		if (!country.includes(keyword)) {
+			return;
+		}
+
+		const button =
+			createSuggestionButton(
+				country,
+				function () {
+
+					countryInput.value =
+						country;
+
+					countryValue.value =
+						country;
+
+					countrySuggestions.innerHTML =
+						"";
+
+					clearCountryError();
+
+					// 나라 선택 후 도시 다시 선택
+					cityInput.disabled =
+						false;
+
+					cityInput.value =
+						"";
+
+					cityValue.value =
+						"";
+
+					citySuggestions.innerHTML =
+						"";
+
+					cityInput.focus();
+				}
+			);
+
+		countrySuggestions.appendChild(
+			button
+		);
+	});
+}
+
+// ========================================
+// 나라 입력
+// ========================================
+countryInput.addEventListener("input", function () {
+
+	// 직접 타이핑하기 시작하면 기존 선택값 해제
+	countryValue.value = "";
+
+	// 나라를 변경하는 중이므로 기존 도시도 해제
+	cityInput.value = "";
+	cityValue.value = "";
+	cityInput.disabled = true;
+
+	countrySuggestions.innerHTML = "";
+	citySuggestions.innerHTML = "";
+
+	clearCountryError();
+	clearCityError();
+
+	renderCountrySuggestions();
+});
+
+// ========================================
+// 도시 검색
+// ========================================
+cityInput.addEventListener("input", function () {
+
+	const keyword =
+		this.value.trim();
+
+	cityValue.value = "";
+
+	citySuggestions.innerHTML = "";
+
+	clearCityError();
+
+	const selectedCountry =
+			countryValue.value;
+
+	if (
+		selectedCountry === ""
+		|| keyword === ""
+	) {
+		return;
+	}
+
+	const cities =
+		travelLocations[selectedCountry] || [];
+
+	const matchedCities =
+		cities.filter(function (city) {
+			return city.includes(keyword);
+		});
+
+	matchedCities.forEach(function (city) {
+
+		const button =
+			createSuggestionButton(
+				city,
+					function () {
+
+					cityInput.value =
+						city;
+
+					cityValue.value =
+						city;
+
+					citySuggestions.innerHTML =
+							"";
+
+					clearCityError();
+				}
+			);
+
+		citySuggestions.appendChild(
+			button
+		);
+	});
+});
+
+
+	// ========================================
+	// 오류 표시
+	// ========================================
+	function showCountryError() {
+
+		countryInput.style.border =
+			"1.5px solid #ef4444";
+
+		countryError.classList.remove(
+			"hidden"
+		);
+	}
+
+
+	function clearCountryError() {
+
+		countryInput.style.border =
+			"1.5px solid #D1D2F9";
+
+		countryError.classList.add(
+			"hidden"
+		);
+	}
+
+
+	function showCityError() {
+
+		cityInput.style.border =
+			"1.5px solid #ef4444";
+
+		cityError.classList.remove(
+			"hidden"
+		);
+	}
+
+
+	function clearCityError() {
+
+		cityInput.style.border =
+			"1.5px solid #D1D2F9";
+
+		cityError.classList.add(
+			"hidden"
+		);
+	}
+
+
+	// ========================================
+	// 수정하기 전 최종 검사
+	// ========================================
+	form.addEventListener("submit", function (event) {
+
+		if (countryValue.value.trim() === "") {
+
+			event.preventDefault();
+
+			showCountryError();
+
+			countryInput.scrollIntoView({
+				behavior: "smooth",
+				block: "center"
+			});
+
+			setTimeout(function () {
+				countryInput.focus();
+			}, 300);
+
+			return;
+		}
+
+
+		if (cityValue.value.trim() === "") {
+
+			event.preventDefault();
+
+			showCityError();
+
+			cityInput.scrollIntoView({
+				behavior: "smooth",
+				block: "center"
+			});
+
+			setTimeout(function () {
+				cityInput.focus();
+			}, 300);
+		}
+	});
+
+});
+
+console.log("tipModify.js 로드됨");
+
+document.addEventListener("DOMContentLoaded", function () {
+
+	console.log("여행지 JS 시작");
+
+	const countryInput =
+		document.getElementById("countryInput");
+
+	const countrySuggestions =
+		document.getElementById("countrySuggestions");
+
+	console.log("countryInput =", countryInput);
+	console.log("countrySuggestions =", countrySuggestions);
+
+});

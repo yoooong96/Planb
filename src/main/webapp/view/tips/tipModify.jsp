@@ -61,27 +61,80 @@ request.setAttribute("activePage", "tips");
 							</span>
 						</div>
 					</div>
+					<!-- 여행지 -->
+					<div>
+						<label class="flex items-center gap-1.5 text-sm font-bold mb-2" style="color: #6369D1;">
+							<span
+								class="w-5 h-5 rounded-full flex items-center justify-center text-white text-xs font-bold bg-[#6369D1]">
+								2
+							</span>
+							여행지
+							<span class="text-red-500 text-xs">
+								*
+							</span>
+						</label>
+						<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+							<!-- 나라 -->
+							<div>
+								<label for="countryInput" class="block text-xs font-semibold text-gray-500 mb-2">
+									나라
+								</label>
+								<input type="text" id="countryInput" value="${tip.country}" autocomplete="off" placeholder="예: 일본"
+									class="jsp-focus w-full rounded-xl px-4 py-3 text-sm text-gray-800 outline-none"
+									style="border: 1.5px solid #D1D2F9;">
+								<input type="hidden" id="country" name="country" value="${tip.country}">
+								<div id="countrySuggestions" class="flex flex-wrap gap-2 mt-2"></div>
+								<p id="countryError" class="hidden mt-2 text-xs" style="color: #ef4444;">
+									나라를 입력한 후 아래 목록에서 선택해주세요.
+								</p>
+							</div>
+							<!-- 도시 -->
+							<div>
+								<label for="cityInput" class="block text-xs font-semibold text-gray-500 mb-2">
+									도시
+								</label>
+								<input type="text" id="cityInput" value="${tip.city}" autocomplete="off" placeholder="예: 후쿠오카"
+									class="jsp-focus w-full rounded-xl px-4 py-3 text-sm text-gray-800 outline-none"
+									style="border: 1.5px solid #D1D2F9;">
+								<input type="hidden" id="city" name="city" value="${tip.city}">
+								<div id="citySuggestions" class="flex flex-wrap gap-2 mt-2"></div>
+								<p id="cityError" class="hidden mt-2 text-xs" style="color: #ef4444;">
+									도시를 입력한 후 아래 목록에서 선택해주세요.
+								</p>
+							</div>
+						</div>
+						<p class="mt-3 text-xs text-gray-400">
+							나라를 변경하면 도시도 다시 선택해주세요.
+						</p>
+					</div>
 					<!-- 해시태그 -->
 					<div>
 						<label class="flex items-center gap-1.5 text-sm font-bold mb-2" style="color: #6369D1">
-							<span class="w-5 h-5 rounded-full flex items-center justify-center text-white text-xs font-bold bg-[#6369D1]">2</span>
+							<span class="w-5 h-5 rounded-full flex items-center justify-center text-white text-xs font-bold bg-[#6369D1]">
+								3
+							</span>
 								해시태그
-							<span class="text-xs font-normal text-gray-400">(선택)</span>
+							<span class="text-xs font-normal text-gray-400">
+								(선택)
+							</span>
 						</label>
-						<input type="text" name="hashtag" value="${tip.hashtag}"
-       							class="jsp-focus w-full rounded-xl px-4 py-3 text-sm text-gray-800 outline-none" style="border: 1.5px solid #D1D2F9"
-       							placeholder="#일본 #도쿄 #교통 #맛집">
+						<input type="text" name="hashtag" value="${tip.hashtag}" class="jsp-focus w-full rounded-xl px-4 py-3 text-sm text-gray-800 outline-none" 
+								style="border: 1.5px solid #D1D2F9" placeholder="#교통 #맛집 #혼자여행">
 						<p class="mt-2 text-xs text-gray-400">
-							여행 국가나 관련 키워드를 해시태그로 입력해주세요. 예: #일본 #도쿄 #교통
+							여행과 관련된 자유로운 키워드를 입력해주세요. 예: #교통 #맛집 #혼자여행
 						</p>
 					</div>
 					<div>
-						<label class="flex items-center gap-1.5 text-sm font-bold mb-3"
-							style="color: #6369D1"><span
-							class="w-5 h-5 rounded-full flex items-center justify-center text-white text-xs font-bold bg-[#6369D1]">3</span>내용
-							<span class="text-red-500 text-xs">*</span></label>
-						<div class="rounded-xl overflow-hidden"
-							style="border: 1.5px solid #D1D2F9">
+						<label class="flex items-center gap-1.5 text-sm font-bold mb-3" style="color: #6369D1">
+							<span class="w-5 h-5 rounded-full flex items-center justify-center text-white text-xs font-bold bg-[#6369D1]">
+								4
+							</span>
+							내용
+							<span class="text-red-500 text-xs">
+								*
+							</span>
+						</label>
+						<div class="rounded-xl overflow-hidden" style="border: 1.5px solid #D1D2F9">
 							<div class="flex flex-wrap gap-1 px-3 py-2 border-b border-[#D1D2F9] bg-[#FAFAFF]">
 								<button type="button" class="px-2 py-1 text-xs font-bold">↩</button>
 								<button type="button" class="px-2 py-1 text-xs font-bold">↪</button>
@@ -92,42 +145,34 @@ request.setAttribute("activePage", "tips");
 								<button type="button" class="px-2 py-1 text-xs">🖼</button>
 							</div>
 							<textarea name="content" class="w-full min-h-[220px] p-4 outline-none resize-y text-sm text-gray-700"
-          							placeholder="여행에서 직접 경험한 소중한 팁을 자세히 적어주세요." required>${tip.content}
+          							placeholder="여행에서 직접 경험한 소중한 팁을 자세히 적어주세요." required>
+          							${tip.content}
           					</textarea>
 						</div>
 					</div>
 					<div>
 						<div class="flex items-center justify-between mb-2">
-							<label class="flex items-center gap-2 text-sm font-bold" style="color: #6369D1">📎 사진 첨부</label>
-							<span class="text-xs text-gray-400">최대 5장</span>
+							<label class="flex items-center gap-2 text-sm font-bold" style="color: #6369D1">
+								📎 사진 첨부
+							</label>
+							<span class="text-xs text-gray-400">
+								최대 5장
+							</span>
 						</div>
 						<c:if test="${not empty tipMediaList}">
 						    <div class="mb-4">
-						
 						        <p class="text-xs font-semibold text-gray-500 mb-2">
 						            현재 등록된 이미지
 						        </p>
-						
-						        <div id="existingImageList"
-						             class="grid gap-3"
+						        <div id="existingImageList"class="grid gap-3"
 						             style="grid-template-columns: repeat(auto-fit, minmax(min(120px, 100%), 1fr));">
-						
 						            <c:forEach var="media" items="${tipMediaList}">
-						
 						                <c:if test="${media.mediaType eq 'IMAGE'}">
-						
 						                    <div class="existing-image-item relative overflow-hidden rounded-xl border bg-gray-50"
-						                         data-media-id="${media.mediaId}"
-						                         style="border-color: #D1D2F9; aspect-ratio: 4 / 3;">
-						
-						                        <img
-						                            src="${pageContext.request.contextPath}${media.mediaUrl}"
-						                            alt="현재 등록된 이미지"
-						                            class="w-full h-full object-cover">
-						
-						                        <button
-						                            type="button"
-						                            class="existing-image-delete absolute top-2 right-2
+						                         data-media-id="${media.mediaId}" style="border-color: #D1D2F9; aspect-ratio: 4 / 3;">
+						                        <img src="${pageContext.request.contextPath}${media.mediaUrl}"
+						                            alt="현재 등록된 이미지" class="w-full h-full object-cover">
+						                        <button type="button" class="existing-image-delete absolute top-2 right-2
 						                                   w-7 h-7 rounded-full
 						                                   bg-black/60 text-white
 						                                   flex items-center justify-center"
@@ -135,22 +180,15 @@ request.setAttribute("activePage", "tips");
 						                            aria-label="이미지 삭제">
 						                            ×
 						                        </button>
-						
 						                    </div>
-						
 						                </c:if>
-						
 						            </c:forEach>
-						
 						        </div>
-						
 						        <!-- 삭제할 기존 이미지 ID 저장 -->
 						        <div id="deletedMediaInputs"></div>
-						
 						        <p class="text-xs text-gray-400 mt-2">
 						            삭제할 사진은 우측 상단의 × 버튼을 눌러주세요.
 						        </p>
-						
 						    </div>
 						</c:if>
 						<label class="rounded-xl py-12 flex flex-col items-center justify-center gap-3 cursor-pointer"
@@ -164,8 +202,12 @@ request.setAttribute("activePage", "tips");
 								</svg>
 							</div>
 							<div class="text-center">
-								<p class="text-sm font-semibold text-[#6369D1]">사진을 변경하려면 새 이미지를 선택해주세요.</p>
-								<p class="text-xs text-gray-400 mt-0.5">JPG, PNG, GIF 파일 (최대 10MB) </p>
+								<p class="text-sm font-semibold text-[#6369D1]">
+									사진을 변경하려면 새 이미지를 선택해주세요.
+								</p>
+								<p class="text-xs text-gray-400 mt-0.5">
+									JPG, PNG, GIF 파일 (최대 10MB) 
+								</p>
 							</div>
 						</label>
 						<!-- 선택한 이미지 미리보기 -->
@@ -174,7 +216,8 @@ request.setAttribute("activePage", "tips");
 						</div>
 					</div>
 					<div class="flex justify-end gap-3 pt-2">
-						<a href="${pageContext.request.contextPath}/tipDetail?tipId=${tip.tipId}" class="px-8 py-3 rounded-full text-sm font-semibold"
+						<a href="${pageContext.request.contextPath}/tipDetail?tipId=${tip.tipId}" 
+							class="px-8 py-3 rounded-full text-sm font-semibold"
 							style="border: 2px solid #D1D2F9; color: #6369D1">
 							취소
 						</a>
@@ -187,8 +230,6 @@ request.setAttribute("activePage", "tips");
 			</form>
 		</div>
 	</div>
-	
-	
 	<jsp:include page="/common/footer.jsp" />
 </body>
 </html>

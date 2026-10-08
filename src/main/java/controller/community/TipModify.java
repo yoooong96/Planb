@@ -145,37 +145,21 @@ public class TipModify extends HttpServlet {
 			// ========================================
 			// 2. 수정 값 받기
 			// ========================================
-			long tipId =
-				Long.parseLong(request.getParameter("tipId"));
+			long tipId = Long.parseLong(request.getParameter("tipId"));
 
-			String title =
-				request.getParameter("title");
-
-			String hashtag =
-				request.getParameter("hashtag");
-
-			String content =
-				request.getParameter("content");
-
-			String[] deletedMediaIds =
-				request.getParameterValues("deletedMediaIds");
+			String title = request.getParameter("title");
+			String country = request.getParameter("country");
+			String city = request.getParameter("city");
+			String hashtag = request.getParameter("hashtag");
+			String content = request.getParameter("content");
+			String[] deletedMediaIds = request.getParameterValues("deletedMediaIds");
 
 			// ========================================
 			// 3. 기본 입력값 검사
 			// ========================================
-			if (
-				title == null
-				|| title.trim().isEmpty()
-				|| content == null
-				|| content.trim().isEmpty()
-			) {
-
-				response.sendRedirect(
-					request.getContextPath()
-						+ "/tipModify?tipId="
-						+ tipId
-				);
-
+			if (title == null || title.trim().isEmpty() || country == null || country.trim().isEmpty()
+				|| city == null || city.trim().isEmpty() || content == null || content.trim().isEmpty()) {
+				response.sendRedirect(request.getContextPath() + "/tipModify?tipId=" + tipId);
 				return;
 			}
 
@@ -350,33 +334,22 @@ public class TipModify extends HttpServlet {
 			}
 
 			// ========================================
-			// 10. 제목 / 내용 / 해시태그 수정
+			// 10. 제목 / 여행지 / 내용 / 해시태그 수정
 			// ========================================
-			TipDto tip =
-				new TipDto();
+			TipDto tip = new TipDto();
 
 			tip.setTipId(tipId);
 			tip.setUserId(user.getUserId());
 			tip.setTitle(title.trim());
-
-			tip.setHashtag(
-				hashtag == null
-					? null
-					: hashtag.trim()
-			);
-
+			tip.setCountry(country.trim());
+			tip.setCity(city.trim());
+			tip.setHashtag(hashtag == null ? null : hashtag.trim());
 			tip.setContent(content.trim());
 
-			int result =
-				tipService.updateTip(tip);
+			int result = tipService.updateTip(tip);
 
 			if (result == 0) {
-
-				response.sendError(
-					HttpServletResponse.SC_FORBIDDEN,
-					"수정할 수 없는 게시글입니다."
-				);
-
+				response.sendError(HttpServletResponse.SC_FORBIDDEN,"수정할 수 없는 게시글입니다.");
 				return;
 			}
 

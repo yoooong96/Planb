@@ -62,57 +62,57 @@ public class TipWrite extends HttpServlet {
 		// 2. 작성한 값 받기
 		// ========================================
 		String title = request.getParameter("title");
+		String country = request.getParameter("country");
+		String city = request.getParameter("city");
 		String hashtag = request.getParameter("hashtag");
 		String content = request.getParameter("content");
 
 		// ========================================
-		// 3. 저장된 이미지 URL 리스트
+		// 3. 필수 입력값 검사
+		// ========================================
+		if (title == null || title.trim().isEmpty() || country == null
+			|| country.trim().isEmpty() || city == null || city.trim().isEmpty()
+			|| content == null || content.trim().isEmpty()) {
+			request.setAttribute("errorMessage", "제목, 여행지, 내용을 다시 확인해주세요.");
+			request.getRequestDispatcher("/view/tips/tipWrite.jsp").forward(request, response);
+			return;
+		}
+
+		// ========================================
+		// 4. 저장된 이미지 URL 리스트
 		// ========================================
 		List<String> imageUrls = new ArrayList<>();
 
 		// ========================================
-		// 4. 첨부 이미지 최대 5장 저장
+		// 5. 첨부 이미지 최대 5장 저장
 		// ========================================
 		for (Part part : request.getParts()) {
-
 			if (!"images".equals(part.getName())) {
 				continue;
 			}
-
-			System.out.println("파일명 = " + part.getSubmittedFileName());
-			System.out.println("파일크기 = " + part.getSize());
-
 			if (part.getSize() == 0) {
 				continue;
 			}
-
 			if (imageUrls.size() >= 5) {
 				break;
 			}
-
 			String originalName = part.getSubmittedFileName();
-
 			if (originalName == null || originalName.trim().isEmpty()) {
 				continue;
 			}
-
 			String contentType = part.getContentType();
 
 			if (contentType == null || !contentType.startsWith("image/")) {
 				continue;
 			}
 
-			String imageUrl =
-				SharedImageStorage.saveImage(
-					part,
-					SharedImageStorage.Category.TIP
-				);
+			String imageUrl = SharedImageStorage.saveImage(part, SharedImageStorage.Category.TIP);
 
 			imageUrls.add(imageUrl);
 		}
 
 		// ========================================
-		// 5. 첫 번째 사진을 대표 이미지로 지정
+		// 6. 첫 번째 사진을 대표 이미지로 지정
 		// ========================================
 		String thumbnailImg = null;
 
@@ -121,64 +121,45 @@ public class TipWrite extends HttpServlet {
 		}
 
 		// ========================================
-		// 6. 게시글 DTO 생성
+		// 7. 게시글 DTO 생성
 		// ========================================
 		TipDto tipDto = new TipDto();
 
 		tipDto.setUserId(user.getUserId());
-		tipDto.setTitle(title);
-		tipDto.setHashtag(hashtag);
-		tipDto.setContent(content);
+		tipDto.setTitle(title.trim());
+		tipDto.setCountry(country.trim());
+		tipDto.setCity(city.trim());
+		tipDto.setHashtag(hashtag == null ? null : hashtag.trim());
+		tipDto.setContent(content.trim());
 		tipDto.setThumbnailImg(thumbnailImg);
 
 		// ========================================
-		// 7. TB_TIP에 게시글 등록
+		// 8. TB_TIP에 게시글 등록
 		// ========================================
 		TipService tipService = new TipServiceImpl();
 
 		int result = tipService.insertTip(tipDto);
 
 		// ========================================
-		// 8. 게시글 등록 성공
+		// 9. 게시글 등록 성공
 		// ========================================
 		if (result > 0) {
-
-			TipMediaService tipMediaService =
-				new TipMediaServiceImpl();
-
+			TipMediaService tipMediaService = new TipMediaServiceImpl();
 			int sortOrder = 1;
-
-			// 선택한 이미지 모두 TB_TIP_MEDIA에 저장
 			for (String imageUrl : imageUrls) {
-
-				TipMediaDto mediaDto =
-					new TipMediaDto();
-
+				TipMediaDto mediaDto = new TipMediaDto();
 				mediaDto.setTipId(tipDto.getTipId());
 				mediaDto.setMediaType("IMAGE");
 				mediaDto.setMediaUrl(imageUrl);
 				mediaDto.setSortOrder(sortOrder);
-
 				tipMediaService.insertTipMedia(mediaDto);
-
 				sortOrder++;
 			}
-
 			// 등록 완료 → 여행꿀팁 목록
-			response.sendRedirect(
-				request.getContextPath() + "/tips"
-			);
-
+			response.sendRedirect(request.getContextPath() + "/tips");
 		} else {
-
-			request.setAttribute(
-				"errorMessage",
-				"여행꿀팁 등록에 실패했습니다."
-			);
-
-			request.getRequestDispatcher(
-				"/view/tips/tipWrite.jsp"
-			).forward(request, response);
+			request.setAttribute("errorMessage","여행꿀팁 등록에 실패했습니다.");
+			request.getRequestDispatcher("/view/tips/tipWrite.jsp").forward(request, response);
 		}
 	}
 }

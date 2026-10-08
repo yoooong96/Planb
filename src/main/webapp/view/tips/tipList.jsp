@@ -406,7 +406,11 @@ request.setAttribute("activePage", "tips");
 				<div class="flex items-center justify-between mb-5 gap-4 flex-wrap">
 					<!-- 왼쪽 : 게시글 수 -->
 					<p class="text-[12px] font-medium text-gray-500">
-				        총 <span class="font-bold" style="color: #6369D1">${totalCount}</span>개의 여행 꿀팁
+				        총 
+				        <span class="font-bold" style="color: #6369D1">
+				        	<span>${tipList.size()}</span>개의 여행 꿀팁
+				        </span>
+				        개의 여행 꿀팁
 				    </p>
 				    <!-- 오른쪽 : 정렬 + 글쓰기 -->
 				    <div class="flex items-center gap-4 flex-wrap">	
