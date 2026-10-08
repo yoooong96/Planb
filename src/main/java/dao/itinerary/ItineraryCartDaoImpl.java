@@ -95,10 +95,10 @@ public class ItineraryCartDaoImpl implements ItineraryCartDao {
 
 		return map;
 	}
-	
+
 	// 변경된 카트 daoimpl
 	///////////////////////////////////////////////////////////////////////////////////////////////////////
-	
+
 	@Override
 	public Long selectCartId(SqlSession sqlSession, Long userId, Long itineraryId) throws Exception {
 
@@ -165,5 +165,10 @@ public class ItineraryCartDaoImpl implements ItineraryCartDao {
 		params.put("blockId", blockId);
 
 		return sqlSession.insert("mapper.itinerary.itineraryCart.insertBlockSnapshot", params);
+	}
+
+	@Override
+	public int selectCartCount(SqlSession sqlSession, Long userId) {
+		return sqlSession.selectOne("mapper.itinerary.itineraryCart.selectCartCount", userId);
 	}
 }

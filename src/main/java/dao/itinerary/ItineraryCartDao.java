@@ -69,4 +69,6 @@ public interface ItineraryCartDao {
 	Long selectBlockCartId(SqlSession sqlSession, Long dayCartId, Long blockId) throws Exception;
 
 	int insertBlockSnapshot(SqlSession sqlSession, Long userId, Long dayCartId, Long blockId) throws Exception;
+	
+	int selectCartCount(SqlSession sqlSession, Long userId);
 }
