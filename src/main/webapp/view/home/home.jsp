@@ -148,7 +148,7 @@ request.setAttribute("activePage", "home");
 								<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" /></svg>
 								<c:out value="${not empty itinerary.city ? itinerary.city : itinerary.country}" />
 							</span>
-							<span class="ph-plan-card-duration"><c:out value="${itinerary.durationText}" /></span>
+							<span class="ph-plan-card-duration"><c:out value="${itinerary.dayDurationText}" /></span>
 						</div>
 
 						<div class="ph-plan-card-body">
