@@ -147,3 +147,16 @@ button.mate-recruit-badge:disabled {
 .tip-detail-actions .mate-recruit-badge {
     margin-left: 8px;
 }
+
+/* 본문 URL 링크 */
+.mate-content-link {
+	color: #6369D1;
+	text-decoration: underline;
+	text-underline-offset: 3px;
+	word-break: break-all;
+	cursor: pointer;
+}
+
+.mate-content-link:hover {
+	color: #4f46e5;
+}

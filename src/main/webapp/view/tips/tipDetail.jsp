@@ -20,7 +20,9 @@ request.setAttribute("activePage", "tips");
 <link rel="stylesheet" href="${pageContext.request.contextPath}/view/assets/css/support/displayAds.css?v=1">
 </head>
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/view/assets/css/tips/tipDetail.css?v=20261015-report">
-	<script defer src="${pageContext.request.contextPath}/view/assets/js/tips/tipDetail.js"></script>
+	<script defer
+		src="${pageContext.request.contextPath}/view/assets/js/tips/tipDetail.js?v=20261019-1">
+	</script>
 <body class="site-shell">
 	<jsp:include page="/common/header.jsp" />
 

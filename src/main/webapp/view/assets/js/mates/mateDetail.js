@@ -959,3 +959,115 @@ if (mateRecruitStatusButton) {
 	}
 
 })();
+
+// =========================
+// 메이트 본문 URL 자동 하이퍼링크
+// =========================
+
+function convertMateUrlsToLinks() {
+
+	const contentBody = document.getElementById("mateContentBody");
+
+	if (!contentBody) {
+		return;
+	}
+
+	const textNodes = [];
+
+	function collectTextNodes(node) {
+
+		node.childNodes.forEach(function (child) {
+
+			if (child.nodeType === Node.TEXT_NODE) {
+
+				textNodes.push(child);
+
+			} else if (
+				child.nodeType === Node.ELEMENT_NODE &&
+				child.tagName !== "A"
+			) {
+
+				collectTextNodes(child);
+			}
+		});
+	}
+
+	collectTextNodes(contentBody);
+
+	const urlPattern = /(https?:\/\/[^\s]+)/g;
+
+	textNodes.forEach(function (textNode) {
+
+		const text = textNode.nodeValue;
+
+		urlPattern.lastIndex = 0;
+
+		if (!urlPattern.test(text)) {
+			urlPattern.lastIndex = 0;
+			return;
+		}
+
+		urlPattern.lastIndex = 0;
+
+		const fragment = document.createDocumentFragment();
+
+		let lastIndex = 0;
+		let match;
+
+		while ((match = urlPattern.exec(text)) !== null) {
+
+			// URL 앞 일반 텍스트
+			fragment.appendChild(
+				document.createTextNode(
+					text.substring(lastIndex, match.index)
+				)
+			);
+
+			// URL을 <a> 태그로 변환
+			const link = document.createElement("a");
+
+			link.href = match[0];
+			link.textContent = match[0];
+
+			// 새 탭에서 열기
+			link.target = "_blank";
+			link.rel = "noopener noreferrer";
+
+			link.className = "mate-content-link";
+
+			fragment.appendChild(link);
+
+			lastIndex = urlPattern.lastIndex;
+		}
+
+		// URL 뒤 일반 텍스트
+		fragment.appendChild(
+			document.createTextNode(
+				text.substring(lastIndex)
+			)
+		);
+
+		textNode.parentNode.replaceChild(
+			fragment,
+			textNode
+		);
+	});
+}
+
+
+// =========================
+// 실행
+// =========================
+
+if (document.readyState === "loading") {
+
+	document.addEventListener(
+		"DOMContentLoaded",
+		convertMateUrlsToLinks
+	);
+
+} else {
+
+	// DOM 로딩이 이미 끝난 경우 바로 실행
+	convertMateUrlsToLinks();
+}

@@ -13,7 +13,9 @@
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/view/assets/css/tips/tipDetail.css?v=20261016-profile">
 	<!-- 메이트에만 있는 요소 (모집 상태 / 모집 정보) -->
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/view/assets/css/mates/mateDetail.css?v=3">
-	<script defer src="${pageContext.request.contextPath}/view/assets/js/mates/mateDetail.js"></script>
+	<script defer
+		src="${pageContext.request.contextPath}/view/assets/js/mates/mateDetail.js?v=20261019-1">
+	</script>
 
 <script
     defer

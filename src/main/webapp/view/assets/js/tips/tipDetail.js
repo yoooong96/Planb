@@ -759,3 +759,104 @@ if (tipDeleteButton) {
 	updateFormState();
 
 })();
+
+// =========================
+// 본문 URL 자동 하이퍼링크
+// =========================
+
+function convertTipUrlsToLinks() {
+
+	const contentBody = document.getElementById("tipContentBody");
+
+	if (!contentBody) {
+		return;
+	}
+
+	const textNodes = [];
+
+	function collectTextNodes(node) {
+
+		node.childNodes.forEach(function (child) {
+
+			if (child.nodeType === Node.TEXT_NODE) {
+
+				textNodes.push(child);
+
+			} else if (
+				child.nodeType === Node.ELEMENT_NODE &&
+				child.tagName !== "A"
+			) {
+
+				collectTextNodes(child);
+			}
+		});
+	}
+
+	collectTextNodes(contentBody);
+
+	const urlPattern = /(https?:\/\/[^\s]+)/g;
+
+	textNodes.forEach(function (textNode) {
+
+		const text = textNode.nodeValue;
+
+		if (!urlPattern.test(text)) {
+			urlPattern.lastIndex = 0;
+			return;
+		}
+
+		urlPattern.lastIndex = 0;
+
+		const fragment = document.createDocumentFragment();
+
+		let lastIndex = 0;
+		let match;
+
+		while ((match = urlPattern.exec(text)) !== null) {
+
+			fragment.appendChild(
+				document.createTextNode(
+					text.substring(lastIndex, match.index)
+				)
+			);
+
+			const link = document.createElement("a");
+
+			link.href = match[0];
+			link.textContent = match[0];
+			link.target = "_blank";
+			link.rel = "noopener noreferrer";
+			link.className = "tip-content-link";
+
+			fragment.appendChild(link);
+
+			lastIndex = urlPattern.lastIndex;
+		}
+
+		fragment.appendChild(
+			document.createTextNode(
+				text.substring(lastIndex)
+			)
+		);
+
+		textNode.parentNode.replaceChild(
+			fragment,
+			textNode
+		);
+	});
+}
+
+
+// 일반 페이지 최초 진입
+if (document.readyState === "loading") {
+
+	document.addEventListener(
+		"DOMContentLoaded",
+		convertTipUrlsToLinks
+	);
+
+} else {
+
+	// 이미 DOM 로딩이 끝난 상태에서 JS가 실행된 경우
+	convertTipUrlsToLinks();
+}

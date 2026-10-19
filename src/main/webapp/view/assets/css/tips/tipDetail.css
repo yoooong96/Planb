@@ -882,3 +882,16 @@
 }
 #tipReportButton.tip-detail-report-button:focus-visible, #mateReportButton.tip-detail-report-button:focus-visible { outline: 2px solid #6369D1; outline-offset: 3px; }
 #tipReportButton.tip-detail-report-button svg, #mateReportButton.tip-detail-report-button svg { width: 13px; height: 13px; color: #EF6461; }
+
+/* 본문 URL 링크 */
+.tip-content-link {
+	color: #6369D1;
+	text-decoration: underline;
+	text-underline-offset: 3px;
+	word-break: break-all;
+	cursor: pointer;
+}
+
+.tip-content-link:hover {
+	color: #4f46e5;
+}
