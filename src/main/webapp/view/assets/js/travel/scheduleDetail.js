@@ -1574,7 +1574,10 @@
     const comments = document.getElementById("detailCommentPanel");
     const list = document.getElementById("detailSheetList");
     if (!nav || !panel || !list) return;
-    let selected = "all";
+    // 단일 시트에서는 '전체' 탭이 없으므로 실제 활성 국가 시트로 시작한다.
+    const initialTab = nav.querySelector("[data-detail-sheet].is-active")
+        || nav.querySelector("[data-detail-sheet]");
+    let selected = initialTab ? initialTab.dataset.detailSheet : "all";
     function showSheet(key) {
         selected = key;
         nav.querySelectorAll("[data-detail-sheet]").forEach(function (tab) {

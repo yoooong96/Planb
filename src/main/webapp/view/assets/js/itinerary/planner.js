@@ -1544,31 +1544,52 @@
             renderSavedPlans();
 
             var startDate=$('#plannerStartDate'), endDate=$('#plannerEndDate');
+
+            // DAY는 날짜 수(숙박 수 + 1)이며, 날짜 계산은 DST와 관계없이 UTC 일 단위로 처리한다.
+            function plannerDatePlusDays(value,offset){
+                if(!/^\d{4}-\d{2}-\d{2}$/.test(value||''))return '';
+                var date=new Date(value+'T12:00:00Z');
+                if(!isFinite(date.getTime()) || date.toISOString().slice(0,10)!==value)return '';
+                date.setUTCDate(date.getUTCDate()+offset);
+                return date.toISOString().slice(0,10);
+            }
+            function plannerMinimumEndDate(start,dayCount){
+                return plannerDatePlusDays(start,Math.max(0,dayCount-1));
+            }
+            function plannerCurrentDayCount(){
+                return Math.max(1,$$('.planner-day').length);
+            }
             function syncDates(){
-                if(!startDate || !endDate) return;
-                // 어느 날짜를 먼저 골라도 선택 가능하게 하고, 서로의 선택 범위만 제한한다.
-                endDate.min=startDate.value||'';
-                startDate.max=endDate.value||'';
+                if(!startDate || !endDate)return;
+                // 종료일 달력은 현재 시트의 DAY 개수보다 짧은 기간을 선택할 수 없다.
+                endDate.min=plannerMinimumEndDate(startDate.value,plannerCurrentDayCount());
+                // 종료일을 먼저 정한 경우에만 시작일 선택 상한을 적용한다.
+                // 이미 시작일이 있으면 날짜를 옮길 때 종료일을 함께 연장할 수 있다.
+                startDate.max=(!startDate.value && endDate.value)
+                    ? plannerDatePlusDays(endDate.value,1-plannerCurrentDayCount()) : '';
                 endDate.removeAttribute('aria-disabled');
                 endDate.style.opacity='1';
             }
+            function ensurePlannerDayDateRange(notify){
+                if(!startDate || !endDate)return false;
+                var minEnd=plannerMinimumEndDate(startDate.value,plannerCurrentDayCount());
+                var extended=!!(minEnd && endDate.value && endDate.value<minEnd);
+                if(extended){
+                    endDate.value=minEnd;
+                    if(notify)toast('DAY 개수에 맞춰 종료일을 '+minEnd+'로 조정했습니다.');
+                }
+                syncDates();
+                return extended;
+            }
             if(startDate){
                 startDate.addEventListener('change',function(){
-                    if(startDate.value && endDate && endDate.value && startDate.value>endDate.value){
-                        startDate.value='';
-                        if(typeof showToast==='function') showToast('시작 날짜는 종료 날짜보다 늦을 수 없습니다.');
-                    }
-                    syncDates();
+                    ensurePlannerDayDateRange(true);
                     markDirty();
                 });
             }
             if(endDate){
                 endDate.addEventListener('change',function(){
-                    if(endDate.value && startDate && startDate.value && endDate.value<startDate.value){
-                        endDate.value='';
-                        if(typeof showToast==='function') showToast('종료 날짜는 시작 날짜보다 빠를 수 없습니다.');
-                    }
-                    syncDates();
+                    ensurePlannerDayDateRange(true);
                     markDirty();
                 });
             }
@@ -3688,6 +3709,9 @@
                     }
                 });
                 updateAddDayButton(); rebuildMapFilter(); updateDayDeleteButtons(); updatePlannerScheduleStats();
+                // 추가/가져오기/삭제/복원으로 DAY 수가 바뀔 때 날짜 선택 제한도 갱신한다.
+                // 이미 선택한 종료일이 부족할 때만 시작일 기준으로 연장하며 자동 단축하지 않는다.
+                ensurePlannerDayDateRange(false);
             }
 
             function enableDayTitleEdit(day){
@@ -7105,6 +7129,8 @@
                     startDate:start||null,endDate:null,days:[]};
                 plannerSheets.push({placeholder:placeholder,payload:payload,files:[],first:false});
                 switchPlannerSheet(plannerSheets.length-1);
+                // 새 시트는 국가 미선택 상태: 이전 시트의 카트 필터를 즉시 해제한다.
+                if(typeof filterPlans==='function')filterPlans();
                 revealPlannerSheet(plannerSheetIndex,true);
                 schedulePlannerTripGeoStats();
             }
@@ -7118,6 +7144,12 @@
                     var p=Object.assign({},sheet.payload||{});
                     p.title=title;p.summary=summary;p.visibility=visibilityValue;
                     p.sheetOrder=i+1;
+                    // 다른 시트를 열지 않고 저장해도 각 시트의 DAY 수보다 기간이 짧지 않게 보정한다.
+                    var minSheetEnd=plannerMinimumEndDate(p.startDate,(p.days||[]).length);
+                    if(minSheetEnd && p.endDate && p.endDate<minSheetEnd){
+                        p.endDate=minSheetEnd;
+                        sheet.payload.endDate=minSheetEnd;
+                    }
                     // '지역' 입력 UI가 제거된 동안 과거 시트의 숨은 city 값을 보내지 않는다.
                     if($('#plannerRegion') && $('#plannerRegion').type==='hidden')p.city=null;
                     return p;

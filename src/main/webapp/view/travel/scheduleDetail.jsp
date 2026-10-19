@@ -380,16 +380,21 @@ request.setAttribute("activePage", "travel");
             </button>
          </div>
 
-            <!-- 전체와 국가별 시트 (댓글 탭과 독립) -->
+            <!-- 국가별 시트: 2개 이상일 때만 '전체' 보기 제공 -->
             <nav id="detailSheetTabs" class="detail-sheet-tabs" aria-label="일정 시트">
-               <button type="button" class="detail-sheet-tab is-active" data-detail-sheet="all" aria-pressed="true">전체</button>
-               <button type="button" class="detail-sheet-scroll" data-detail-sheet-scroll="left" aria-label="이전 시트">&#8249;</button>
+               <c:if test="${fn:length(detailSheets) gt 1}">
+                  <button type="button" class="detail-sheet-tab is-active" data-detail-sheet="all" aria-pressed="true">전체</button>
+                  <button type="button" class="detail-sheet-scroll" data-detail-sheet-scroll="left" aria-label="이전 시트">&#8249;</button>
+               </c:if>
                <div class="detail-sheet-list" id="detailSheetList" role="group" aria-label="국가별 일정 시트 선택">
                   <c:forEach var="sheet" items="${detailSheets}">
-                     <button type="button" class="detail-sheet-tab" data-detail-sheet="${sheet.key}" aria-pressed="false"><c:out value="${sheet.label}" /></button>
+                     <button type="button" class="detail-sheet-tab${fn:length(detailSheets) eq 1 ? ' is-active' : ''}"
+                        data-detail-sheet="${sheet.key}" aria-pressed="${fn:length(detailSheets) eq 1}"><c:out value="${sheet.label}" /></button>
                   </c:forEach>
                </div>
-               <button type="button" class="detail-sheet-scroll" data-detail-sheet-scroll="right" aria-label="다음 시트">&#8250;</button>
+               <c:if test="${fn:length(detailSheets) gt 1}">
+                  <button type="button" class="detail-sheet-scroll" data-detail-sheet-scroll="right" aria-label="다음 시트">&#8250;</button>
+               </c:if>
             </nav>
 
          <div class="detail-panel-body detail-content-body">
@@ -927,10 +932,10 @@ request.setAttribute("activePage", "travel");
       src="${pageContext.request.contextPath}/view/assets/js/auth/tripily.js"></script>
 
    <script
-      src="${pageContext.request.contextPath}/view/assets/js/travel/scheduleDetail.js?v=20261016-default-profile"></script>
+      src="${pageContext.request.contextPath}/view/assets/js/travel/scheduleDetail.js?v=20261019-single-sheet"></script>
       
    <script
-       src="${pageContext.request.contextPath}/view/assets/js/travel/scheduleDetailMap.js?v=20261016-sheets"></script>
+       src="${pageContext.request.contextPath}/view/assets/js/travel/scheduleDetailMap.js?v=20261019-single-sheet"></script>
 
    <script async
        onerror="detailMapLoadFailed()"

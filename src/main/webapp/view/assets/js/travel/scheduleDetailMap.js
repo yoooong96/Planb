@@ -22,7 +22,10 @@
     let markers = [];
     let lines = [];
     let activeDay = "all";
-    let activeSheet = "all";
+    // 일정표 JS가 지도 JS보다 먼저 실행된다. 초기 시트 변경 이벤트를
+    // 놓치지 않도록 활성 탭을 직접 읽는다 (단일 시트는 국가별 DAY 경로 표시).
+    const initialSheetTab = document.querySelector("#detailSheetTabs [data-detail-sheet].is-active");
+    let activeSheet = initialSheetTab ? initialSheetTab.dataset.detailSheet : "all";
     let placesLibraryPromise = null;
     let infoSequence = 0;
 

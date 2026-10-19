@@ -2,7 +2,6 @@ package controller.itinerary;
 
 import java.io.IOException;
 import java.util.Collections;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -100,20 +99,10 @@ public class ModifyPlanServlet extends HttpServlet {
                 importList = Collections.emptyList();
             }
 
-            // 수정 대상의 국가와 일치하는 카트 일정만 보낸다.
-            // 프런트 필터의 초기 실행 시점과 무관하게 다른 국가는 노출되지 않는다.
-            List<ItineraryDto> sameCountry = new ArrayList<ItineraryDto>();
-            String editCountry = editItinerary.getCountry() == null
-                    ? "" : editItinerary.getCountry().trim();
-            for (ItineraryDto item : importList) {
-                if (item != null && item.getCountry() != null
-                        && !editCountry.isEmpty()
-                        && editCountry.equals(item.getCountry().trim())) {
-                    sameCountry.add(item);
-                }
-            }
-            importList = sameCountry;
-
+            // 모든 국가의 카트를 전달한다. 실제 표시 목록은 작성/수정 화면에서
+            // 현재 선택한 시트의 국가에 따라 동적으로 필터링한다.
+            // 서버에서 수정 대상의 첫 국가로 제한하면 다른 국가 시트나 빈 시트에서
+            // 해당 국가의 카트를 다시 표시할 수 없다.
             request.setAttribute("importListJson", gson.toJson(importList));
             request.setAttribute(
                     "exchangeRatesJson",
