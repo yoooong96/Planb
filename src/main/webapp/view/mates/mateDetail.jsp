@@ -20,7 +20,7 @@
     data-context-path="${pageContext.request.contextPath}"
     src="${pageContext.request.contextPath}/view/assets/js/common/listReturn.js?v=1">
 </script>
-<link rel="stylesheet" href="${pageContext.request.contextPath}/view/assets/css/support/displayAds.css?v=1">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/view/assets/css/support/displayAds.css?v=20261019-ratio">
 </head>
 <body class="site-shell">
 	<jsp:include page="/common/header.jsp" />

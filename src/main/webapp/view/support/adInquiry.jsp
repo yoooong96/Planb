@@ -202,7 +202,7 @@ String formEndDate =
 
 <!-- 반드시 support.css보다 뒤에 -->
 <link rel="stylesheet"
-    href="<%=ctx%>/view/assets/css/support/adInquiry.css?v=20261019-two-images">
+    href="<%=ctx%>/view/assets/css/support/adInquiry.css?v=20261019-ratio">
 
 </head>
 

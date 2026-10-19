@@ -17,7 +17,7 @@ request.setAttribute("activePage", "tips");
     data-context-path="${pageContext.request.contextPath}"
     src="${pageContext.request.contextPath}/view/assets/js/common/listReturn.js?v=1">
 </script>
-<link rel="stylesheet" href="${pageContext.request.contextPath}/view/assets/css/support/displayAds.css?v=1">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/view/assets/css/support/displayAds.css?v=20261019-ratio">
 </head>
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/view/assets/css/tips/tipDetail.css?v=20261015-report">
 	<script defer src="${pageContext.request.contextPath}/view/assets/js/tips/tipDetail.js"></script>
