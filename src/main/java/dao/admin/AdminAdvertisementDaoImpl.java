@@ -73,6 +73,14 @@ public class AdminAdvertisementDaoImpl implements AdminAdvertisementDao {
 		return sqlSession.update(NAMESPACE + "deleteAd", param);
 	}
 
+    @Override
+    public int restoreAd(SqlSession sqlSession, long adId, long adminUserId) throws Exception {
+        Map<String, Object> param = new HashMap<>();
+        param.put("adId", adId);
+        param.put("adminUserId", adminUserId);
+        return sqlSession.update(NAMESPACE + "restoreAd", param);
+    }
+
 	@Override
 	public int insertHistory(SqlSession sqlSession, long adId, long adminUserId, String actionType, String fromStatus,
 			String toStatus, Date previousEndDate, Date newEndDate, String reason) throws Exception {
@@ -81,6 +89,7 @@ public class AdminAdvertisementDaoImpl implements AdminAdvertisementDao {
 		param.put("adminUserId", adminUserId);
 		param.put("actionType", actionType);
 		param.put("fromStatus", fromStatus);
+		param.put("toStatus", toStatus);
 		param.put("previousEndDate", previousEndDate);
 		param.put("newEndDate", newEndDate);
 		param.put("reason", reason);

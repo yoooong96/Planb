@@ -1162,6 +1162,11 @@ for (Map<String, Object> ad : allAds) {
                     <div class="admin-ad-actions">
 
 
+                        <% if ("EXPIRED".equals(status) || "DELETED".equals(status) || "WITHDRAWN".equals(status)) { %>
+                        <button type="button" class="admin-ad-outline-action"
+                            data-ad-action="RESTORE" data-ad-id="<%=adId%>">복구</button>
+                        <% } %>
+
                         <%
                         if (!linkUrl.isEmpty()) {
                         %>
@@ -1500,6 +1505,12 @@ for (Map<String, Object> ad : allAds) {
 document.addEventListener(
     "DOMContentLoaded",
     function () {
+        const restoreUrl = new URL(window.location.href);
+        if (restoreUrl.searchParams.get("restoreExpired") === "1") {
+            window.alert("기간이 종료되어 복구할 수 없습니다.");
+            restoreUrl.searchParams.delete("restoreExpired");
+            window.history.replaceState(null, "", restoreUrl.pathname + restoreUrl.search + restoreUrl.hash);
+        }
 
         const modal =
             document.getElementById(
@@ -1956,7 +1967,10 @@ document.addEventListener(
                                 "이 광고의 게시를 시작하시겠습니까?",
 
                             DELETE:
-                                "이 광고를 삭제 처리하시겠습니까?"
+                                "이 광고를 삭제 처리하시겠습니까?",
+
+                            RESTORE:
+                                "기존 신청 기간을 유지한 채 광고를 복구하시겠습니까?"
                         };
 
 

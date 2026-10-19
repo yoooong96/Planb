@@ -31,6 +31,8 @@ public interface AdminAdvertisementDao {
 	/* 광고 삭제 처리 */
 	int deleteAd(SqlSession sqlSession, long adId, long adminUserId)throws Exception;
 	
+	int restoreAd(SqlSession sqlSession, long adId, long adminUserId) throws Exception;
+
 	/* 광고 처리 이력 등록 */
 	int insertHistory(SqlSession sqlSession, long adId, long adminUserId, String actionType, String fromStatus, String toStatus, Date previousEndDate, Date newEndDate, String reason) throws Exception;
 	

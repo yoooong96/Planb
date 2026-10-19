@@ -242,6 +242,11 @@ public class AdminAction extends HttpServlet {
                     break;
 
 
+                case "RESTORE":
+                    service.restore(adId, admin.getUserId());
+                    returnTab = "ACTIVE";
+                    break;
+
                 default:
 
                     throw new IllegalArgumentException(
@@ -286,6 +291,9 @@ public class AdminAction extends HttpServlet {
                     + "&result=error"
                     + "&message="
                     + encode(message)
+                    + ("RESTORE".equals(request.getParameter("action"))
+                        && "기간이 종료되어 복구할 수 없습니다.".equals(message)
+                        ? "&restoreExpired=1" : "")
             );
         }
     }

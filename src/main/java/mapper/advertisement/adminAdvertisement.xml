@@ -85,7 +85,8 @@
 		start_date AS
 		startDate,
 
-		end_date AS endDate
+		end_date AS endDate,
+        CURRENT_DATE AS databaseToday
 
 		FROM TB_ADVERTISEMENT
 
@@ -332,4 +333,13 @@
 
 	</select>
 
+    <!-- 기존 계약 기간 그대로 복구. 만료 여부는 DB 날짜로 재검사한다. -->
+    <update id="restoreAd" parameterType="map">
+        UPDATE TB_ADVERTISEMENT
+        SET status = 'ACTIVE', deleted_at = NULL,
+            processed_by_user_id = #{adminUserId}, processed_at = CURRENT_TIMESTAMP
+        WHERE ad_id = #{adId}
+          AND status IN ('EXPIRED', 'DELETED', 'WITHDRAWN')
+          AND end_date &gt;= CURRENT_DATE
+    </update>
 </mapper>

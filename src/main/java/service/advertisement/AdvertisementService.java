@@ -16,4 +16,5 @@ public interface AdvertisementService {
 	void withdraw(long adId, long adminUserId, String reason) throws Exception;
 	void extend(long adId,long adminUserId, Date newEndDate) throws Exception;
 	void delete(long adId, long adminUserId) throws Exception;
+	void restore(long adId, long adminUserId) throws Exception;
 }

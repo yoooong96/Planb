@@ -509,6 +509,41 @@ public class AdvertisementServiceImpl implements AdvertisementService {
 		}
 	}
 
+    @Override
+    public void restore(long adId, long adminUserId) throws Exception {
+        validateIds(adId, adminUserId);
+        try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession(false)) {
+            try {
+                Map<String, Object> ad = requireAd(sqlSession, adId);
+                String oldStatus = stringValue(ad.get("status"));
+                if (!"EXPIRED".equals(oldStatus) && !"DELETED".equals(oldStatus)
+                        && !"WITHDRAWN".equals(oldStatus)) {
+                    throw new IllegalStateException("종료·삭제·철회된 광고만 복구할 수 있습니다.");
+                }
+                Date endDate = toSqlDate(ad.get("endDate"));
+                Date today = toSqlDate(ad.get("databaseToday"));
+                if (endDate == null || today == null)
+                    throw new IllegalStateException("광고 신청 기간을 확인할 수 없습니다.");
+                if (endDate.before(today))
+                    throw new IllegalStateException("기간이 종료되어 복구할 수 없습니다.");
+
+                // 신청 시작일·종료일을 수정하지 않으며 삭제 표시는 해제한다.
+                int updated = adminDao.restoreAd(sqlSession, adId, adminUserId);
+                if (updated == 0)
+                    throw new IllegalStateException("기간이 종료되어 복구할 수 없습니다.");
+                requireUpdated(updated);
+                // 기존 이력 action_type을 사용하여 ENUM 변경 없이 복구 사실을 기록한다.
+                int historyRows = adminDao.insertHistory(sqlSession, adId, adminUserId,
+                        "ACTIVATED", oldStatus, "ACTIVE", endDate, endDate, "광고 복구 (기존 신청 기간 유지)");
+                if (historyRows != 1) throw new IllegalStateException("광고 복구 이력 저장에 실패했습니다.");
+                sqlSession.commit();
+            } catch (Exception e) {
+                sqlSession.rollback();
+                throw e;
+            }
+        }
+    }
+
 	private Map<String, Object> requireAd(SqlSession sqlSession, long adId) throws Exception {
 
 		Map<String, Object> ad = adminDao.selectAdForUpdate(sqlSession, adId);
