@@ -283,56 +283,52 @@ function selectCountry(country) {
  
  
 // ========================================
-// 도시 검색
+// 도시 추천 표시
 // ========================================
- 
-cityInput.addEventListener("input", function() {
- 
-	const keyword =
-		this.value.trim();
- 
-	cityValue.value =
-		"";
- 
-	citySuggestions.innerHTML =
-		"";
- 
-	clearCityError();
- 
-	const selectedCountry =
-		countryValue.value;
- 
-	if (!selectedCountry) {
+
+function renderCitySuggestions() {
+
+	const keyword = cityInput.value.trim();
+	const selectedCountry = countryValue.value.trim();
+
+	citySuggestions.innerHTML = "";
+
+	if (!selectedCountry || keyword === "") {
 		return;
 	}
- 
-	if (keyword === "") {
-		return;
-	}
- 
-	const cities =
-		travelLocations[selectedCountry] || [];
- 
-	const matchedCities =
-		cities.filter(function(city) {
- 
-			return city.includes(keyword);
-		});
- 
-	matchedCities.forEach(function(city) {
- 
-		const button =
-			createSuggestionButton(
-				city,
-				function() {
-					selectCity(city);
-				}
-			);
- 
-		citySuggestions.appendChild(
-			button
-		);
+
+	const cities = travelLocations[selectedCountry] || [];
+
+	const matchedCities = cities.filter(function(city) {
+		return city.includes(keyword);
 	});
+
+	matchedCities.forEach(function(city) {
+
+		const button = createSuggestionButton(
+			city,
+			function() {
+				selectCity(city);
+			}
+		);
+
+		citySuggestions.appendChild(button);
+	});
+}
+
+
+// ========================================
+// 도시 입력
+// ========================================
+
+cityInput.addEventListener("input", function() {
+
+	// 직접 입력했으므로 아직 선택된 값은 아님
+	cityValue.value = "";
+
+	clearCityError();
+
+	renderCitySuggestions();
 });
  
  

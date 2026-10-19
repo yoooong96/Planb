@@ -192,6 +192,10 @@ request.setAttribute("activePage", "tips");
 							class="block w-full text-left px-3 py-2 rounded-lg text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600">
 							🇨🇦 캐나다
 						</a>
+						<a href="${pageContext.request.contextPath}/tips?country=쿠바&sort=${sort}"
+							class="block w-full text-left px-3 py-2 rounded-lg text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600">
+							🇨🇺 쿠바
+						</a>
 					</div>
 				</div>
 				<!-- 남아메리카 -->

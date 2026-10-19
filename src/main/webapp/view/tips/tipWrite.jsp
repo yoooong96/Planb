@@ -13,7 +13,7 @@ request.setAttribute("activePage", "tips");
 	<jsp:include page="/common/headStyles.jsp" />
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/view/assets/css/community/postWrite.css?v=3">
 	<script defer src="${pageContext.request.contextPath}/view/assets/js/community/postEditor.js?v=1"></script>
-	<script defer src="${pageContext.request.contextPath}/view/assets/js/tips/tipWrite.js?v=2"></script>
+	<script defer src="${pageContext.request.contextPath}/view/assets/js/tips/tipWrite.js?v=3"></script>	
 </head>
 <body class="site-shell">
 	<jsp:include page="/common/header.jsp" />

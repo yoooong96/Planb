@@ -283,6 +283,7 @@ request.setAttribute("activePage", "travel");
 					<button type="button" data-schedule-country="멕시코" class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">🇲🇽 멕시코</button>
 					<button type="button" data-schedule-country="미국" class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">🇺🇸 미국</button>
 					<button type="button" data-schedule-country="캐나다" class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">🇨🇦 캐나다</button>
+					<button type="button" data-schedule-country="쿠바" class="text-left text-sm py-1.5 px-2 rounded-md text-gray-500 hover:text-[#6369D1]">🇨🇺 쿠바</button>
 				</div>
 			</div>
 			
