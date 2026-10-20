@@ -1334,15 +1334,7 @@
 #scheduleDetail #detailSchedulePanel button.detail-block-title:focus-visible { color: #6369D1; }
 #scheduleDetail button.detail-block-title:focus-visible { outline: 2px solid #D1D2F9; outline-offset: 3px; border-radius: 3px; }
 #scheduleDetail .detail-map-block.is-map-selected { background: #f1f0ff; border-radius: 12px; box-shadow: inset 3px 0 #6369D1; }
-#scheduleDetail .detail-map-block.is-location-missing { background: #f5f6f8; border-radius: 12px; }
-#scheduleDetail .is-location-missing .detail-block-sequence { background: #a4a9b5; box-shadow: 0 0 0 1px #dfe1e7; }
-#scheduleDetail .is-location-missing .detail-block-type { background: #e5e7eb; color: #7a8190; }
-#scheduleDetail .is-location-missing .detail-block-time,
-#scheduleDetail .is-location-missing .detail-block-place,
-#scheduleDetail .is-location-missing .detail-block-address,
-#scheduleDetail .is-location-missing .detail-block-memo,
-#scheduleDetail .is-location-missing .detail-block-cost { color: #8b919e !important; }
-.detail-location-missing { display: inline-flex; align-items: center; padding: 2px 7px; border-radius: 9px; background: #e6e8ee; color: #747d8b; font-size: 11px; white-space: nowrap; }
+.detail-location-missing { display: inline-flex; align-items: center; padding: 3px 8px; border-radius: 9px; background: #FFD447; color: #292519; font-size: 11px; font-weight: 700; white-space: nowrap; }
 .detail-location-missing[hidden] { display: none !important; }
 .detail-map-notice { position: absolute; top: 10px; left: 10px; z-index: 3; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; max-width: calc(100% - 20px); padding: 7px 10px; border-radius: 10px; background: rgba(255,255,255,.96); box-shadow: 0 2px 12px #262f4a14; color: #646b7c; font-size: 11px; }
 .detail-map-notice[hidden], .detail-map-notice [hidden] { display: none !important; }
@@ -1358,3 +1350,6 @@
 .detail-map-day-legend { top: auto; bottom: 76px; left: 12px; pointer-events: auto; }
 .detail-map-day-legend .detail-map-route-key { border-top-color: #ffffff40; color: #e2e5f0; }
 .detail-map-status { top: auto; bottom: 14px; transform: translateX(-50%); pointer-events: none; }
+
+/* 모든 일차 제목에 동일한 굵기 적용 */
+#scheduleDetail #detailSchedulePanel .detail-day-title { font-weight: 700; }
