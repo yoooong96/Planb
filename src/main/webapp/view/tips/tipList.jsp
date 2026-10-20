@@ -13,10 +13,10 @@ request.setAttribute("activePage", "tips");
 	<title>Planb</title>
 	<jsp:include page="/common/headStyles.jsp" />
 	<script>
-		window.selectedCountry = "${country}";
+		window.selectedCountry = "<c:out value='${country}'/>";
 	</script>
-	<link rel="stylesheet" href="${pageContext.request.contextPath}/view/assets/css/tips/tipList.css?v=20261016-highlight">
-	<script defer src="${pageContext.request.contextPath}/view/assets/js/tips/tipList.js"></script>
+	<link rel="stylesheet" href="${pageContext.request.contextPath}/view/assets/css/tips/tipList.css?v=20261020-sidebar">
+	<script defer src="${pageContext.request.contextPath}/view/assets/js/tips/tipList.js?v=20261020"></script>
 	<script
     defer
     data-context-path="${pageContext.request.contextPath}"
@@ -84,7 +84,7 @@ request.setAttribute("activePage", "tips");
 							class="block w-full text-left px-3 py-2 rounded-lg text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600">
 							🇯🇵 일본
 						</a>
-						<a href="${pageContext.request.contextPath}/tips?country=중국&sort=${sort}"
+						<a href="${pageContext.request.contextPath}/tips?country=중국&sort=${sort}" data-country="중국"
 							class="block w-full text-left px-3 py-2 rounded-lg text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600">
 							🇨🇳 중국
 						</a>
@@ -248,7 +248,7 @@ request.setAttribute("activePage", "tips");
 							class="block w-full text-left px-3 py-2 rounded-lg text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600">
 							🇿🇦 남아프리카
 						</a>
-						<a href="${pageContext.request.contextPath}/tips?country=모르코&sort=${sort}"
+						<a href="${pageContext.request.contextPath}/tips?country=모코&sort=${sort}"
 							class="block w-full text-left px-3 py-2 rounded-lg text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600">
 							🇲🇦 모로코
 						</a>
@@ -306,7 +306,7 @@ request.setAttribute("activePage", "tips");
 					<div class="continent-panel hidden pl-8 pr-2 py-1 space-y-1" data-continent-panel="middle-east">
 						<a href="${pageContext.request.contextPath}/tips?country=아랍에미리트&sort=${sort}"
 							class="block w-full text-left px-3 py-2 rounded-lg text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600">
-							🇦🇪 UAE
+							🇦🇪 아랍에미리트
 						</a>
 						<a href="${pageContext.request.contextPath}/tips?country=이스라엘&sort=${sort}"
 							class="block w-full text-left px-3 py-2 rounded-lg text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600">

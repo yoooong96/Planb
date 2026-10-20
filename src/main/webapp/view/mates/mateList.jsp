@@ -11,13 +11,16 @@ request.setAttribute("activePage", "mates");
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Planb</title>
 	<jsp:include page="/common/headStyles.jsp" />
-	<link rel="stylesheet" href="${pageContext.request.contextPath}/view/assets/css/mates/mateList.css?v=20261016-highlight">
-	<script defer src="${pageContext.request.contextPath}/view/assets/js/mates/mateList.js"></script>
+	<script>
+		window.selectedCountry = "<c:out value='${country}'/>";
+	</script>
+	<link rel="stylesheet" href="${pageContext.request.contextPath}/view/assets/css/mates/mateList.css?v=20261020-sidebar">
+	<script defer src="${pageContext.request.contextPath}/view/assets/js/mates/mateList.js?v=20261020"></script>
 	<script
-    defer
-    data-context-path="${pageContext.request.contextPath}"
-    src="${pageContext.request.contextPath}/view/assets/js/common/listReturn.js?v=1">
-</script>
+	    defer
+	    data-context-path="${pageContext.request.contextPath}"
+	    src="${pageContext.request.contextPath}/view/assets/js/common/listReturn.js?v=1">
+	</script>
 	
 </head>
 <body class="site-shell mate-list-page">
@@ -239,7 +242,7 @@ request.setAttribute("activePage", "mates");
 							class="block w-full text-left px-3 py-2 rounded-lg text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600">
 							🇿🇦 남아프리카
 						</a>
-						<a href="${pageContext.request.contextPath}/mates?country=모르코&sort=${sort}"
+						<a href="${pageContext.request.contextPath}/mates?country=모로코&sort=${sort}"
 							class="block w-full text-left px-3 py-2 rounded-lg text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600">
 							🇲🇦 모로코
 						</a>
@@ -297,7 +300,7 @@ request.setAttribute("activePage", "mates");
 					<div class="continent-panel hidden pl-8 pr-2 py-1 space-y-1" data-continent-panel="middle-east">
 						<a href="${pageContext.request.contextPath}/mates?country=아랍에미리트&sort=${sort}"
 							class="block w-full text-left px-3 py-2 rounded-lg text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600">
-							🇦🇪 UAE
+							🇦🇪 아랍에미리트
 						</a>
 						<a href="${pageContext.request.contextPath}/mates?country=이스라엘&sort=${sort}"
 							class="block w-full text-left px-3 py-2 rounded-lg text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600">

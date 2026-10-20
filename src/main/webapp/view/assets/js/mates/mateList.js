@@ -1,82 +1,56 @@
-document.querySelectorAll("[data-continent-toggle]").forEach(button => {
-	button.addEventListener("click", function() {
-		const continent = this.dataset.continentToggle;
-		const panel = document.querySelector(`[data-continent-panel="${continent}"]`);
+// ================================
+// 대륙별 국가 목록 펼치기 / 접기 + 선택 국가 표시
+// ================================
+(function () {
 
-		if (panel) {
-			panel.classList.toggle("hidden");
-			if (panel.classList.contains("hidden")) {
-				panel.style.display = "none";
-			} else {
-				panel.style.display = "block";
-			}
-		}
+	const selectedCountry = (window.selectedCountry || "").trim();
 
-		const chevron = this.querySelector(".continent-chevron");
-		if (chevron) {
-			chevron.classList.toggle("rotate-180");
+	// 선택 국가 표시 (일정 목록과 동일한 색)
+	document.querySelectorAll(".continent-panel a").forEach(function (link) {
+		const country = new URL(link.href, window.location.origin).searchParams.get("country");
+		const selected = selectedCountry !== "" && country === selectedCountry;
+
+		link.setAttribute("aria-current", String(selected));
+
+		if (selected) {
+			link.style.color = "#6369D1";
+			link.style.backgroundColor = "#F0F0FF";
+			link.style.fontWeight = "600";
 		}
 	});
-});
 
-const countryContinentMap = {
-	"대한민국": "asia",
-	"일본": "asia",
-	"중국": "asia",
-	"대만": "asia",
-	"홍콩": "asia",
-	"태국": "asia",
-	"베트남": "asia",
-	"필리핀": "asia",
-	"싱가포르": "asia",
-	"말레이시아": "asia",
-	"인도네시아": "asia",
-	"그리스": "europe",
-	"독일": "europe",
-	"스페인": "europe",
-	"영국": "europe",
-	"이탈리아": "europe",
-	"포르투갈": "europe",
-	"프랑스": "europe",
-	"멕시코": "north-america",
-	"미국": "north-america",
-	"캐나다": "north-america",
-	"브라질": "south-america",
-	"아르헨티나": "south-america",
-	"칠레": "south-america",
-	"페루": "south-america",
-	"남아프리카": "africa",
-	"모로코": "africa",
-	"이집트": "africa",
-	"케냐": "africa",
-	"뉴질랜드": "oceania",
-	"피지": "oceania",
-	"호주": "oceania",
-	"UAE": "middle-east",
-	"터키": "middle-east",
-	"이스라엘": "middle-east"
-};
+	// 대륙 패널 열기 / 닫기
+	document.querySelectorAll("[data-continent-toggle]").forEach(function (button) {
 
-if (window.selectedCountry) {
-	const continent = countryContinentMap[window.selectedCountry];
+		const panel = document.querySelector(
+			'[data-continent-panel="' + button.dataset.continentToggle + '"]'
+		);
+		const chevron = button.querySelector(".continent-chevron");
 
-	if (continent) {
-		const panel = document.querySelector(`[data-continent-panel="${continent}"]`);
-		const button = document.querySelector(`[data-continent-toggle="${continent}"]`);
+		if (!panel) return;
 
-		if (panel) {
-			panel.classList.remove("hidden");
-			panel.style.display = "block";
-		}
-
-		if (button) {
-			const chevron = button.querySelector(".continent-chevron");
+		function setContinentOpen(open) {
+			panel.classList.toggle("hidden", !open);
+			panel.style.display = open ? "block" : "none";
+			button.setAttribute("aria-expanded", String(open));
 			if (chevron) {
-				chevron.classList.add("rotate-180");
+				chevron.style.transform = open ? "rotate(180deg)" : "";
 			}
 		}
-	}
-}
+
+		const containsSelectedCountry = selectedCountry !== "" &&
+			Array.from(panel.querySelectorAll("a")).some(function (link) {
+				return new URL(link.href, window.location.origin)
+					.searchParams.get("country") === selectedCountry;
+			});
+
+		setContinentOpen(containsSelectedCountry);
+
+		button.addEventListener("click", function () {
+			setContinentOpen(button.getAttribute("aria-expanded") !== "true");
+		});
+	});
+})();
 
 // ================================
 // 여행 메이트 무한 스크롤

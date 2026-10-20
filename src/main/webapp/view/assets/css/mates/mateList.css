@@ -330,9 +330,51 @@
 /* 일정 목록과 동일한 바탕색: 사이드바와 카드는 흰색 유지 */
 .mate-list-page > .min-h-screen > .flex > main { background: #f8f8fd; }
 
-/* 여행 일정의 국가별 보기와 동일한 강조 색상 */
-.continent-toggle:hover { background:#f1f1fd; color:#6369D1; }
-.continent-panel a:hover { background:#fff5ce; color:#494da4; }
+/* ========================================
+   국가별 보기 - 여행일정과 동일
+======================================== */
+
+/* 패널 간격 (일정: ml-2 pl-3 pt-1) */
+.mate-list-sidebar .continent-panel {
+	margin: 0 0 .25rem .5rem !important;
+	padding: .25rem 0 0 .75rem !important;
+	border-left: 0 !important;
+}
+
+/* 국가 버튼 모양 (일정: py-1.5 px-2 rounded-md text-sm text-gray-500) */
+.mate-list-page .continent-panel a {
+	display: block;
+	margin: 0 !important;
+	padding: .375rem .5rem !important;
+	border-radius: .375rem !important;
+	font-size: .875rem;
+	line-height: 1.25rem;
+	color: #6b7280;
+	text-align: left;
+}
+.mate-list-page .continent-panel a + a {
+	margin-top: .125rem !important;
+}
+
+/* 대륙 마우스 오버 */
+.mate-list-page .continent-toggle:hover {
+	background: #f1f1fd;
+	color: #6369D1;
+}
+
+/* 국가 마우스 오버 */
+.mate-list-page .continent-panel a:hover {
+	background: #fff5ce !important;
+	color: #494da4 !important;
+}
+
+/* 현재 선택된 국가 (hover 시에도 유지) */
+.mate-list-page .continent-panel a[aria-current="true"],
+.mate-list-page .continent-panel a[aria-current="true"]:hover {
+	background: #F0F0FF !important;
+	color: #6369D1 !important;
+	font-weight: 600;
+}
 
 #mateLoading .mate-loading-spinner {
 	width: 28px;
