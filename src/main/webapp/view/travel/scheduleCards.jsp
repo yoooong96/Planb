@@ -14,9 +14,9 @@
 
 	<article
 		class="jsp-schedule-card bg-white rounded-2xl overflow-hidden transition-all duration-200 border group"
-		style="border-color: #D1D2F9; box-shadow: 0 2px 8px rgba(0, 0, 0, .07)">
+		style="border-color: #D1D2F9; box-shadow: 0 2px 8px rgba(0, 0, 0, .07); display: flex; flex-direction: column; height: 100%; min-width: 0;">
 
-		<div class="relative overflow-hidden" style="aspect-ratio: 4/3">
+		<div class="relative overflow-hidden" style="aspect-ratio: 4/3; flex-shrink: 0;">
 
 			<a href="${scheduleDetailUrl}" class="block w-full h-full"> <c:choose>
 					<c:when test="${not empty schedule.thumbnailImg}">
@@ -83,12 +83,12 @@
 
 		</div>
 
-		<div class="p-3.5">
+		<div class="p-3.5" style="display: flex; flex-direction: column; flex: 1; min-width: 0;">
 
-			<a href="${scheduleDetailUrl}" class="schedule-card-detail-link">
+			<a href="${scheduleDetailUrl}" class="schedule-card-detail-link" style="display: block; min-width: 0;">
 				<h3
 					class="font-bold text-[14px] leading-snug mb-1 line-clamp-2 transition-colors group-hover:text-[#6369D1]"
-					style="color: #18181b">
+					style="color: #18181b; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; height: 2.75em; line-height: 1.375; white-space: normal; overflow: hidden; overflow-wrap: anywhere;">
 					<c:out value="${schedule.title}" />
 				</h3>
 			</a>
@@ -98,6 +98,7 @@
 				<c:out value="${schedule.summary}" />
 			</p>
 
+			<div class="schedule-card-footer" style="margin-top: auto;">
 			<!-- 좋아요·댓글·조회수 -->
 			<div class="flex items-center gap-2.5 text-[11px] text-gray-400 mb-3">
 				<span
@@ -184,6 +185,7 @@
 				</span>
 			</div>
 
+			</div><!-- schedule-card-footer -->
 		</div>
 	</article>
 </c:forEach>

@@ -500,8 +500,9 @@
                     sourceBlockId:item.sourceBlockId||null,
                     title:item.name||item.title||'',
                     type:TYPE_CONFIG[item.type] ? item.type : 'sightseeing',
-                    startTime:item.time||item.startTime||'',
-                    endTime:item.endTime||'',
+                    // 가져온 블록의 시간은 새 일정에서 다시 입력한다.
+                    startTime:'',
+                    endTime:'',
                     cost:item.cost||'',
                     costType:item.costType||'TOTAL',
                     place:item.location||'',
@@ -2328,17 +2329,17 @@
 
                         var startIndex=$$('.planner-day').indexOf(day);
                         if(d.kind==='item'){
-                            addBlockToDay(day,{sourceBlockId:d.item.sourceBlockId||null,title:d.item.name,type:d.item.type,startTime:d.item.time||'',endTime:d.item.endTime||'',cost:d.item.cost||'',costType:d.item.costType||'TOTAL',place:d.item.location||'',googlePlaceId:d.item.googlePlaceId||'',placeName:d.item.placeName||'',placeAddress:d.item.placeAddress||'',placeLat:d.item.placeLat,placeLng:d.item.placeLng,note:d.item.note||''});
+                            addBlockToDay(day,{sourceBlockId:d.item.sourceBlockId||null,title:d.item.name,type:d.item.type,startTime:'',endTime:'',cost:d.item.cost||'',costType:d.item.costType||'TOTAL',place:d.item.location||'',googlePlaceId:d.item.googlePlaceId||'',placeName:d.item.placeName||'',placeAddress:d.item.placeAddress||'',placeLat:d.item.placeLat,placeLng:d.item.placeLng,note:d.item.note||''});
                             toast('일정 블록 1개를 가져왔습니다.');
                         } else if(d.kind==='day'){
-                            (d.day.items||[]).forEach(function(item){addBlockToDay(day,{sourceBlockId:item.sourceBlockId||null,title:item.name,type:item.type,startTime:item.time||'',endTime:item.endTime||'',cost:item.cost||'',costType:item.costType||'TOTAL',place:item.location||'',googlePlaceId:item.googlePlaceId||'',placeName:item.placeName||'',placeAddress:item.placeAddress||'',placeLat:item.placeLat,placeLng:item.placeLng,note:item.note||''});});
+                            (d.day.items||[]).forEach(function(item){addBlockToDay(day,{sourceBlockId:item.sourceBlockId||null,title:item.name,type:item.type,startTime:'',endTime:'',cost:item.cost||'',costType:item.costType||'TOTAL',place:item.location||'',googlePlaceId:item.googlePlaceId||'',placeName:item.placeName||'',placeAddress:item.placeAddress||'',placeLat:item.placeLat,placeLng:item.placeLng,note:item.note||''});});
                             toast('D'+d.day.dayNum+' 일정을 가져왔습니다.');
                         } else if(d.kind==='plan'){
                             var schedules=d.plan.daySchedules||[];
                             var needed=Math.max(1,schedules.length);
                             while($$('.planner-day').length < startIndex + needed){ $('#plannerAddDay').click(); }
                             var targets=$$('.planner-day');
-                            schedules.forEach(function(ds,di){(ds.items||[]).forEach(function(item){addBlockToDay(targets[startIndex+di],{sourceBlockId:item.sourceBlockId||null,title:item.name,type:item.type,startTime:item.time||'',endTime:item.endTime||'',cost:item.cost||'',costType:item.costType||'TOTAL',place:item.location||'',googlePlaceId:item.googlePlaceId||'',placeName:item.placeName||'',placeAddress:item.placeAddress||'',placeLat:item.placeLat,placeLng:item.placeLng,note:item.note||''});});});
+                            schedules.forEach(function(ds,di){(ds.items||[]).forEach(function(item){addBlockToDay(targets[startIndex+di],{sourceBlockId:item.sourceBlockId||null,title:item.name,type:item.type,startTime:'',endTime:'',cost:item.cost||'',costType:item.costType||'TOTAL',place:item.location||'',googlePlaceId:item.googlePlaceId||'',placeName:item.placeName||'',placeAddress:item.placeAddress||'',placeLat:item.placeLat,placeLng:item.placeLng,note:item.note||''});});});
                             toast('Day '+(startIndex+1)+'부터 '+needed+'개 Day를 가져왔습니다.');
                         }
                     }catch(err){
