@@ -330,7 +330,7 @@
         return placeDetailsCache[placeId];
     }
 
-    function placeInfoHtml(point, details, infoId) {
+    function placeInfoHtml(point, details, infoId, group) {
         const name = details && details.displayName
             ? details.displayName
             : (point.placeName || point.title || "장소");
@@ -429,7 +429,9 @@
             + ratingHtml
             + '<a href="' + escapeHtml(mapsUrl)
             + '" target="_blank" rel="noopener noreferrer" style="display:inline-flex;margin-top:10px;align-items:center;font-size:12px;font-weight:700;color:#4F46E5;text-decoration:none">구글맵에서 자세히 보기 ↗</a>'
-            + '</div></div>';
+            + '</div>'
+            + (group ? visitsHtml(group) : '')
+            + '</div>';
     }
 
     // Keep every block in its original order; only located blocks become map pins.
@@ -546,20 +548,30 @@
     }
 
     function markerIcon(group, selected) {
-        const label = group.points.map(function (p) { return p.sequence; }).join("·");
-        const half = Math.max(18, Math.min(110, label.length * 3.7 + 11));
-        const width = Math.ceil(half * 2), center = width / 2;
+        // Separate number cells prevent repeated visits (1, 9) looking like 19.
+        const cellWidths = group.points.map(function (p) {
+            return Math.max(30, String(p.sequence).length * 8 + 20);
+        });
+        const width = cellWidths.reduce(function (sum, value) { return sum + value; }, 0) + 4;
+        const center = width / 2;
         const outline = selected ? "#FFD447" : "#fff";
-        const path = "M9,2 H" + (width - 9) + " Q" + (width - 2) + ",2 " + (width - 2)
-            + ",9 V23 Q" + (width - 2) + ",30 " + (width - 9) + ",30 H" + (center + 6)
-            + " L" + center + ",41 L" + (center - 6) + ",30 H9 Q2,30 2,23 V9 Q2,2 9,2 Z";
-        const svg = '<svg xmlns="http://www.w3.org/2000/svg" width="' + width + '" height="44" viewBox="0 0 '
-            + width + ' 44"><path d="' + path + '" fill="' + group.color + '" stroke="' + outline
-            + '" stroke-width="' + (selected ? 4 : 2) + '"/></svg>';
+        let cursor = 2;
+        const numbers = group.points.map(function (p, index) {
+            const x = cursor + cellWidths[index] / 2;
+            const divider = index ? '<path d="M' + cursor + ',9 V25" stroke="#fff" stroke-opacity=".85" stroke-width="1.5"/>' : "";
+            cursor += cellWidths[index];
+            return divider + '<text x="' + x + '" y="17" text-anchor="middle" dominant-baseline="central" fill="#fff" font-family="Arial,sans-serif" font-size="13" font-weight="700">'
+                + escapeHtml(p.sequence) + '</text>';
+        }).join("");
+        const svg = '<svg xmlns="http://www.w3.org/2000/svg" width="' + width + '" height="46" viewBox="0 0 '
+            + width + ' 46"><path d="M' + (center - 6) + ',31 L' + center + ',42 L' + (center + 6)
+            + ',31" fill="' + group.color + '" stroke="' + outline + '" stroke-width="2"/>'
+            + '<rect x="2" y="2" width="' + (width - 4) + '" height="30" rx="15" fill="'
+            + group.color + '" stroke="' + outline + '" stroke-width="' + (selected ? 4 : 2) + '"/>'
+            + numbers + '</svg>';
         return { url: "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(svg),
-            scaledSize: new google.maps.Size(width, 44),
-            anchor: new google.maps.Point(center - (group.pixelOffset || 0), 42),
-            labelOrigin: new google.maps.Point(center, 16) };
+            scaledSize: new google.maps.Size(width, 46),
+            anchor: new google.maps.Point(center - (group.pixelOffset || 0), 43) };
     }
 
     function visitsHtml(group) {
@@ -578,13 +590,12 @@
         const marker = new google.maps.Marker({
             map: map, position: { lat: point.lat, lng: point.lng },
             title: "D" + group.day.number + " · " + sequences + " · " + (point.placeName || point.title),
-            label: { text: sequences, color: "#fff", fontWeight: "700", fontSize: sequences.length > 10 ? "9px" : "11px" },
             icon: markerIcon(group, false), zIndex: 100 + Number(group.day.number)
         });
         marker.__group = group;
         const infoId = "detail-map-info-" + (++infoSequence);
         const infoWindow = new google.maps.InfoWindow({
-            content: visitsHtml(group) + placeInfoHtml(point, null, infoId), disableAutoPan: true
+            content: placeInfoHtml(point, null, infoId, group), disableAutoPan: true
         });
         marker.__detailInfoWindow = infoWindow;
         let closeTimer = null, markerHovered = false, infoHovered = false;
@@ -604,13 +615,13 @@
         infoWindow.addListener("closeclick", function () { markerHovered = false; infoHovered = false; cancelClose(); });
         function openInfo() {
             markers.forEach(function (other) { if (other !== marker) other.__detailInfoWindow.close(); });
-            infoWindow.setContent(visitsHtml(group) + placeInfoHtml(point, null, infoId));
+            infoWindow.setContent(placeInfoHtml(point, null, infoId, group));
             infoWindow.open(map, marker);
             fetchPlaceDetails(point).then(function (details) {
-                if (markerHovered || infoHovered) infoWindow.setContent(visitsHtml(group) + placeInfoHtml(point, details || false, infoId));
+                if (markerHovered || infoHovered) infoWindow.setContent(placeInfoHtml(point, details || false, infoId, group));
             }).catch(function (error) {
                 console.warn("지도 핀 상세정보 조회 실패:", error);
-                if (markerHovered || infoHovered) infoWindow.setContent(visitsHtml(group) + placeInfoHtml(point, false, infoId));
+                if (markerHovered || infoHovered) infoWindow.setContent(placeInfoHtml(point, false, infoId, group));
             });
         }
         marker.addListener("mouseover", function () { markerHovered = true; cancelClose(); openInfo(); });
