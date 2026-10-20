@@ -163,7 +163,6 @@ public class ScheduleDetail extends HttpServlet {
                         int blockNumber = 0;
                         for (ItineraryBlockDto block : day.getBlocks()) {
                             blockNumber++;
-                            if (block.getPlaceLat() == null || block.getPlaceLng() == null) continue;
                             Map<String, Object> point = new HashMap<>();
                             point.put("blockId", block.getBlockId());
                             point.put("sequence", blockNumber);

@@ -27,7 +27,7 @@ request.setAttribute("activePage", "travel");
 <title><c:out value="${itinerary.title}" /></title>
 <jsp:include page="/common/headStyles.jsp" />
 <link rel="stylesheet"
-   href="${pageContext.request.contextPath}/view/assets/css/travel/scheduleDetail.css?v=20261016-sheet-divider">
+   href="${pageContext.request.contextPath}/view/assets/css/travel/scheduleDetail.css?v=20261019-flow">
 
 <script
     defer
@@ -547,10 +547,9 @@ request.setAttribute("activePage", "travel");
                      <div class="detail-day-header">
                         <button type="button" class="detail-day-toggle" data-detail-day-toggle
                             aria-expanded="true" aria-controls="detailDayBody_${dayStatus.index}">
-                            <span class="detail-day-number">${dayStatus.count}</span>
+                            <span class="detail-day-number">D${dayStatus.count}</span>
                             <span class="detail-day-copy">
                                 <span class="detail-day-meta">
-                                    <span class="detail-day-label">Day ${dayStatus.count}</span>
                                     <c:if test="${not empty day.dayDate}">
                                         <span class="detail-day-date"><fmt:formatDate value="${day.dayDate}" pattern="yyyy.MM.dd (E)" /></span>
                                     </c:if>
@@ -596,16 +595,13 @@ request.setAttribute("activePage", "travel");
                         <c:forEach var="block" items="${day.blocks}"
                            varStatus="blockStatus">
 
-                           <div class="flex gap-3 relative pt-3">
+                           <div class="flex gap-3 relative pt-3 detail-map-block" data-detail-block="${block.blockId}" data-detail-day="${dayStatus.count}" data-detail-sequence="${blockStatus.count}">
 
                               <!-- 일정 연결선 -->
                               <div class="flex flex-col items-center shrink-0"
                                  style="width: 18px">
 
-                                 <div
-                                    class="w-3 h-3 rounded-full border-2 border-white shrink-0"
-                                    style="background: #6369D1; box-shadow: 0 0 0 2px #6369D140; margin-top: 4px">
-                                 </div>
+                                 <span class="detail-block-sequence" aria-label="${blockStatus.count}번째 일정">${blockStatus.count}</span>
 
                                  <c:if test="${not blockStatus.last}">
                                     <div class="flex-1 w-0.5 mt-1"
@@ -635,13 +631,14 @@ request.setAttribute("activePage", "travel");
                                        </span>
                                     </div>
                                  </c:if>
-<span
+<button type="button" data-detail-block-select="${block.blockId}" aria-pressed="false"
                                           class="detail-block-title font-bold text-[13px]
                                              text-gray-900 leading-snug"
                                           style="overflow-wrap: anywhere"> <c:out
                                              value="${empty block.title
                                         ? block.placeName : block.title}" />
-                                       </span>
+                                       </button>
+                                       <span class="detail-location-missing" hidden>위치 미등록</span>
                                  </div>
 <button type="button" data-cart-add="BLOCK"
                                        data-target-id="${block.blockId}" data-cart-state="NONE"
@@ -819,6 +816,10 @@ request.setAttribute("activePage", "travel");
 
          <div class="detail-map-canvas-wrap">
             <div id="detailGoogleMap"></div>
+            <div id="detailMapNotice" class="detail-map-notice" hidden>
+               <span id="detailMapMissing" hidden></span>
+               <button type="button" id="detailMapSelectionClear" hidden>선택 해제</button>
+            </div>
 
             <!-- 전체 보기의 DAY별 동선 색상 -->
             <div id="detailMapDayLegend" class="detail-map-day-legend" hidden></div>
@@ -932,10 +933,10 @@ request.setAttribute("activePage", "travel");
       src="${pageContext.request.contextPath}/view/assets/js/auth/tripily.js"></script>
 
    <script
-      src="${pageContext.request.contextPath}/view/assets/js/travel/scheduleDetail.js?v=20261019-single-sheet"></script>
+      src="${pageContext.request.contextPath}/view/assets/js/travel/scheduleDetail.js?v=20261019-flow"></script>
       
    <script
-       src="${pageContext.request.contextPath}/view/assets/js/travel/scheduleDetailMap.js?v=20261019-single-sheet"></script>
+       src="${pageContext.request.contextPath}/view/assets/js/travel/scheduleDetailMap.js?v=20261019-flow"></script>
 
    <script async
        onerror="detailMapLoadFailed()"

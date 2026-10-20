@@ -28,6 +28,7 @@
     let activeSheet = initialSheetTab ? initialSheetTab.dataset.detailSheet : "all";
     let placesLibraryPromise = null;
     let infoSequence = 0;
+    let selectedBlockId = "";
 
     const placeDetailsCache = Object.create(null);
 
@@ -89,32 +90,19 @@
                 sheetKey: String(day.sheetKey || "legacy-1"),
                 sheetLabel: String(day.sheetLabel || "일정"),
                 sheetIndex: Number(day.sheetIndex) || 1,
-                points: points.filter(function (point) {
-                    if (point.lat === null || point.lat === undefined
-                            || point.lng === null || point.lng === undefined) {
-                        return false;
-                    }
-
-                    const lat = Number(point.lat);
-                    const lng = Number(point.lng);
-
-                    return Number.isFinite(lat)
-                        && Number.isFinite(lng)
-                        && lat >= -90 && lat <= 90
-                        && lng >= -180 && lng <= 180;
-                }).map(function (point) {
+                points: points.map(function (point, index) {
                     return {
                         blockId: point.blockId,
-                        sequence: point.sequence,
+                        sequence: Number(point.sequence) || index + 1,
                         type: point.type,
                         title: point.title || point.placeName || "장소",
                         placeName: point.placeName || point.title || "장소",
                         address: point.address || "",
-                        googlePlaceId: point.googlePlaceId || "",
-                        lat: Number(point.lat),
-                        lng: Number(point.lng)
+                        googlePlaceId: String(point.googlePlaceId || "").trim(),
+                        lat: point.lat === null || point.lat === undefined || point.lat === "" ? null : Number(point.lat),
+                        lng: point.lng === null || point.lng === undefined || point.lng === "" ? null : Number(point.lng)
                     };
-                })
+                }).sort(function (a, b) { return a.sequence - b.sequence; })
             };
         });
     } catch (error) {
@@ -169,7 +157,7 @@
         if (activeSheet === "all") {
             sheetGroups().forEach(function (sheet) {
                 options.push({ key: "sheet:" + sheet.key, label: sheet.label,
-                    color: sheetLineColor(sheet.index) });
+                    color: "#6369D1" });
             });
         } else {
             visibleDays().forEach(function (day) {
@@ -200,7 +188,7 @@
         if (activeDay !== "all") {
             if (activeSheet === "all") {
                 const group = sheetGroups().find(function (s) { return "sheet:" + s.key === activeDay; });
-                if (group) { label = group.label; color = sheetLineColor(group.index); }
+                if (group) { label = group.label; color = "#6369D1"; }
             } else {
                 label = activeDay + "일차";
                 color = dayLineColor(activeDay);
@@ -216,6 +204,8 @@
     window.addEventListener("detail:sheet-change", function (event) {
         activeSheet = event.detail && event.detail.sheetKey ? String(event.detail.sheetKey) : "all";
         activeDay = "all";
+        selectedBlockId = "";
+        syncTimeline(); updateNotice();
         setMenuOpen(false);
         decorateFilterMenu();
         updateFilter();
@@ -234,6 +224,8 @@
             }
 
             activeDay = button.dataset.detailMapDay || "all";
+            selectedBlockId = "";
+            syncTimeline(); updateNotice();
             setMenuOpen(false);
             updateFilter();
 
@@ -440,216 +432,343 @@
             + '</div></div>';
     }
 
-    function clearMap() {
-        markers.forEach(function (marker) {
-            if (marker.__detailInfoWindow) {
-                marker.__detailInfoWindow.close();
-            }
-            marker.setMap(null);
-        });
-
-        lines.forEach(function (line) {
-            line.setMap(null);
-        });
-
-        markers = [];
-        lines = [];
+    // Keep every block in its original order; only located blocks become map pins.
+    function located(point) {
+        return point.lat !== null && point.lat !== undefined && point.lat !== ""
+            && point.lng !== null && point.lng !== undefined && point.lng !== ""
+            && Number.isFinite(Number(point.lat)) && Number.isFinite(Number(point.lng))
+            && Math.abs(Number(point.lat)) <= 90 && Math.abs(Number(point.lng)) <= 180;
     }
 
-    function addMarker(point, bounds, color) {
-        const marker = new google.maps.Marker({
-            map: map,
-            position: { lat: point.lat, lng: point.lng },
-            title: point.placeName || point.title,
-            icon: {
-                path: "M0,-18 C-10,-18 -18,-10 -18,0 C-18,12 0,30 0,30 C0,30 18,12 18,0 C18,-10 10,-18 0,-18 Z",
-                scale: .5,
-                fillColor: color,
-                fillOpacity: 1,
-                strokeColor: "#fff",
-                strokeWeight: 2,
-                anchor: new google.maps.Point(0, 30)
+    function placeKey(point) {
+        return point.googlePlaceId ? "place:" + point.googlePlaceId
+            : "coord:" + Number(point.lat).toFixed(5) + "," + Number(point.lng).toFixed(5);
+    }
+
+    function shownDays() {
+        return visibleDays().filter(function (day) {
+            return activeDay === "all" || (activeSheet === "all"
+                ? activeDay === "sheet:" + day.sheetKey : activeDay === day.number);
+        });
+    }
+
+    function findBlock(id) {
+        for (const day of days) {
+            const point = day.points.find(function (p) { return String(p.blockId) === String(id); });
+            if (point) return { day: day, point: point };
+        }
+        return null;
+    }
+
+    function syncTimeline() {
+        document.querySelectorAll("[data-detail-block]").forEach(function (row) {
+            const found = findBlock(row.dataset.detailBlock);
+            const missing = !found || !located(found.point);
+            row.classList.toggle("is-location-missing", missing);
+            row.classList.toggle("is-map-selected", String(row.dataset.detailBlock) === selectedBlockId);
+            if (found) row.style.setProperty("--detail-day-color", dayLineColor(found.day.number));
+            const badge = row.querySelector(".detail-location-missing");
+            if (badge) badge.hidden = !missing;
+            const button = row.querySelector("[data-detail-block-select]");
+            if (button) {
+                button.setAttribute("aria-pressed", String(String(row.dataset.detailBlock) === selectedBlockId));
+                button.title = missing ? "위치가 등록되지 않은 일정입니다." : "지도에서 이 일정의 구간 강조";
             }
         });
+    }
 
+    function updateNotice() {
+        const missing = shownDays().reduce(function (total, day) {
+            return total + day.points.filter(function (p) { return !located(p); }).length;
+        }, 0);
+        const note = document.getElementById("detailMapMissing");
+        const clear = document.getElementById("detailMapSelectionClear");
+        const wrap = document.getElementById("detailMapNotice");
+        if (note) { note.textContent = "위치 없는 일정 " + missing + "개 · 누락 구간은 점선"; note.hidden = !missing; }
+        if (clear) clear.hidden = !selectedBlockId;
+        if (wrap) wrap.hidden = !missing && !selectedBlockId;
+    }
+
+    function selectBlock(id, focusMap) {
+        const found = findBlock(id);
+        if (!found) return;
+        let redraw = false;
+        if (activeSheet !== "all" && activeSheet !== found.day.sheetKey) {
+            const tab = Array.from(document.querySelectorAll("#detailSheetTabs [data-detail-sheet]"))
+                .find(function (el) { return el.dataset.detailSheet === found.day.sheetKey; });
+            if (tab) tab.click();
+            else activeSheet = found.day.sheetKey;
+            redraw = true;
+        }
+        if (activeDay !== "all" && !shownDays().includes(found.day)) {
+            activeDay = activeSheet === "all" ? "sheet:" + found.day.sheetKey : found.day.number;
+            redraw = true;
+        }
+        selectedBlockId = String(id);
+        if (redraw && map) { updateFilter(); drawMap(false); }
+        else applySelection();
+        syncTimeline();
+        updateNotice();
+        const row = Array.from(document.querySelectorAll("[data-detail-block]"))
+            .find(function (el) { return el.dataset.detailBlock === String(id); });
+        if (row) {
+            const body = row.closest(".detail-day-body");
+            if (body && body.hidden) {
+                body.hidden = false;
+                const toggle = body.parentElement.querySelector("[data-detail-day-toggle]");
+                if (toggle) toggle.setAttribute("aria-expanded", "true");
+            }
+            if (!focusMap) row.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        }
+        if (map && focusMap && located(found.point)) {
+            map.panTo({ lat: found.point.lat, lng: found.point.lng });
+        }
+    }
+
+    document.addEventListener("click", function (event) {
+        const button = event.target.closest("[data-detail-block-select], [data-detail-map-block]");
+        if (!button) return;
+        const inTimeline = button.hasAttribute("data-detail-block-select");
+        selectBlock(inTimeline ? button.dataset.detailBlockSelect : button.dataset.detailMapBlock, inTimeline);
+    });
+    const clearButton = document.getElementById("detailMapSelectionClear");
+    if (clearButton) clearButton.addEventListener("click", function () {
+        selectedBlockId = ""; applySelection(); syncTimeline(); updateNotice();
+    });
+
+    function clearMap() {
+        markers.forEach(function (marker) {
+            if (marker.__detailInfoWindow) marker.__detailInfoWindow.close();
+            marker.setMap(null);
+        });
+        lines.forEach(function (line) { line.setMap(null); });
+        markers = []; lines = [];
+    }
+
+    function markerIcon(group, selected) {
+        const label = group.points.map(function (p) { return p.sequence; }).join("·");
+        const half = Math.max(18, Math.min(110, label.length * 3.7 + 11));
+        const width = Math.ceil(half * 2), center = width / 2;
+        const outline = selected ? "#FFD447" : "#fff";
+        const path = "M9,2 H" + (width - 9) + " Q" + (width - 2) + ",2 " + (width - 2)
+            + ",9 V23 Q" + (width - 2) + ",30 " + (width - 9) + ",30 H" + (center + 6)
+            + " L" + center + ",41 L" + (center - 6) + ",30 H9 Q2,30 2,23 V9 Q2,2 9,2 Z";
+        const svg = '<svg xmlns="http://www.w3.org/2000/svg" width="' + width + '" height="44" viewBox="0 0 '
+            + width + ' 44"><path d="' + path + '" fill="' + group.color + '" stroke="' + outline
+            + '" stroke-width="' + (selected ? 4 : 2) + '"/></svg>';
+        return { url: "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(svg),
+            scaledSize: new google.maps.Size(width, 44),
+            anchor: new google.maps.Point(center - (group.pixelOffset || 0), 42),
+            labelOrigin: new google.maps.Point(center, 16) };
+    }
+
+    function visitsHtml(group) {
+        return '<div class="detail-map-visits"><strong>D' + escapeHtml(group.day.number)
+            + (group.points.length > 1 ? ' · 같은 장소 방문 ' + group.points.length + '회' : ' · 일정')
+            + '</strong>' + group.points.map(function (p) {
+                return '<button type="button" data-detail-map-block="' + escapeHtml(p.blockId)
+                    + '" aria-pressed="' + String(String(p.blockId) === selectedBlockId) + '">'
+                    + escapeHtml(p.sequence) + '. ' + escapeHtml(p.title || p.placeName || "장소") + '</button>';
+            }).join("") + '</div>';
+    }
+
+    function addMarker(group, bounds) {
+        const point = group.points[0];
+        const sequences = group.points.map(function (p) { return p.sequence; }).join("·");
+        const marker = new google.maps.Marker({
+            map: map, position: { lat: point.lat, lng: point.lng },
+            title: "D" + group.day.number + " · " + sequences + " · " + (point.placeName || point.title),
+            label: { text: sequences, color: "#fff", fontWeight: "700", fontSize: sequences.length > 10 ? "9px" : "11px" },
+            icon: markerIcon(group, false), zIndex: 100 + Number(group.day.number)
+        });
+        marker.__group = group;
         const infoId = "detail-map-info-" + (++infoSequence);
         const infoWindow = new google.maps.InfoWindow({
-            content: placeInfoHtml(point, null, infoId),
-            disableAutoPan: true
+            content: visitsHtml(group) + placeInfoHtml(point, null, infoId), disableAutoPan: true
         });
-
         marker.__detailInfoWindow = infoWindow;
-
-        let closeTimer = null;
-        let markerHovered = false;
-        let infoHovered = false;
-
-        function cancelClose() {
-            if (closeTimer) {
-                clearTimeout(closeTimer);
-                closeTimer = null;
-            }
-        }
-
+        let closeTimer = null, markerHovered = false, infoHovered = false;
+        function cancelClose() { if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; } }
         function scheduleClose() {
             cancelClose();
-            closeTimer = setTimeout(function () {
-                if (!markerHovered && !infoHovered) {
-                    infoWindow.close();
-                }
-            }, 220);
+            closeTimer = setTimeout(function () { if (!markerHovered && !infoHovered) infoWindow.close(); }, 240);
         }
-
         infoWindow.addListener("domready", function () {
-            const infoRoot = document.getElementById(infoId);
-            if (!infoRoot || infoRoot.dataset.hoverBound === "1") {
-                return;
-            }
-
-            infoRoot.dataset.hoverBound = "1";
-            infoRoot.addEventListener("mouseenter", function () {
-                infoHovered = true;
-                cancelClose();
-            });
-            infoRoot.addEventListener("mouseleave", function () {
-                infoHovered = false;
-                scheduleClose();
-            });
+            const root = document.getElementById(infoId);
+            const container = root && root.parentElement;
+            if (!container || container.dataset.detailHoverBound === "1") return;
+            container.dataset.detailHoverBound = "1";
+            container.addEventListener("mouseenter", function () { infoHovered = true; cancelClose(); });
+            container.addEventListener("mouseleave", function () { infoHovered = false; scheduleClose(); });
         });
-
-        infoWindow.addListener("closeclick", function () {
-            markerHovered = false;
-            infoHovered = false;
-            cancelClose();
-        });
-
-        marker.addListener("mouseover", function () {
-            markerHovered = true;
-            cancelClose();
-            infoWindow.setContent(placeInfoHtml(point, null, infoId));
+        infoWindow.addListener("closeclick", function () { markerHovered = false; infoHovered = false; cancelClose(); });
+        function openInfo() {
+            markers.forEach(function (other) { if (other !== marker) other.__detailInfoWindow.close(); });
+            infoWindow.setContent(visitsHtml(group) + placeInfoHtml(point, null, infoId));
             infoWindow.open(map, marker);
-
-            fetchPlaceDetails(point)
-                .then(function (details) {
-                    if (markerHovered || infoHovered) {
-                        infoWindow.setContent(
-                            placeInfoHtml(point, details || false, infoId)
-                        );
-                    }
-                })
-                .catch(function (error) {
-                    console.warn("지도 핀 상세정보 조회 실패:", error);
-                    if (markerHovered || infoHovered) {
-                        infoWindow.setContent(
-                            placeInfoHtml(point, false, infoId)
-                        );
-                    }
-                });
+            fetchPlaceDetails(point).then(function (details) {
+                if (markerHovered || infoHovered) infoWindow.setContent(visitsHtml(group) + placeInfoHtml(point, details || false, infoId));
+            }).catch(function (error) {
+                console.warn("지도 핀 상세정보 조회 실패:", error);
+                if (markerHovered || infoHovered) infoWindow.setContent(visitsHtml(group) + placeInfoHtml(point, false, infoId));
+            });
+        }
+        marker.addListener("mouseover", function () { markerHovered = true; cancelClose(); openInfo(); });
+        marker.addListener("mouseout", function () { markerHovered = false; scheduleClose(); });
+        marker.addListener("click", function () {
+            markerHovered = true; cancelClose();
+            if (group.points.length === 1) selectBlock(point.blockId, false);
+            openInfo();
         });
-
-        marker.addListener("mouseout", function () {
-            markerHovered = false;
-            scheduleClose();
-        });
-
         markers.push(marker);
         bounds.extend(marker.getPosition());
     }
 
-    function addLine(points, color) {
-        if (points.length < 2) {
-            return;
+    // Web-Mercator gives parallel, constant-pixel offsets; it never routes along roads.
+    function world(point) {
+        const sine = Math.max(-0.9999, Math.min(0.9999, Math.sin(point.lat * Math.PI / 180)));
+        return { x: (point.lng + 180) / 360 * 256,
+            y: (0.5 - Math.log((1 + sine) / (1 - sine)) / (4 * Math.PI)) * 256 };
+    }
+    function shiftedPath(edge) {
+        const a = { lat: edge.from.lat, lng: edge.from.lng }, b = { lat: edge.to.lat, lng: edge.to.lng };
+        if (!edge.offset) return [a, b];
+        const pa = world(a), pb = world(b);
+        let dx = pb.x - pa.x;
+        if (dx > 128) dx -= 256;
+        if (dx < -128) dx += 256;
+        const dy = pb.y - pa.y, length = Math.hypot(dx, dy);
+        if (!length) return [a, b];
+        const scale = Math.pow(2, map.getZoom() || 11);
+        const canonical = edge.fromKey < edge.toKey ? 1 : -1;
+        const amount = edge.offset * canonical / scale;
+        const ox = -dy / length * amount, oy = dx / length * amount;
+        function inverse(p) {
+            const x = p.x + ox, y = p.y + oy;
+            return { lat: (2 * Math.atan(Math.exp((0.5 - y / 256) * 2 * Math.PI)) - Math.PI / 2) * 180 / Math.PI,
+                lng: ((x / 256 * 360) % 360 + 360) % 360 - 180 };
         }
+        return [inverse(pa), inverse({ x: pa.x + dx, y: pb.y })];
+    }
+    function routeStyle(edge, selected, faded) {
+        const opacity = faded ? 0.2 : 0.9;
+        const weight = selected ? 6 : 3;
+        const arrow = { path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW, scale: selected ? 3 : 2.3,
+            fillColor: edge.color, fillOpacity: opacity, strokeColor: edge.color, strokeOpacity: opacity, strokeWeight: 1 };
+        const icons = [];
+        if (edge.missing) icons.push({ icon: { path: "M 0,-1 0,1", strokeColor: edge.color,
+            strokeOpacity: opacity, strokeWeight: weight, scale: 2 }, offset: "0", repeat: "11px" });
+        icons.push({ icon: arrow, offset: "55%", repeat: "110px" });
+        return { strokeColor: edge.color, strokeOpacity: edge.missing ? 0 : opacity,
+            strokeWeight: weight, icons: icons, zIndex: selected ? 20 : 5 };
+    }
+    function addLine(edge) {
+        const line = new google.maps.Polyline(Object.assign({ map: map, path: shiftedPath(edge),
+            geodesic: false }, routeStyle(edge, false, false)));
+        line.__edge = edge;
+        lines.push(line);
+    }
+    function refreshLinePaths() {
+        lines.forEach(function (line) { line.setPath(shiftedPath(line.__edge)); });
+    }
 
-        lines.push(new google.maps.Polyline({
-            map: map,
-            path: points.map(function (point) {
-                return { lat: point.lat, lng: point.lng };
-            }),
-            geodesic: true,
-            strokeColor: color,
-            strokeOpacity: 0.82,
-            strokeWeight: 5
-        }));
+    function applySelection() {
+        const found = selectedBlockId ? findBlock(selectedBlockId) : null;
+        const selectable = found && located(found.point);
+        let chosen = selectable ? lines.filter(function (line) {
+            return String(line.__edge.to.blockId) === selectedBlockId;
+        }) : [];
+        const outgoing = !!selectable && !chosen.length;
+        if (outgoing) chosen = lines.filter(function (line) {
+            return String(line.__edge.from.blockId) === selectedBlockId;
+        });
+        lines.forEach(function (line) {
+            const selected = chosen.includes(line);
+            line.setOptions(routeStyle(line.__edge, selected, !!selectable && !selected));
+        });
+        markers.forEach(function (marker) {
+            const selected = selectable && marker.__group.points.some(function (p) { return String(p.blockId) === selectedBlockId; });
+            marker.setIcon(markerIcon(marker.__group, !!selected));
+            marker.setOpacity(selectable && !selected ? 0.55 : 1);
+            marker.setZIndex(selected ? 1000 : 100 + Number(marker.__group.day.number));
+        });
+        if (!found) showStatus("");
+        else if (!located(found.point)) showStatus("D" + found.day.number + " · " + found.point.sequence + " 위치 미등록 — 지도에 표시할 수 없습니다.");
+        else {
+            const dashed = chosen.some(function (line) { return line.__edge.missing; });
+            showStatus("D" + found.day.number + " · " + found.point.sequence + " " + (chosen.length
+                ? (dashed ? "중간 위치가 빠진 점선 구간을 강조했습니다." : (outgoing
+                    ? "이 일정에서 다음 일정으로 나가는 직선 구간을 강조했습니다."
+                    : "이 일정으로 들어오는 직선 구간을 강조했습니다."))
+                : "이 일정에 연결된 이동 구간이 없습니다."));
+        }
     }
 
     function updateLegend() {
         if (!legend) return;
         legend.replaceChildren();
-        if (activeDay !== "all") { legend.hidden = true; return; }
-        const entries = activeSheet === "all"
-            ? sheetGroups().map(function (group) {
-                return { label: group.label, color: sheetLineColor(group.index) };
-            })
-            : visibleDays().map(function (day) {
-                return { label: day.number + "일차", color: dayLineColor(day.number) };
-            });
-        entries.forEach(function (entry) {
-            const row = document.createElement("div");
-            const label = document.createElement("span");
-            const line = document.createElement("span");
-            label.textContent = entry.label;
+        const selectedDays = shownDays();
+        selectedDays.forEach(function (day) {
+            const row = document.createElement("div"), label = document.createElement("span"), swatch = document.createElement("span");
+            label.textContent = (activeSheet === "all" ? day.sheetLabel + " · " : "") + "D" + day.number;
             label.className = "detail-map-day-legend-label";
-            line.className = "detail-map-day-legend-line";
-            line.style.background = entry.color;
-            row.appendChild(label);
-            row.appendChild(line);
-            legend.appendChild(row);
+            swatch.className = "detail-map-day-legend-line";
+            swatch.style.background = dayLineColor(day.number);
+            row.appendChild(label); row.appendChild(swatch); legend.appendChild(row);
         });
-        legend.hidden = entries.length === 0;
+        const key = document.createElement("div");
+        key.className = "detail-map-route-key";
+        key.textContent = "화살표: 이동 방향 · 점선: 중간 위치 미등록";
+        legend.appendChild(key);
+        legend.hidden = !selectedDays.length;
     }
 
-    function drawMap() {
+    function drawMap(fitView) {
         clearMap();
-        const bounds = new google.maps.LatLngBounds();
-        let visiblePointCount = 0;
-        const selectedDays = visibleDays();
-        if (activeSheet === "all") {
-            // 전체 보기: 시트별 동선을 독립적으로 그리고 시트마다 색상을 고정한다.
-            // 다른 국가 시트 사이에는 경로를 연결하지 않는다.
-            sheetGroups().forEach(function (group) {
-                if (activeDay !== "all" && activeDay !== "sheet:" + group.key) return;
-                const points = [];
-                selectedDays.filter(function (day) { return day.sheetKey === group.key; })
-                    .forEach(function (day) {
-                        day.points.slice().sort(function (a, b) {
-                            return Number(a.sequence) - Number(b.sequence);
-                        }).forEach(function (point) { points.push(point); });
-                    });
-                const color = sheetLineColor(group.index);
-                points.forEach(function (point) {
-                    addMarker(point, bounds, color);
-                    visiblePointCount++;
-                });
-                addLine(points, color);
+        const bounds = new google.maps.LatLngBounds(), groups = [], edges = [];
+        shownDays().forEach(function (day) {
+            const points = day.points.filter(located);
+            const grouped = new Map();
+            const color = dayLineColor(day.number);
+            points.forEach(function (point) {
+                const key = placeKey(point);
+                if (!grouped.has(key)) {
+                    const group = { key: key, day: day, color: color, points: [] };
+                    grouped.set(key, group); groups.push(group);
+                }
+                grouped.get(key).points.push(point);
             });
-        } else {
-            // 국가별 보기: 기존과 같이 DAY별 색상/경로를 표시한다.
-            selectedDays.forEach(function (day) {
-                if (activeDay !== "all" && activeDay !== day.number) return;
-                const points = day.points.slice().sort(function (a, b) {
-                    return Number(a.sequence) - Number(b.sequence);
-                });
-                const color = dayLineColor(day.number);
-                points.forEach(function (point) {
-                    addMarker(point, bounds, color);
-                    visiblePointCount++;
-                });
-                addLine(points, color);
+            const pairs = new Map();
+            for (let i = 1; i < points.length; i++) {
+                const from = points[i - 1], to = points[i], fromKey = placeKey(from), toKey = placeKey(to);
+                if (fromKey === toKey) continue;
+                const edge = { from: from, to: to, fromKey: fromKey, toKey: toKey, color: color,
+                    missing: Number(to.sequence) - Number(from.sequence) > 1, offset: 0 };
+                const key = [fromKey, toKey].sort().join("|");
+                if (!pairs.has(key)) pairs.set(key, []);
+                pairs.get(key).push(edge); edges.push(edge);
+            }
+            pairs.forEach(function (pair) {
+                if (pair.length > 1) pair.forEach(function (edge, index) { edge.offset = (index - (pair.length - 1) / 2) * 12; });
             });
-        }
-        updateLegend();
-        if (visiblePointCount === 0) {
-            showStatus("표시할 장소 좌표가 없습니다.");
-            return;
-        }
-        showStatus("");
-        if (visiblePointCount === 1) {
-            map.setCenter(markers[0].getPosition());
-            map.setZoom(15);
-        } else {
-            map.fitBounds(bounds);
-        }
+        });
+        // Coincident locations on different days retain each day's color and separate their labels.
+        const overlaps = new Map();
+        groups.forEach(function (group) {
+            const p = group.points[0], key = p.lat.toFixed(5) + "," + p.lng.toFixed(5);
+            if (!overlaps.has(key)) overlaps.set(key, []);
+            overlaps.get(key).push(group);
+        });
+        overlaps.forEach(function (list) {
+            if (list.length > 1) list.forEach(function (group, index) { group.pixelOffset = (index - (list.length - 1) / 2) * 46; });
+        });
+        groups.forEach(function (group) { addMarker(group, bounds); });
+        edges.forEach(addLine);
+        updateLegend(); updateNotice(); syncTimeline(); applySelection();
+        if (!groups.length) { showStatus("표시할 장소 좌표가 없습니다. 위치 미등록 일정을 확인해주세요."); return; }
+        if (fitView === false) return;
+        if (groups.length === 1) { map.setCenter(markers[0].getPosition()); map.setZoom(15); }
+        else map.fitBounds(bounds);
     }
 
     window.initScheduleDetailMap = function () {
@@ -673,6 +792,7 @@
                 ]
             });
 
+            map.addListener("zoom_changed", refreshLinePaths);
             decorateFilterMenu();
             updateFilter();
             drawMap();
@@ -682,6 +802,8 @@
         }
     };
 
+    syncTimeline();
+    updateNotice();
     decorateFilterMenu();
     updateFilter();
     window.setTimeout(function () { if (!map) showMapFallback(); }, 1800);
