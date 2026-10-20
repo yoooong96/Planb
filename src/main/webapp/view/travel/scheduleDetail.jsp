@@ -27,12 +27,12 @@ request.setAttribute("activePage", "travel");
 <title><c:out value="${itinerary.title}" /></title>
 <jsp:include page="/common/headStyles.jsp" />
 <link rel="stylesheet"
-   href="${pageContext.request.contextPath}/view/assets/css/travel/scheduleDetail.css?v=20261019-flow">
+   href="${pageContext.request.contextPath}/view/assets/css/travel/scheduleDetail.css?v=20261020-flow">
 
 <script
     defer
     data-context-path="${pageContext.request.contextPath}"
-    src="${pageContext.request.contextPath}/view/assets/js/common/listReturn.js?v=1">
+    src="${pageContext.request.contextPath}/view/assets/js/common/listReturn.js?v=2">
 </script>
 </head>
 <body class="site-shell"><jsp:include page="/common/header.jsp" />
@@ -933,10 +933,10 @@ request.setAttribute("activePage", "travel");
       src="${pageContext.request.contextPath}/view/assets/js/auth/tripily.js"></script>
 
    <script
-      src="${pageContext.request.contextPath}/view/assets/js/travel/scheduleDetail.js?v=20261019-flow"></script>
+      src="${pageContext.request.contextPath}/view/assets/js/travel/scheduleDetail.js?v=20261020-flow"></script>
       
    <script
-       src="${pageContext.request.contextPath}/view/assets/js/travel/scheduleDetailMap.js?v=20261019-flow"></script>
+       src="${pageContext.request.contextPath}/view/assets/js/travel/scheduleDetailMap.js?v=20261020-flow"></script>
 
    <script async
        onerror="detailMapLoadFailed()"
